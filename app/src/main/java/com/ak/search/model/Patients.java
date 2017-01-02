@@ -1,6 +1,10 @@
 package com.ak.search.model;
 
 
+import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -16,13 +20,13 @@ public class Patients extends RealmObject {
 
     String patientname;
 
-    Answers answers;
+    RealmList<Answers> answers;
 
-    public Answers getAnswers() {
+    public RealmList<Answers> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(Answers answers) {
+    public void setAnswers(RealmList<Answers> answers) {
         this.answers = answers;
     }
 

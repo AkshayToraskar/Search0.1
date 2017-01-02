@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,11 @@ import com.ak.search.R;
 import com.ak.search.app.SaveAnswer;
 import com.ak.search.model.Answers;
 import com.ak.search.model.Questions;
+import com.ak.search.model.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 import static android.view.View.GONE;
 
@@ -48,6 +51,7 @@ public class QuestionFragment extends Fragment {
     SaveAnswer answer;
 
     public Answers ans;
+    Realm realm;
 
 
     public static final QuestionFragment newInstance(Questions message) {
@@ -65,7 +69,7 @@ public class QuestionFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ButterKnife.bind(this, v);
-
+realm=Realm.getDefaultInstance();
 
 
 
@@ -76,6 +80,14 @@ public class QuestionFragment extends Fragment {
         //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
 
         tv_question.setText(message.getQuestion());
+
+        int answerId;
+        try {
+            answerId = realm.where(User.class).max("id").intValue() + 1;
+        } catch(Exception ex) {
+            Log.v("exception",ex.toString());
+            answerId = 1;
+        }
 
         ans=new Answers();
 

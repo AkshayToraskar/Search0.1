@@ -15,7 +15,6 @@ public class Answers extends RealmObject {
     long patientid;
     int selectedopt;
     String ans;
-
     Questions questions;
 
 

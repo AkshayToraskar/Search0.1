@@ -69,7 +69,7 @@ public class NewSurveyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_survey);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
         ButterKnife.bind(this);
         patientList = new ArrayList<>();
 
@@ -88,15 +88,15 @@ realm=Realm.getDefaultInstance();
             surveyId = getIntent().getExtras().getLong("SurveyId");
             int totalQuestions = getIntent().getExtras().getInt("TotalQuestions");
 
-            selectedSurvey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
+            selectedSurvey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
             tvTotalQuestions.setText(" (" + totalQuestions + " Questions)");
 
 
             if (selectedSurvey != null) {
-               // String surveyId1 = String.valueOf(selectedSurvey.getId());
+                // String surveyId1 = String.valueOf(selectedSurvey.getId());
                 getSupportActionBar().setTitle(selectedSurvey.getName());
                 patientList.clear();
-                patientList.addAll(realm.where(Patients.class).equalTo("surveyid",surveyId).findAll());
+                patientList.addAll(realm.where(Patients.class).equalTo("surveyid", surveyId).findAll());
                 mAdapter.notifyDataSetChanged();
 
             }
@@ -117,10 +117,9 @@ realm=Realm.getDefaultInstance();
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.length()>2){
+                if (editable.length() > 2) {
                     btnStartSurvey.setEnabled(true);
-                }
-                else{
+                } else {
                     btnStartSurvey.setEnabled(false);
                 }
             }
@@ -150,7 +149,7 @@ realm=Realm.getDefaultInstance();
             case R.id.action_export:
                 new AlertDialog.Builder(this)
                         .setTitle("Export to CSV")
-                        .setMessage("Would you like to Export "+selectedSurvey.getName()+" ?")
+                        .setMessage("Would you like to Export " + selectedSurvey.getName() + " ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 generateCSV();
@@ -209,28 +208,24 @@ realm=Realm.getDefaultInstance();
 
             Log.v("asdf", "SUCCESS");
 
-            Toast.makeText(getApplicationContext(),"Successfully Exported the data..!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Successfully Exported the data..!", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
 
-            Toast.makeText(getApplicationContext(),"Something went wrong..!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Something went wrong..!", Toast.LENGTH_SHORT).show();
         }
     }
 
 
+    public void onBtnClick(View view) {
+        int id = view.getId();
 
-
-
-    public void onBtnClick(View view){
-        int id=view.getId();
-
-        switch (id)
-        {
+        switch (id) {
             case R.id.btnStartSurvey:
-                Intent i=new Intent(this, QuestionsActivity.class);
-                i.putExtra("surveyId",surveyId);
-                i.putExtra("patientName",etPatientName.getText().toString());
+                Intent i = new Intent(this, QuestionsActivity.class);
+                i.putExtra("surveyId", surveyId);
+                i.putExtra("patientName", etPatientName.getText().toString());
                 startActivity(i);
                 break;
         }
@@ -243,16 +238,14 @@ realm=Realm.getDefaultInstance();
 
         etPatientName.setText("");
         patientList.clear();
-       // patientList.addAll(Patients.find(Patients.class, "surveyid=?", String.valueOf(surveyId)));
-        patientList.addAll(realm.where(Patients.class).equalTo("surveyid",surveyId).findAll());
+        // patientList.addAll(Patients.find(Patients.class, "surveyid=?", String.valueOf(surveyId)));
+        patientList.addAll(realm.where(Patients.class).equalTo("surveyid", surveyId).findAll());
         mAdapter.notifyDataSetChanged();
 
 
-        if(patientList.size()>0){
+        if (patientList.size() > 0) {
             llNoData.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             llNoData.setVisibility(View.VISIBLE);
         }
 

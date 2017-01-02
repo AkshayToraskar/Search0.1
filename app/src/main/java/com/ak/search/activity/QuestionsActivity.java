@@ -287,7 +287,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
         ans.setPatientid(patientId);
 
-        answers.put(ans.getQuestionid(), ans);
+        answers.put(ans.getQuestions().getId(), ans);
 
         if (q.updateReviewAnswer != null) {
             q.updateReviewAnswer.onReviewUpdate(answers);
