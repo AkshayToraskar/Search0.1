@@ -1,21 +1,31 @@
 package com.ak.search.model;
 
 
-import io.realm.Realm;
+import com.ak.search.app.RealmListParcelConverter;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.SurveyRealmProxy;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by dg hdghfd on 01-12-2016.
  */
 
-public class Survey extends RealmObject {
+@Parcel(implementations = { SurveyRealmProxy.class },
+        value = Parcel.Serialization.FIELD,
+        analyze = { Survey.class })
+public class Survey extends RealmObject{
 
     @PrimaryKey
     long id;
 
     String name;
+
+    @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Questions> questions;
 
     public long getId() {

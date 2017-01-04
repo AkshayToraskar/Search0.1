@@ -13,21 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ak.search.R;
+import com.ak.search.app.ManageFragment;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
 import com.ak.search.fragment.AdminFragment;
+import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.model.Patients;
+
+import org.parceler.Parcels;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ManageFragment {
 
     private String username;
     private int loginType;
     public static String TAG = MainActivity.class.getName();
     private SessionManager sessionManager;
 
+    public static ManageFragment manageFragment;
     /*@BindView(R.id.ll_admin)
     LinearLayout llAdmin;
 
@@ -46,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public static long surveyId = -1;
 
     private Validate validate;
+    public static FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
+
+        manageFragment = this;
 
         sessionManager = new SessionManager(this);
         validate = new Validate();
@@ -62,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             username = sessionManager.getUsername();
             loginType = sessionManager.getLoginType();
 
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction = getSupportFragmentManager().beginTransaction();
 
 
             getSupportActionBar().setTitle("Welcome " + username);
@@ -83,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case 3:
                     //UserFragment userFragment=new UserFragment();
-                    transaction.add(R.id.main_frame, new UserFragment());
+                    //transaction.add(R.id.main_frame, new UserFragment());
+                    transaction.add(R.id.main_frame, new PatientFragment());
                     transaction.commit();
                     break;
             }
@@ -203,4 +214,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void changeFragment(Patients patients) {
+
+        UserFragment userFragment=new UserFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("PatientData", Parcels.wrap(Patients.class,patients));
+        userFragment.setArguments(args);
+
+        FragmentTransaction tras = getSupportFragmentManager().beginTransaction();
+        tras.replace(R.id.main_frame,userFragment);
+        tras.addToBackStack(null);
+        tras.commit();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(getSupportFragmentManager().getBackStackEntryCount() > 0)
+            getSupportFragmentManager().popBackStack();
+        else
+            super.onBackPressed();
+    }
 }

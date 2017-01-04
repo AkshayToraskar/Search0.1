@@ -62,16 +62,16 @@ realm=Realm.getDefaultInstance();
 
 
         if (getArguments() != null) {
-            surveyId = getArguments().getLong("surveyId");
+           /* surveyId = getArguments().getLong("surveyId");
             survey=realm.where(Survey.class).equalTo("id",surveyId).findFirst();
 questionsList=survey.getQuestions();
             mAdapter = new GetQuestionsAdapter(getContext(), getQuestionList());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(mAdapter);
+            recyclerView.setAdapter(mAdapter);*/
 
-            Log.v("GET SURVEY", "" + surveyId);
+           // Log.v("GET SURVEY", "" + surveyId);
 
         }
 

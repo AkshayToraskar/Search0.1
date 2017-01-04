@@ -3,6 +3,7 @@ package com.ak.search.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,14 @@ import android.widget.TextView;
 
 import com.ak.search.activity.NewSurveyActivity;
 import com.ak.search.R;
+import com.ak.search.activity.QuestionsActivity;
+import com.ak.search.fragment.UserFragment;
+import com.ak.search.model.Patients;
 import com.ak.search.model.Questions;
 import com.ak.search.model.Survey;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -81,10 +88,13 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, NewSurveyActivity.class);
-                intent.putExtra("SurveyId", survey.getId());
-                intent.putExtra("TotalQuestions",survey.getQuestions().size());
-                context.startActivity(intent);
+                //Intent intent = new Intent(context, NewSurveyActivity.class);
+                Intent intent = new Intent(act, QuestionsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("survey", Parcels.wrap(Survey.class,survey));
+                bundle.putParcelable("patient", Parcels.wrap(Patients.class,UserFragment.patients));
+                intent.putExtras(bundle);
+                act.startActivity(intent);
             }
         });
     }

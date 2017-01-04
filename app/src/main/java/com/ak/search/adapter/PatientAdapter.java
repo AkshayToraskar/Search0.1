@@ -42,7 +42,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
                     Intent i = new Intent(context, ShowSurveyActivity.class);
-                    i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
+                  //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
                   //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
                     context.startActivity(i);
                 }

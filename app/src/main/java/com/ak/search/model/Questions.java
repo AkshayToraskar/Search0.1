@@ -1,9 +1,15 @@
 package com.ak.search.model;
 
 
+import com.ak.search.app.RealmListParcelConverter;
+
+import org.parceler.Parcel;
+import org.parceler.ParcelPropertyConverter;
+
 import java.io.Serializable;
 import java.util.List;
 
+import io.realm.QuestionsRealmProxy;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -14,12 +20,16 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-public class Questions extends RealmObject implements Serializable {
+@Parcel(implementations = { QuestionsRealmProxy.class },
+        value = Parcel.Serialization.FIELD,
+        analyze = { Questions.class })
+public class Questions extends RealmObject{
 
     @PrimaryKey
     long id;
 
     String question;
+    @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Options> options;
 
     Boolean text, opt;

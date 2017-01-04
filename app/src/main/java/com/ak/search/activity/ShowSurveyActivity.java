@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 
 public class ShowSurveyActivity extends AppCompatActivity {
 
-    String surveyId;
+   // String surveyId;
     Long patientId;
     private List<Questions> questionsList;
     @BindView(R.id.rv_questions)
@@ -39,7 +39,7 @@ public class ShowSurveyActivity extends AppCompatActivity {
 
 
         if (getIntent().getExtras() != null) {
-            surveyId = getIntent().getExtras().getString("surveyId");
+            //surveyId = getIntent().getExtras().getString("surveyId");
             patientId = getIntent().getExtras().getLong("patientId");
 
 
@@ -52,7 +52,7 @@ public class ShowSurveyActivity extends AppCompatActivity {
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(mAdapter);
 
-            Log.v("GET SURVEY", "" + surveyId);
+           // Log.v("GET SURVEY", "" + surveyId);
         }
 
     }

@@ -88,7 +88,7 @@ public class NewSurveyActivity extends AppCompatActivity {
             surveyId = getIntent().getExtras().getLong("SurveyId");
             int totalQuestions = getIntent().getExtras().getInt("TotalQuestions");
 
-            selectedSurvey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
+            selectedSurvey = realm.where(Survey.class).findFirst();
             tvTotalQuestions.setText(" (" + totalQuestions + " Questions)");
 
 
@@ -96,7 +96,7 @@ public class NewSurveyActivity extends AppCompatActivity {
                 // String surveyId1 = String.valueOf(selectedSurvey.getId());
                 getSupportActionBar().setTitle(selectedSurvey.getName());
                 patientList.clear();
-                patientList.addAll(realm.where(Patients.class).equalTo("surveyid", surveyId).findAll());
+                patientList.addAll(realm.where(Patients.class).findAll());
                 mAdapter.notifyDataSetChanged();
 
             }
@@ -239,7 +239,7 @@ public class NewSurveyActivity extends AppCompatActivity {
         etPatientName.setText("");
         patientList.clear();
         // patientList.addAll(Patients.find(Patients.class, "surveyid=?", String.valueOf(surveyId)));
-        patientList.addAll(realm.where(Patients.class).equalTo("surveyid", surveyId).findAll());
+        patientList.addAll(realm.where(Patients.class).findAll());
         mAdapter.notifyDataSetChanged();
 
 

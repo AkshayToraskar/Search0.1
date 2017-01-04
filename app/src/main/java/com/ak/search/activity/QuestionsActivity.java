@@ -25,6 +25,8 @@ import com.ak.search.model.Patients;
 import com.ak.search.model.Questions;
 import com.ak.search.model.Survey;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +60,9 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     QuestionReviewFragment q;
     Survey survey;
     Realm realm;
+
+    Patients patients;
+
     public static HashMap<Long, Answers> answers;
 
     @Override
@@ -71,15 +76,15 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getIntent().getExtras() != null) {
-            surveyId = getIntent().getExtras().getLong("surveyId");
-            patientName = getIntent().getExtras().getString("patientName");
+            survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
+            patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
             // survey = Survey.findById(Survey.class, (int) surveyId);
-            getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
+            getSupportActionBar().setTitle(survey.getName() + " ");
 
 
-            realm.executeTransaction(new Realm.Transaction() {
+            /*realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
@@ -93,17 +98,19 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                     }
 
 
-                    Patients patients = realm.createObject(Patients.class, patientId);
-                    patients.setPatientname(patientName);
-                    patients.setSurveyid(surveyId);
+                    //Patients patients = realm.createObject(Patients.class, patientId);
+                    patients.setPatientname(patients.getPatientname());
+                    //patients.setSurveyid(surveyId);
 
                     realm.copyToRealmOrUpdate(patients);
 
                 }
-            });
+            });*/
             //     patientId = patients.save();
 
-            questionsList=NewSurveyActivity.selectedSurvey.getQuestions();
+            questionsList=new ArrayList<>();
+
+            questionsList.addAll(survey.getQuestions());
 
             //     questionsList = Questions.find(Questions.class, "surveyid = ?", String.valueOf(surveyId));
 
@@ -222,7 +229,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(pager.getWindowToken(), 0);
 
-                getSupportActionBar().setTitle("Review " + NewSurveyActivity.selectedSurvey.getName());
+              //  getSupportActionBar().setTitle("Review " + NewSurveyActivity.selectedSurvey.getName());
 
             } else if (position == 0) {
                 // still pages are left
@@ -243,7 +250,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 btn_previous.setVisibility(View.VISIBLE);
 
 
-                getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
+               // getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
 
             }
         }

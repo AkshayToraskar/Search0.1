@@ -21,6 +21,8 @@ import com.ak.search.model.Answers;
 import com.ak.search.model.Questions;
 import com.ak.search.model.User;
 
+import org.parceler.Parcels;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
@@ -57,7 +59,7 @@ public class QuestionFragment extends Fragment {
     public static final QuestionFragment newInstance(Questions message) {
         QuestionFragment f = new QuestionFragment();
         Bundle bdl = new Bundle(1);
-        bdl.putSerializable(EXTRA_MESSAGE, message);
+        bdl.putParcelable(EXTRA_MESSAGE, Parcels.wrap(message));
         f.setArguments(bdl);
         return f;
     }
@@ -74,14 +76,14 @@ realm=Realm.getDefaultInstance();
 
 
 
-        Questions message = (Questions) getArguments().getSerializable(EXTRA_MESSAGE);
+        Questions message = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
         //Survey survey=Survey.findById(Survey.class,Integer.parseInt(message.getSurveyid()));
         //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
 
         tv_question.setText(message.getQuestion());
 
-        int answerId;
+        /*int answerId;
         try {
             answerId = realm.where(User.class).max("id").intValue() + 1;
         } catch(Exception ex) {
@@ -101,11 +103,11 @@ realm=Realm.getDefaultInstance();
                 rb_opt1.setText(message.getOptions().get(0).getOpt());
                 rb_opt2.setText(message.getOptions().get(1).getOpt());
             }
-            /*if (opt.size() > 2) {
+            *//*if (opt.size() > 2) {
                 for (int i = 2; i < opt.size(); i++) {
 
                 }
-            }*/
+            }*//*
 
             if (message.getOptions().size() > 0) {
                 rb_opt1.setText(message.getOptions().get(0).getOpt());
@@ -163,7 +165,7 @@ realm=Realm.getDefaultInstance();
 
                 answer.onAnswerSave(ans);
             }
-        });
+        });*/
 
 
 
