@@ -57,13 +57,15 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
     @BindView(R.id.txt_page_count)
     TextView txt_page_count;
-    QuestionReviewFragment q;
+    QuestionReviewFragment questionReviewFragment;
     Survey survey;
     Realm realm;
 
     Patients patients;
 
     public static HashMap<Long, Answers> answers;
+
+    //public ArrayList<Answers> ans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,20 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
             // survey = Survey.findById(Survey.class, (int) surveyId);
             getSupportActionBar().setTitle(survey.getName() + " ");
+
+
+           // ans=new ArrayList<>();
+
+            for(int i=0; i<survey.getQuestions().size(); i++){
+
+                Answers answ=new Answers();
+
+                answ.setPatientid(patients.getId());
+                answ.setQuestions(survey.getQuestions().get(i));
+
+                answers.put(survey.getQuestions().get(i).getId(),answ);
+            }
+
 
 
             /*realm.executeTransaction(new Realm.Transaction() {
@@ -146,13 +162,13 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                     } else {
                         // launchHomeScreen();
 
-                        for (Map.Entry m : answers.entrySet()) {
+                        /*for (Map.Entry m : answers.entrySet()) {
                             Answers an = (Answers) m.getValue();
                             // an.save();
 
                             Log.v("ans ", " " + m.getKey() + "," + an.getPatientid() + "," + an.getPatientid() + "," + an.getAns());
 
-                        }
+                        }*/
 
 
                     }
@@ -165,9 +181,9 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                     //Log.v("ans "," "+answers.get(0).getQuestionId());
 
 
-                 /*   for (Map.Entry m : answers.entrySet()) {
+                    /*for (Map.Entry m : answers.entrySet()) {
                         Answers an = (Answers) m.getValue();
-                        an.save();
+                       // an.save();
                         Log.v("ans ", " " + m.getKey() + "," + "," + an.getPatientid() + "--------" + an.getSelectedopt() + "," + an.getAns());
 
                     }*/
@@ -241,7 +257,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 //btn_next.setVisibility(View.VISIBLE);
                 btn_previous.setVisibility(View.INVISIBLE);
 
-                getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
+//                getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
             } else {
 
                 btn_next.setText("NEXT");
@@ -275,11 +291,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
         for (int i = 0; i < questionsList.size(); i++) {
             fList.add(QuestionFragment.newInstance(questionsList.get(i)));
         }
-        q = new QuestionReviewFragment();
-        Bundle args = new Bundle();
-        args.putLong("surveyId", surveyId);
-        q.setArguments(args);
-        fList.add(q);
+        questionReviewFragment = new QuestionReviewFragment();
+        Bundle args = new Bundle(1);
+        args.putParcelable("questionList", Parcels.wrap(questionsList));
+        questionReviewFragment.setArguments(args);
+        fList.add(questionReviewFragment);
 
         //fList.add(QuestionFragment.newInstance("Fragment 2"));
         //fList.add(QuestionFragment.newInstance("Fragment 3"));
@@ -292,12 +308,13 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     @Override
     public void onAnswerSave(Answers ans) {
 
-        ans.setPatientid(patientId);
+        ans.setPatientid(patients.getId());
+
 
         answers.put(ans.getQuestions().getId(), ans);
 
-        if (q.updateReviewAnswer != null) {
-            q.updateReviewAnswer.onReviewUpdate(answers);
+        if (questionReviewFragment.updateReviewAnswer != null) {
+            questionReviewFragment.updateReviewAnswer.onReviewUpdate(answers);
         }
 
         //Log.v("asdf",""+ans.getAns());

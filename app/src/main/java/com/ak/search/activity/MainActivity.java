@@ -217,15 +217,21 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
     @Override
     public void changeFragment(Patients patients) {
 
-        UserFragment userFragment=new UserFragment();
-        Bundle args = new Bundle();
-        args.putParcelable("PatientData", Parcels.wrap(Patients.class,patients));
-        userFragment.setArguments(args);
+        //UserFragment userFragment=new UserFragment();
 
-        FragmentTransaction tras = getSupportFragmentManager().beginTransaction();
-        tras.replace(R.id.main_frame,userFragment);
-        tras.addToBackStack(null);
-        tras.commit();
+        Intent i=new Intent(this,PatientActivity.class);
+
+        //Bundle args = new Bundle();
+        //args.putParcelable("PatientData", Parcels.wrap(Patients.class,patients));
+        i.putExtra("PatientData",Parcels.wrap(Patients.class,patients));
+        startActivity(i);
+
+        //userFragment.setArguments(args);
+
+        //FragmentTransaction tras = getSupportFragmentManager().beginTransaction();
+        //tras.replace(R.id.main_frame,userFragment);
+        //tras.addToBackStack(null);
+        //tras.commit();
     }
 
     @Override

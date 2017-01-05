@@ -33,15 +33,15 @@ public class UserFragment extends Fragment {
     private List<Survey> surveysList;
     @BindView(R.id.rv_survey)
     RecyclerView recyclerView;
-    @BindView(R.id.tv_patient_name)
+    /*@BindView(R.id.tv_patient_name)
     TextView tvPatientName;
     @BindView(R.id.tv_patient_address)
-    TextView tvPatientAddress;
+    TextView tvPatientAddress;*/
 
 
     public GetSurveyAdapter mAdapter;
     Realm realm;
-    public static Patients patients;
+    //public static Patients patients;
 
     public UserFragment() {
         // Required empty public constructor
@@ -57,13 +57,13 @@ public class UserFragment extends Fragment {
 
         surveysList = realm.where(Survey.class).findAll();
 
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             patients = Parcels.unwrap(getArguments().getParcelable("PatientData"));
 
             tvPatientName.setText(patients.getPatientname());
             tvPatientAddress.setText(patients.getAddress());
 
-        }
+        }*/
         //  surveysList = Survey.listAll(Survey.class);
 
         mAdapter = new GetSurveyAdapter(getContext(), surveysList, getActivity());

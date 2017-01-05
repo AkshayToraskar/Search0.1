@@ -46,11 +46,11 @@ public class ShowSurveyActivity extends AppCompatActivity {
          //   Patients patients= Patients.findById(Patients.class,patientId);
          //   getSupportActionBar().setTitle(patients.getPatientname()+" ");
 
-            mAdapter = new GetQuestionsAdapter(this, getQuestionList());
+           /* mAdapter = new GetQuestionsAdapter(this, getQuestionList());
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(mAdapter);
+            recyclerView.setAdapter(mAdapter);*/
 
            // Log.v("GET SURVEY", "" + surveyId);
         }

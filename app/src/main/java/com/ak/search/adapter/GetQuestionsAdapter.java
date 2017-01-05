@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ak.search.R;
+import com.ak.search.model.Answers;
 import com.ak.search.model.Questions;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import static android.view.View.GONE;
 
 public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapter.MyViewHolder> {
 
-    private List<Questions> questionsList;
+    private List<Answers> answerList;
     private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -46,8 +47,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         }
     }
 
-    public GetQuestionsAdapter(Context context, List<Questions> questionsList) {
-        this.questionsList = questionsList;
+    public GetQuestionsAdapter(Context context, List<Answers> answerList) {
+        this.answerList = answerList;
         this.context = context;
     }
 
@@ -62,7 +63,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         holder.setIsRecyclable(false);
-        Questions questions = questionsList.get(position);
+        Questions questions = answerList.get(position).getQuestions();
         holder.tvQuestion.setText(questions.getQuestion());
         //Log.v("asdff a", "" + questionsList.get(position).getId());
         List<RadioButton> allRb = new ArrayList<>();
@@ -70,26 +71,26 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         if (!questions.getOpt()) {
             holder.rgOption.setVisibility(GONE);
         } else {
-            if (questionsList.get(position).getOptions().size() >= 2) {
-                holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
-                holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
 
-                allRb.add(holder.rbOpt1);
-                allRb.add(holder.rbOpt2);
-            }
 
-            if (questions.getOptions().size() > 2) {
-                for (int i = 2; i < questionsList.get(position).getOptions().size(); i++) {
-                    RadioButton rb = new RadioButton(context);
-                    rb.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rb.setText(questionsList.get(position).getOptions().get(i).getOpt());
-                    holder.rgOption.addView(rb);
-                    allRb.add(rb);
+                for (int i = 2; i < answerList.get(position).getQuestions().getOptions().size(); i++) {
+
+                    if(questions.getOptions().size()<2) {
+                        holder.rbOpt1.setText(answerList.get(position).getQuestions().getOptions().get(0).getOpt());
+                        holder.rbOpt2.setText(answerList.get(position).getQuestions().getOptions().get(1).getOpt());
+                    }
+                    else{
+                        RadioButton rb = new RadioButton(context);
+                        rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        rb.setText(answerList.get(position).getQuestions().getOptions().get(i).getOpt());
+                        holder.rgOption.addView(rb);
+                        allRb.add(rb);
+                    }
                 }
                 //allRb.get(questionsList.get(position).getAnswers().getSelectedOpt()).setChecked(true);
-            }
+
 
             /*if (questions.getAnswers() != null) {
                 allRb.get(questionsList.get(position).getAnswers().getSelectedopt()).setChecked(true);
@@ -115,13 +116,13 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
     @Override
     public int getItemCount() {
-        return questionsList.size();
+        return answerList.size();
     }
 
 
-    public void update(List<Questions> modelList) {
-        questionsList.clear();
-        questionsList.addAll(modelList);
+    public void update(List<Answers> modelList) {
+        answerList.clear();
+        answerList.addAll(modelList);
         notifyDataSetChanged();
     }
 }

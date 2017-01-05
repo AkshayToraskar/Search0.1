@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ak.search.activity.NewSurveyActivity;
 import com.ak.search.R;
+import com.ak.search.activity.PatientActivity;
 import com.ak.search.activity.QuestionsActivity;
 import com.ak.search.fragment.UserFragment;
 import com.ak.search.model.Patients;
@@ -92,7 +93,7 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
                 Intent intent = new Intent(act, QuestionsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("survey", Parcels.wrap(Survey.class,survey));
-                bundle.putParcelable("patient", Parcels.wrap(Patients.class,UserFragment.patients));
+                bundle.putParcelable("patient", Parcels.wrap(Patients.class, PatientActivity.patients));
                 intent.putExtras(bundle);
                 act.startActivity(intent);
             }

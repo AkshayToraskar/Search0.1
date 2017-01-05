@@ -71,17 +71,15 @@ public class QuestionFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_question, container, false);
         ButterKnife.bind(this, v);
-realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
 
-
-
-        Questions message = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
+        Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
         //Survey survey=Survey.findById(Survey.class,Integer.parseInt(message.getSurveyid()));
         //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
 
-        tv_question.setText(message.getQuestion());
+        tv_question.setText(questions.getQuestion());
 
         /*int answerId;
         try {
@@ -89,19 +87,20 @@ realm=Realm.getDefaultInstance();
         } catch(Exception ex) {
             Log.v("exception",ex.toString());
             answerId = 1;
-        }
+        }*/
 
         ans=new Answers();
 
 
+        ans.setQuestions(questions);
 
-        if (!message.getOpt()) {
+        if (!questions.getOpt()) {
             rg_option.setVisibility(GONE);
             ans.setSelectedopt(-1);
         } else {
-            if (message.getOptions().size() > 1) {
-                rb_opt1.setText(message.getOptions().get(0).getOpt());
-                rb_opt2.setText(message.getOptions().get(1).getOpt());
+            /*if (questions.getOptions().size() > 1) {
+                rb_opt1.setText(questions.getOptions().get(0).getOpt());
+                rb_opt2.setText(questions.getOptions().get(1).getOpt());
             }
             *//*if (opt.size() > 2) {
                 for (int i = 2; i < opt.size(); i++) {
@@ -109,27 +108,34 @@ realm=Realm.getDefaultInstance();
                 }
             }*//*
 
-            if (message.getOptions().size() > 0) {
-                rb_opt1.setText(message.getOptions().get(0).getOpt());
-            } else if (message.getOptions().size() > 1) {
-                rb_opt1.setText(message.getOptions().get(0).getOpt());
-                rb_opt2.setText(message.getOptions().get(1).getOpt());
-            }
-            if (message.getOptions().size() > 2) {
-                for (int i = 2; i < message.getOptions().size(); i++) {
-                    RadioButton rb = new RadioButton(getContext());
-                    rb.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rb.setText(message.getOptions().get(i).getOpt());
-                    rg_option.addView(rb);
+            if (questions.getOptions().size() > 0) {
+                rb_opt1.setText(questions.getOptions().get(0).getOpt());
+            } else if (questions.getOptions().size() > 1) {
+                rb_opt1.setText(questions.getOptions().get(0).getOpt());
+                rb_opt2.setText(questions.getOptions().get(1).getOpt());
+            }*/
+            if (questions.getOptions().size() > 0) {
+                for (int i = 0; i < questions.getOptions().size(); i++) {
+                    if(i<2){
+                        rb_opt1.setText(questions.getOptions().get(0).getOpt());
+                        rb_opt2.setText(questions.getOptions().get(1).getOpt());
+
+                    }
+                    else {
+                        RadioButton rb = new RadioButton(getContext());
+                        rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        rb.setText(questions.getOptions().get(i).getOpt());
+                        rg_option.addView(rb);
+                    }
                     //allEds.add(text);
                 }
             }
 
         }
 
-        if (!message.getText()) {
+        if (!questions.getText()) {
             et_answer.setVisibility(GONE);
             ans.setAns("-");
         }
@@ -165,8 +171,7 @@ realm=Realm.getDefaultInstance();
 
                 answer.onAnswerSave(ans);
             }
-        });*/
-
+        });
 
 
         return v;
