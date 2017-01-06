@@ -9,8 +9,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class Answers extends RealmObject {
-    @PrimaryKey
-    long id;
+
 
     long patientid;
     int selectedopt;
@@ -26,13 +25,7 @@ public class Answers extends RealmObject {
         this.questions = questions;
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
 
 

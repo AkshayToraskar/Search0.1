@@ -20,6 +20,7 @@ import com.ak.search.app.SaveAnswer;
 import com.ak.search.fragment.QuestionFragment;
 import com.ak.search.fragment.QuestionReviewFragment;
 import com.ak.search.model.Answers;
+import com.ak.search.model.DataCollection;
 import com.ak.search.model.Options;
 import com.ak.search.model.Patients;
 import com.ak.search.model.Questions;
@@ -35,6 +36,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
@@ -65,6 +67,8 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
     public static HashMap<Long, Answers> answers;
 
+    DataCollection dataCollection;
+
     //public ArrayList<Answers> ans;
 
     @Override
@@ -86,16 +90,16 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             getSupportActionBar().setTitle(survey.getName() + " ");
 
 
-           // ans=new ArrayList<>();
+            // ans=new ArrayList<>();
 
-            for(int i=0; i<survey.getQuestions().size(); i++){
+            for (int i = 0; i < survey.getQuestions().size(); i++) {
 
-                Answers answ=new Answers();
+                Answers answ = new Answers();
 
                 answ.setPatientid(patients.getId());
                 answ.setQuestions(survey.getQuestions().get(i));
 
-                answers.put(survey.getQuestions().get(i).getId(),answ);
+                answers.put(survey.getQuestions().get(i).getId(), answ);
             }
 
 
@@ -124,7 +128,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             });*/
             //     patientId = patients.save();
 
-            questionsList=new ArrayList<>();
+            questionsList = new ArrayList<>();
 
             questionsList.addAll(survey.getQuestions());
 
@@ -188,6 +192,70 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
                     }*/
 
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+                            //Answers
+                            RealmList<Answers> answerses = new RealmList<Answers>();
+                            for (Map.Entry m : answers.entrySet()) {
+                                /*int answerId;
+                                try {
+                                    answerId = realm.where(Answers.class).max("id").intValue() + 1;
+                                } catch (Exception ex) {
+                                    Log.v("exception", ex.toString());
+                                    answerId = 1;
+                                }*/
+                                Answers a = (Answers) m.getValue();
+                                Answers ans = realm.createObject(Answers.class);
+
+                                Questions questions=realm.where(Questions.class).equalTo("id",a.getQuestions().getId()).findFirst();
+
+                                ans.setQuestions(questions);
+                                ans.setPatientid(a.getPatientid());
+                                ans.setAns(a.getAns());
+                                ans.setSelectedopt(a.getSelectedopt());
+                                answerses.add(ans);
+
+                            }
+
+
+                            //Patients
+                            /*if (!patients.isManaged()) { // if the 'list' is managed, all items in it is also managed
+                                //RealmList<Image> managedImageList = new RealmList<>();
+                               // for (Image item : list) {
+                                    if (patients.isManaged()) {
+                                        //managedImageList.add(item);
+                                    } else {
+                                        realm.copyToRealm(patients);
+                                        //managedImageList.add(realm.copyToRealm(item));
+                                    }
+                                }
+                                //list = managedImageList;
+                            }*/
+
+                            Patients patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
+
+
+                            int collectionId;
+                            try {
+                                collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
+                            } catch (Exception ex) {
+                                Log.v("exception", ex.toString());
+                                collectionId = 1;
+                            }
+
+                            dataCollection = realm.createObject(DataCollection.class, collectionId);
+                            dataCollection.setSurveyid(surveyId);
+                            dataCollection.setPatients(patients1);
+                            dataCollection.setAnswerses(answerses);
+
+                            realm.copyToRealmOrUpdate(dataCollection);
+
+                        }
+                    });
+
+
                     Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
 
 
@@ -245,7 +313,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(pager.getWindowToken(), 0);
 
-              //  getSupportActionBar().setTitle("Review " + NewSurveyActivity.selectedSurvey.getName());
+                //  getSupportActionBar().setTitle("Review " + NewSurveyActivity.selectedSurvey.getName());
 
             } else if (position == 0) {
                 // still pages are left
@@ -266,7 +334,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 btn_previous.setVisibility(View.VISIBLE);
 
 
-               // getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
+                // getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
 
             }
         }

@@ -124,21 +124,26 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
     public void onReviewUpdate(HashMap<Long, Answers> answers) {
 
         //getQuestionList();
-        answersList.clear();
+        //answersList.clear();
         //questionsList.addAll(getQuestionList());
 
 
         for (Map.Entry m : answers.entrySet()) {
-//            for (int i = 0; i < answersList.size(); i++) {
-//                if (Long.parseLong(String.valueOf(m.getKey())) == answersList.get(i).getQuestions().getId()) {
-//                    Answers an = (Answers) m.getValue();
-//                    answersList.set(i,an);
-//                }
-//            }
-            answersList.add((Answers) m.getValue());
+            for (int i = 0; i < answersList.size(); i++) {
+                if (Long.parseLong(String.valueOf(m.getKey())) == answersList.get(i).getQuestions().getId()) {
+                    Answers an = (Answers) m.getValue();
+                    answersList.set(i,an);
+                }
+            }
+            //Answers ans=(Answers)m.getValue();
+
+            //answersList.add(ans);
 
         }
 
+
+
+        //recyclerView.invalidate();
         //Log.v("ans "," "+questionsList.get(0).getId());
 
         mAdapter.notifyDataSetChanged();

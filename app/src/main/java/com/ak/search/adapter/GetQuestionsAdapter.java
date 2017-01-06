@@ -73,23 +73,25 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         } else {
 
 
-                for (int i = 2; i < answerList.get(position).getQuestions().getOptions().size(); i++) {
+            for (int i = 0; i < answerList.get(position).getQuestions().getOptions().size(); i++) {
 
-                    if(questions.getOptions().size()<2) {
-                        holder.rbOpt1.setText(answerList.get(position).getQuestions().getOptions().get(0).getOpt());
-                        holder.rbOpt2.setText(answerList.get(position).getQuestions().getOptions().get(1).getOpt());
-                    }
-                    else{
-                        RadioButton rb = new RadioButton(context);
-                        rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rb.setText(answerList.get(position).getQuestions().getOptions().get(i).getOpt());
-                        holder.rgOption.addView(rb);
-                        allRb.add(rb);
-                    }
+                if (i < 2) {
+                    holder.rbOpt1.setText(answerList.get(position).getQuestions().getOptions().get(0).getOpt());
+                    holder.rbOpt2.setText(answerList.get(position).getQuestions().getOptions().get(1).getOpt());
+                    allRb.add(holder.rbOpt1);
+                    allRb.add(holder.rbOpt2);
+
+                } else {
+                    RadioButton rb = new RadioButton(context);
+                    rb.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    rb.setText(answerList.get(position).getQuestions().getOptions().get(i).getOpt());
+                    holder.rgOption.addView(rb);
+                    allRb.add(rb);
                 }
-                //allRb.get(questionsList.get(position).getAnswers().getSelectedOpt()).setChecked(true);
+            }
+            allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
 
 
             /*if (questions.getAnswers() != null) {
@@ -102,9 +104,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         if (!questions.getText()) {
             holder.etAnswer.setVisibility(GONE);
         } else {
-            /*if (questions.getAnswers() != null) {
-                holder.etAnswer.setText(questions.getAnswers().getAns());
-            }*/
+            if (questions.getText() != null) {
+                holder.etAnswer.setText(answerList.get(position).getAns());
+            }
         }
 
         holder.etAnswer.setEnabled(false);
@@ -120,9 +122,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     }
 
 
-    public void update(List<Answers> modelList) {
+    /*public void update(List<Answers> modelList) {
         answerList.clear();
         answerList.addAll(modelList);
         notifyDataSetChanged();
-    }
+    }*/
 }
