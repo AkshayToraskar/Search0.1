@@ -43,8 +43,8 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
                     Intent i = new Intent(context, ShowSurveyActivity.class);
-                  //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
-                  //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
+                    //i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
+                    i.putExtra("collectionid", patientsList.get(getPosition()).getId());
                     context.startActivity(i);
                 }
             });

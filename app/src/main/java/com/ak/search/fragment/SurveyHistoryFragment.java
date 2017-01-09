@@ -37,11 +37,11 @@ public class SurveyHistoryFragment extends Fragment {
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
-    @BindView(R.id.spnSurveyName)
-    Spinner spnSurveyName;
+   /* @BindView(R.id.spnSurveyName)
+    Spinner spnSurveyName;*/
 
     public SurveyHistoryAdapter mAdapter;
-    ArrayAdapter<String> spnSurveyNameAdapter;
+    //ArrayAdapter<String> spnSurveyNameAdapter;
 
     View view;
     Realm realm;
@@ -85,7 +85,7 @@ public class SurveyHistoryFragment extends Fragment {
 
         surveyHistory.clear();
         // List<User> results = ;
-        surveyHistory.addAll(realm.where(DataCollection.class).findAll());
+        surveyHistory.addAll(realm.where(DataCollection.class).equalTo("patients.id",PatientActivity.patients.getId()).findAll());
         mAdapter.notifyDataSetChanged();
 
     }

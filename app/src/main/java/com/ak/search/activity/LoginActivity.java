@@ -123,6 +123,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 break;
+
+            case R.id.btn_bluetooth:
+                startActivity(new Intent(this, BluetoothActivity.class));
+                break;
+
+            case R.id.btn_bluetooth_client:
+                startActivity(new Intent(this, BluetoothClientActivity.class));
+                break;
         }
     }
 
