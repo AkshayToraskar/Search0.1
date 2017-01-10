@@ -12,23 +12,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
-import com.ak.search.realm_model.Test1;
-import com.ak.search.realm_model.TestModel;
+import com.ak.search.app.ParcebleUtil;
+import com.ak.search.model.MPatients;
+import com.ak.search.model.MSurvey;
+import com.ak.search.model.MUser;
+import com.ak.search.model.TransferModel;
+import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.User;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
     private UUID myUUID;
 
     LinearLayout inputPane;
-    EditText inputField;
+   // EditText inputField;
     Button btnSend;
 
     ThreadConnectBTdevice myThreadConnectBTdevice;
@@ -70,7 +69,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
         realm=Realm.getDefaultInstance();
 
         inputPane = (LinearLayout)findViewById(R.id.inputpane);
-        inputField = (EditText)findViewById(R.id.input);
+       // inputField = (EditText)findViewById(R.id.input);
         btnSend = (Button)findViewById(R.id.send);
         btnSend.setOnClickListener(new View.OnClickListener(){
 
@@ -78,23 +77,25 @@ public class BluetoothClientActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(myThreadConnected!=null){
 
-                    User user=realm.where(User.class).findFirst();
+                  /*  User user=realm.where(User.class).findFirst();
 
 
-                    List<Test1> test1=new ArrayList<Test1>();
-                    test1.add(new Test1(1));
-                    test1.add(new Test1(2));
+                        // List<Test1> test1=new ArrayList<Test1>();
+                        //  test1.add(new Test1(1));
+                        // test1.add(new Test1(2));
 
-                    TestModel testModel=new TestModel();
-                    testModel.setName("aa");
-                    testModel.setTest1List(test1);
+                        TransferModel testModel=new TransferModel();
+                        testModel.setName("aa");
+                        //    testModel.setTest1List(test1);
 
-                    try {
-                        byte[] bytesToSend = serialize(testModel);
-                        myThreadConnected.write(bytesToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        try {
+                            byte[] bytesToSend = ParcebleUtil.serialize(testModel);
+                            myThreadConnected.write(bytesToSend);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                    }*/
+
+                    sendData();
 
 
                    // byte[] bytesToSend = inputField.getText().toString().getBytes();
@@ -318,7 +319,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
                     bytes = connectedInputStream.read(buffer);
                     //String strReceived = new String(buffer, 0, bytes);
 
-                    TestModel user=(TestModel)deserialize(buffer);
+                    TransferModel user=(TransferModel) ParcebleUtil.deserialize(buffer);
 
                     final String msgReceived = String.valueOf(bytes) +
                             " bytes received:\n"
@@ -370,17 +371,71 @@ public class BluetoothClientActivity extends AppCompatActivity {
     }
 
 
-    public static byte[] serialize(Object obj) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(obj);
-        return out.toByteArray();
+    public void sendData() {
+
+        List<MUser> mUserList = new ArrayList<>();
+        List<MPatients> mPatientsList = new ArrayList<>();
+        List<MSurvey> mSurveys = new ArrayList<>();
+
+        List<User> user = realm.where(User.class).findAll();
+        List<Patients> patients = realm.where(Patients.class).findAll();
+        // List<Survey> surveys = realm.where(Survey.class).findAll();
+        //List<Test1> test1=new ArrayList<Test1>();
+        //test1.add(new Test1(1));
+        // test1.add(new Test1(2));
+
+
+        //ConvertUser
+        for (int i = 0; i < user.size(); i++) {
+            MUser mu = new MUser();
+            mu.setId(user.get(i).getId());
+            mu.setName(user.get(i).getName());
+            mu.setPassword(user.get(i).getPassword());
+            mu.setType(user.get(i).getType());
+            mUserList.add(mu);
+        }
+
+        //ConvertPatients
+        for (int i = 0; i < patients.size(); i++) {
+            MPatients pa = new MPatients();
+            pa.setId(patients.get(i).getId());
+            pa.setAddress(patients.get(i).getAddress());
+            pa.setPatientname(patients.get(i).getPatientname());
+            mPatientsList.add(pa);
+        }
+
+
+        //Convert Survey
+        /*for(int i=0; i<surveys.size(); i++){
+
+            Survey sur=new Survey();
+            sur.setId(surveys.get(i).getId());
+            sur.setName(surveys.get(i).getName());
+
+            for(int j=0; j<surveys.get(i).getQuestions().size(); j++){
+
+            }
+
+
+        }*/
+
+
+
+
+        TransferModel transModel = new TransferModel();
+        transModel.setName("aa");
+        transModel.setUserList(mUserList);
+        transModel.setPatientsList(mPatientsList);
+        // transModel.setSurveyList(mSurveys);
+
+        try {
+            byte[] bytesToSend = ParcebleUtil.serialize(transModel);
+            myThreadConnected.write(bytesToSend);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(data);
-        ObjectInputStream is = new ObjectInputStream(in);
-        return is.readObject();
-    }
+
 
 
 }

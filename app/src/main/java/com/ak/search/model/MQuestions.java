@@ -1,13 +1,14 @@
 package com.ak.search.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by dg hdghfd on 01-12-2016.
  */
 
-public class MQuestions {
+public class MQuestions implements Serializable {
 
 
     long id;

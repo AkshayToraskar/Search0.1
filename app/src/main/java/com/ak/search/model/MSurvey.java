@@ -1,6 +1,7 @@
 package com.ak.search.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,13 +9,10 @@ import java.util.List;
  */
 
 
-public class MSurvey {
-
+public class MSurvey implements Serializable {
 
     long id;
-
     String name;
-
     List<MQuestions> questions;
 
     public long getId() {
@@ -25,7 +23,6 @@ public class MSurvey {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public List<MQuestions> getQuestions() {
         return questions;

@@ -29,15 +29,15 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <EditText
+        <!--<EditText
             android:id="@+id/input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/>-->
         <Button
             android:id="@+id/send"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sent"/>
+            android:text="Send Login/Patient/Survey Data"/>
 
     </LinearLayout>
 

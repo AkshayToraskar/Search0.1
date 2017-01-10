@@ -1,6 +1,8 @@
 package com.ak.search.model;
 
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -8,9 +10,9 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 29-11-2016.
  */
 
-public class MUser extends RealmObject {
+public class MUser implements Serializable{
 
-    @PrimaryKey
+
     private long id;
 
     private String name, password;

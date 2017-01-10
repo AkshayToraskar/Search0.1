@@ -3,6 +3,8 @@ package com.ak.search.model;
 
 import org.parceler.Parcel;
 
+import java.io.Serializable;
+
 import io.realm.OptionsRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -12,7 +14,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 
-public class MOptions {
+public class MOptions implements Serializable {
 
 
     long id;

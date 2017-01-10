@@ -11,23 +11,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
-import com.ak.search.realm_model.Test1;
-import com.ak.search.realm_model.TestModel;
+import com.ak.search.app.ParcebleUtil;
+import com.ak.search.model.MPatients;
+import com.ak.search.model.MSurvey;
+import com.ak.search.model.MUser;
+import com.ak.search.model.TransferModel;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.User;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class BluetoothActivity extends AppCompatActivity {
     private String myName;
 
     LinearLayout inputPane;
-    EditText inputField;
+    //EditText inputField;
     Button btnSend;
 
     TextView textInfo, textStatus;
@@ -57,44 +58,30 @@ public class BluetoothActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
-        textInfo = (TextView)findViewById(R.id.info);
-        textStatus = (TextView)findViewById(R.id.status);
+        textInfo = (TextView) findViewById(R.id.info);
+        textStatus = (TextView) findViewById(R.id.status);
 
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
-        inputPane = (LinearLayout)findViewById(R.id.inputpane);
-        inputField = (EditText)findViewById(R.id.input);
-        btnSend = (Button)findViewById(R.id.send);
-        btnSend.setOnClickListener(new View.OnClickListener(){
+        inputPane = (LinearLayout) findViewById(R.id.inputpane);
+        // inputField = (EditText)findViewById(R.id.input);
+        btnSend = (Button) findViewById(R.id.send);
+        btnSend.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if(myThreadConnected!=null){
+                if (myThreadConnected != null) {
 
-                    User user=realm.where(User.class).findFirst();
-
-                    List<Test1> test1=new ArrayList<Test1>();
-                    test1.add(new Test1(1));
-                    test1.add(new Test1(2));
-
-                    TestModel testModel=new TestModel();
-                    testModel.setName("aa");
-                    testModel.setTest1List(test1);
-
-                    try {
-                        byte[] bytesToSend = serialize(testModel);
-                        myThreadConnected.write(bytesToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    sendData();
 
 
                     // byte[] bytesToSend = inputField.getText().toString().getBytes();
-                   // myThreadConnected.write(bytesToSend);
+                    // myThreadConnected.write(bytesToSend);
                 }
-            }});
+            }
+        });
 
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)){
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
                     "FEATURE_BLUETOOTH NOT support",
                     Toast.LENGTH_LONG).show();
@@ -144,7 +131,7 @@ public class BluetoothActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        if(myThreadBeConnected!=null){
+        if (myThreadBeConnected != null) {
             myThreadBeConnected.cancel();
         }
     }
@@ -152,10 +139,10 @@ public class BluetoothActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode==REQUEST_ENABLE_BT){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == Activity.RESULT_OK) {
                 setup();
-            }else{
+            } else {
                 Toast.makeText(this,
                         "BlueTooth NOT enabled",
                         Toast.LENGTH_SHORT).show();
@@ -187,7 +174,7 @@ public class BluetoothActivity extends AppCompatActivity {
         public void run() {
             BluetoothSocket bluetoothSocket = null;
 
-            if(bluetoothServerSocket!=null){
+            if (bluetoothServerSocket != null) {
                 try {
                     bluetoothSocket = bluetoothServerSocket.accept();
 
@@ -198,13 +185,14 @@ public class BluetoothActivity extends AppCompatActivity {
                             remoteDevice.getAddress();
 
                     //connected
-                    runOnUiThread(new Runnable(){
+                    runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
                             textStatus.setText(strConnected);
                             inputPane.setVisibility(View.VISIBLE);
-                        }});
+                        }
+                    });
 
                     startThreadConnected(bluetoothSocket);
 
@@ -213,20 +201,22 @@ public class BluetoothActivity extends AppCompatActivity {
                     e.printStackTrace();
 
                     final String eMessage = e.getMessage();
-                    runOnUiThread(new Runnable(){
+                    runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
                             textStatus.setText("something wrong: \n" + eMessage);
-                        }});
+                        }
+                    });
                 }
-            }else{
-                runOnUiThread(new Runnable(){
+            } else {
+                runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
                         textStatus.setText("bluetoothServerSocket == null");
-                    }});
+                    }
+                });
             }
         }
 
@@ -245,7 +235,7 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    private void startThreadConnected(BluetoothSocket socket){
+    private void startThreadConnected(BluetoothSocket socket) {
 
         myThreadConnected = new ThreadConnected(socket);
         myThreadConnected.start();
@@ -284,18 +274,19 @@ public class BluetoothActivity extends AppCompatActivity {
 
                     //String strReceived = new String(buffer, 0, bytes);
 
-                    TestModel user=(TestModel)deserialize(buffer);
+                    TransferModel user = (TransferModel) ParcebleUtil.deserialize(buffer);
 
                     final String msgReceived = String.valueOf(bytes) +
                             " bytes received:\n"
                             + user.getName();
 
-                    runOnUiThread(new Runnable(){
+                    runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
                             textStatus.setText(msgReceived);
-                        }});
+                        }
+                    });
 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
@@ -303,12 +294,13 @@ public class BluetoothActivity extends AppCompatActivity {
 
                     final String msgConnectionLost = "Connection lost:\n"
                             + e.getMessage();
-                    runOnUiThread(new Runnable(){
+                    runOnUiThread(new Runnable() {
 
                         @Override
                         public void run() {
                             textStatus.setText(msgConnectionLost);
-                        }});
+                        }
+                    });
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -337,16 +329,69 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
 
-    public static byte[] serialize(Object obj) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(out);
-        os.writeObject(obj);
-        return out.toByteArray();
-    }
-    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream in = new ByteArrayInputStream(data);
-        ObjectInputStream is = new ObjectInputStream(in);
-        return is.readObject();
+    public void sendData() {
+
+        List<MUser> mUserList = new ArrayList<>();
+        List<MPatients> mPatientsList = new ArrayList<>();
+        List<MSurvey> mSurveys = new ArrayList<>();
+
+        List<User> user = realm.where(User.class).findAll();
+        List<Patients> patients = realm.where(Patients.class).findAll();
+       // List<Survey> surveys = realm.where(Survey.class).findAll();
+        //List<Test1> test1=new ArrayList<Test1>();
+        //test1.add(new Test1(1));
+        // test1.add(new Test1(2));
+
+
+        //ConvertUser
+        for (int i = 0; i < user.size(); i++) {
+            MUser mu = new MUser();
+            mu.setId(user.get(i).getId());
+            mu.setName(user.get(i).getName());
+            mu.setPassword(user.get(i).getPassword());
+            mu.setType(user.get(i).getType());
+            mUserList.add(mu);
+        }
+
+        //ConvertPatients
+        for (int i = 0; i < patients.size(); i++) {
+            MPatients pa = new MPatients();
+            pa.setId(patients.get(i).getId());
+            pa.setAddress(patients.get(i).getAddress());
+            pa.setPatientname(patients.get(i).getPatientname());
+            mPatientsList.add(pa);
+        }
+
+
+        //Convert Survey
+        /*for(int i=0; i<surveys.size(); i++){
+
+            Survey sur=new Survey();
+            sur.setId(surveys.get(i).getId());
+            sur.setName(surveys.get(i).getName());
+
+            for(int j=0; j<surveys.get(i).getQuestions().size(); j++){
+
+            }
+
+
+        }*/
+
+
+
+
+        TransferModel transModel = new TransferModel();
+        transModel.setName("aa");
+        transModel.setUserList(mUserList);
+        transModel.setPatientsList(mPatientsList);
+       // transModel.setSurveyList(mSurveys);
+
+        try {
+            byte[] bytesToSend = ParcebleUtil.serialize(transModel);
+            myThreadConnected.write(bytesToSend);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

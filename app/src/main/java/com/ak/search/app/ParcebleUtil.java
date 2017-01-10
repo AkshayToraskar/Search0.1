@@ -3,30 +3,26 @@ package com.ak.search.app;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /**
  * Created by dg hdghfd on 10-01-2017.
  */
 
 public class ParcebleUtil {
-    public static byte[] marshall(Parcelable parceable) {
-        Parcel parcel = Parcel.obtain();
-        parceable.writeToParcel(parcel, 0);
-        byte[] bytes = parcel.marshall();
-        parcel.recycle();
-        return bytes;
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
     }
-
-    public static Parcel unmarshall(byte[] bytes) {
-        Parcel parcel = Parcel.obtain();
-        parcel.unmarshall(bytes, 0, bytes.length);
-        parcel.setDataPosition(0); // This is extremely important!
-        return parcel;
-    }
-
-    public static <T> T unmarshall(byte[] bytes, Parcelable.Creator<T> creator) {
-        Parcel parcel = unmarshall(bytes);
-        T result = creator.createFromParcel(parcel);
-        parcel.recycle();
-        return result;
+    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+        return is.readObject();
     }
 }

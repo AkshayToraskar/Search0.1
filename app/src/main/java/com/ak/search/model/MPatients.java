@@ -1,7 +1,11 @@
 package com.ak.search.model;
 
 
+import android.net.sip.SipErrorCode;
+
 import org.parceler.Parcel;
+
+import java.io.Serializable;
 
 import io.realm.PatientsRealmProxy;
 import io.realm.RealmObject;
@@ -12,7 +16,7 @@ import io.realm.annotations.PrimaryKey;
  */
 
 
-public class MPatients {
+public class MPatients implements Serializable {
 
     long id;
     String patientname;

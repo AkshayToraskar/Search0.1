@@ -1,11 +1,13 @@
 package com.ak.search.model;
 
 
+import java.io.Serializable;
+
 /**
  * Created by dg hdghfd on 14-12-2016.
  */
 
-public class MAnswers {
+public class MAnswers implements Serializable {
 
 
     long patientid;

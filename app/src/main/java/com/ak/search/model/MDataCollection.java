@@ -1,12 +1,13 @@
 package com.ak.search.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by dg hdghfd on 04-01-2017.
  */
 
-public class MDataCollection {
+public class MDataCollection implements Serializable {
 
 
     long id;
