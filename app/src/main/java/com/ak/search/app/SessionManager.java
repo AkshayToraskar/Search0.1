@@ -39,7 +39,7 @@ public class SessionManager {
         editor.putString(KEY_USERNAME,Username);
         editor.putInt(KEY_TYPE,Type);
         editor.commit();
-        Log.d(TAG, "User login session modified!");
+        Log.d(TAG, "MUser login session modified!");
     }
 
     public String getUsername(){

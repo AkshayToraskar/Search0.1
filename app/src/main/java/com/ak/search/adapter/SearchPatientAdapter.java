@@ -1,9 +1,6 @@
 package com.ak.search.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ak.search.R;
-import com.ak.search.activity.AddQuestionActivity;
 import com.ak.search.activity.MainActivity;
-import com.ak.search.fragment.AdminFragment;
-import com.ak.search.fragment.UserFragment;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Questions;
+import com.ak.search.realm_model.Patients;
 
 import io.realm.RealmList;
 

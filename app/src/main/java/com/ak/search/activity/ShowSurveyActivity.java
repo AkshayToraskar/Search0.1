@@ -5,16 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.ak.search.R;
 import com.ak.search.adapter.GetQuestionsAdapter;
-import com.ak.search.model.Answers;
-import com.ak.search.model.DataCollection;
-import com.ak.search.model.Options;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Questions;
+import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.DataCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +47,7 @@ public class ShowSurveyActivity extends AppCompatActivity {
             collectionId = getIntent().getExtras().getLong("collectionid");
 
 
-         //   Patients patients= Patients.findById(Patients.class,patientId);
+         //   MPatients patients= MPatients.findById(MPatients.class,patientId);
 
 
             mAdapter = new GetQuestionsAdapter(this, getCollectionData());
@@ -76,16 +72,16 @@ public class ShowSurveyActivity extends AppCompatActivity {
         answerList.addAll(dataCollection.getAnswerses());
 
 
-      //  questionsList = Questions.find(Questions.class, "surveyid = ?", String.valueOf(surveyId));
+      //  questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(surveyId));
 
-        ///List<Options> opt = new ArrayList<>();
+        ///List<MOptions> opt = new ArrayList<>();
         /*for (int i = 0; i < answerList.size(); i++) {
             //opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
-         //   List<Options> opt = Options.find(Options.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
+         //   List<MOptions> opt = MOptions.find(MOptions.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
          //   questionsList.get(i).setOptions(opt);
 
 
-          //  List<Answers> answers = Answers.find(Answers.class, "patientid = ? and questionid = ?", String.valueOf(patientId),String.valueOf(questionsList.get(i).getId()));
+          //  List<MAnswers> answers = MAnswers.find(MAnswers.class, "patientid = ? and questionid = ?", String.valueOf(patientId),String.valueOf(questionsList.get(i).getId()));
           //  questionsList.get(i).setAnswers(answers.get(0));
 
         }*/

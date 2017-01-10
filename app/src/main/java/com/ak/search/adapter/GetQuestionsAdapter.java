@@ -2,7 +2,6 @@ package com.ak.search.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.ak.search.R;
-import com.ak.search.model.Answers;
-import com.ak.search.model.Questions;
+import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.Questions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,7 +121,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     }
 
 
-    /*public void update(List<Answers> modelList) {
+    /*public void update(List<MAnswers> modelList) {
         answerList.clear();
         answerList.addAll(modelList);
         notifyDataSetChanged();

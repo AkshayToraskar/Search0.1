@@ -1,4 +1,4 @@
-package com.ak.search.model;
+package com.ak.search.realm_model;
 
 
 import io.realm.RealmObject;
@@ -15,7 +15,7 @@ public class User extends RealmObject {
 
     private String name, password;
 
-    private int type; //1-Admin, 2-Superviser, 3-User
+    private int type; //1-Admin, 2-Superviser, 3-MUser
 
     public long getId() {
         return id;

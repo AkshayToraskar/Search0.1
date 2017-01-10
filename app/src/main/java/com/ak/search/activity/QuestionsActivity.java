@@ -19,12 +19,11 @@ import com.ak.search.adapter.MyPagerAdapter;
 import com.ak.search.app.SaveAnswer;
 import com.ak.search.fragment.QuestionFragment;
 import com.ak.search.fragment.QuestionReviewFragment;
-import com.ak.search.model.Answers;
-import com.ak.search.model.DataCollection;
-import com.ak.search.model.Options;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Questions;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Questions;
+import com.ak.search.realm_model.Survey;
 
 import org.parceler.Parcels;
 
@@ -69,7 +68,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
     DataCollection dataCollection;
 
-    //public ArrayList<Answers> ans;
+    //public ArrayList<MAnswers> ans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +85,9 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
-            // survey = Survey.findById(Survey.class, (int) surveyId);
+
+
+            // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
             getSupportActionBar().setTitle(survey.getName() + " ");
 
 
@@ -111,14 +112,14 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
                     int patientId;
                     try {
-                        patientId = realm.where(Patients.class).max("id").intValue() + 1;
+                        patientId = realm.where(MPatients.class).max("id").intValue() + 1;
                     } catch (Exception ex) {
                         Log.v("exception", ex.toString());
                         patientId = 1;
                     }
 
 
-                    //Patients patients = realm.createObject(Patients.class, patientId);
+                    //MPatients patients = realm.createObject(MPatients.class, patientId);
                     patients.setPatientname(patients.getPatientname());
                     //patients.setSurveyid(surveyId);
 
@@ -132,11 +133,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
             questionsList.addAll(survey.getQuestions());
 
-            //     questionsList = Questions.find(Questions.class, "surveyid = ?", String.valueOf(surveyId));
+            //     questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(surveyId));
 
 
             /*for (int i = 0; i < questionsList.size(); i++) {
-                List<Options> opt = Options.find(Options.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
+                List<MOptions> opt = MOptions.find(MOptions.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
                 questionsList.get(i).setOptions(opt);
             }*/
         }
@@ -167,7 +168,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                         // launchHomeScreen();
 
                         /*for (Map.Entry m : answers.entrySet()) {
-                            Answers an = (Answers) m.getValue();
+                            MAnswers an = (MAnswers) m.getValue();
                             // an.save();
 
                             Log.v("ans ", " " + m.getKey() + "," + an.getPatientid() + "," + an.getPatientid() + "," + an.getAns());
@@ -186,7 +187,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
 
                     /*for (Map.Entry m : answers.entrySet()) {
-                        Answers an = (Answers) m.getValue();
+                        MAnswers an = (MAnswers) m.getValue();
                        // an.save();
                         Log.v("ans ", " " + m.getKey() + "," + "," + an.getPatientid() + "--------" + an.getSelectedopt() + "," + an.getAns());
 
@@ -196,12 +197,12 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                         @Override
                         public void execute(Realm realm) {
 
-                            //Answers
+                            //MAnswers
                             RealmList<Answers> answerses = new RealmList<Answers>();
                             for (Map.Entry m : answers.entrySet()) {
                                 /*int answerId;
                                 try {
-                                    answerId = realm.where(Answers.class).max("id").intValue() + 1;
+                                    answerId = realm.where(MAnswers.class).max("id").intValue() + 1;
                                 } catch (Exception ex) {
                                     Log.v("exception", ex.toString());
                                     answerId = 1;
@@ -220,7 +221,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                             }
 
 
-                            //Patients
+                            //MPatients
                             /*if (!patients.isManaged()) { // if the 'list' is managed, all items in it is also managed
                                 //RealmList<Image> managedImageList = new RealmList<>();
                                // for (Image item : list) {
@@ -412,10 +413,10 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     public void discardSurvey() {
         new AlertDialog.Builder(this)
                 .setTitle("Discard")
-                .setMessage("Would you like to Discard Survey?")
+                .setMessage("Would you like to Discard MSurvey?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //    Patients patients = Patients.findById(Patients.class, patientId);
+                        //    MPatients patients = MPatients.findById(MPatients.class, patientId);
                         //    patients.delete();
                         finish();
                     }

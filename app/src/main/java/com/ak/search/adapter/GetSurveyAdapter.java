@@ -11,16 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ak.search.activity.NewSurveyActivity;
 import com.ak.search.R;
 import com.ak.search.activity.PatientActivity;
 import com.ak.search.activity.QuestionsActivity;
-import com.ak.search.fragment.UserFragment;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Questions;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 
-import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -83,8 +79,8 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
         final Survey survey = surveysList.get(position);
         holder.tvSurveyName.setText(survey.getName());
 
-      //  final List<Questions> questionsList = Questions.find(Questions.class, "surveyid = ?", String.valueOf(survey.getId()));
-        holder.tvSurveyQuestions.setText( survey.getQuestions().size()+" Questions");
+      //  final List<MQuestions> questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(survey.getId()));
+        holder.tvSurveyQuestions.setText( survey.getQuestions().size()+" MQuestions");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -24,8 +24,8 @@ import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientAdapter;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -89,7 +89,7 @@ public class NewSurveyActivity extends AppCompatActivity {
             int totalQuestions = getIntent().getExtras().getInt("TotalQuestions");
 
             selectedSurvey = realm.where(Survey.class).findFirst();
-            tvTotalQuestions.setText(" (" + totalQuestions + " Questions)");
+            tvTotalQuestions.setText(" (" + totalQuestions + " MQuestions)");
 
 
             if (selectedSurvey != null) {
@@ -238,7 +238,7 @@ public class NewSurveyActivity extends AppCompatActivity {
 
         etPatientName.setText("");
         patientList.clear();
-        // patientList.addAll(Patients.find(Patients.class, "surveyid=?", String.valueOf(surveyId)));
+        // patientList.addAll(MPatients.find(MPatients.class, "surveyid=?", String.valueOf(surveyId)));
         patientList.addAll(realm.where(Patients.class).findAll());
         mAdapter.notifyDataSetChanged();
 

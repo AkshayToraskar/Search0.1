@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,8 @@ import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.app.SaveAnswer;
-import com.ak.search.model.Answers;
-import com.ak.search.model.Questions;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.Questions;
 
 import org.parceler.Parcels;
 
@@ -76,14 +74,14 @@ public class QuestionFragment extends Fragment {
 
         Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
-        //Survey survey=Survey.findById(Survey.class,Integer.parseInt(message.getSurveyid()));
+        //MSurvey survey=MSurvey.findById(MSurvey.class,Integer.parseInt(message.getSurveyid()));
         //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
 
         tv_question.setText(questions.getQuestion());
 
         /*int answerId;
         try {
-            answerId = realm.where(User.class).max("id").intValue() + 1;
+            answerId = realm.where(MUser.class).max("id").intValue() + 1;
         } catch(Exception ex) {
             Log.v("exception",ex.toString());
             answerId = 1;
@@ -190,7 +188,7 @@ public class QuestionFragment extends Fragment {
     }
 
 
-    /*public static Answers getAns()
+    /*public static MAnswers getAns()
     {
 
         return ans;

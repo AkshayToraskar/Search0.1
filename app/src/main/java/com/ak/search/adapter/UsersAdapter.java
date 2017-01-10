@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.ak.search.activity.AddUserActivity;
 import com.ak.search.R;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.User;
 
 import java.util.List;
 

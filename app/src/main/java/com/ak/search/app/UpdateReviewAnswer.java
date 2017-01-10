@@ -1,6 +1,6 @@
 package com.ak.search.app;
 
-import com.ak.search.model.Answers;
+import com.ak.search.realm_model.Answers;
 
 import java.util.HashMap;
 

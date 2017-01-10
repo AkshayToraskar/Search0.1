@@ -1,6 +1,6 @@
 package com.ak.search.app;
 
-import com.ak.search.model.Patients;
+import com.ak.search.realm_model.Patients;
 
 /**
  * Created by dg hdghfd on 03-01-2017.

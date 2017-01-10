@@ -9,15 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientAdapter;
-import com.ak.search.model.Patients;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Patients;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -58,16 +55,16 @@ public class GetSurveyActivity extends AppCompatActivity {
        /* if (getIntent().getExtras() != null) {
             surveyId = getIntent().getExtras().getLong("surveyId");
 
-            questionsList = Questions.find(Questions.class, "surveyid = ?", String.valueOf(surveyId));
+            questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(surveyId));
 
-            List<Options> opt = new ArrayList<>();
+            List<MOptions> opt = new ArrayList<>();
             for (int i = 0; i < questionsList.size(); i++) {
                 opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
             }*/
 
-        //patientList = Patients.listAll(Patients.class);
+        //patientList = MPatients.listAll(MPatients.class);
 
-        //List<Survey> surveyList = Survey.listAll(Survey.class);
+        //List<MSurvey> surveyList = MSurvey.listAll(MSurvey.class);
         /*final String surveyName[] = new String[surveyList.size() + 1];
         surveyName[0] = "All";
         for (int i = 0; i < surveyList.size(); i++) {
@@ -94,15 +91,15 @@ public class GetSurveyActivity extends AppCompatActivity {
 
                                                         if (selectedItem.equals("All")) {
                                                             patientList.clear();
-                                                            patientList.addAll(Patients.listAll(Patients.class));
+                                                            patientList.addAll(MPatients.listAll(MPatients.class));
                                                             mAdapter.notifyDataSetChanged();
                                                         } else {
-                                                            List<Survey> selectedSurvey = Survey.find(Survey.class, "name = ?", selectedItem);
+                                                            List<MSurvey> selectedSurvey = MSurvey.find(MSurvey.class, "name = ?", selectedItem);
 
                                                             if (selectedSurvey.size() > 0) {
                                                                 String surveyId1 = String.valueOf(selectedSurvey.get(0).getId());
                                                                 patientList.clear();
-                                                                patientList.addAll(Patients.find(Patients.class, "surveyid=?", surveyId1));
+                                                                patientList.addAll(MPatients.find(MPatients.class, "surveyid=?", surveyId1));
                                                                 mAdapter.notifyDataSetChanged();
                                                             }
                                                         }

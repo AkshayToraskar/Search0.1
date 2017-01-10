@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.ak.search.R;
 import com.ak.search.adapter.UsersAdapter;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class UserActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm=Realm.getDefaultInstance();
 
-      //  usersList = User.listAll(User.class);
+      //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<User> results = realm.where(User.class).findAll();
 
@@ -72,7 +72,7 @@ public class UserActivity extends AppCompatActivity {
         super.onResume();
         usersList.clear();
 
-       // List<User> results = ;
+       // List<MUser> results = ;
 
         usersList.addAll(realm.where(User.class).findAll());
         mAdapter.notifyDataSetChanged();

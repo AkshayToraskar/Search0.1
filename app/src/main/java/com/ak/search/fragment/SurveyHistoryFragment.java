@@ -9,16 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.ak.search.R;
 import com.ak.search.activity.PatientActivity;
-import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
-import com.ak.search.model.DataCollection;
-import com.ak.search.model.Patients;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.DataCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +79,7 @@ public class SurveyHistoryFragment extends Fragment {
         super.onResume();
 
         surveyHistory.clear();
-        // List<User> results = ;
+        // List<MUser> results = ;
         surveyHistory.addAll(realm.where(DataCollection.class).equalTo("patients.id",PatientActivity.patients.getId()).findAll());
         mAdapter.notifyDataSetChanged();
 

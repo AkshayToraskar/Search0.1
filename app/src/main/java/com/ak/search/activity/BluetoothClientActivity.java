@@ -19,13 +19,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.realm_model.Test1;
+import com.ak.search.realm_model.TestModel;
+import com.ak.search.realm_model.User;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import io.realm.Realm;
 
 public class BluetoothClientActivity extends AppCompatActivity {
 
@@ -47,6 +57,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
     ThreadConnectBTdevice myThreadConnectBTdevice;
     ThreadConnected myThreadConnected;
 
+    Realm realm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +66,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
         textInfo = (TextView)findViewById(R.id.info);
         textStatus = (TextView)findViewById(R.id.status);
         listViewPairedDevice = (ListView)findViewById(R.id.pairedlist);
+
+        realm=Realm.getDefaultInstance();
 
         inputPane = (LinearLayout)findViewById(R.id.inputpane);
         inputField = (EditText)findViewById(R.id.input);
@@ -63,8 +77,28 @@ public class BluetoothClientActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(myThreadConnected!=null){
-                    byte[] bytesToSend = inputField.getText().toString().getBytes();
-                    myThreadConnected.write(bytesToSend);
+
+                    User user=realm.where(User.class).findFirst();
+
+
+                    List<Test1> test1=new ArrayList<Test1>();
+                    test1.add(new Test1(1));
+                    test1.add(new Test1(2));
+
+                    TestModel testModel=new TestModel();
+                    testModel.setName("aa");
+                    testModel.setTest1List(test1);
+
+                    try {
+                        byte[] bytesToSend = serialize(testModel);
+                        myThreadConnected.write(bytesToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                   // byte[] bytesToSend = inputField.getText().toString().getBytes();
+                   // myThreadConnected.write(bytesToSend);
                 }
             }});
 
@@ -276,16 +310,19 @@ public class BluetoothClientActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int bytes;
 
             while (true) {
                 try {
                     bytes = connectedInputStream.read(buffer);
-                    String strReceived = new String(buffer, 0, bytes);
+                    //String strReceived = new String(buffer, 0, bytes);
+
+                    TestModel user=(TestModel)deserialize(buffer);
+
                     final String msgReceived = String.valueOf(bytes) +
                             " bytes received:\n"
-                            + strReceived;
+                            + user.getName();
 
                     runOnUiThread(new Runnable(){
 
@@ -306,6 +343,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
                         public void run() {
                             textStatus.setText(msgConnectionLost);
                         }});
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -329,5 +368,19 @@ public class BluetoothClientActivity extends AppCompatActivity {
         }
 
     }
+
+
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
+    }
+    public static Object deserialize(byte[] data) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is = new ObjectInputStream(in);
+        return is.readObject();
+    }
+
 
 }

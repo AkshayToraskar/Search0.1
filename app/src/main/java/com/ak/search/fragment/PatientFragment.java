@@ -16,7 +16,7 @@ import android.widget.EditText;
 
 import com.ak.search.R;
 import com.ak.search.adapter.SearchPatientAdapter;
-import com.ak.search.model.Patients;
+import com.ak.search.realm_model.Patients;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.app.Validate;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,7 +71,7 @@ public class AddUserActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            getSupportActionBar().setTitle("Update User Info");
+            getSupportActionBar().setTitle("Update MUser Info");
 
             userId = getIntent().getExtras().getLong("userId");
 
@@ -120,11 +120,11 @@ public class AddUserActivity extends AppCompatActivity {
             case R.id.action_delete_user:
                 new AlertDialog.Builder(this)
                         .setTitle("Delete")
-                        .setMessage("Would you like to delete this User ?")
+                        .setMessage("Would you like to delete this MUser ?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //     User user = User.findById(User.class, Long.parseLong(userId));
+                                //     MUser user = MUser.findById(MUser.class, Long.parseLong(userId));
                                 //     user.delete();
                                 realm.executeTransaction(new Realm.Transaction() {
                                     public void execute(Realm realm) {
@@ -183,7 +183,7 @@ public class AddUserActivity extends AppCompatActivity {
                         @Override
                         public void execute(Realm realm) {
 
-                            //long id = realm.where(User.class).max("id").longValue() + 1;
+                            //long id = realm.where(MUser.class).max("id").longValue() + 1;
 
                             int key;
                             try {
@@ -201,7 +201,7 @@ public class AddUserActivity extends AppCompatActivity {
                             user.setType(type);
 
                             realm.copyToRealmOrUpdate(user);
-                            Toast.makeText(getApplicationContext(), "User Added Successfully !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
                         }
                     });

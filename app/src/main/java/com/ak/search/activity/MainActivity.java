@@ -19,8 +19,7 @@ import com.ak.search.app.Validate;
 import com.ak.search.fragment.AdminFragment;
 import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
-import com.ak.search.fragment.UserFragment;
-import com.ak.search.model.Patients;
+import com.ak.search.realm_model.Patients;
 
 import org.parceler.Parcels;
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
     @BindView(R.id.txt_patient_name)
     EditText txt_patient_name;
 
-    private List<Survey> surveysList;
+    private List<MSurvey> surveysList;
     @BindView(R.id.rv_survey)
     RecyclerView recyclerView;
     public GetSurveyAdapter mAdapter;
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 Log.v(TAG, "USER");
                 *//*llAdmin.setVisibility(View.GONE);
 
-                surveysList = Survey.listAll(Survey.class);
+                surveysList = MSurvey.listAll(MSurvey.class);
 
                 mAdapter = new GetSurveyAdapter(this, surveysList);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 }
 
                 if(surveyId==-1){
-                    Toast.makeText(getApplicationContext(),"Survey is not selected",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"MSurvey is not selected",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -222,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
         Intent i=new Intent(this,PatientActivity.class);
 
         //Bundle args = new Bundle();
-        //args.putParcelable("PatientData", Parcels.wrap(Patients.class,patients));
+        //args.putParcelable("PatientData", Parcels.wrap(MPatients.class,patients));
         i.putExtra("PatientData",Parcels.wrap(Patients.class,patients));
         startActivity(i);
 

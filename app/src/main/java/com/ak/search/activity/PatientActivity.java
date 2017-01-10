@@ -1,6 +1,5 @@
 package com.ak.search.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -11,10 +10,9 @@ import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
-import com.ak.search.fragment.AdminFragment;
 import com.ak.search.fragment.SurveyHistoryFragment;
 import com.ak.search.fragment.UserFragment;
-import com.ak.search.model.Patients;
+import com.ak.search.realm_model.Patients;
 
 import org.parceler.Parcels;
 

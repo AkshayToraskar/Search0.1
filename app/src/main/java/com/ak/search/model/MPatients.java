@@ -3,12 +3,7 @@ package com.ak.search.model;
 
 import org.parceler.Parcel;
 
-import java.io.Serializable;
-import java.util.List;
-
 import io.realm.PatientsRealmProxy;
-import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -16,22 +11,20 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 15-12-2016.
  */
 
-@Parcel(implementations = { PatientsRealmProxy.class },
-        value = Parcel.Serialization.FIELD,
-        analyze = { Patients.class })
-public class Patients extends RealmObject{
-    @PrimaryKey
+
+public class MPatients {
+
     long id;
     String patientname;
     String Address;
 
-    //RealmList<Answers> answers;
+    //RealmList<MAnswers> answers;
 
-   /* public RealmList<Answers> getAnswers() {
+   /* public RealmList<MAnswers> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(RealmList<Answers> answers) {
+    public void setAnswers(RealmList<MAnswers> answers) {
         this.answers = answers;
     }*/
 

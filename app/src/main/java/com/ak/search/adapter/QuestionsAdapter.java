@@ -10,11 +10,8 @@ import android.widget.TextView;
 
 import com.ak.search.activity.AddQuestionActivity;
 import com.ak.search.R;
-import com.ak.search.model.Questions;
+import com.ak.search.realm_model.Questions;
 
-import java.util.List;
-
-import io.realm.Realm;
 import io.realm.RealmList;
 
 /**

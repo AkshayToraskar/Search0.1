@@ -13,16 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.QuestionsAdapter;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
-import com.ak.search.model.Options;
-import com.ak.search.model.Questions;
-import com.ak.search.model.Survey;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.Options;
+import com.ak.search.realm_model.Questions;
+import com.ak.search.realm_model.Survey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,13 +79,13 @@ public class AddSurveyActivity extends AppCompatActivity {
             update = true;
         } else {
 
-            txt_survey_name.setText("Survey " + String.valueOf(sessionManager.getSurveyId()));
+            txt_survey_name.setText("MSurvey " + String.valueOf(sessionManager.getSurveyId()));
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
-                    //long id = realm.where(User.class).max("id").longValue() + 1;
+                    //long id = realm.where(MUser.class).max("id").longValue() + 1;
 
 
                     try {
@@ -100,9 +98,9 @@ public class AddSurveyActivity extends AppCompatActivity {
                     // Add a survey
                     survey = realm.createObject(Survey.class, surveyId);
                     //survey.setId(surveyId);
-                    survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
+                    survey.setName("MSurvey " + String.valueOf(sessionManager.getSurveyId()));
                     realm.copyToRealmOrUpdate(survey);
-                    //Toast.makeText(getApplicationContext(), "User Added Successfully !", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
                 }
             });
@@ -115,7 +113,7 @@ public class AddSurveyActivity extends AppCompatActivity {
             // this.surveyId = String.valueOf(surveyid);
             update = false;
         }
-        // questionsList = Questions.find(Questions.class, "surveyid = ?", surveyId);
+        // questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", surveyId);
 
 
         List<Options> opt = new ArrayList<>();
@@ -171,7 +169,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                     txt_survey_name.setError(null);
                 }
 
-                //   Survey surveyName = Survey.findById(Survey.class, Long.parseLong(surveyId));
+                //   MSurvey surveyName = MSurvey.findById(MSurvey.class, Long.parseLong(surveyId));
                 //    surveyName.setName(txt_survey_name.getText().toString());
                 //    surveyName.save();
 
@@ -179,7 +177,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                     @Override
                     public void execute(Realm realm) {
                         // save a survey
-                        //survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
+                        //survey = realm.where(MSurvey.class).equalTo("id", surveyId).findFirst();
                         survey.setName(txt_survey_name.getText().toString());
 
                         /*RealmList que = new RealmList();
@@ -187,29 +185,29 @@ public class AddSurveyActivity extends AppCompatActivity {
 
                             int questionid;
                             try {
-                                questionid = realm.where(Questions.class).max("id").intValue() + 1;
+                                questionid = realm.where(MQuestions.class).max("id").intValue() + 1;
                             } catch (Exception ex) {
                                 Log.v("exception", ex.toString());
                                 questionid = 1;
                             }
 
-                            Questions questions = realm.createObject(Questions.class, questionid);
+                            MQuestions questions = realm.createObject(MQuestions.class, questionid);
                             //questions.setId(i);
                             questions.setQuestion("question"+i+"?");
                             questions.setOpt(true);
                             questions.setText(true);
-                            RealmList<Options> opt = new RealmList();
+                            RealmList<MOptions> opt = new RealmList();
                             for (int j = 0; j < 2; j++) {
                                 int optionsId;
                                 try {
-                                    optionsId = realm.where(Options.class).max("id").intValue() + 1;
+                                    optionsId = realm.where(MOptions.class).max("id").intValue() + 1;
                                 } catch (Exception ex) {
                                     Log.v("exception", ex.toString());
                                     optionsId = 1;
                                 }
 
 
-                                Options opt1 = realm.createObject(Options.class, optionsId);
+                                MOptions opt1 = realm.createObject(MOptions.class, optionsId);
                                 //opt1.setId(j);
                                 opt1.setOpt("asdf" + j);
                                 opt.add(opt1);
@@ -220,9 +218,9 @@ public class AddSurveyActivity extends AppCompatActivity {
                         }
 
 
-                        survey.setQuestions(que);*/
+                        survey.setMQuestions(que);*/
                         realm.copyToRealmOrUpdate(survey);
-                        //Toast.makeText(getApplicationContext(), "User Added Successfully !", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -235,17 +233,17 @@ public class AddSurveyActivity extends AppCompatActivity {
             case R.id.action_delete_survey:
                 new AlertDialog.Builder(this)
                         .setTitle("Delete")
-                        .setMessage("Would you like to delete this survey and Questions?")
+                        .setMessage("Would you like to delete this survey and MQuestions?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //       Survey survey = Survey.findById(Survey.class, Long.parseLong(surveyId));
+                                //       MSurvey survey = MSurvey.findById(MSurvey.class, Long.parseLong(surveyId));
                                 //        survey.delete();
 
-                                //       List<Questions> que = Questions.find(Questions.class, "surveyid = ?", surveyId);
+                                //       List<MQuestions> que = MQuestions.find(MQuestions.class, "surveyid = ?", surveyId);
 
                                 //       for (int i = 0; i < que.size(); i++) {
-                                //           List<Options> op = Options.find(Options.class, "questionid=?", String.valueOf(que.get(i).getId()));
+                                //           List<MOptions> op = MOptions.find(MOptions.class, "questionid=?", String.valueOf(que.get(i).getId()));
 
                                 //          for (int j = 0; j < op.size(); j++) {
                                 //              op.get(i).delete();
@@ -257,7 +255,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                                     public void execute(Realm realm) {
                                         // save a survey
                                         survey.deleteFromRealm();
-                                        //Toast.makeText(getApplicationContext(), "User Added Successfully !", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -299,7 +297,7 @@ public class AddSurveyActivity extends AppCompatActivity {
 
         }
 
-        //  questionsList.addAll(Questions.find(Questions.class, "surveyid = ?", surveyId));
+        //  questionsList.addAll(MQuestions.find(MQuestions.class, "surveyid = ?", surveyId));
         mAdapter.notifyDataSetChanged();
     }
 

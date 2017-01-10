@@ -3,7 +3,6 @@ package com.ak.search.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.ak.search.activity.AddSurveyActivity;
 import com.ak.search.R;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Survey;
 
 import java.util.List;
 

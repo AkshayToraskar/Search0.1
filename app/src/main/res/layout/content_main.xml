@@ -145,7 +145,7 @@
                     android:layout_weight="0.5"
                     android:background="@color/colorPrimary"
                     android:onClick="onBtnClick"
-                    android:text="Start Survey"
+                    android:text="Start MSurvey"
                     android:textColor="@android:color/white" />
             </LinearLayout>
 

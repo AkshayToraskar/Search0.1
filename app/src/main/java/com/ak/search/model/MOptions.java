@@ -11,12 +11,10 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-@Parcel(implementations = { OptionsRealmProxy.class },
-        value = Parcel.Serialization.FIELD,
-        analyze = { Options.class })
-public class Options extends RealmObject {
 
-    @PrimaryKey
+public class MOptions {
+
+
     long id;
     String opt;
 

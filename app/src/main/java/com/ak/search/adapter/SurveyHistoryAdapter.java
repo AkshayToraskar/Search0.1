@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.activity.ShowSurveyActivity;
-import com.ak.search.model.DataCollection;
-import com.ak.search.model.Patients;
+import com.ak.search.realm_model.DataCollection;
 
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                             .setMessage("Would you like to delete?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                          //          Patients patients = Patients.findById(Patients.class, patientsList.get(getPosition()).getId());
+                          //          MPatients patients = MPatients.findById(MPatients.class, patientsList.get(getPosition()).getId());
                         //            patients.delete();
 
                                     patientsList.remove(getPosition());

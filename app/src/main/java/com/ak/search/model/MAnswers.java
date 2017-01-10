@@ -1,33 +1,26 @@
 package com.ak.search.model;
 
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-
 /**
  * Created by dg hdghfd on 14-12-2016.
  */
 
-public class Answers extends RealmObject {
+public class MAnswers {
 
 
     long patientid;
     int selectedopt;
     String ans;
-    Questions questions;
+    MQuestions MQuestions;
 
 
-    public Questions getQuestions() {
-        return questions;
+    public MQuestions getMQuestions() {
+        return MQuestions;
     }
 
-    public void setQuestions(Questions questions) {
-        this.questions = questions;
+    public void setMQuestions(MQuestions MQuestions) {
+        this.MQuestions = MQuestions;
     }
-
-
-
-
 
     public long getPatientid() {
         return patientid;

@@ -15,10 +15,9 @@ import com.ak.search.R;
 import com.ak.search.activity.QuestionsActivity;
 import com.ak.search.adapter.GetQuestionsAdapter;
 import com.ak.search.app.UpdateReviewAnswer;
-import com.ak.search.model.Answers;
-import com.ak.search.model.Options;
-import com.ak.search.model.Questions;
-import com.ak.search.model.Survey;
+import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.Questions;
+import com.ak.search.realm_model.Survey;
 
 import org.parceler.Parcels;
 
@@ -70,8 +69,8 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
 
             questionsList = Parcels.unwrap(getArguments().getParcelable("questionList"));
            /* surveyId = getArguments().getLong("surveyId");
-            survey=realm.where(Survey.class).equalTo("id",surveyId).findFirst();
-            questionsList=survey.getQuestions();*/
+            survey=realm.where(MSurvey.class).equalTo("id",surveyId).findFirst();
+            questionsList=survey.getMQuestions();*/
 
 
             for (Map.Entry m : QuestionsActivity.answers.entrySet()) {
@@ -85,8 +84,8 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
 
 
                     for (int i = 0; i < answersList.size(); i++) {
-                        if (Long.parseLong(String.valueOf(m.getKey())) == answersList.get(i).getQuestions().getId()) {
-                            Answers an = (Answers) m.getValue();
+                        if (Long.parseLong(String.valueOf(m.getKey())) == answersList.get(i).getMQuestions().getId()) {
+                            MAnswers an = (MAnswers) m.getValue();
                             answersList.set(i,an);
                         }
                     }
@@ -135,7 +134,7 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
                     answersList.set(i,an);
                 }
             }
-            //Answers ans=(Answers)m.getValue();
+            //MAnswers ans=(MAnswers)m.getValue();
 
             //answersList.add(ans);
 
@@ -154,17 +153,17 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
     }
 
 
-    /*public List<Questions> getQuestionList() {
+    /*public List<MQuestions> getQuestionList() {
 
 
         //surveyId = getArguments().getLong("surveyId");
-        //survey=realm.where(Survey.class).equalTo("id",surveyId).findFirst();
-        //questionsList=survey.getQuestions();
+        //survey=realm.where(MSurvey.class).equalTo("id",surveyId).findFirst();
+        //questionsList=survey.getMQuestions();
 
-        ///List<Options> opt = new ArrayList<>();
+        ///List<MOptions> opt = new ArrayList<>();
        *//* for (int i = 0; i < questionsList.size(); i++) {
             //opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
-            //List<Options> opt = Options.find(Options.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
+            //List<MOptions> opt = MOptions.find(MOptions.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
             //questionsList.get(i).setOptions(opt);
 
         }*//*

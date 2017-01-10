@@ -11,15 +11,13 @@ import android.widget.Toast;
 import com.ak.search.*;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.User;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -88,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(i);
                 } else {
 
-                    // List<User> user = User.find(User.class, "name = ?", txt_username.getText().toString());
+                    // List<MUser> user = MUser.find(MUser.class, "name = ?", txt_username.getText().toString());
 
                     boolean loginStatus = false, isAdmin = false;
 

@@ -1,4 +1,4 @@
-package com.ak.search.model;
+package com.ak.search.realm_model;
 
 
 import com.ak.search.app.RealmListParcelConverter;

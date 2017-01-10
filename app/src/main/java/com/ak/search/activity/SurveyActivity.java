@@ -12,8 +12,7 @@ import android.view.View;
 
 import com.ak.search.R;
 import com.ak.search.adapter.SurveyAdapter;
-import com.ak.search.model.Survey;
-import com.ak.search.model.User;
+import com.ak.search.realm_model.Survey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +40,10 @@ public class SurveyActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm=Realm.getDefaultInstance();
 
-        //  usersList = User.listAll(User.class);
+        //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<Survey> results = realm.where(Survey.class).findAll();
-        //surveysList = Survey.listAll(Survey.class);
+        //surveysList = MSurvey.listAll(MSurvey.class);
         surveysList=new ArrayList<>();
         surveysList.addAll(results);
 
@@ -67,7 +66,7 @@ public class SurveyActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         surveysList.clear();
-        //surveysList.addAll(Survey.listAll(Survey.class));
+        //surveysList.addAll(MSurvey.listAll(MSurvey.class));
         surveysList.addAll(realm.where(Survey.class).findAll());
         mAdapter.notifyDataSetChanged();
     }
