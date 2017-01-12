@@ -1,16 +1,23 @@
-package com.ak.search.app;
+package com.ak.search.bluetooth;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ak.search.activity.BluetoothActivity;
+import com.ak.search.R;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
+
 
 /**
  * Created by dg hdghfd on 10-01-2017.
@@ -21,27 +28,41 @@ public class ThreadBeConnected extends Thread {
     private BluetoothServerSocket bluetoothServerSocket = null;
     private UUID myUUID;
     private String myName;
-
+    BluetoothAdapter bluetoothAdapter;
     Activity act;
+    public static String TAG="Thread";
+    TextView textStatus;
+    LinearLayout inputPane;
 
-    public ThreadBeConnected(Activity act) {
+    PulsatorLayout pulsator;
+
+    public ThreadBeConnected(Activity act,BluetoothAdapter bluetoothAdapter ) {
 
         myUUID = UUID.fromString("ec79da00-853f-11e4-b4a9-0800200c9a66");
         myName = myUUID.toString();
         this.act=act;
-       /* try {
+        this.bluetoothAdapter=bluetoothAdapter;
 
+        textStatus=(TextView)act.findViewById(R.id.tv_status);
+        inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
+        pulsator=(PulsatorLayout)act.findViewById(R.id.pulsator);
 
-           // bluetoothServerSocket =
-                //    BluetoothActivity.bluetoothAdapter.listenUsingRfcommWithServiceRecord(myName, myUUID);
+        try {
+            bluetoothServerSocket =
+                    bluetoothAdapter.listenUsingRfcommWithServiceRecord(myName, myUUID);
 
-            //textStatus.setText("Waiting\n"
-             //       + "bluetoothServerSocket :\n"
-             //       + bluetoothServerSocket);
-        }*//* catch (IOException e) {
+            textStatus.setText("Waiting\n"
+                    + "bluetoothServerSocket :\n"
+                    + bluetoothServerSocket);
+
+            Log.v(TAG,"Waiting\n"
+                    + "bluetoothServerSocket :\n"
+                    + bluetoothServerSocket);
+
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override
@@ -63,11 +84,15 @@ public class ThreadBeConnected extends Thread {
 
                     @Override
                     public void run() {
-                      //  textStatus.setText(strConnected);
-                     //   inputPane.setVisibility(View.VISIBLE);
+
+                        Log.v(TAG,strConnected);
+
+                        textStatus.setText(strConnected);
+                        inputPane.setVisibility(View.VISIBLE);
+                        pulsator.setVisibility(View.GONE);
                     }});
 
-             //   BluetoothActivity.startThreadConnected(bluetoothSocket);
+                BluetoothActivity.startThreadConnected(bluetoothSocket);
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -78,7 +103,8 @@ public class ThreadBeConnected extends Thread {
 
                     @Override
                     public void run() {
-                      //  textStatus.setText("something wrong: \n" + eMessage);
+                        Log.v(TAG,eMessage);
+                        textStatus.setText("something wrong: \n" + eMessage);
                     }});
             }
         }else{
@@ -86,7 +112,8 @@ public class ThreadBeConnected extends Thread {
 
                 @Override
                 public void run() {
-                //    textStatus.setText("bluetoothServerSocket == null");
+                    Log.v(TAG,"bluetoothServerSocket == null");
+                    textStatus.setText("bluetoothServerSocket == null");
                 }});
         }
     }

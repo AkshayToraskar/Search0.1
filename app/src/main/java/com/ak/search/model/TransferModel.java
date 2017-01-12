@@ -1,5 +1,7 @@
 package com.ak.search.model;
 
+import com.ak.search.realm_model.Survey;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +17,8 @@ public class TransferModel implements Serializable{
     List<MUser> userList;
     List<MPatients> patientsList;
     List<MSurvey> surveyList;
+
+    MSurvey survey;
 
 
 
@@ -57,5 +61,13 @@ public class TransferModel implements Serializable{
 
     public void setSurveyList(List<MSurvey> surveyList) {
         this.surveyList = surveyList;
+    }
+
+    public MSurvey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(MSurvey survey) {
+        this.survey = survey;
     }
 }

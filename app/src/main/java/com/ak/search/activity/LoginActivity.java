@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.ak.search.*;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
+import com.ak.search.bluetooth.BluetoothActivity;
+import com.ak.search.bluetooth.BluetoothClientActivity;
 import com.ak.search.realm_model.User;
 
 import java.util.List;

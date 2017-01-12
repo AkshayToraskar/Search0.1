@@ -101,8 +101,8 @@
         <activity
             android:name=".activity.PatientActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.BluetoothActivity" />
-        <activity android:name=".activity.BluetoothClientActivity"></activity>
+        <activity android:name=".bluetooth.BluetoothActivity" />
+        <activity android:name=".bluetooth.BluetoothClientActivity"></activity>
     </application>
 
 </manifest>

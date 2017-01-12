@@ -1,9 +1,15 @@
-package com.ak.search.app;
+package com.ak.search.bluetooth;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ak.search.R;
 
 import java.io.IOException;
 
@@ -14,18 +20,25 @@ import java.io.IOException;
 public class ThreadConnectBTdevice  extends Thread {
     private BluetoothSocket bluetoothSocket = null;
     private final BluetoothDevice bluetoothDevice;
+    TextView textStatus;
+    LinearLayout inputPane;
+    ListView listViewPairedDevice;
+    Activity act;
 
 
-    public ThreadConnectBTdevice(BluetoothDevice device) {
+    public ThreadConnectBTdevice(BluetoothDevice device, Activity act) {
         bluetoothDevice = device;
-/*
+        this.act=act;
+        textStatus=(TextView)act.findViewById(R.id.tv_status);
+        inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
+        listViewPairedDevice=(ListView)act.findViewById(R.id.lv_pairedlist);
         try {
-            bluetoothSocket = device.createRfcommSocketToServiceRecord(myUUID);
-            textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);
+            bluetoothSocket = device.createRfcommSocketToServiceRecord(BluetoothClientActivity.myUUID);
+          textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override
@@ -38,12 +51,12 @@ public class ThreadConnectBTdevice  extends Thread {
             e.printStackTrace();
 
             final String eMessage = e.getMessage();
-           /* runOnUiThread(new Runnable(){
+            act.runOnUiThread(new Runnable(){
 
                 @Override
                 public void run() {
-                    textStatus.setText("something wrong bluetoothSocket.connect(): \n" + eMessage);
-                }});*/
+                  textStatus.setText("something wrong bluetoothSocket.connect(): \n" + eMessage);
+                }});
 
             try {
                 bluetoothSocket.close();
@@ -59,17 +72,17 @@ public class ThreadConnectBTdevice  extends Thread {
                     + "BluetoothSocket: " + bluetoothSocket + "\n"
                     + "BluetoothDevice: " + bluetoothDevice;
 
-          /*  runOnUiThread(new Runnable(){
+            act.runOnUiThread(new Runnable(){
 
                 @Override
                 public void run() {
-                    textStatus.setText(msgconnected);
+                   textStatus.setText(msgconnected);
 
-                    listViewPairedDevice.setVisibility(View.GONE);
-                    inputPane.setVisibility(View.VISIBLE);
+                   listViewPairedDevice.setVisibility(View.GONE);
+                   inputPane.setVisibility(View.VISIBLE);
                 }});
 
-            startThreadConnected(bluetoothSocket);*/
+            BluetoothClientActivity.startThreadConnected(bluetoothSocket);
         }else{
             //fail
         }
@@ -77,7 +90,7 @@ public class ThreadConnectBTdevice  extends Thread {
 
     public void cancel() {
 
-        /*Toast.makeText(getApplicationContext(),
+        Toast.makeText(act,
                 "close bluetoothSocket",
                 Toast.LENGTH_LONG).show();
 
@@ -86,7 +99,7 @@ public class ThreadConnectBTdevice  extends Thread {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
+        }
 
     }
 }
