@@ -3,6 +3,7 @@ package com.ak.search.bluetooth;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,7 +23,7 @@ public class ThreadConnectBTdevice  extends Thread {
     private final BluetoothDevice bluetoothDevice;
     TextView textStatus;
     LinearLayout inputPane;
-    ListView listViewPairedDevice;
+    RecyclerView listViewPairedDevice;
     Activity act;
 
 
@@ -31,7 +32,7 @@ public class ThreadConnectBTdevice  extends Thread {
         this.act=act;
         textStatus=(TextView)act.findViewById(R.id.tv_status);
         inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
-        listViewPairedDevice=(ListView)act.findViewById(R.id.lv_pairedlist);
+        listViewPairedDevice=(RecyclerView) act.findViewById(R.id.rv_btlist);
         try {
             bluetoothSocket = device.createRfcommSocketToServiceRecord(BluetoothClientActivity.myUUID);
           textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);

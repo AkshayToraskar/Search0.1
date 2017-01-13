@@ -52,6 +52,9 @@ public class AddQuestionActivity extends AppCompatActivity {
     @BindView(R.id.btn_add_more_option)
     Button btn_add_more_option;
 
+    @BindView(R.id.toolbar)
+            Toolbar toolbar;
+
     List<EditText> allEds;
     public Questions questions;
     public List<Options> option;
@@ -67,9 +70,11 @@ public class AddQuestionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_question);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
         realm = Realm.getDefaultInstance();
         validate = new Validate();
 

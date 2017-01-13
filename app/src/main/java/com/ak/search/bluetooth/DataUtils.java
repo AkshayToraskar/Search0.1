@@ -218,7 +218,7 @@ public class DataUtils {
                                                   sur = realm.createObject(Survey.class, data.getSurvey().getId());
                                               }
 
-                                              sur.setId(data.getSurvey().getId());
+                                             // sur.setId(data.getSurvey().getId());
                                               sur.setName(data.getSurvey().getName());
 
                                               RealmList<Questions> ques = new RealmList<Questions>();

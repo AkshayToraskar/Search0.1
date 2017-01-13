@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ak.search.bluetooth.BluetoothClientActivity"
+    tools:showIn="@layout/activity_bluetooth_client">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_btlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+        <!--<ListView
+            android:id="@+id/lv_pairedlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
+
+        <LinearLayout
+            android:id="@+id/ll_inputpane"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onBtnClick"
+                android:text="Send Login/Patient" />
+
+            <Button
+                android:id="@+id/btn_send_survey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onBtnClick"
+                android:text="Send Survey" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

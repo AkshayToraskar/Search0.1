@@ -100,9 +100,13 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         <activity
             android:name=".activity.PatientActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".bluetooth.BluetoothActivity" />
-        <activity android:name=".bluetooth.BluetoothClientActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".bluetooth.BluetoothActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_receive"/>
+        <activity android:name=".bluetooth.BluetoothClientActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_send"></activity>
     </application>
 
 </manifest>

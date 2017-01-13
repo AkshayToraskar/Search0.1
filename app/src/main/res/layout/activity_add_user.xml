@@ -5,8 +5,7 @@
     android:id="@+id/activity_add_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.ak.search.AddUserActivity">
+    tools:context="com.ak.search.activity.AddUserActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

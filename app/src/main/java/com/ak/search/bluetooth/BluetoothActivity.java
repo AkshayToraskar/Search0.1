@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -38,6 +40,8 @@ public class BluetoothActivity extends AppCompatActivity {
     TextView textStatus;
     @BindView(R.id.pulsator)
     PulsatorLayout pulsator;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -55,7 +59,12 @@ public class BluetoothActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+
         realm = Realm.getDefaultInstance();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
@@ -119,9 +128,23 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setup() {
         textStatus.setText("setup()");
-        myThreadBeConnected = new ThreadBeConnected(this,bluetoothAdapter);
+        myThreadBeConnected = new ThreadBeConnected(this, bluetoothAdapter);
         myThreadBeConnected.start();
     }
 
@@ -147,14 +170,14 @@ public class BluetoothActivity extends AppCompatActivity {
 
             case R.id.btn_send_survey:
                 if (myThreadConnected != null) {
-                try {
-                    byte[] bytesToSend = ParcebleUtil.serialize(DataUtils.sendSurveyData(realm));
-                    myThreadConnected.write(bytesToSend);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        byte[] bytesToSend = ParcebleUtil.serialize(DataUtils.sendSurveyData(realm));
+                        myThreadConnected.write(bytesToSend);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            break;
+                break;
         }
     }
 }

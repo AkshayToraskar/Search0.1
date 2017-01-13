@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.adapter.BluetoothPairedAdapter;
+import com.ak.search.adapter.UsersAdapter;
 import com.ak.search.app.ParcebleUtil;
 
 import java.io.IOException;
@@ -39,8 +46,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
     TextView textInfo;
     @BindView(R.id.tv_status)
     TextView textStatus;
-    @BindView(R.id.lv_pairedlist)
-    ListView listViewPairedDevice;
+    /*@BindView(R.id.lv_pairedlist)
+    ListView listViewPairedDevice;*/
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     public static UUID myUUID;
     @BindView(R.id.ll_inputpane)
@@ -50,8 +57,12 @@ public class BluetoothClientActivity extends AppCompatActivity {
     Button btnSend;
     @BindView(R.id.btn_send_survey)
     Button btnSendSurvey;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.rv_btlist)
+    RecyclerView recyclerView;
 
-    ThreadConnectBTdevice myThreadConnectBTdevice;
+    public static ThreadConnectBTdevice myThreadConnectBTdevice;
     static ThreadConnected myThreadConnected;
 
     Realm realm;
@@ -61,6 +72,9 @@ public class BluetoothClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_client);
         ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm = Realm.getDefaultInstance();
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
@@ -87,6 +101,20 @@ public class BluetoothClientActivity extends AppCompatActivity {
         String stInfo = bluetoothAdapter.getName() + "\n" +
                 bluetoothAdapter.getAddress();
         textInfo.setText(stInfo);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -131,14 +159,28 @@ public class BluetoothClientActivity extends AppCompatActivity {
 
     private void setup() {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
+
         if (pairedDevices.size() > 0) {
             pairedDeviceArrayList = new ArrayList<BluetoothDevice>();
 
             for (BluetoothDevice device : pairedDevices) {
+
                 pairedDeviceArrayList.add(device);
             }
 
-            pairedDeviceAdapter = new ArrayAdapter<BluetoothDevice>(this,
+
+            //usersList=new ArrayList<>();
+            //usersList.addAll(results);
+
+            BluetoothPairedAdapter mAdapter = new BluetoothPairedAdapter(this, pairedDeviceArrayList);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(mAdapter);
+
+
+
+            /*pairedDeviceAdapter = new ArrayAdapter<BluetoothDevice>(this,
                     android.R.layout.simple_list_item_1, pairedDeviceArrayList);
             listViewPairedDevice.setAdapter(pairedDeviceAdapter);
 
@@ -161,7 +203,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
                     myThreadConnectBTdevice = new ThreadConnectBTdevice(device, BluetoothClientActivity.this);
                     myThreadConnectBTdevice.start();
                 }
-            });
+            });*/
         }
     }
 
