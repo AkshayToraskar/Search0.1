@@ -60,8 +60,8 @@ public class ThreadConnected extends Thread {
                         " bytes received:\n"
                         + data.getName();
 
-
-                DataUtils.saveData(data, realm);
+                DataUtils dataUtils=new DataUtils();
+                dataUtils.saveData(data, realm);
 
                 Log.v(TAG, msgReceived);
 

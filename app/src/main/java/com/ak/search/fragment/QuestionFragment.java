@@ -2,6 +2,10 @@ package com.ak.search.fragment;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -9,10 +13,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.ak.search.R;
 import com.ak.search.app.SaveAnswer;
@@ -20,6 +30,8 @@ import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.Questions;
 
 import org.parceler.Parcels;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,9 +56,37 @@ public class QuestionFragment extends Fragment {
 
     @BindView(R.id.txt_answer)
     EditText et_answer;
+    @BindView(R.id.txt_number)
+    EditText et_number;
 
     @BindView(R.id.tv_question)
     TextView tv_question;
+
+
+    @BindView(R.id.btn_date)
+    Button btnDate;
+    @BindView(R.id.btn_time)
+    Button btnTime;
+    @BindView(R.id.btn_capture_image)
+    Button btnCaptureImage;
+    @BindView(R.id.iv_capture)
+    ImageView ivCapture;
+    @BindView(R.id.ll_check)
+    LinearLayout llCheck;
+    @BindView(R.id.ll_image)
+    LinearLayout llSelectImage;
+    @BindView(R.id.ll_time)
+    LinearLayout llTime;
+    @BindView(R.id.ll_date)
+    LinearLayout llDate;
+
+    @BindView(R.id.tvTime)
+    TextView tvTime;
+    @BindView(R.id.tvDate)
+    TextView tvDate;
+
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    public static int CAMERA_REQUEST=11;
 
     SaveAnswer answer;
 
@@ -87,7 +127,7 @@ public class QuestionFragment extends Fragment {
             answerId = 1;
         }*/
 
-        ans=new Answers();
+        ans = new Answers();
 
 
         ans.setQuestions(questions);
@@ -114,12 +154,11 @@ public class QuestionFragment extends Fragment {
             }*/
             if (questions.getOptions().size() > 0) {
                 for (int i = 0; i < questions.getOptions().size(); i++) {
-                    if(i<2){
+                    if (i < 2) {
                         rb_opt1.setText(questions.getOptions().get(0).getOpt());
                         rb_opt2.setText(questions.getOptions().get(1).getOpt());
 
-                    }
-                    else {
+                    } else {
                         RadioButton rb = new RadioButton(getContext());
                         rb.setLayoutParams(new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -138,7 +177,42 @@ public class QuestionFragment extends Fragment {
             ans.setAns("-");
         }
 
-      //  ans.setQuestionid(String.valueOf(message.getId()));
+
+        if (!questions.getCheckbox()) {
+            llCheck.setVisibility(GONE);
+        } else {
+            if (questions.getChkb().size() > 0) {
+                for (int i = 0; i < questions.getChkb().size(); i++) {
+
+                    CheckBox cb = new CheckBox(getContext());
+                    cb.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    cb.setText(questions.getChkb().get(i).getOpt());
+                    llCheck.addView(cb);
+                }
+                //allEds.add(text);
+            }
+
+        }
+
+        if (!questions.getNumber()) {
+            et_number.setVisibility(GONE);
+        }
+
+        if (!questions.getDate()) {
+            llDate.setVisibility(GONE);
+        }
+
+        if (!questions.getTime()) {
+            llTime.setVisibility(GONE);
+        }
+
+        if (!questions.getImage()) {
+            llSelectImage.setVisibility(GONE);
+        }
+
+        //  ans.setQuestionid(String.valueOf(message.getId()));
 
         et_answer.addTextChangedListener(new TextWatcher() {
             @Override
@@ -163,11 +237,34 @@ public class QuestionFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
-                int id=rg_option.getCheckedRadioButtonId();
+                int id = rg_option.getCheckedRadioButtonId();
                 View radioButton = rg_option.findViewById(id);
                 ans.setSelectedopt(rg_option.indexOfChild(radioButton));
 
                 answer.onAnswerSave(ans);
+            }
+        });
+
+
+        btnDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePicker();
+            }
+        });
+
+        btnTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                timePicker();
+            }
+        });
+
+        btnCaptureImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
 
@@ -187,6 +284,58 @@ public class QuestionFragment extends Fragment {
         super.onAttach(activity);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( requestCode == CAMERA_REQUEST  && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            ivCapture.setImageBitmap(photo);
+        }
+    }
+
+
+    public void datePicker() {
+        // Get Current Date
+        final Calendar c = Calendar.getInstance();
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(),
+                new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                    }
+                }, mYear, mMonth, mDay);
+        datePickerDialog.show();
+    }
+
+
+    public void timePicker() {
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+        // Launch Time Picker Dialog
+        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+
+                        tvTime.setText(hourOfDay + ":" + minute);
+                    }
+                }, mHour, mMinute, false);
+        timePickerDialog.show();
+    }
+}
 
     /*public static MAnswers getAns()
     {
@@ -194,4 +343,3 @@ public class QuestionFragment extends Fragment {
         return ans;
     }*/
 
-}

@@ -214,7 +214,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
             case R.id.btn_send:
                 if (myThreadConnected != null) {
                     try {
-                        byte[] bytesToSend = ParcebleUtil.serialize(DataUtils.sendData(realm));
+                        DataUtils dataUtils=new DataUtils();
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -225,7 +226,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
             case R.id.btn_send_survey:
                 if (myThreadConnected != null) {
                     try {
-                        byte[] bytesToSend = ParcebleUtil.serialize(DataUtils.sendSurveyData(realm));
+                        DataUtils dataUtils=new DataUtils();
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendSurveyData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
                         e.printStackTrace();

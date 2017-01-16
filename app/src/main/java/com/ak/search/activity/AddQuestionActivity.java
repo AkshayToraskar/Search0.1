@@ -34,30 +34,47 @@ public class AddQuestionActivity extends AppCompatActivity {
     @BindView(R.id.txt_question)
     EditText txt_question;
 
-    @BindView(R.id.cb_options)
-    CheckBox cb_option;
-
-    @BindView(R.id.cb_text)
-    CheckBox cb_text;
-
     @BindView(R.id.txt_opt1)
     EditText et_opt1;
-
     @BindView(R.id.txt_opt2)
     EditText et_opt2;
-
     @BindView(R.id.ll_option)
     LinearLayout ll_option;
-
     @BindView(R.id.btn_add_more_option)
     Button btn_add_more_option;
 
-    @BindView(R.id.toolbar)
-            Toolbar toolbar;
+    @BindView(R.id.txt_chk1)
+    EditText et_chk1;
+    @BindView(R.id.txt_chk2)
+    EditText et_chk2;
+    @BindView(R.id.ll_check)
+    LinearLayout ll_check;
+    @BindView(R.id.btn_add_more_checkbox)
+    Button btn_add_more_checkbox;
 
-    List<EditText> allEds;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.cb_options)
+    CheckBox cb_option;
+    @BindView(R.id.cb_text)
+    CheckBox cb_text;
+    @BindView(R.id.cb_number)
+    CheckBox cb_number;
+    @BindView(R.id.cb_date)
+    CheckBox cb_date;
+    @BindView(R.id.cb_time)
+    CheckBox cb_time;
+    @BindView(R.id.cb_picture)
+    CheckBox cb_picture;
+    @BindView(R.id.cb_compulsary)
+    CheckBox cb_compulsary;
+    @BindView(R.id.cb_checkbox)
+    CheckBox cb_checkbox;
+
+    List<EditText> allEds, allEdsChk;
     public Questions questions;
-    public List<Options> option;
+    public List<Options> option,checkboxOpt;
 
     public boolean update;
 
@@ -79,11 +96,17 @@ public class AddQuestionActivity extends AppCompatActivity {
         validate = new Validate();
 
         allEds = new ArrayList<EditText>();
+        allEdsChk=new ArrayList<>();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         questions = new Questions();
         allEds.add(et_opt1);
         allEds.add(et_opt2);
+
+
+        allEdsChk.add(et_chk1);
+        allEdsChk.add(et_chk2);
+
         lstQuestion = new RealmList<Questions>();
 
 
@@ -102,12 +125,18 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                 cb_option.setChecked(questions.getOpt());
                 cb_text.setChecked(questions.getText());
+                cb_number.setChecked(questions.getNumber());
+                cb_date.setChecked(questions.getDate());
+                cb_time.setChecked(questions.getTime());
+                cb_picture.setChecked(questions.getImage());
+                cb_compulsary.setChecked(questions.getCompulsary());
+                cb_checkbox.setChecked(questions.getCheckbox());
                 showOption(questions.getOpt());
+                showCheckbox(questions.getCheckbox());
+
                 txt_question.setText(questions.getQuestion());
 
                 option = questions.getOptions();
-
-
                 /*if (option.size() > 0)
                     et_opt1.setText(option.get(0).getOpt());
                 if (option.size() > 1)
@@ -129,6 +158,30 @@ public class AddQuestionActivity extends AppCompatActivity {
                     }
 
                 }
+
+                checkboxOpt = questions.getChkb();
+                /*if (option.size() > 0)
+                    et_opt1.setText(option.get(0).getOpt());
+                if (option.size() > 1)
+                    et_opt2.setText(option.get(1).getOpt());
+                if (option.size() > 2) {*/
+                for (int i = 0; i < checkboxOpt.size(); i++) {
+                    if (i == 0) {
+                        et_chk1.setText(checkboxOpt.get(i).getOpt());
+                    } else if (i == 1) {
+                        et_chk2.setText(checkboxOpt.get(i).getOpt());
+                    } else {
+                        EditText text = new EditText(this);
+                        text.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        text.setText(checkboxOpt.get(i).getOpt());
+                        ll_check.addView(text);
+                        allEdsChk.add(text);
+                    }
+
+                }
+
                 //}
 
                 update = true;
@@ -176,6 +229,13 @@ public class AddQuestionActivity extends AppCompatActivity {
             }
         });
 
+        cb_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                showCheckbox(cb_checkbox.isChecked());
+            }
+        });
+
 
     }
 
@@ -201,7 +261,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_save_question:
                 if (validate.validateString(txt_question.getText().toString())) {
-                    txt_question.setError("Enter Username");
+                    txt_question.setError("Enter Question");
                     break;
                 } else {
                     txt_question.setError(null);
@@ -332,6 +392,16 @@ public class AddQuestionActivity extends AppCompatActivity {
                 ll_option.addView(text);
                 allEds.add(text);
                 break;
+
+            case R.id.btn_add_more_checkbox:
+                EditText text1 = new EditText(this);
+                text1.setLayoutParams(new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                text1.setHint("option");
+                ll_check.addView(text1);
+                allEdsChk.add(text1);
+                break;
         }
     }
 
@@ -342,6 +412,17 @@ public class AddQuestionActivity extends AppCompatActivity {
         } else {
             ll_option.setVisibility(View.GONE);
             btn_add_more_option.setVisibility(View.GONE);
+        }
+    }
+
+
+    public void showCheckbox(boolean val) {
+        if (val) {
+            ll_check.setVisibility(View.VISIBLE);
+            btn_add_more_checkbox.setVisibility(View.VISIBLE);
+        } else {
+            ll_check.setVisibility(View.GONE);
+            btn_add_more_checkbox.setVisibility(View.GONE);
         }
     }
 
@@ -364,6 +445,12 @@ public class AddQuestionActivity extends AppCompatActivity {
                 // questions.setSurveyid(surveyid);
                 questions.setQuestion(txt_question.getText().toString());
                 questions.setText(cb_text.isChecked());
+                questions.setNumber(cb_number.isChecked());
+                questions.setDate(cb_date.isChecked());
+                questions.setTime(cb_time.isChecked());
+                questions.setImage(cb_picture.isChecked());
+                questions.setCompulsary(cb_compulsary.isChecked());
+                questions.setCheckbox(cb_checkbox.isChecked());
                 questions.setOpt(cb_option.isChecked());
 
                 RealmList<Options> options = new RealmList<>();
@@ -371,6 +458,11 @@ public class AddQuestionActivity extends AppCompatActivity {
                     questions.getOptions().clear();
                 }
 
+
+                RealmList<Options> chk = new RealmList<>();
+                if (questions.getChkb() != null) {
+                    questions.getChkb().clear();
+                }
 
                 //MOptions opt1 = new MOptions();
                 // opt2 = new MOptions();
@@ -409,6 +501,38 @@ public class AddQuestionActivity extends AppCompatActivity {
                     }
                 }
                 questions.setOptions(options);
+
+
+
+                if (cb_checkbox.isChecked()) {
+                    if (allEdsChk.size() >= 0) {
+                        for (int i = 0; i < allEdsChk.size(); i++) {
+                            int optionsId;
+                            try {
+                                optionsId = realm.where(Options.class).max("id").intValue() + 1;
+                            } catch (Exception ex) {
+                                Log.v("exception", ex.toString());
+                                optionsId = 1;
+                            }
+
+
+                            Options opt1 = realm.createObject(Options.class, optionsId);
+                            //opt1.setId(j);
+                            opt1.setOpt(allEdsChk.get(i).getText().toString());
+                            chk.add(opt1);
+
+
+                            //MOptions op = new MOptions();
+                            //           op.setQuestionid(String.valueOf(questionid));
+                            //            op.setOpt(allEds.get(i).getText().toString());
+                            //options.add(op);
+                        }
+                    }
+                }
+                questions.setChkb(chk);
+
+
+
 
                 if (update) {
                     realm.copyToRealmOrUpdate(questions);
