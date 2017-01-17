@@ -12,8 +12,10 @@ public class Answers extends RealmObject {
 
     long patientid;
     int selectedopt;
-    String ans;
+    String selectedChk;
+    String ans,numAns,date,time;
     Questions questions;
+    byte[] byteArrayImage;
 
 
     public Questions getQuestions() {
@@ -50,5 +52,45 @@ public class Answers extends RealmObject {
 
     public void setAns(String ans) {
         this.ans = ans;
+    }
+
+    public String getSelectedChk() {
+        return selectedChk;
+    }
+
+    public void setSelectedChk(String selectedChk) {
+        this.selectedChk = selectedChk;
+    }
+
+    public String getNumAns() {
+        return numAns;
+    }
+
+    public void setNumAns(String numAns) {
+        this.numAns = numAns;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public byte[] getByteArrayImage() {
+        return byteArrayImage;
+    }
+
+    public void setByteArrayImage(byte[] byteArrayImage) {
+        this.byteArrayImage = byteArrayImage;
     }
 }

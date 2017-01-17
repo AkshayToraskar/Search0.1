@@ -14,6 +14,9 @@ public class DataCollection extends RealmObject {
     long id;
     long surveyid;
 
+    String timestamp;
+    long lat, lng;
+
     Patients patients;
     RealmList<Answers> answerses;
 
@@ -47,5 +50,29 @@ public class DataCollection extends RealmObject {
 
     public void setAnswerses(RealmList<Answers> answerses) {
         this.answerses = answerses;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public long getLat() {
+        return lat;
+    }
+
+    public void setLat(long lat) {
+        this.lat = lat;
+    }
+
+    public long getLng() {
+        return lng;
+    }
+
+    public void setLng(long lng) {
+        this.lng = lng;
     }
 }

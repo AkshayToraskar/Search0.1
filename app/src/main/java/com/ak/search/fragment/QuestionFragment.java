@@ -31,7 +31,10 @@ import com.ak.search.realm_model.Questions;
 
 import org.parceler.Parcels;
 
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,8 +89,9 @@ public class QuestionFragment extends Fragment {
     TextView tvDate;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
-    public static int CAMERA_REQUEST=11;
+    public static int CAMERA_REQUEST = 11;
 
+    List<CheckBox> lstChkbox;
     SaveAnswer answer;
 
     public Answers ans;
@@ -111,6 +115,7 @@ public class QuestionFragment extends Fragment {
         ButterKnife.bind(this, v);
         realm = Realm.getDefaultInstance();
 
+        lstChkbox = new ArrayList<>();
 
         Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
@@ -179,7 +184,9 @@ public class QuestionFragment extends Fragment {
 
 
         if (!questions.getCheckbox()) {
+
             llCheck.setVisibility(GONE);
+            ans.setSelectedChk("-");
         } else {
             if (questions.getChkb().size() > 0) {
                 for (int i = 0; i < questions.getChkb().size(); i++) {
@@ -190,6 +197,7 @@ public class QuestionFragment extends Fragment {
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     cb.setText(questions.getChkb().get(i).getOpt());
                     llCheck.addView(cb);
+                    lstChkbox.add(cb);
                 }
                 //allEds.add(text);
             }
@@ -198,18 +206,23 @@ public class QuestionFragment extends Fragment {
 
         if (!questions.getNumber()) {
             et_number.setVisibility(GONE);
+            ans.setNumAns("-");
         }
 
         if (!questions.getDate()) {
             llDate.setVisibility(GONE);
+            ans.setDate("-");
         }
 
         if (!questions.getTime()) {
             llTime.setVisibility(GONE);
+            ans.setTime("-");
         }
 
         if (!questions.getImage()) {
+            byte[] aa = {-1};
             llSelectImage.setVisibility(GONE);
+            ans.setByteArrayImage(aa);
         }
 
         //  ans.setQuestionid(String.valueOf(message.getId()));
@@ -228,7 +241,26 @@ public class QuestionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 ans.setAns(String.valueOf(editable));
+                getSelectedChkbox();
+                answer.onAnswerSave(ans);
+            }
+        });
 
+        et_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ans.setNumAns(String.valueOf(editable));
+                getSelectedChkbox();
                 answer.onAnswerSave(ans);
             }
         });
@@ -286,9 +318,18 @@ public class QuestionFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if( requestCode == CAMERA_REQUEST  && resultCode == Activity.RESULT_OK) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             ivCapture.setImageBitmap(photo);
+
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            ans.setByteArrayImage(byteArray);
+            getSelectedChkbox();
+            answer.onAnswerSave(ans);
         }
     }
 
@@ -310,6 +351,9 @@ public class QuestionFragment extends Fragment {
 
                         tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
+                        ans.setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                        getSelectedChkbox();
+                        answer.onAnswerSave(ans);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -331,15 +375,36 @@ public class QuestionFragment extends Fragment {
                                           int minute) {
 
                         tvTime.setText(hourOfDay + ":" + minute);
+                        ans.setTime(hourOfDay + ":" + minute);
+                        getSelectedChkbox();
+                        answer.onAnswerSave(ans);
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
     }
-}
 
-    /*public static MAnswers getAns()
+    public void getSelectedChkbox() {
+        if (!lstChkbox.isEmpty()) {
+            List<Integer> lstChecked = new ArrayList<>();
+
+            for (int i = 0; i < lstChkbox.size(); i++) {
+                if (lstChkbox.get(i).isChecked()) {
+                    lstChecked.add(i);
+                }
+            }
+
+            String checkedData="";
+            for (int i = 0; i < lstChecked.size(); i++) {
+                checkedData = checkedData+","+i;
+            }
+
+            ans.setSelectedChk(checkedData);
+        }
+    }
+
+     /*public static MAnswers getAns()
     {
 
         return ans;
     }*/
-
+}

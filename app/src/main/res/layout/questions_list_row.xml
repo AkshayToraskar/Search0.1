@@ -41,6 +41,32 @@
                 android:layout_height="wrap_content"
                 android:hint="Answer" />
 
+            <EditText
+                android:id="@+id/txt_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Answer" />
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date"/>
+
+            <TextView
+                android:id="@+id/txt_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Time"/>
+
+
+            <ImageView
+                android:id="@+id/iv_selImage"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@drawable/brain"/>
+
+
             <RadioGroup
                 android:id="@+id/rg_options"
                 android:layout_width="match_parent"
@@ -59,6 +85,12 @@
                     android:text="Options 2" />
 
             </RadioGroup>
+
+            <LinearLayout
+                android:id="@+id/ll_check"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
 
 
         </LinearLayout>

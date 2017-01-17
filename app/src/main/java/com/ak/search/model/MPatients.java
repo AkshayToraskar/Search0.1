@@ -7,7 +7,7 @@ import org.parceler.Parcel;
 
 import java.io.Serializable;
 
-import io.realm.PatientsRealmProxy;
+//import io.realm.PatientsRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 

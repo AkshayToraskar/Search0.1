@@ -27,7 +27,9 @@ import com.ak.search.realm_model.Survey;
 
 import org.parceler.Parcels;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -250,6 +252,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                             dataCollection.setSurveyid(surveyId);
                             dataCollection.setPatients(patients1);
                             dataCollection.setAnswerses(answerses);
+
+                            String timeStamp = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new Date());
+                            dataCollection.setLat(0);
+                            dataCollection.setLng(0);
+                            dataCollection.setTimestamp(timeStamp);
 
                             realm.copyToRealmOrUpdate(dataCollection);
 
