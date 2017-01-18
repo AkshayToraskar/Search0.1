@@ -19,9 +19,6 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
 
-
-
-
         <pl.bclogic.pulsator4droid.library.PulsatorLayout
             android:id="@+id/pulsator"
             android:layout_width="match_parent"
@@ -45,27 +42,21 @@
         <LinearLayout
             android:id="@+id/ll_inputpane"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
+           <!-- <include layout="@layout/content_bluetooth_inputpane"/>-->
             <!--<EditText
                 android:id="@+id/input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>-->
-            <Button
-                android:id="@+id/btn_send"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onBtnClick"
-                android:text="Send Login/Patient" />
 
-            <Button
-                android:id="@+id/btn_send_survey"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onBtnClick"
-                android:text="Send Survey" />
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 
         </LinearLayout>
 

@@ -2,21 +2,40 @@ package com.ak.search.bluetooth;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.activity.LoginActivity;
+import com.ak.search.adapter.PatientTabViewpagerAdapter;
+import com.ak.search.app.ChangeUIFromThread;
 import com.ak.search.app.ParcebleUtil;
+import com.ak.search.app.SessionManager;
+import com.ak.search.bluetooth.fragment.BtCollectionFragment;
+import com.ak.search.bluetooth.fragment.BtLoginFragment;
+import com.ak.search.bluetooth.fragment.BtPatientFragment;
+import com.ak.search.bluetooth.fragment.BtSurveyFragment;
+import com.ak.search.fragment.AdminFragment;
+import com.ak.search.fragment.ImpExpFragment;
+import com.ak.search.fragment.PatientFragment;
+import com.ak.search.fragment.SuperviserFragment;
+import com.ak.search.fragment.UserFragment;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -26,14 +45,14 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
-public class BluetoothActivity extends AppCompatActivity {
+public class BluetoothActivity extends AppCompatActivity implements ChangeUIFromThread {
 
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
-    @BindView(R.id.btn_send)
-    Button btnSend;
-    @BindView(R.id.btn_send_survey)
-    Button btnSendSurvey;
+    //@BindView(R.id.btn_send)
+    //Button btnSend;
+    //@BindView(R.id.btn_send_survey)
+    //Button btnSendSurvey;
     @BindView(R.id.tv_info)
     TextView textInfo;
     @BindView(R.id.tv_status)
@@ -42,6 +61,12 @@ public class BluetoothActivity extends AppCompatActivity {
     PulsatorLayout pulsator;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.tabs)
+    TabLayout tabs;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
 
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -49,10 +74,12 @@ public class BluetoothActivity extends AppCompatActivity {
     private UUID myUUID;
     private String myName;
 
-    ThreadBeConnected myThreadBeConnected;
-    public static ThreadConnected myThreadConnected;
-    Realm realm;
+    ChangeUIFromThread changeUIFromThread;
 
+    ThreadBeConnected myThreadBeConnected;
+    ThreadConnected myThreadConnected;
+    Realm realm;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +92,35 @@ public class BluetoothActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        sessionManager = new SessionManager(this);
+        changeUIFromThread = this;
+
+        setupViewPager(viewPager);
+
+        tabs.setupWithViewPager(viewPager);
+
+        if (sessionManager.isLoggedIn()) {
+            // username = sessionManager.getUsername();
+            int loginType = sessionManager.getLoginType();
+
+
+            switch (loginType) {
+                case 1://admin
+
+                    break;
+
+                case 2://superviser
+
+                    break;
+
+                case 3://field worker
+
+                    break;
+            }
+        } else {
+
+        }
+
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
@@ -92,9 +148,22 @@ public class BluetoothActivity extends AppCompatActivity {
                 bluetoothAdapter.getAddress();
         textInfo.setText(stInfo);
         pulsator.start();
+
+
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
+        //adapter.addFragment(new ImpExpFragment(), "Imp / Exp");
+        adapter.addFragment(new BtLoginFragment(), "Login Info");
+        adapter.addFragment(new BtPatientFragment(), "Patients");
+        adapter.addFragment(new BtSurveyFragment(), "Survey");
+        adapter.addFragment(new BtCollectionFragment(), "Collection");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
+
     protected void onStart() {
         super.onStart();
         //Turn ON BlueTooth if it is OFF
@@ -130,10 +199,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-
-
         switch (id) {
             case android.R.id.home:
                 finish();
@@ -144,14 +210,16 @@ public class BluetoothActivity extends AppCompatActivity {
 
     private void setup() {
         textStatus.setText("setup()");
-        myThreadBeConnected = new ThreadBeConnected(this, bluetoothAdapter);
+        myThreadBeConnected = new ThreadBeConnected(changeUIFromThread, bluetoothAdapter,this);
         myThreadBeConnected.start();
     }
 
-    public static void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(socket);
+    public void startThreadConnected(BluetoothSocket socket) {
+        myThreadConnected = new ThreadConnected(changeUIFromThread,socket,this);
         myThreadConnected.start();
     }
+
+
 
     public void onBtnClick(View view) {
         int id = view.getId();
@@ -160,7 +228,7 @@ public class BluetoothActivity extends AppCompatActivity {
             case R.id.btn_send:
                 if (myThreadConnected != null) {
                     try {
-                        DataUtils dataUtils=new DataUtils();
+                        DataUtils dataUtils = new DataUtils();
                         byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
@@ -172,7 +240,7 @@ public class BluetoothActivity extends AppCompatActivity {
             case R.id.btn_send_survey:
                 if (myThreadConnected != null) {
                     try {
-                        DataUtils dataUtils=new DataUtils();
+                        DataUtils dataUtils = new DataUtils();
                         byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendSurveyData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
@@ -182,4 +250,42 @@ public class BluetoothActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    public void changeUi() {
+        tabs.setVisibility(View.VISIBLE);
+        inputPane.setVisibility(View.VISIBLE);
+        pulsator.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void changeStatus(String status) {
+        textStatus.setText(status);
+    }
+
+    @Override
+    public void connectToThread(BluetoothDevice device) {
+
+    }
+
+    @Override
+    public void startThread(BluetoothSocket socket) {
+        startThreadConnected(socket);
+    }
+
+    @Override
+    public void disconnectThread() {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Disconnected..!", Snackbar.LENGTH_LONG)
+                .setAction("Close", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+
+        snackbar.show();
+    }
+
+
 }

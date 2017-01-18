@@ -1,9 +1,11 @@
 package com.ak.search.bluetooth;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.ak.search.app.ChangeUIFromThread;
 import com.ak.search.app.ParcebleUtil;
 import com.ak.search.model.TransferModel;
 
@@ -22,11 +24,14 @@ public class ThreadConnected extends Thread {
     private final InputStream connectedInputStream;
     private final OutputStream connectedOutputStream;
     private static String TAG = "Thread Connected";
-
+    Activity act;
     Realm realm;
+    ChangeUIFromThread changeUIFromThread;
 
-    public ThreadConnected(BluetoothSocket socket) {
+    public ThreadConnected(ChangeUIFromThread changeUIFromThread, BluetoothSocket socket, Activity act) {
         connectedBluetoothSocket = socket;
+        this.act = act;
+        this.changeUIFromThread = changeUIFromThread;
         InputStream in = null;
         OutputStream out = null;
 
@@ -60,21 +65,20 @@ public class ThreadConnected extends Thread {
                         " bytes received:\n"
                         + data.getName();
 
-                DataUtils dataUtils=new DataUtils();
+                DataUtils dataUtils = new DataUtils();
                 dataUtils.saveData(data, realm);
 
                 Log.v(TAG, msgReceived);
 
 
-
-
-               /* runOnUiThread(new Runnable() {
+                act.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        textStatus.setText(msgReceived);
+                        //textStatus.setText(msgReceived);
+                        changeUIFromThread.changeStatus(msgReceived);
                     }
-                });*/
+                });
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -83,15 +87,24 @@ public class ThreadConnected extends Thread {
                 final String msgConnectionLost = "Connection lost:\n"
                         + e.getMessage();
                 Log.v(TAG, msgConnectionLost);
-               /* runOnUiThread(new Runnable() {
+                act.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        textStatus.setText(msgConnectionLost);
+                        //textStatus.setText(msgConnectionLost);
+                        changeUIFromThread.changeStatus(msgConnectionLost);
+                        changeUIFromThread.disconnectThread();
                     }
-                });*/
+                });
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
+                act.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        changeUIFromThread.disconnectThread();
+                    }
+                });
             }
         }
     }

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.activity.AddUserActivity;
+import com.ak.search.app.ChangeUIFromThread;
 import com.ak.search.bluetooth.BluetoothClientActivity;
 import com.ak.search.bluetooth.ThreadConnectBTdevice;
 
@@ -25,7 +26,8 @@ import java.util.List;
 public class BluetoothPairedAdapter extends RecyclerView.Adapter<BluetoothPairedAdapter.MyViewHolder> {
 
 private List<BluetoothDevice> bluetoothDevicesList;
-private Activity context;
+//private Activity context;
+    ChangeUIFromThread changeUIFromThread;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
     public TextView tvName,tvAddress;
@@ -40,9 +42,9 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
 
-                BluetoothDevice device =
+               BluetoothDevice device =
                         (BluetoothDevice) bluetoothDevicesList.get(getPosition());
-                Toast.makeText(context,
+                 /*Toast.makeText(context,
                         "Name: " + device.getName() + "\n"
                                 + "Address: " + device.getAddress() + "\n"
                                 + "BondState: " + device.getBondState() + "\n"
@@ -51,8 +53,9 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
                         Toast.LENGTH_LONG).show();
 
                 //textStatus.setText("start ThreadConnectBTdevice");
-                BluetoothClientActivity.myThreadConnectBTdevice = new ThreadConnectBTdevice(device, context);
-                BluetoothClientActivity.myThreadConnectBTdevice.start();
+                BluetoothClientActivity.myThreadConnectBTdevice = new ThreadConnectBTdevice(BluetoothClientActivity.changeUIFromThread,device);
+                BluetoothClientActivity.myThreadConnectBTdevice.start();*/
+                changeUIFromThread.connectToThread(device);
 
             }
         });
@@ -62,9 +65,9 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 }
 
 
-    public BluetoothPairedAdapter(Activity context, List<BluetoothDevice> bluetoothDevicesList) {
+    public BluetoothPairedAdapter(ChangeUIFromThread changeUIFromThread, List<BluetoothDevice> bluetoothDevicesList) {
         this.bluetoothDevicesList = bluetoothDevicesList;
-        this.context=context;
+        this.changeUIFromThread=changeUIFromThread;
     }
 
     @Override

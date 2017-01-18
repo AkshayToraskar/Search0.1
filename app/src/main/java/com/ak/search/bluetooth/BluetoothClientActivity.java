@@ -7,6 +7,10 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,8 +28,17 @@ import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.BluetoothPairedAdapter;
+import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.adapter.UsersAdapter;
+import com.ak.search.app.ChangeUIFromThread;
 import com.ak.search.app.ParcebleUtil;
+import com.ak.search.app.SessionManager;
+import com.ak.search.bluetooth.fragment.BtCollectionFragment;
+import com.ak.search.bluetooth.fragment.BtLoginFragment;
+import com.ak.search.bluetooth.fragment.BtPatientFragment;
+import com.ak.search.bluetooth.fragment.BtSurveyFragment;
+import com.ak.search.fragment.ImpExpFragment;
+import com.ak.search.fragment.UserFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class BluetoothClientActivity extends AppCompatActivity {
+public class BluetoothClientActivity extends AppCompatActivity implements ChangeUIFromThread {
 
     private static final int REQUEST_ENABLE_BT = 1;
     BluetoothAdapter bluetoothAdapter;
@@ -53,18 +66,26 @@ public class BluetoothClientActivity extends AppCompatActivity {
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
     // EditText inputField;
-    @BindView(R.id.btn_send)
-    Button btnSend;
-    @BindView(R.id.btn_send_survey)
-    Button btnSendSurvey;
+    //@BindView(R.id.btn_send)
+    //Button btnSend;
+    //@BindView(R.id.btn_send_survey)
+    //Button btnSendSurvey;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.rv_btlist)
     RecyclerView recyclerView;
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.tabs)
+    TabLayout tabs;
+    @BindView(R.id.viewpager)
+    ViewPager viewPager;
 
-    public static ThreadConnectBTdevice myThreadConnectBTdevice;
-    static ThreadConnected myThreadConnected;
+    public ThreadConnectBTdevice myThreadConnectBTdevice;
+    ThreadConnected myThreadConnected;
 
+    public static ChangeUIFromThread changeUIFromThread;
+    SessionManager sessionManager;
     Realm realm;
 
     @Override
@@ -72,10 +93,45 @@ public class BluetoothClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_client);
         ButterKnife.bind(this);
+        changeUIFromThread = this;
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm = Realm.getDefaultInstance();
+
+        sessionManager = new SessionManager(this);
+
+
+        setupViewPager(viewPager);
+
+        tabs.setupWithViewPager(viewPager);
+
+        if (sessionManager.isLoggedIn()) {
+            // username = sessionManager.getUsername();
+            int loginType = sessionManager.getLoginType();
+
+
+            switch (loginType) {
+                case 1://admin
+
+                    break;
+
+                case 2://superviser
+
+                    break;
+
+                case 3://field worker
+
+                    break;
+            }
+        } else {
+
+        }
+
+
+
+
+
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
@@ -101,6 +157,16 @@ public class BluetoothClientActivity extends AppCompatActivity {
         String stInfo = bluetoothAdapter.getName() + "\n" +
                 bluetoothAdapter.getAddress();
         textInfo.setText(stInfo);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
+       // adapter.addFragment(new ImpExpFragment(), "Imp / Exp");
+        adapter.addFragment(new BtLoginFragment(), "Login Info");
+        adapter.addFragment(new BtPatientFragment(), "Patients");
+        adapter.addFragment(new BtSurveyFragment(), "Survey");
+        adapter.addFragment(new BtCollectionFragment(), "Collection");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -152,8 +218,8 @@ public class BluetoothClientActivity extends AppCompatActivity {
     }
 
 
-    public static void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(socket);
+    public void startThreadConnected(BluetoothSocket socket) {
+        myThreadConnected = new ThreadConnected(changeUIFromThread,socket,this);
         myThreadConnected.start();
     }
 
@@ -214,7 +280,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
             case R.id.btn_send:
                 if (myThreadConnected != null) {
                     try {
-                        DataUtils dataUtils=new DataUtils();
+                        DataUtils dataUtils = new DataUtils();
                         byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
@@ -226,7 +292,7 @@ public class BluetoothClientActivity extends AppCompatActivity {
             case R.id.btn_send_survey:
                 if (myThreadConnected != null) {
                     try {
-                        DataUtils dataUtils=new DataUtils();
+                        DataUtils dataUtils = new DataUtils();
                         byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendSurveyData(realm));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
@@ -237,4 +303,42 @@ public class BluetoothClientActivity extends AppCompatActivity {
 
         }
     }
+
+    @Override
+    public void changeUi() {
+        tabs.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        inputPane.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void changeStatus(String status) {
+        textStatus.setText(status);
+    }
+
+    @Override
+    public void connectToThread(BluetoothDevice device) {
+        myThreadConnectBTdevice = new ThreadConnectBTdevice(changeUIFromThread, device,this);
+        myThreadConnectBTdevice.start();
+    }
+
+    @Override
+    public void startThread(BluetoothSocket socket) {
+        startThreadConnected(socket);
+    }
+
+    @Override
+    public void disconnectThread() {
+        Snackbar snackbar = Snackbar
+                .make(coordinatorLayout, "Disconnected..!", Snackbar.LENGTH_LONG)
+                .setAction("Close", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        finish();
+                    }
+                });
+        snackbar.show();
+    }
+
+
 }

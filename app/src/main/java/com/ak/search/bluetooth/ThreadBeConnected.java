@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.app.ChangeUIFromThread;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -31,27 +32,32 @@ public class ThreadBeConnected extends Thread {
     BluetoothAdapter bluetoothAdapter;
     Activity act;
     public static String TAG="Thread";
-    TextView textStatus;
-    LinearLayout inputPane;
+  //  TextView textStatus;
+ //   LinearLayout inputPane;
 
     PulsatorLayout pulsator;
+    ChangeUIFromThread changeUIFromThread;
 
-    public ThreadBeConnected(Activity act,BluetoothAdapter bluetoothAdapter ) {
+    public ThreadBeConnected(ChangeUIFromThread changeUIFromThread, BluetoothAdapter bluetoothAdapter, Activity act ) {
 
         myUUID = UUID.fromString("ec79da00-853f-11e4-b4a9-0800200c9a66");
         myName = myUUID.toString();
         this.act=act;
+        this.changeUIFromThread=changeUIFromThread;
         this.bluetoothAdapter=bluetoothAdapter;
 
-        textStatus=(TextView)act.findViewById(R.id.tv_status);
-        inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
-        pulsator=(PulsatorLayout)act.findViewById(R.id.pulsator);
+       // textStatus=(TextView)act.findViewById(R.id.tv_status);
+       // inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
+      //  pulsator=(PulsatorLayout)act.findViewById(R.id.pulsator);
 
         try {
             bluetoothServerSocket =
                     bluetoothAdapter.listenUsingRfcommWithServiceRecord(myName, myUUID);
 
-            textStatus.setText("Waiting\n"
+           /* textStatus.setText("Waiting\n"
+                    + "bluetoothServerSocket :\n"
+                    + bluetoothServerSocket);*/
+            changeUIFromThread.changeStatus("Waiting\n"
                     + "bluetoothServerSocket :\n"
                     + bluetoothServerSocket);
 
@@ -87,12 +93,16 @@ public class ThreadBeConnected extends Thread {
 
                         Log.v(TAG,strConnected);
 
-                        textStatus.setText(strConnected);
-                        inputPane.setVisibility(View.VISIBLE);
-                        pulsator.setVisibility(View.GONE);
+                     //   textStatus.setText(strConnected);
+                    //    inputPane.setVisibility(View.VISIBLE);
+                    //    pulsator.setVisibility(View.GONE);
+                        changeUIFromThread.changeStatus(strConnected);
+                        changeUIFromThread.changeUi();
                     }});
 
-                BluetoothActivity.startThreadConnected(bluetoothSocket);
+
+
+                changeUIFromThread.startThread(bluetoothSocket);
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -104,8 +114,10 @@ public class ThreadBeConnected extends Thread {
                     @Override
                     public void run() {
                         Log.v(TAG,eMessage);
-                        textStatus.setText("something wrong: \n" + eMessage);
+                     //   textStatus.setText("something wrong: \n" + eMessage);
+                        changeUIFromThread.changeStatus("something wrong: \n" + eMessage);
                     }});
+
             }
         }else{
             act.runOnUiThread(new Runnable(){
@@ -113,8 +125,11 @@ public class ThreadBeConnected extends Thread {
                 @Override
                 public void run() {
                     Log.v(TAG,"bluetoothServerSocket == null");
-                    textStatus.setText("bluetoothServerSocket == null");
+                 //   textStatus.setText("bluetoothServerSocket == null");
+                    changeUIFromThread.changeStatus("bluetoothServerSocket == null");
+                    changeUIFromThread.disconnectThread();
                 }});
+
         }
     }
 

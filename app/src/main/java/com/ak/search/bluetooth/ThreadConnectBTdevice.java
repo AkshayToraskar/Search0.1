@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.app.ChangeUIFromThread;
 
 import java.io.IOException;
 
@@ -25,17 +26,20 @@ public class ThreadConnectBTdevice  extends Thread {
     LinearLayout inputPane;
     RecyclerView listViewPairedDevice;
     Activity act;
+    ChangeUIFromThread changeUIFromThread;
 
 
-    public ThreadConnectBTdevice(BluetoothDevice device, Activity act) {
+    public ThreadConnectBTdevice(ChangeUIFromThread changeUIFromThread,BluetoothDevice device, Activity act) {
         bluetoothDevice = device;
+        this.changeUIFromThread=changeUIFromThread;
         this.act=act;
-        textStatus=(TextView)act.findViewById(R.id.tv_status);
-        inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
-        listViewPairedDevice=(RecyclerView) act.findViewById(R.id.rv_btlist);
+        //textStatus=(TextView)act.findViewById(R.id.tv_status);
+      //  inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
+       // listViewPairedDevice=(RecyclerView) act.findViewById(R.id.rv_btlist);
         try {
             bluetoothSocket = device.createRfcommSocketToServiceRecord(BluetoothClientActivity.myUUID);
-          textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);
+          //textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);
+            changeUIFromThread.changeStatus("bluetoothSocket: \n" + bluetoothSocket);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -56,8 +60,10 @@ public class ThreadConnectBTdevice  extends Thread {
 
                 @Override
                 public void run() {
-                  textStatus.setText("something wrong bluetoothSocket.connect(): \n" + eMessage);
+                  //textStatus.setText("something wrong bluetoothSocket.connect(): \n" + eMessage);
+                    changeUIFromThread.changeStatus("something wrong bluetoothSocket.connect(): \n" + eMessage);
                 }});
+
 
             try {
                 bluetoothSocket.close();
@@ -77,13 +83,17 @@ public class ThreadConnectBTdevice  extends Thread {
 
                 @Override
                 public void run() {
-                   textStatus.setText(msgconnected);
+                   //textStatus.setText(msgconnected);
 
-                   listViewPairedDevice.setVisibility(View.GONE);
-                   inputPane.setVisibility(View.VISIBLE);
+                   //listViewPairedDevice.setVisibility(View.GONE);
+                  // inputPane.setVisibility(View.VISIBLE);
+
+                    changeUIFromThread.changeStatus(msgconnected);
+                    changeUIFromThread.changeUi();
                 }});
 
-            BluetoothClientActivity.startThreadConnected(bluetoothSocket);
+
+            changeUIFromThread.startThread(bluetoothSocket);
         }else{
             //fail
         }
@@ -94,6 +104,7 @@ public class ThreadConnectBTdevice  extends Thread {
         Toast.makeText(act,
                 "close bluetoothSocket",
                 Toast.LENGTH_LONG).show();
+
 
         try {
             bluetoothSocket.close();
