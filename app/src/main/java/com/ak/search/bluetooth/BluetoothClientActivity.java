@@ -167,6 +167,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         adapter.addFragment(new BtSurveyFragment(), "Survey");
         adapter.addFragment(new BtCollectionFragment(), "Collection");
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(4);
     }
 
     @Override
