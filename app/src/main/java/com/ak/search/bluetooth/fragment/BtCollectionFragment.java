@@ -1,6 +1,7 @@
 package com.ak.search.bluetooth.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.ak.search.R;
 import com.ak.search.adapter.SurveyAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.bluetooth.adapter.BtSurveyHistoryAdapter;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Survey;
@@ -36,6 +38,7 @@ public class BtCollectionFragment extends Fragment {
     private BtSurveyHistoryAdapter mAdapter;
     Realm realm;
     View view;
+    CollectDataInfo collectDataInfo;
 
     public BtCollectionFragment() {
         // Required empty public constructor
@@ -60,13 +63,23 @@ public class BtCollectionFragment extends Fragment {
         dataCollectionList=new ArrayList<>();
         dataCollectionList.addAll(results);
 
-        mAdapter = new BtSurveyHistoryAdapter(getContext(), dataCollectionList);
+        mAdapter = new BtSurveyHistoryAdapter(collectDataInfo,getContext(), dataCollectionList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            collectDataInfo = (CollectDataInfo) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
     }
 
 }

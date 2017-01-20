@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.activity.AddUserActivity;
+import com.ak.search.app.CollectDataInfo;
+import com.ak.search.realm_model.TransferModel;
 import com.ak.search.realm_model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,37 +25,40 @@ import java.util.List;
 
 public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHolder> {
 
-private List<User> userList;
-private Context context;
+    private List<User> userList;
+    private Context context;
+    CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
-    public CheckBox cbName;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public CheckBox cbName;
 
-    public MyViewHolder(View view) {
-        super(view);
-        cbName = (CheckBox) view.findViewById(R.id.cbName);
-
-
-        /*view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-               // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
-
-                Intent i=new Intent(context, AddUserActivity.class);
-                i.putExtra("userId",userList.get(getPosition()).getId());
-                context.startActivity(i);
-            }
-        });*/
+        public MyViewHolder(View view) {
+            super(view);
+            cbName = (CheckBox) view.findViewById(R.id.cbName);
 
 
+            cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                    List<User> user=new ArrayList<User>();
+                    user.add(userList.get(getPosition()));
+                    transferModel.setUserList(user);
+                    collectDataInfo.collectData(transferModel);
+                }
+            });
+
+
+        }
     }
-}
 
 
-    public BtUsersAdapter(Context context, List<User> userList) {
+    public BtUsersAdapter(CollectDataInfo collectDataInfo, Context context, List<User> userList) {
         this.userList = userList;
-        this.context=context;
+        this.context = context;
+        this.collectDataInfo = collectDataInfo;
+        transferModel = new TransferModel();
     }
 
     @Override

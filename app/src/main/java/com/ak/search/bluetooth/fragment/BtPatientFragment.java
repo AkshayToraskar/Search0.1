@@ -1,6 +1,7 @@
 package com.ak.search.bluetooth.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import com.ak.search.R;
 import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.UsersAdapter;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.bluetooth.adapter.BtPatientAdapter;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.User;
@@ -36,6 +38,7 @@ public class BtPatientFragment extends Fragment {
     private BtPatientAdapter mAdapter;
     Realm realm;
     View view;
+    CollectDataInfo collectDataInfo;
 
     public BtPatientFragment() {
 
@@ -58,7 +61,7 @@ public class BtPatientFragment extends Fragment {
         patientsList=new ArrayList<>();
         patientsList.addAll(results);
 
-        mAdapter = new BtPatientAdapter(getContext(), patientsList);
+        mAdapter = new BtPatientAdapter(collectDataInfo,getContext(), patientsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -66,6 +69,16 @@ public class BtPatientFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            collectDataInfo = (CollectDataInfo) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
     }
 
 }

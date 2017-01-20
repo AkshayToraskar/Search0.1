@@ -9,7 +9,7 @@ import java.util.List;
  * Created by dg hdghfd on 10-01-2017.
  */
 
-public class TransferModel implements Serializable{
+public class MTransferModel implements Serializable{
 
     String name;
   //  List<Test1> test1List;

@@ -1,21 +1,20 @@
 package com.ak.search.bluetooth.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.CompoundButton;
 
 import com.ak.search.R;
-import com.ak.search.activity.ShowSurveyActivity;
+import com.ak.search.app.CollectDataInfo;
+import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.TransferModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +25,9 @@ public class BtPatientAdapter extends RecyclerView.Adapter<BtPatientAdapter.MyVi
 
     private List<Patients> patientsList;
     private Context context;
+    CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
@@ -34,55 +36,28 @@ public class BtPatientAdapter extends RecyclerView.Adapter<BtPatientAdapter.MyVi
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
-           // ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-
-            /*view.setOnClickListener(new View.OnClickListener() {
+            cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View view) {
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
+                    List<Patients> patientses=new ArrayList<Patients>();
+                    patientses.add(patientsList.get(getPosition()));
+                    transferModel.setPatientsList(patientses);
 
-                    Intent i = new Intent(context, ShowSurveyActivity.class);
-                  //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
-                  //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
-                    context.startActivity(i);
+                    collectDataInfo.collectData(transferModel);
                 }
             });
-
-
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(context)
-                            .setTitle("Delete")
-                            .setMessage("Would you like to delete?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                          //          MPatients patients = MPatients.findById(MPatients.class, patientsList.get(getPosition()).getId());
-                        //            patients.delete();
-
-                                    patientsList.remove(getPosition());
-
-                                    notifyDataSetChanged();
-
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // user doesn't want to logout
-                                }
-                            })
-                            .show();
-                }
-            });*/
 
         }
     }
 
 
-    public BtPatientAdapter(Context context, List<Patients> patientsList) {
+    public BtPatientAdapter(CollectDataInfo collectDataInfo,Context context, List<Patients> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
+        this.collectDataInfo=collectDataInfo;
+
+        transferModel=new TransferModel();
     }
 
     @Override

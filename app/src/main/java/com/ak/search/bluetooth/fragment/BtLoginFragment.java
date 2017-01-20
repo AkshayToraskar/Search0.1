@@ -1,6 +1,7 @@
 package com.ak.search.bluetooth.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ak.search.R;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.bluetooth.adapter.BtUsersAdapter;
 import com.ak.search.realm_model.User;
 
@@ -33,6 +35,7 @@ public class BtLoginFragment extends Fragment {
     private BtUsersAdapter mAdapter;
     Realm realm;
     View view;
+CollectDataInfo collectDataInfo;
 
     public BtLoginFragment() {
     }
@@ -54,7 +57,7 @@ public class BtLoginFragment extends Fragment {
         usersList=new ArrayList<>();
         usersList.addAll(results);
 
-        mAdapter = new BtUsersAdapter(getContext(), usersList);
+        mAdapter = new BtUsersAdapter(collectDataInfo,getContext(), usersList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -65,4 +68,14 @@ public class BtLoginFragment extends Fragment {
         return  view;
     }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            collectDataInfo = (CollectDataInfo) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
+    }
 }

@@ -1,19 +1,18 @@
 package com.ak.search.bluetooth;
 
-import com.ak.search.app.ParcebleUtil;
 import com.ak.search.model.MOptions;
 import com.ak.search.model.MPatients;
 import com.ak.search.model.MQuestions;
 import com.ak.search.model.MSurvey;
 import com.ak.search.model.MUser;
-import com.ak.search.model.TransferModel;
+import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.Options;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Questions;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.TransferModel;
 import com.ak.search.realm_model.User;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +26,18 @@ import io.realm.RealmList;
 public class DataUtils {
 
 
-    public TransferModel sendData(Realm realm) {
+    public MTransferModel sendData(Realm realm, TransferModel transferModel) {
 
         List<MUser> mUserList = new ArrayList<>();
-    //    List<MPatients> mPatientsList = new ArrayList<>();
-      //  List<MSurvey> mSurveys = new ArrayList<>();
+        List<MPatients> mPatientsList = new ArrayList<>();
+        List<MSurvey> mSurveys = new ArrayList<>();
 
-        List<User> user = realm.where(User.class).findAll();
-     //   List<Patients> patients = realm.where(Patients.class).findAll();
-       // MSurvey survey=new MSurvey();
+        List<User> user = transferModel.getUserList(); //realm.where(User.class).findAll();
+        List<Patients> patients = transferModel.getPatientsList(); //realm.where(Patients.class).findAll();
+        List<Survey> surveys = transferModel.getSurveyList(); //new MSurvey();
 
         //ConvertUser
-        if(user!=null) {
+        if (user != null) {
             for (int i = 0; i < user.size(); i++) {
                 MUser mu = new MUser();
                 mu.setId(user.get(i).getId());
@@ -50,7 +49,7 @@ public class DataUtils {
         }
 
         //ConvertPatients
-      /*  if(patients!=null) {
+        if (patients != null) {
             for (int i = 0; i < patients.size(); i++) {
                 MPatients pa = new MPatients();
                 pa.setId(patients.get(i).getId());
@@ -58,9 +57,67 @@ public class DataUtils {
                 pa.setPatientname(patients.get(i).getPatientname());
                 mPatientsList.add(pa);
             }
-        }*/
+        }
 
         //Convert Survey
+
+
+        //ConvertUser
+        /*for (int i = 0; i < user.size(); i++) {
+            MUser mu = new MUser();
+            mu.setId(user.get(i).getId());
+            mu.setName(user.get(i).getName());
+            mu.setPassword(user.get(i).getPassword());
+            mu.setType(user.get(i).getType());
+            mUserList.add(mu);
+        }
+
+        //ConvertPatients
+        for (int i = 0; i < patients.size(); i++) {
+            MPatients pa = new MPatients();
+            pa.setId(patients.get(i).getId());
+            pa.setAddress(patients.get(i).getAddress());
+            pa.setPatientname(patients.get(i).getPatientname());
+            mPatientsList.add(pa);
+        }*/
+        // MSurvey sur = new MSurvey();
+        if (surveys != null) {
+            for (int i = 0; i < surveys.size(); i++) {
+
+                MSurvey sur = new MSurvey();
+                sur.setId(surveys.get(i).getId());
+                sur.setName(surveys.get(i).getName());
+
+                List<MQuestions> ques = new ArrayList<>();
+                if (surveys.get(i).getQuestions() != null) {
+                    for (int j = 0; j < surveys.get(i).getQuestions().size(); j++) {
+                        MQuestions que = new MQuestions();
+                        que.setId(surveys.get(i).getQuestions().get(j).getId());
+                        que.setOpt(surveys.get(i).getQuestions().get(j).getOpt());
+                        que.setQuestion(surveys.get(i).getQuestions().get(j).getQuestion());
+                        que.setText(surveys.get(i).getQuestions().get(j).getText());
+
+                        List<MOptions> opt = new ArrayList<>();
+                        if (surveys.get(i).getQuestions().get(j).getOptions() != null) {
+                            for (int k = 0; k < surveys.get(i).getQuestions().get(j).getOptions().size(); k++) {
+                                MOptions op = new MOptions();
+                                op.setId(surveys.get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                op.setOpt(surveys.get(i).getQuestions().get(j).getOptions().get(k).getOpt());
+                                opt.add(op);
+                            }
+                            que.setOptions(opt);
+                        }
+
+                        ques.add(que);
+                    }
+                    sur.setQuestions(ques);
+                }
+
+                mSurveys.add(sur);
+
+            }
+        }
+
         /*for(int i=0; i<surveys.size(); i++){
             Survey sur=new Survey();
             sur.setId(surveys.get(i).getId());
@@ -70,11 +127,11 @@ public class DataUtils {
         }*/
 
 
-        TransferModel transModel = new TransferModel();
+        MTransferModel transModel = new MTransferModel();
         transModel.setName("aa");
         transModel.setUserList(mUserList);
-     //   transModel.setPatientsList(mPatientsList);
-        //transModel.setSurveyList(mSurveys);
+        transModel.setPatientsList(mPatientsList);
+        transModel.setSurveyList(mSurveys);
         //transModel.setSurvey(survey);
 
         /*try {
@@ -87,7 +144,7 @@ public class DataUtils {
 
     }
 
-    public TransferModel sendSurveyData(Realm realm) {
+    public MTransferModel sendSurveyData(Realm realm) {
         // List<MUser> mUserList = new ArrayList<>();
         // List<MPatients> mPatientsList = new ArrayList<>();
         // List<MSurvey> mSurveys = new ArrayList<>();
@@ -121,7 +178,7 @@ public class DataUtils {
             mPatientsList.add(pa);
         }*/
         MSurvey sur = new MSurvey();
-        if(surveys!=null) {
+        if (surveys != null) {
             // for (int i = 0; i < surveys.size(); i++) {
 
 
@@ -155,7 +212,7 @@ public class DataUtils {
 
             // }
         }
-        TransferModel transModel = new TransferModel();
+        MTransferModel transModel = new MTransferModel();
         transModel.setName("single_survey");
         //transModel.setUserList(mUserList);
         //transModel.setPatientsList(mPatientsList);
@@ -174,192 +231,185 @@ public class DataUtils {
     }
 
 
-    public void saveData(final TransferModel data, Realm realm) {
+    public void saveData(final MTransferModel data, Realm realm) {
 
 
         realm.executeTransaction(new Realm.Transaction() {
-                                      @Override
-                                      public void execute(Realm realm) {
+                                     @Override
+                                     public void execute(Realm realm) {
 
-                                          //save User
-                                          if (data.getUserList() != null) {
-
-
-                                              for (int i = 0; i < data.getUserList().size(); i++) {
-                                                  User mu = realm.where(User.class).equalTo("id", data.getUserList().get(i).getId()).findFirst();
-                                                  if (mu != null) {
-                                                      //mu.setId(data.getUserList().get(i).getId());
-                                                      mu.setName(data.getUserList().get(i).getName());
-                                                      mu.setPassword(data.getUserList().get(i).getPassword());
-                                                      mu.setType(data.getUserList().get(i).getType());
-                                                      realm.copyToRealmOrUpdate(mu);
-                                                  } else {
-                                                      User us = realm.createObject(User.class, data.getUserList().get(i).getId());
-                                                      us.setName(data.getUserList().get(i).getName());
-                                                      us.setPassword(data.getUserList().get(i).getPassword());
-                                                      us.setType(data.getUserList().get(i).getType());
-                                                      realm.copyToRealmOrUpdate(us);
-                                                  }
-
-                                                  //mUserList.add(mu);
-                                              }
-                                          }
-                                          //save Patients
-                                          if (data.getPatientsList() != null) {
-                                              for (int i = 0; i < data.getPatientsList().size(); i++) {
-                                                  Patients pa = realm.where(Patients.class).equalTo("id", data.getPatientsList().get(i).getId()).findFirst();
-                                                  if (pa != null) {
-                                                      //pa.setId(data.getPatientsList().get(i).getId());
-                                                      pa.setAddress(data.getPatientsList().get(i).getAddress());
-                                                      pa.setPatientname(data.getPatientsList().get(i).getPatientname());
-                                                      //mPatientsList.add(pa);
-                                                      realm.copyToRealmOrUpdate(pa);
-                                                  } else {
-                                                      Patients up = realm.createObject(Patients.class, data.getPatientsList().get(i).getId());
-                                                      //pa.setId(data.getPatientsList().get(i).getId());
-                                                      up.setAddress(data.getPatientsList().get(i).getAddress());
-                                                      up.setPatientname(data.getPatientsList().get(i).getPatientname());
-                                                      //mPatientsList.add(pa);
-                                                      realm.copyToRealmOrUpdate(up);
-                                                  }
-                                              }
-                                              //Toast.makeText(getApplicationContext(),"Data Saved")
-                                          }
+                                         //save User
+                                         if (data.getUserList() != null) {
 
 
-                                          //save survey
-                                          if (data.getSurveyList() != null) {
-                                              for (int i = 0; i < data.getSurveyList().size(); i++) {
+                                             for (int i = 0; i < data.getUserList().size(); i++) {
+                                                 User mu = realm.where(User.class).equalTo("id", data.getUserList().get(i).getId()).findFirst();
+                                                 if (mu != null) {
+                                                     //mu.setId(data.getUserList().get(i).getId());
+                                                     mu.setName(data.getUserList().get(i).getName());
+                                                     mu.setPassword(data.getUserList().get(i).getPassword());
+                                                     mu.setType(data.getUserList().get(i).getType());
+                                                     realm.copyToRealmOrUpdate(mu);
+                                                 } else {
+                                                     User us = realm.createObject(User.class, data.getUserList().get(i).getId());
+                                                     us.setName(data.getUserList().get(i).getName());
+                                                     us.setPassword(data.getUserList().get(i).getPassword());
+                                                     us.setType(data.getUserList().get(i).getType());
+                                                     realm.copyToRealmOrUpdate(us);
+                                                 }
 
-                                                  Survey surv = realm.where(Survey.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                  Survey sur;
-                                                  if (surv != null) {
-                                                      sur = realm.where(Survey.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                  } else {
-                                                      sur = realm.createObject(Survey.class, data.getSurveyList().get(i).getId());
-                                                  }
-
-                                                  sur.setId(data.getSurveyList().get(i).getId());
-                                                  sur.setName(data.getSurveyList().get(i).getName());
-
-                                                  RealmList<Questions> ques = new RealmList<Questions>();
-
-                                                  for (int j = 0; j < data.getSurveyList().get(i).getQuestions().size(); j++) {
-                                                      Questions que = realm.where(Questions.class).equalTo("id", data.getSurveyList().get(i).getQuestions().get(j).getId()).findFirst();
-                                                      Questions qu;
-                                                      if (que != null) {
-                                                          qu = realm.where(Questions.class).equalTo("id", data.getSurveyList().get(i).getQuestions().get(j).getId()).findFirst();
-                                                      } else {
-                                                          qu = realm.createObject(Questions.class, data.getSurveyList().get(i).getQuestions().get(j).getId());
-                                                      }
-                                                      //  que.setId(data.getSurveyList().get(i).getQuestions().get(j).getId());
-                                                      qu.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOpt());
-                                                      qu.setQuestion(data.getSurveyList().get(i).getQuestions().get(j).getQuestion());
-                                                      qu.setText(data.getSurveyList().get(i).getQuestions().get(j).getText());
-
-                                                      RealmList<Options> opt = new RealmList<Options>();
-                                                      for (int k = 0; k < data.getSurveyList().get(i).getQuestions().get(j).getOptions().size(); k++) {
-                                                          Options op = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                          Options o;
-                                                          if (op != null) {
-                                                              o = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                          } else {
-                                                              o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
-                                                          }
-
-                                                          //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
-                                                          o.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getOpt());
-
-                                                          realm.copyToRealmOrUpdate(o);
-                                                          opt.add(o);
-
-                                                      }
-                                                      qu.setOptions(opt);
-                                                      realm.copyToRealmOrUpdate(qu);
-                                                      ques.add(qu);
-
-                                                  }
-                                                  sur.setQuestions(ques);
-
-                                                  realm.copyToRealmOrUpdate(sur);
-                                              }
-
-                                          }
+                                                 //mUserList.add(mu);
+                                             }
+                                         }
+                                         //save Patients
+                                         if (data.getPatientsList() != null) {
+                                             for (int i = 0; i < data.getPatientsList().size(); i++) {
+                                                 Patients pa = realm.where(Patients.class).equalTo("id", data.getPatientsList().get(i).getId()).findFirst();
+                                                 if (pa != null) {
+                                                     //pa.setId(data.getPatientsList().get(i).getId());
+                                                     pa.setAddress(data.getPatientsList().get(i).getAddress());
+                                                     pa.setPatientname(data.getPatientsList().get(i).getPatientname());
+                                                     //mPatientsList.add(pa);
+                                                     realm.copyToRealmOrUpdate(pa);
+                                                 } else {
+                                                     Patients up = realm.createObject(Patients.class, data.getPatientsList().get(i).getId());
+                                                     //pa.setId(data.getPatientsList().get(i).getId());
+                                                     up.setAddress(data.getPatientsList().get(i).getAddress());
+                                                     up.setPatientname(data.getPatientsList().get(i).getPatientname());
+                                                     //mPatientsList.add(pa);
+                                                     realm.copyToRealmOrUpdate(up);
+                                                 }
+                                             }
+                                             //Toast.makeText(getApplicationContext(),"Data Saved")
+                                         }
 
 
-                                          if(data.getSurvey()!=null){
-                                              Survey surv = realm.where(Survey.class).equalTo("id", data.getSurvey().getId()).findFirst();
-                                              Survey sur;
-                                              if (surv != null) {
-                                                  sur = realm.where(Survey.class).equalTo("id",data.getSurvey().getId()).findFirst();
-                                              } else {
-                                                  sur = realm.createObject(Survey.class, data.getSurvey().getId());
-                                              }
+                                         //save survey
+                                         if (data.getSurveyList() != null) {
+                                             for (int i = 0; i < data.getSurveyList().size(); i++) {
+
+                                                 Survey surv = realm.where(Survey.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                 Survey sur;
+                                                 if (surv != null) {
+                                                     sur = realm.where(Survey.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                 } else {
+                                                     sur = realm.createObject(Survey.class, data.getSurveyList().get(i).getId());
+                                                 }
+
+                                                // sur.setId(data.getSurveyList().get(i).getId());
+                                                 sur.setName(data.getSurveyList().get(i).getName());
+
+                                                 RealmList<Questions> ques = new RealmList<Questions>();
+
+                                                 for (int j = 0; j < data.getSurveyList().get(i).getQuestions().size(); j++) {
+                                                     Questions que = realm.where(Questions.class).equalTo("id", data.getSurveyList().get(i).getQuestions().get(j).getId()).findFirst();
+                                                     Questions qu;
+                                                     if (que != null) {
+                                                         qu = realm.where(Questions.class).equalTo("id", data.getSurveyList().get(i).getQuestions().get(j).getId()).findFirst();
+                                                     } else {
+                                                         qu = realm.createObject(Questions.class, data.getSurveyList().get(i).getQuestions().get(j).getId());
+                                                     }
+                                                     //  que.setId(data.getSurveyList().get(i).getQuestions().get(j).getId());
+                                                     qu.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOpt());
+                                                     qu.setQuestion(data.getSurveyList().get(i).getQuestions().get(j).getQuestion());
+                                                     qu.setText(data.getSurveyList().get(i).getQuestions().get(j).getText());
+
+                                                     RealmList<Options> opt = new RealmList<Options>();
+                                                     for (int k = 0; k < data.getSurveyList().get(i).getQuestions().get(j).getOptions().size(); k++) {
+                                                         Options op = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                         Options o;
+                                                         if (op != null) {
+                                                             o = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                         } else {
+                                                             o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                         }
+
+                                                         //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                         o.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getOpt());
+
+                                                         realm.copyToRealmOrUpdate(o);
+                                                         opt.add(o);
+
+                                                     }
+                                                     qu.setOptions(opt);
+                                                     realm.copyToRealmOrUpdate(qu);
+                                                     ques.add(qu);
+
+                                                 }
+                                                 sur.setQuestions(ques);
+
+                                                 realm.copyToRealmOrUpdate(sur);
+                                             }
+
+                                         }
+
+
+                                         if (data.getSurvey() != null) {
+                                             Survey surv = realm.where(Survey.class).equalTo("id", data.getSurvey().getId()).findFirst();
+                                             Survey sur;
+                                             if (surv != null) {
+                                                 sur = realm.where(Survey.class).equalTo("id", data.getSurvey().getId()).findFirst();
+                                             } else {
+                                                 sur = realm.createObject(Survey.class, data.getSurvey().getId());
+                                             }
 
                                              // sur.setId(data.getSurvey().getId());
-                                              sur.setName(data.getSurvey().getName());
+                                             sur.setName(data.getSurvey().getName());
 
-                                              RealmList<Questions> ques = new RealmList<Questions>();
+                                             RealmList<Questions> ques = new RealmList<Questions>();
 
-                                              if(data.getSurvey().getQuestions()!=null) {
-                                                  for (int j = 0; j < data.getSurvey().getQuestions().size(); j++) {
-                                                      Questions que = realm.where(Questions.class).equalTo("id", data.getSurvey().getQuestions().get(j).getId()).findFirst();
-                                                      Questions qu;
-                                                      if (que != null) {
-                                                          qu = realm.where(Questions.class).equalTo("id", data.getSurvey().getQuestions().get(j).getId()).findFirst();
-                                                      } else {
-                                                          qu = realm.createObject(Questions.class, data.getSurvey().getQuestions().get(j).getId());
-                                                      }
-                                                      //  que.setId(data.getSurveyList().get(i).getQuestions().get(j).getId());
-                                                      qu.setOpt(data.getSurvey().getQuestions().get(j).getOpt());
-                                                      qu.setQuestion(data.getSurvey().getQuestions().get(j).getQuestion());
-                                                      qu.setText(data.getSurvey().getQuestions().get(j).getText());
+                                             if (data.getSurvey().getQuestions() != null) {
+                                                 for (int j = 0; j < data.getSurvey().getQuestions().size(); j++) {
+                                                     Questions que = realm.where(Questions.class).equalTo("id", data.getSurvey().getQuestions().get(j).getId()).findFirst();
+                                                     Questions qu;
+                                                     if (que != null) {
+                                                         qu = realm.where(Questions.class).equalTo("id", data.getSurvey().getQuestions().get(j).getId()).findFirst();
+                                                     } else {
+                                                         qu = realm.createObject(Questions.class, data.getSurvey().getQuestions().get(j).getId());
+                                                     }
+                                                     //  que.setId(data.getSurveyList().get(i).getQuestions().get(j).getId());
+                                                     qu.setOpt(data.getSurvey().getQuestions().get(j).getOpt());
+                                                     qu.setQuestion(data.getSurvey().getQuestions().get(j).getQuestion());
+                                                     qu.setText(data.getSurvey().getQuestions().get(j).getText());
 
-                                                      RealmList<Options> opt = new RealmList<Options>();
-                                                      for (int k = 0; k < data.getSurvey().getQuestions().get(j).getOptions().size(); k++) {
-                                                          Options op = realm.where(Options.class).equalTo("id", data.getSurvey().getId()).findFirst();
-                                                          Options o;
-                                                          if (op != null) {
-                                                              o = realm.where(Options.class).equalTo("id", data.getSurvey().getId()).findFirst();
-                                                          } else {
-                                                              o = realm.createObject(Options.class, data.getSurvey().getQuestions().get(j).getOptions().get(k).getId());
-                                                          }
+                                                     RealmList<Options> opt = new RealmList<Options>();
+                                                     for (int k = 0; k < data.getSurvey().getQuestions().get(j).getOptions().size(); k++) {
+                                                         Options op = realm.where(Options.class).equalTo("id", data.getSurvey().getId()).findFirst();
+                                                         Options o;
+                                                         if (op != null) {
+                                                             o = realm.where(Options.class).equalTo("id", data.getSurvey().getId()).findFirst();
+                                                         } else {
+                                                             o = realm.createObject(Options.class, data.getSurvey().getQuestions().get(j).getOptions().get(k).getId());
+                                                         }
 
-                                                          //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
-                                                          o.setOpt(data.getSurvey().getQuestions().get(j).getOptions().get(k).getOpt());
+                                                         //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                         o.setOpt(data.getSurvey().getQuestions().get(j).getOptions().get(k).getOpt());
 
-                                                          realm.copyToRealmOrUpdate(o);
-                                                          opt.add(o);
+                                                         realm.copyToRealmOrUpdate(o);
+                                                         opt.add(o);
 
-                                                      }
-                                                      qu.setOptions(opt);
-                                                      realm.copyToRealmOrUpdate(qu);
-                                                      ques.add(qu);
+                                                     }
+                                                     qu.setOptions(opt);
+                                                     realm.copyToRealmOrUpdate(qu);
+                                                     ques.add(qu);
 
-                                                  }
-                                                  sur.setQuestions(ques);
-                                              }
+                                                 }
+                                                 sur.setQuestions(ques);
+                                             }
 
-                                              realm.copyToRealmOrUpdate(sur);
-                                          }
-
-
+                                             realm.copyToRealmOrUpdate(sur);
+                                         }
 
 
+                                     }
 
 
-                                      }
-
-
-                                  }
+                                 }
 
         );
 
 
     }
-
-
-
 
 
 }

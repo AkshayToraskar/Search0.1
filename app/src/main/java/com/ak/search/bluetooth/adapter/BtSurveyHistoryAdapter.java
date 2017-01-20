@@ -9,12 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.activity.ShowSurveyActivity;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.TransferModel;
 
 import java.util.List;
 
@@ -26,6 +29,8 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
 
     private List<DataCollection> patientsList;
     private Context context;
+    CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
@@ -34,55 +39,23 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
-           // ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
-            /*view.setOnClickListener(new View.OnClickListener() {
+            cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View view) {
-
-                    // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
-
-                    Intent i = new Intent(context, ShowSurveyActivity.class);
-                    //i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
-                    i.putExtra("collectionid", patientsList.get(getPosition()).getId());
-                    context.startActivity(i);
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    collectDataInfo.collectData(transferModel);
                 }
             });
-
-
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(context)
-                            .setTitle("Delete")
-                            .setMessage("Would you like to delete?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                          //          MPatients patients = MPatients.findById(MPatients.class, patientsList.get(getPosition()).getId());
-                        //            patients.delete();
-
-                                    patientsList.remove(getPosition());
-
-                                    notifyDataSetChanged();
-
-                                }
-                            })
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // user doesn't want to logout
-                                }
-                            })
-                            .show();
-                }
-            });*/
 
         }
     }
 
 
-    public BtSurveyHistoryAdapter(Context context, List<DataCollection> patientsList) {
+    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo,Context context, List<DataCollection> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
+        this.collectDataInfo=collectDataInfo;
+        transferModel=new TransferModel();
     }
 
     @Override

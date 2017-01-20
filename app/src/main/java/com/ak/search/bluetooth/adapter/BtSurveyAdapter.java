@@ -7,12 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.activity.AddSurveyActivity;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.TransferModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,38 +25,41 @@ import java.util.List;
 
 public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyViewHolder> {
 
-private List<Survey> surveysList;
-private Context context;
+    private List<Survey> surveysList;
+    private Context context;
+    CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
-    public CheckBox cbName;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public CheckBox cbName;
 
-    public MyViewHolder(View view) {
-        super(view);
-        cbName = (CheckBox) view.findViewById(R.id.cbName);
-
-
-        /*view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-             //   Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
-
-                Intent i=new Intent(context, AddSurveyActivity.class);
-                i.putExtra("surveyId",surveysList.get(getPosition()).getId());
-                i.putExtra("surveyName",surveysList.get(getPosition()).getName());
-                context.startActivity(i);
-            }
-        });*/
+        public MyViewHolder(View view) {
+            super(view);
+            cbName = (CheckBox) view.findViewById(R.id.cbName);
 
 
+            cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                    List<Survey> surveys=new ArrayList<Survey>();
+                    surveys.add(surveysList.get(getPosition()));
+                    transferModel.setSurveyList(surveys);
+
+                    collectDataInfo.collectData(transferModel);
+                }
+            });
+
+
+        }
     }
-}
 
 
-    public BtSurveyAdapter(Context context, List<Survey> surveysList) {
+    public BtSurveyAdapter(CollectDataInfo collectDataInfo, Context context, List<Survey> surveysList) {
         this.surveysList = surveysList;
-        this.context=context;
+        this.context = context;
+        this.collectDataInfo = collectDataInfo;
+        transferModel=new TransferModel();
     }
 
     @Override

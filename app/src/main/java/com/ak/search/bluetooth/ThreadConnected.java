@@ -3,11 +3,10 @@ package com.ak.search.bluetooth;
 import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ak.search.app.ChangeUIFromThread;
 import com.ak.search.app.ParcebleUtil;
-import com.ak.search.model.TransferModel;
+import com.ak.search.model.MTransferModel;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,7 +57,7 @@ public class ThreadConnected extends Thread {
             try {
                 bytes = connectedInputStream.read(buffer);
                 //String strReceived = new String(buffer, 0, bytes);
-                TransferModel data = (TransferModel) ParcebleUtil.deserialize(buffer);
+                MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(buffer);
 
 
                 final String msgReceived = String.valueOf(bytes) +

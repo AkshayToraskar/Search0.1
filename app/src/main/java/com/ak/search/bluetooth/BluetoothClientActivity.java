@@ -31,6 +31,7 @@ import com.ak.search.adapter.BluetoothPairedAdapter;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.adapter.UsersAdapter;
 import com.ak.search.app.ChangeUIFromThread;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.app.ParcebleUtil;
 import com.ak.search.app.SessionManager;
 import com.ak.search.bluetooth.fragment.BtCollectionFragment;
@@ -39,6 +40,8 @@ import com.ak.search.bluetooth.fragment.BtPatientFragment;
 import com.ak.search.bluetooth.fragment.BtSurveyFragment;
 import com.ak.search.fragment.ImpExpFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.TransferModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
-public class BluetoothClientActivity extends AppCompatActivity implements ChangeUIFromThread {
+public class BluetoothClientActivity extends AppCompatActivity implements ChangeUIFromThread, CollectDataInfo {
 
     private static final int REQUEST_ENABLE_BT = 1;
     BluetoothAdapter bluetoothAdapter;
@@ -84,9 +87,13 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     public ThreadConnectBTdevice myThreadConnectBTdevice;
     ThreadConnected myThreadConnected;
 
+    //CollectDataInfo collectDataInfo;
+
     public static ChangeUIFromThread changeUIFromThread;
     SessionManager sessionManager;
     Realm realm;
+
+    TransferModel transferModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +101,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         setContentView(R.layout.activity_bluetooth_client);
         ButterKnife.bind(this);
         changeUIFromThread = this;
+        //collectDataInfo = this;
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -129,10 +137,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         }
 
 
-
-
-
-
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
             Toast.makeText(this,
                     "FEATURE_BLUETOOTH NOT support",
@@ -161,7 +165,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
     private void setupViewPager(ViewPager viewPager) {
         PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
-       // adapter.addFragment(new ImpExpFragment(), "Imp / Exp");
+        // adapter.addFragment(new ImpExpFragment(), "Imp / Exp");
         adapter.addFragment(new BtLoginFragment(), "Login Info");
         adapter.addFragment(new BtPatientFragment(), "Patients");
         adapter.addFragment(new BtSurveyFragment(), "Survey");
@@ -220,7 +224,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
 
     public void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(changeUIFromThread,socket,this);
+        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
         myThreadConnected.start();
     }
 
@@ -282,7 +286,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                 if (myThreadConnected != null) {
                     try {
                         DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm));
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm,transferModel));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -319,7 +323,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
     @Override
     public void connectToThread(BluetoothDevice device) {
-        myThreadConnectBTdevice = new ThreadConnectBTdevice(changeUIFromThread, device,this);
+        myThreadConnectBTdevice = new ThreadConnectBTdevice(changeUIFromThread, device, this);
         myThreadConnectBTdevice.start();
     }
 
@@ -342,4 +346,17 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     }
 
 
+    @Override
+    public void collectData(TransferModel transferModel) {
+
+
+        this.transferModel=transferModel;
+        //this.transferModel.setName(transferModel.getName());
+        //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
+        //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
+        //this.transferModel.getUserList().addAll(transferModel.getUserList());
+
+
+        Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
+    }
 }

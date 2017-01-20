@@ -25,6 +25,7 @@ import com.ak.search.R;
 import com.ak.search.activity.LoginActivity;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.app.ChangeUIFromThread;
+import com.ak.search.app.CollectDataInfo;
 import com.ak.search.app.ParcebleUtil;
 import com.ak.search.app.SessionManager;
 import com.ak.search.bluetooth.fragment.BtCollectionFragment;
@@ -36,6 +37,8 @@ import com.ak.search.fragment.ImpExpFragment;
 import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.TransferModel;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -45,7 +48,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
-public class BluetoothActivity extends AppCompatActivity implements ChangeUIFromThread {
+public class BluetoothActivity extends AppCompatActivity implements ChangeUIFromThread,CollectDataInfo {
 
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
@@ -80,6 +83,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     ThreadConnected myThreadConnected;
     Realm realm;
     SessionManager sessionManager;
+    TransferModel transferModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -230,7 +234,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
                 if (myThreadConnected != null) {
                     try {
                         DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm));
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm,transferModel));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -289,4 +293,13 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     }
 
 
+    @Override
+    public void collectData(TransferModel transferModel) {
+        Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
+        this.transferModel=transferModel;
+        //this.transferModel.setName(transferModel.getName()+"");
+        //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
+        //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
+        //this.transferModel.getUserList().addAll(transferModel.getUserList());
+    }
 }
