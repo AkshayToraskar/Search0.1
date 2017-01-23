@@ -10,14 +10,15 @@ import java.util.List;
 
 public class MQuestions implements Serializable {
 
-
     long id;
 
     String question;
 
     List<MOptions> options;
 
-    Boolean text, opt;
+    List<MOptions> chkb;
+
+    Boolean text, number, date, time, image, compulsary, opt, checkbox;
 
 
     public long getId() {
@@ -46,7 +47,7 @@ public class MQuestions implements Serializable {
         this.question = question;
     }
 
-   public Boolean getText() {
+    public Boolean getText() {
         return text;
     }
 
@@ -60,5 +61,62 @@ public class MQuestions implements Serializable {
 
     public void setOpt(Boolean opt) {
         this.opt = opt;
+    }
+
+
+    public List<MOptions> getChkb() {
+        return chkb;
+    }
+
+    public void setChkb(List<MOptions> chkb) {
+        this.chkb = chkb;
+    }
+
+    public Boolean getNumber() {
+        return number;
+    }
+
+    public void setNumber(Boolean number) {
+        this.number = number;
+    }
+
+    public Boolean getDate() {
+        return date;
+    }
+
+    public void setDate(Boolean date) {
+        this.date = date;
+    }
+
+    public Boolean getTime() {
+        return time;
+    }
+
+    public void setTime(Boolean time) {
+        this.time = time;
+    }
+
+    public Boolean getImage() {
+        return image;
+    }
+
+    public void setImage(Boolean image) {
+        this.image = image;
+    }
+
+    public Boolean getCompulsary() {
+        return compulsary;
+    }
+
+    public void setCompulsary(Boolean compulsary) {
+        this.compulsary = compulsary;
+    }
+
+    public Boolean getCheckbox() {
+        return checkbox;
+    }
+
+    public void setCheckbox(Boolean checkbox) {
+        this.checkbox = checkbox;
     }
 }

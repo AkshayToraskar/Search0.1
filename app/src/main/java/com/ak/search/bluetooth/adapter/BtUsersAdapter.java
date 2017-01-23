@@ -44,6 +44,7 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
 
                     List<User> user=new ArrayList<User>();
                     user.add(userList.get(getPosition()));
+                    transferModel.setName(String.valueOf(b));
                     transferModel.setUserList(user);
                     collectDataInfo.collectData(transferModel);
                 }

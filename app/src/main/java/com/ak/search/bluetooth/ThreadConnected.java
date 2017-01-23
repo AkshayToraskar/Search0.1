@@ -56,16 +56,23 @@ public class ThreadConnected extends Thread {
         while (true) {
             try {
                 bytes = connectedInputStream.read(buffer);
+
+
+
                 //String strReceived = new String(buffer, 0, bytes);
-                MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(buffer);
+                int bytes1=0;
+                int messageSize= connectedInputStream.read(buffer);
+                while(bytes1 < messageSize)
+                {
+                    bytes1 += connectedInputStream.read(buffer,bytes1,messageSize - bytes1);
+
+                }
+                int len = bytes1;
 
 
                 final String msgReceived = String.valueOf(bytes) +
-                        " bytes received:\n"
-                        + data.getName();
-
-                DataUtils dataUtils = new DataUtils();
-                dataUtils.saveData(data, realm);
+                        " bytes received:\n";
+                        //+ data.getName();
 
                 Log.v(TAG, msgReceived);
 
@@ -78,6 +85,14 @@ public class ThreadConnected extends Thread {
                         changeUIFromThread.changeStatus(msgReceived);
                     }
                 });
+
+                MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(buffer);
+
+
+                DataUtils dataUtils = new DataUtils();
+                dataUtils.saveData(data, realm);
+
+
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -111,6 +126,15 @@ public class ThreadConnected extends Thread {
     public void write(byte[] buffer) {
         try {
             connectedOutputStream.write(buffer);
+
+           /* int BIG_NUM=1000;
+            for(int i=0; i<buffer.length;i+=BIG_NUM)
+            {
+                int b = ((i+BIG_NUM) < buffer.length) ? BIG_NUM: buffer.length - i;
+                connectedOutputStream.write(buffer,i,b);
+                connectedOutputStream.flush();
+            }*/
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

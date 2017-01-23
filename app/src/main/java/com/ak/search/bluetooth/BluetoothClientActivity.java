@@ -16,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.activity.QuestionsActivity;
 import com.ak.search.adapter.BluetoothPairedAdapter;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.adapter.UsersAdapter;
@@ -40,11 +42,18 @@ import com.ak.search.bluetooth.fragment.BtPatientFragment;
 import com.ak.search.bluetooth.fragment.BtSurveyFragment;
 import com.ak.search.fragment.ImpExpFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.TransferModel;
+import com.ak.search.realm_model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -108,7 +117,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         realm = Realm.getDefaultInstance();
 
         sessionManager = new SessionManager(this);
-
+        transferModel = new TransferModel();
 
         setupViewPager(viewPager);
 
@@ -182,7 +191,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
         switch (id) {
             case android.R.id.home:
+
                 finish();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -204,6 +215,10 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         super.onDestroy();
         if (myThreadConnectBTdevice != null) {
             myThreadConnectBTdevice.cancel();
+
+        }
+        if( myThreadConnected!=null){
+            myThreadConnected.cancel();
         }
     }
 
@@ -286,8 +301,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                 if (myThreadConnected != null) {
                     try {
                         DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm,transferModel));
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm, transferModel));
                         myThreadConnected.write(bytesToSend);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -345,18 +361,65 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         snackbar.show();
     }
 
+    HashMap<Long, User> userData = new HashMap<>();
+    HashMap<Long, Patients> patientData = new HashMap<>();
+    HashMap<Long, Survey> surveyData = new HashMap<>();
+
 
     @Override
     public void collectData(TransferModel transferModel) {
 
 
-        this.transferModel=transferModel;
-        //this.transferModel.setName(transferModel.getName());
+        // this.transferModel = transferModel;
+
+
+        if (transferModel.getUserList() != null) {
+            if (transferModel.getName().equals("true")) {
+                userData.put(transferModel.getUserList().get(0).getId(), transferModel.getUserList().get(0));
+            } else {
+                userData.remove(transferModel.getUserList().get(0).getId());
+            }
+        } else if (transferModel.getPatientsList() != null) {
+            if (transferModel.getName().equals("true")) {
+                patientData.put(transferModel.getPatientsList().get(0).getId(), transferModel.getPatientsList().get(0));
+            } else {
+                patientData.remove(transferModel.getPatientsList().get(0).getId());
+            }
+        } else if (transferModel.getSurveyList() != null) {
+            if (transferModel.getName().equals("true")) {
+                surveyData.put(transferModel.getSurveyList().get(0).getId(), transferModel.getSurveyList().get(0));
+            } else {
+                surveyData.remove(transferModel.getSurveyList().get(0).getId());
+            }
+        }
+
+
+        List<User> userList = new ArrayList<>();
+        List<Patients> patientsList = new ArrayList<>();
+        List<Survey> surveyList = new ArrayList<>();
+
+        for (Map.Entry m : userData.entrySet()) {
+            userList.add((User) m.getValue());
+        }
+
+        for (Map.Entry m : patientData.entrySet()) {
+            patientsList.add((Patients) m.getValue());
+        }
+
+        for (Map.Entry m : surveyData.entrySet()) {
+            surveyList.add((Survey) m.getValue());
+        }
+
+        this.transferModel.setName("sending");
+        this.transferModel.setSurveyList(surveyList);
+        this.transferModel.setUserList(userList);
+        this.transferModel.setPatientsList(patientsList);
+
+        Log.v("asdf", "asdf");
+
         //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
         //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
         //this.transferModel.getUserList().addAll(transferModel.getUserList());
-
-
-        Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
     }
 }

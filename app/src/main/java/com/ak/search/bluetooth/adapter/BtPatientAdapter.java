@@ -42,6 +42,7 @@ public class BtPatientAdapter extends RecyclerView.Adapter<BtPatientAdapter.MyVi
 
                     List<Patients> patientses=new ArrayList<Patients>();
                     patientses.add(patientsList.get(getPosition()));
+                    transferModel.setName(String.valueOf(b));
                     transferModel.setPatientsList(patientses);
 
                     collectDataInfo.collectData(transferModel);

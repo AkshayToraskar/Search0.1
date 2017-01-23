@@ -97,6 +97,13 @@ public class DataUtils {
                         que.setQuestion(surveys.get(i).getQuestions().get(j).getQuestion());
                         que.setText(surveys.get(i).getQuestions().get(j).getText());
 
+                        que.setCheckbox(surveys.get(i).getQuestions().get(j).getCheckbox());
+                        que.setCompulsary(surveys.get(i).getQuestions().get(j).getCompulsary());
+                        que.setDate(surveys.get(i).getQuestions().get(j).getDate());
+                        que.setImage(surveys.get(i).getQuestions().get(j).getImage());
+                        que.setNumber(surveys.get(i).getQuestions().get(j).getNumber());
+                        que.setTime(surveys.get(i).getQuestions().get(j).getTime());
+
                         List<MOptions> opt = new ArrayList<>();
                         if (surveys.get(i).getQuestions().get(j).getOptions() != null) {
                             for (int k = 0; k < surveys.get(i).getQuestions().get(j).getOptions().size(); k++) {
@@ -106,6 +113,17 @@ public class DataUtils {
                                 opt.add(op);
                             }
                             que.setOptions(opt);
+                        }
+
+                        List<MOptions> optChk = new ArrayList<>();
+                        if (surveys.get(i).getQuestions().get(j).getChkb() != null) {
+                            for (int k = 0; k < surveys.get(i).getQuestions().get(j).getChkb().size(); k++) {
+                                MOptions op = new MOptions();
+                                op.setId(surveys.get(i).getQuestions().get(j).getChkb().get(k).getId());
+                                op.setOpt(surveys.get(i).getQuestions().get(j).getChkb().get(k).getOpt());
+                                optChk.add(op);
+                            }
+                            que.setOptions(optChk);
                         }
 
                         ques.add(que);
@@ -296,7 +314,7 @@ public class DataUtils {
                                                      sur = realm.createObject(Survey.class, data.getSurveyList().get(i).getId());
                                                  }
 
-                                                // sur.setId(data.getSurveyList().get(i).getId());
+                                                 // sur.setId(data.getSurveyList().get(i).getId());
                                                  sur.setName(data.getSurveyList().get(i).getName());
 
                                                  RealmList<Questions> ques = new RealmList<Questions>();
@@ -314,28 +332,62 @@ public class DataUtils {
                                                      qu.setQuestion(data.getSurveyList().get(i).getQuestions().get(j).getQuestion());
                                                      qu.setText(data.getSurveyList().get(i).getQuestions().get(j).getText());
 
-                                                     RealmList<Options> opt = new RealmList<Options>();
-                                                     for (int k = 0; k < data.getSurveyList().get(i).getQuestions().get(j).getOptions().size(); k++) {
-                                                         Options op = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                         Options o;
-                                                         if (op != null) {
-                                                             o = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
-                                                         } else {
-                                                             o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                     qu.setCheckbox(data.getSurveyList().get(i).getQuestions().get(j).getCheckbox());
+                                                     qu.setCompulsary(data.getSurveyList().get(i).getQuestions().get(j).getCompulsary());
+                                                     qu.setDate(data.getSurveyList().get(i).getQuestions().get(j).getDate());
+                                                     qu.setImage(data.getSurveyList().get(i).getQuestions().get(j).getImage());
+                                                     qu.setNumber(data.getSurveyList().get(i).getQuestions().get(j).getNumber());
+                                                     qu.setTime(data.getSurveyList().get(i).getQuestions().get(j).getTime());
+
+
+                                                     if (data.getSurveyList().get(i).getQuestions().get(j).getOptions() != null) {
+                                                         RealmList<Options> opt = new RealmList<Options>();
+                                                         for (int k = 0; k < data.getSurveyList().get(i).getQuestions().get(j).getOptions().size(); k++) {
+                                                             Options op = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                             Options o;
+                                                             if (op != null) {
+                                                                 o = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                             } else {
+                                                                 o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                             }
+
+                                                             //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                             o.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getOpt());
+
+                                                             realm.copyToRealmOrUpdate(o);
+                                                             opt.add(o);
+
                                                          }
-
-                                                         //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
-                                                         o.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getOpt());
-
-                                                         realm.copyToRealmOrUpdate(o);
-                                                         opt.add(o);
-
+                                                         qu.setOptions(opt);
                                                      }
-                                                     qu.setOptions(opt);
+
+                                                     if (data.getSurveyList().get(i).getQuestions().get(j).getChkb() != null) {
+                                                         RealmList<Options> optChk = new RealmList<Options>();
+                                                         for (int k = 0; k < data.getSurveyList().get(i).getQuestions().get(j).getChkb().size(); k++) {
+                                                             Options op = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                             Options o;
+                                                             if (op != null) {
+                                                                 o = realm.where(Options.class).equalTo("id", data.getSurveyList().get(i).getId()).findFirst();
+                                                             } else {
+                                                                 o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getChkb().get(k).getId());
+                                                             }
+
+                                                             //o.setId(data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                             o.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getChkb().get(k).getOpt());
+
+                                                             realm.copyToRealmOrUpdate(o);
+                                                             optChk.add(o);
+
+                                                         }
+                                                         qu.setChkb(optChk);
+                                                     }
+
+
                                                      realm.copyToRealmOrUpdate(qu);
                                                      ques.add(qu);
 
                                                  }
+
                                                  sur.setQuestions(ques);
 
                                                  realm.copyToRealmOrUpdate(sur);
@@ -344,6 +396,7 @@ public class DataUtils {
                                          }
 
 
+                                         //survey
                                          if (data.getSurvey() != null) {
                                              Survey surv = realm.where(Survey.class).equalTo("id", data.getSurvey().getId()).findFirst();
                                              Survey sur;

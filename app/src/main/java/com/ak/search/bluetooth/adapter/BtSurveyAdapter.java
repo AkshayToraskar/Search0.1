@@ -44,6 +44,7 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
 
                     List<Survey> surveys=new ArrayList<Survey>();
                     surveys.add(surveysList.get(getPosition()));
+                    transferModel.setName(String.valueOf(b));
                     transferModel.setSurveyList(surveys);
 
                     collectDataInfo.collectData(transferModel);

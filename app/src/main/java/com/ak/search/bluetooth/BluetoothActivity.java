@@ -13,6 +13,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,9 +39,16 @@ import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.UserFragment;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.TransferModel;
+import com.ak.search.realm_model.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -48,7 +56,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
-public class BluetoothActivity extends AppCompatActivity implements ChangeUIFromThread,CollectDataInfo {
+public class BluetoothActivity extends AppCompatActivity implements ChangeUIFromThread, CollectDataInfo {
 
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
@@ -94,6 +102,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
         setSupportActionBar(toolbar);
 
         realm = Realm.getDefaultInstance();
+        transferModel=new TransferModel();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sessionManager = new SessionManager(this);
@@ -185,6 +194,9 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
         if (myThreadBeConnected != null) {
             myThreadBeConnected.cancel();
         }
+        if(myThreadConnected!=null){
+            myThreadConnected.cancel();
+        }
     }
 
     @Override
@@ -215,15 +227,14 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
     private void setup() {
         textStatus.setText("setup()");
-        myThreadBeConnected = new ThreadBeConnected(changeUIFromThread, bluetoothAdapter,this);
+        myThreadBeConnected = new ThreadBeConnected(changeUIFromThread, bluetoothAdapter, this);
         myThreadBeConnected.start();
     }
 
     public void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(changeUIFromThread,socket,this);
+        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
         myThreadConnected.start();
     }
-
 
 
     public void onBtnClick(View view) {
@@ -234,7 +245,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
                 if (myThreadConnected != null) {
                     try {
                         DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm,transferModel));
+                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm, transferModel));
                         myThreadConnected.write(bytesToSend);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -293,13 +304,64 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     }
 
 
+
+    HashMap<Long, User> userData = new HashMap<>();
+    HashMap<Long, Patients> patientData = new HashMap<>();
+    HashMap<Long, Survey> surveyData = new HashMap<>();
+
     @Override
     public void collectData(TransferModel transferModel) {
-        Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
-        this.transferModel=transferModel;
+
+        //this.transferModel = transferModel;
+
+        //Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
         //this.transferModel.setName(transferModel.getName()+"");
         //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
         //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
         //this.transferModel.getUserList().addAll(transferModel.getUserList());
+
+        if (transferModel.getUserList() != null) {
+            if (transferModel.getName().equals("true")) {
+                userData.put(transferModel.getUserList().get(0).getId(), transferModel.getUserList().get(0));
+            } else {
+                userData.remove(transferModel.getUserList().get(0).getId());
+            }
+        } else if (transferModel.getPatientsList() != null) {
+            if (transferModel.getName().equals("true")) {
+                patientData.put(transferModel.getPatientsList().get(0).getId(), transferModel.getPatientsList().get(0));
+            } else {
+                patientData.remove(transferModel.getPatientsList().get(0).getId());
+            }
+        } else if (transferModel.getSurveyList() != null) {
+            if (transferModel.getName().equals("true")) {
+                surveyData.put(transferModel.getSurveyList().get(0).getId(), transferModel.getSurveyList().get(0));
+            } else {
+                surveyData.remove(transferModel.getSurveyList().get(0).getId());
+            }
+        }
+
+
+        List<User> userList=new ArrayList<>();
+        List<Patients> patientsList=new ArrayList<>();
+        List<Survey> surveyList=new ArrayList<>();
+
+        for (Map.Entry m : userData.entrySet()) {
+            userList.add((User) m.getValue());
+        }
+
+        for (Map.Entry m : patientData.entrySet()) {
+            patientsList.add((Patients) m.getValue());
+        }
+
+        for (Map.Entry m : surveyData.entrySet()) {
+            surveyList.add((Survey) m.getValue());
+        }
+
+        this.transferModel.setName("sending");
+        this.transferModel.setSurveyList(surveyList);
+        this.transferModel.setUserList(userList);
+        this.transferModel.setPatientsList(patientsList);
+
+        Log.v("asdf","asdf");
     }
 }

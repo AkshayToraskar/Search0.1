@@ -43,6 +43,7 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    transferModel.setName(String.valueOf(b));
                     collectDataInfo.collectData(transferModel);
                 }
             });
