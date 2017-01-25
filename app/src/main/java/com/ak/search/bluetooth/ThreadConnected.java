@@ -11,6 +11,10 @@ import com.ak.search.model.MTransferModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -48,50 +52,87 @@ public class ThreadConnected extends Thread {
 
     @Override
     public void run() {
-        byte[] buffer = new byte[63000];
+        //byte[] buffer = new byte[68000];
+        //byte[] buff = new byte[68000];
         int bytes;
-
+        List<byte[]> byteList = new ArrayList<>();
         realm = Realm.getDefaultInstance();
 
         while (true) {
             try {
-                bytes = connectedInputStream.read(buffer);
-
+                // bytes = connectedInputStream.read(buffer);
 
 
                 //String strReceived = new String(buffer, 0, bytes);
-                int bytes1=0;
-                int messageSize= connectedInputStream.read(buffer);
-                while(bytes1 < messageSize)
-                {
-                    bytes1 += connectedInputStream.read(buffer,bytes1,messageSize - bytes1);
+                // bytes = 0;
+                //int messageSize = connectedInputStream.read(buff);
+                // buffer =new byte[messageSize];
 
-                }
-                int len = bytes1;
+                // bytes = connectedInputStream.read(buffer);
+                //  while (bytes < messageSize) {
+
+                // buffer=new byte[connectedInputStream.available()];
+                byte[] buffer = new byte[200];
+                bytes = connectedInputStream.read(buffer);
+
+                //  }
+
+                byteList.add(buffer);
+
+                //int ii=connectedInputStream.available();
 
 
-                final String msgReceived = String.valueOf(bytes) +
-                        " bytes received:\n";
-                        //+ data.getName();
+                //  byte[] finalBuffer = new byte[buff.length + buffer.length];
+                // System.arraycopy(buff, 0, finalBuffer, 0, buff.length);
+                //  System.arraycopy(buffer, 0, finalBuffer, buff.length, buffer.length);
+
+
+                //    MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(finalBuffer);
+
+                final String msgReceived = String.valueOf(bytes) + " bytes received: ";
+                // + data.getName();
 
                 Log.v(TAG, msgReceived);
 
 
-                act.runOnUiThread(new Runnable() {
+                if (connectedInputStream.available() == 0) {
+                    int buffsize = 0;
+                    Log.v("End of data", "asdf");
 
-                    @Override
-                    public void run() {
-                        //textStatus.setText(msgReceived);
-                        changeUIFromThread.changeStatus(msgReceived);
+                    ByteBuffer bb = ByteBuffer.allocate(((byteList.size()) * 200) + bytes);
+
+                    for (int i = 0; i < byteList.size(); i++) {
+                        bb.put(byteList.get(i));
+                        //bb.put(b);
+                        //bb.put(c);
+
                     }
-                });
 
-                MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(buffer);
+                    byteList.clear();
+                    byte[] result = bb.array();
 
 
-                DataUtils dataUtils = new DataUtils();
-                dataUtils.saveData(data, realm);
+                    act.runOnUiThread(new Runnable() {
 
+                        @Override
+                        public void run() {
+                          //  textStatus.setText(msgReceived);
+                            changeUIFromThread.changeStatus(msgReceived);
+                        }
+                    });
+
+
+                    MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(result);
+                    DataUtils dataUtils = new DataUtils();
+                    dataUtils.saveData(data, realm);
+
+                }
+
+
+
+
+                //        DataUtils dataUtils = new DataUtils();
+                //        dataUtils.saveData(data, realm);
 
 
             } catch (IOException e) {
@@ -120,20 +161,27 @@ public class ThreadConnected extends Thread {
                     }
                 });
             }
+
         }
+
+
     }
 
     public void write(byte[] buffer) {
         try {
-            connectedOutputStream.write(buffer);
+            // connectedOutputStream.write(buffer);
+            // connectedOutputStream.flush();
 
-           /* int BIG_NUM=1000;
-            for(int i=0; i<buffer.length;i+=BIG_NUM)
-            {
-                int b = ((i+BIG_NUM) < buffer.length) ? BIG_NUM: buffer.length - i;
-                connectedOutputStream.write(buffer,i,b);
-                connectedOutputStream.flush();
-            }*/
+            Log.v("Buffer Length sending", " " + buffer.length);
+
+            int CHUNK_SIZE = 200;
+            int currentIndex = 0;
+            int size = buffer.length;
+            while (currentIndex < size) {
+                int currentLength = Math.min(size - currentIndex, CHUNK_SIZE);
+                connectedOutputStream.write(buffer, currentIndex, currentLength);
+                currentIndex += currentLength;
+            }
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
