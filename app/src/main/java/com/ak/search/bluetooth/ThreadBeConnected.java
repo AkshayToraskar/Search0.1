@@ -31,37 +31,30 @@ public class ThreadBeConnected extends Thread {
     private String myName;
     BluetoothAdapter bluetoothAdapter;
     Activity act;
-    public static String TAG="Thread";
-  //  TextView textStatus;
- //   LinearLayout inputPane;
+    public static String TAG = "Thread";
 
-    PulsatorLayout pulsator;
+
     ChangeUIFromThread changeUIFromThread;
 
-    public ThreadBeConnected(ChangeUIFromThread changeUIFromThread, BluetoothAdapter bluetoothAdapter, Activity act ) {
+    public ThreadBeConnected(ChangeUIFromThread changeUIFromThread, BluetoothAdapter bluetoothAdapter, Activity act) {
 
         myUUID = UUID.fromString("ec79da00-853f-11e4-b4a9-0800200c9a66");
         myName = myUUID.toString();
-        this.act=act;
-        this.changeUIFromThread=changeUIFromThread;
-        this.bluetoothAdapter=bluetoothAdapter;
+        this.act = act;
+        this.changeUIFromThread = changeUIFromThread;
+        this.bluetoothAdapter = bluetoothAdapter;
 
-       // textStatus=(TextView)act.findViewById(R.id.tv_status);
-       // inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
-      //  pulsator=(PulsatorLayout)act.findViewById(R.id.pulsator);
 
         try {
             bluetoothServerSocket =
                     bluetoothAdapter.listenUsingRfcommWithServiceRecord(myName, myUUID);
 
-           /* textStatus.setText("Waiting\n"
-                    + "bluetoothServerSocket :\n"
-                    + bluetoothServerSocket);*/
+
             changeUIFromThread.changeStatus("Waiting\n"
                     + "bluetoothServerSocket :\n"
                     + bluetoothServerSocket);
 
-            Log.v(TAG,"Waiting\n"
+            Log.v(TAG, "Waiting\n"
                     + "bluetoothServerSocket :\n"
                     + bluetoothServerSocket);
 
@@ -75,7 +68,7 @@ public class ThreadBeConnected extends Thread {
     public void run() {
         BluetoothSocket bluetoothSocket = null;
 
-        if(bluetoothServerSocket!=null){
+        if (bluetoothServerSocket != null) {
             try {
                 bluetoothSocket = bluetoothServerSocket.accept();
 
@@ -86,20 +79,18 @@ public class ThreadBeConnected extends Thread {
                         remoteDevice.getAddress();
 
                 //connected
-                act.runOnUiThread(new Runnable(){
+                act.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
 
-                        Log.v(TAG,strConnected);
+                        Log.v(TAG, strConnected);
 
-                     //   textStatus.setText(strConnected);
-                    //    inputPane.setVisibility(View.VISIBLE);
-                    //    pulsator.setVisibility(View.GONE);
+
                         changeUIFromThread.changeStatus(strConnected);
                         changeUIFromThread.changeUi();
-                    }});
-
+                    }
+                });
 
 
                 changeUIFromThread.startThread(bluetoothSocket);
@@ -109,41 +100,39 @@ public class ThreadBeConnected extends Thread {
                 e.printStackTrace();
 
                 final String eMessage = e.getMessage();
-                act.runOnUiThread(new Runnable(){
+                act.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        Log.v(TAG,eMessage);
-                     //   textStatus.setText("something wrong: \n" + eMessage);
+                        Log.v(TAG, eMessage);
+                        //   textStatus.setText("something wrong: \n" + eMessage);
                         changeUIFromThread.changeStatus("something wrong: \n" + eMessage);
-                    }});
+                    }
+                });
 
             }
-        }else{
-            act.runOnUiThread(new Runnable(){
+        } else {
+            act.runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
-                    Log.v(TAG,"bluetoothServerSocket == null");
-                 //   textStatus.setText("bluetoothServerSocket == null");
+                    Log.v(TAG, "bluetoothServerSocket == null");
+                    //   textStatus.setText("bluetoothServerSocket == null");
                     changeUIFromThread.changeStatus("bluetoothServerSocket == null");
                     changeUIFromThread.disconnectThread();
-                }});
+                }
+            });
 
         }
     }
 
     public void cancel() {
 
-        Toast.makeText(act,
-                "close bluetoothServerSocket",
-                Toast.LENGTH_LONG).show();
 
-        try {
-            bluetoothServerSocket.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        if (bluetoothServerSocket != null) {
+            try {bluetoothServerSocket.close();} catch (Exception e) {}
+            bluetoothServerSocket = null;
         }
     }
 

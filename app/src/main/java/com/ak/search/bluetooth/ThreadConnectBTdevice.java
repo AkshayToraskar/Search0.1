@@ -22,9 +22,7 @@ import java.io.IOException;
 public class ThreadConnectBTdevice  extends Thread {
     private BluetoothSocket bluetoothSocket = null;
     private final BluetoothDevice bluetoothDevice;
-    TextView textStatus;
-    LinearLayout inputPane;
-    RecyclerView listViewPairedDevice;
+
     Activity act;
     ChangeUIFromThread changeUIFromThread;
 
@@ -33,12 +31,10 @@ public class ThreadConnectBTdevice  extends Thread {
         bluetoothDevice = device;
         this.changeUIFromThread=changeUIFromThread;
         this.act=act;
-        //textStatus=(TextView)act.findViewById(R.id.tv_status);
-      //  inputPane=(LinearLayout)act.findViewById(R.id.ll_inputpane);
-       // listViewPairedDevice=(RecyclerView) act.findViewById(R.id.rv_btlist);
+
         try {
             bluetoothSocket = device.createRfcommSocketToServiceRecord(BluetoothClientActivity.myUUID);
-          //textStatus.setText("bluetoothSocket: \n" + bluetoothSocket);
+
             changeUIFromThread.changeStatus("bluetoothSocket: \n" + bluetoothSocket);
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -60,7 +56,7 @@ public class ThreadConnectBTdevice  extends Thread {
 
                 @Override
                 public void run() {
-                  //textStatus.setText("something wrong bluetoothSocket.connect(): \n" + eMessage);
+
                     changeUIFromThread.changeStatus("something wrong bluetoothSocket.connect(): \n" + eMessage);
                 }});
 
@@ -83,10 +79,6 @@ public class ThreadConnectBTdevice  extends Thread {
 
                 @Override
                 public void run() {
-                   //textStatus.setText(msgconnected);
-
-                   //listViewPairedDevice.setVisibility(View.GONE);
-                  // inputPane.setVisibility(View.VISIBLE);
 
                     changeUIFromThread.changeStatus(msgconnected);
                     changeUIFromThread.changeUi();
@@ -101,16 +93,10 @@ public class ThreadConnectBTdevice  extends Thread {
 
     public void cancel() {
 
-        Toast.makeText(act,
-                "close bluetoothSocket",
-                Toast.LENGTH_LONG).show();
 
-
-        try {
-            bluetoothSocket.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (bluetoothSocket != null) {
+            try {bluetoothSocket.close();} catch (Exception e) {}
+            bluetoothSocket = null;
         }
 
     }

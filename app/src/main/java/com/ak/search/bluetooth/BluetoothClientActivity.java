@@ -42,6 +42,7 @@ import com.ak.search.bluetooth.fragment.BtPatientFragment;
 import com.ak.search.bluetooth.fragment.BtSurveyFragment;
 import com.ak.search.fragment.ImpExpFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
@@ -71,17 +72,12 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     TextView textInfo;
     @BindView(R.id.tv_status)
     TextView textStatus;
-    /*@BindView(R.id.lv_pairedlist)
-    ListView listViewPairedDevice;*/
+
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     public static UUID myUUID;
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
-    // EditText inputField;
-    //@BindView(R.id.btn_send)
-    //Button btnSend;
-    //@BindView(R.id.btn_send_survey)
-    //Button btnSendSurvey;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.rv_btlist)
@@ -96,7 +92,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     public ThreadConnectBTdevice myThreadConnectBTdevice;
     ThreadConnected myThreadConnected;
 
-    //CollectDataInfo collectDataInfo;
+
 
     public static ChangeUIFromThread changeUIFromThread;
     SessionManager sessionManager;
@@ -110,7 +106,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         setContentView(R.layout.activity_bluetooth_client);
         ButterKnife.bind(this);
         changeUIFromThread = this;
-        //collectDataInfo = this;
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -213,13 +208,17 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+
+
         if (myThreadConnectBTdevice != null) {
             myThreadConnectBTdevice.cancel();
+        }
 
-        }
-        if( myThreadConnected!=null){
+     /*   if( myThreadConnected!=null){
             myThreadConnected.cancel();
-        }
+        }*/
+
     }
 
     @Override
@@ -250,13 +249,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             pairedDeviceArrayList = new ArrayList<BluetoothDevice>();
 
             for (BluetoothDevice device : pairedDevices) {
-
                 pairedDeviceArrayList.add(device);
             }
 
-
-            //usersList=new ArrayList<>();
-            //usersList.addAll(results);
 
             BluetoothPairedAdapter mAdapter = new BluetoothPairedAdapter(this, pairedDeviceArrayList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -265,31 +260,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             recyclerView.setAdapter(mAdapter);
 
 
-
-            /*pairedDeviceAdapter = new ArrayAdapter<BluetoothDevice>(this,
-                    android.R.layout.simple_list_item_1, pairedDeviceArrayList);
-            listViewPairedDevice.setAdapter(pairedDeviceAdapter);
-
-            listViewPairedDevice.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    BluetoothDevice device =
-                            (BluetoothDevice) parent.getItemAtPosition(position);
-                    Toast.makeText(BluetoothClientActivity.this,
-                            "Name: " + device.getName() + "\n"
-                                    + "Address: " + device.getAddress() + "\n"
-                                    + "BondState: " + device.getBondState() + "\n"
-                                    + "BluetoothClass: " + device.getBluetoothClass() + "\n"
-                                    + "Class: " + device.getClass(),
-                            Toast.LENGTH_LONG).show();
-
-                    textStatus.setText("start ThreadConnectBTdevice");
-                    myThreadConnectBTdevice = new ThreadConnectBTdevice(device, BluetoothClientActivity.this);
-                    myThreadConnectBTdevice.start();
-                }
-            });*/
         }
     }
 
@@ -349,6 +319,11 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     }
 
     @Override
+    public void dataReceived(MTransferModel transferModel) {
+
+    }
+
+    @Override
     public void disconnectThread() {
         Snackbar snackbar = Snackbar
                 .make(coordinatorLayout, "Disconnected..!", Snackbar.LENGTH_LONG)
@@ -359,6 +334,17 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                     }
                 });
         snackbar.show();
+
+
+
+        if (myThreadConnectBTdevice != null) {
+            myThreadConnectBTdevice.cancel();
+        }
+
+       /* if( myThreadConnected!=null){
+            myThreadConnected.cancel();
+        }*/
+
     }
 
     HashMap<Long, User> userData = new HashMap<>();
@@ -368,10 +354,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
     @Override
     public void collectData(TransferModel transferModel) {
-
-
-        // this.transferModel = transferModel;
-
 
         if (transferModel.getUserList() != null) {
             if (transferModel.getName().equals("true")) {
@@ -393,7 +375,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             }
         }
 
-
         List<User> userList = new ArrayList<>();
         List<Patients> patientsList = new ArrayList<>();
         List<Survey> surveyList = new ArrayList<>();
@@ -414,12 +395,5 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         this.transferModel.setSurveyList(surveyList);
         this.transferModel.setUserList(userList);
         this.transferModel.setPatientsList(patientsList);
-
-        Log.v("asdf", "asdf");
-
-        //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
-        //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
-        //this.transferModel.getUserList().addAll(transferModel.getUserList());
-        //Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
     }
 }

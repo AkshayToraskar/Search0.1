@@ -23,13 +23,14 @@ import io.realm.Realm;
  */
 
 public class ThreadConnected extends Thread {
-    private final BluetoothSocket connectedBluetoothSocket;
-    private final InputStream connectedInputStream;
-    private final OutputStream connectedOutputStream;
+    private  BluetoothSocket connectedBluetoothSocket;
+    private  InputStream connectedInputStream;
+    private  OutputStream connectedOutputStream;
     private static String TAG = "Thread Connected";
     Activity act;
     Realm realm;
     ChangeUIFromThread changeUIFromThread;
+
 
     public ThreadConnected(ChangeUIFromThread changeUIFromThread, BluetoothSocket socket, Activity act) {
         connectedBluetoothSocket = socket;
@@ -52,88 +53,54 @@ public class ThreadConnected extends Thread {
 
     @Override
     public void run() {
-        //byte[] buffer = new byte[68000];
-        //byte[] buff = new byte[68000];
+
         int bytes;
         List<byte[]> byteList = new ArrayList<>();
         realm = Realm.getDefaultInstance();
 
         while (true) {
             try {
-                // bytes = connectedInputStream.read(buffer);
 
-
-                //String strReceived = new String(buffer, 0, bytes);
-                // bytes = 0;
-                //int messageSize = connectedInputStream.read(buff);
-                // buffer =new byte[messageSize];
-
-                // bytes = connectedInputStream.read(buffer);
-                //  while (bytes < messageSize) {
-
-                // buffer=new byte[connectedInputStream.available()];
                 byte[] buffer = new byte[200];
                 bytes = connectedInputStream.read(buffer);
 
-                //  }
+
 
                 byteList.add(buffer);
 
-                //int ii=connectedInputStream.available();
 
-
-                //  byte[] finalBuffer = new byte[buff.length + buffer.length];
-                // System.arraycopy(buff, 0, finalBuffer, 0, buff.length);
-                //  System.arraycopy(buffer, 0, finalBuffer, buff.length, buffer.length);
-
-
-                //    MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(finalBuffer);
-
-                final String msgReceived = String.valueOf(bytes) + " bytes received: ";
-                // + data.getName();
-
+                final String msgReceived = String.valueOf(bytes+ " bytes received");
                 Log.v(TAG, msgReceived);
 
 
                 if (connectedInputStream.available() == 0) {
-                    int buffsize = 0;
+
                     Log.v("End of data", "asdf");
 
                     ByteBuffer bb = ByteBuffer.allocate(((byteList.size()) * 200) + bytes);
 
+                    final String msgReceived1 = String.valueOf((((byteList.size()) * 200)-1) + bytes) + " bytes received: ";
+
                     for (int i = 0; i < byteList.size(); i++) {
                         bb.put(byteList.get(i));
-                        //bb.put(b);
-                        //bb.put(c);
-
                     }
 
                     byteList.clear();
                     byte[] result = bb.array();
 
-
-                    act.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                          //  textStatus.setText(msgReceived);
-                            changeUIFromThread.changeStatus(msgReceived);
-                        }
-                    });
-
-
-                    MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(result);
+                    final MTransferModel data = (MTransferModel) ParcebleUtil.deserialize(result);
                     DataUtils dataUtils = new DataUtils();
                     dataUtils.saveData(data, realm);
 
+                    act.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                          //  textStatus.setText(msgReceived);
+                            changeUIFromThread.changeStatus(msgReceived1);
+                            changeUIFromThread.dataReceived(data);
+                        }
+                    });
                 }
-
-
-
-
-                //        DataUtils dataUtils = new DataUtils();
-                //        dataUtils.saveData(data, realm);
-
 
             } catch (IOException e) {
                 // TODO Auto-generated catch block
@@ -169,11 +136,8 @@ public class ThreadConnected extends Thread {
 
     public void write(byte[] buffer) {
         try {
-            // connectedOutputStream.write(buffer);
-            // connectedOutputStream.flush();
 
             Log.v("Buffer Length sending", " " + buffer.length);
-
             int CHUNK_SIZE = 200;
             int currentIndex = 0;
             int size = buffer.length;
@@ -182,7 +146,6 @@ public class ThreadConnected extends Thread {
                 connectedOutputStream.write(buffer, currentIndex, currentLength);
                 currentIndex += currentLength;
             }
-
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -190,11 +153,19 @@ public class ThreadConnected extends Thread {
     }
 
     public void cancel() {
-        try {
-            connectedBluetoothSocket.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (connectedInputStream != null) {
+            try {connectedInputStream.close();} catch (Exception e) {}
+            connectedInputStream = null;
+        }
+
+        if (connectedOutputStream != null) {
+            try {connectedOutputStream.close();} catch (Exception e) {}
+            connectedOutputStream = null;
+        }
+
+        if (connectedBluetoothSocket != null) {
+            try {connectedBluetoothSocket.close();} catch (Exception e) {}
+            connectedBluetoothSocket = null;
         }
     }
 

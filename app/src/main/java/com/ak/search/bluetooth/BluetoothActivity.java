@@ -38,6 +38,7 @@ import com.ak.search.fragment.ImpExpFragment;
 import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.UserFragment;
+import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Survey;
@@ -60,10 +61,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
     @BindView(R.id.ll_inputpane)
     LinearLayout inputPane;
-    //@BindView(R.id.btn_send)
-    //Button btnSend;
-    //@BindView(R.id.btn_send_survey)
-    //Button btnSendSurvey;
+
     @BindView(R.id.tv_info)
     TextView textInfo;
     @BindView(R.id.tv_status)
@@ -74,10 +72,13 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     Toolbar toolbar;
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.tabs)
-    TabLayout tabs;
-    @BindView(R.id.viewpager)
-    ViewPager viewPager;
+
+    @BindView(R.id.tv_survey_info_count)
+    TextView surveyCount;
+    @BindView(R.id.tv_login_info_count)
+    TextView loginCount;
+    @BindView(R.id.tv_patient_info_count)
+    TextView patientCount;
 
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -102,37 +103,11 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
         setSupportActionBar(toolbar);
 
         realm = Realm.getDefaultInstance();
-        transferModel=new TransferModel();
+        transferModel = new TransferModel();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sessionManager = new SessionManager(this);
         changeUIFromThread = this;
-
-        setupViewPager(viewPager);
-
-        tabs.setupWithViewPager(viewPager);
-
-        if (sessionManager.isLoggedIn()) {
-            // username = sessionManager.getUsername();
-            int loginType = sessionManager.getLoginType();
-
-
-            switch (loginType) {
-                case 1://admin
-
-                    break;
-
-                case 2://superviser
-
-                    break;
-
-                case 3://field worker
-
-                    break;
-            }
-        } else {
-
-        }
 
 
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)) {
@@ -165,16 +140,6 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
-        //adapter.addFragment(new ImpExpFragment(), "Imp / Exp");
-        adapter.addFragment(new BtLoginFragment(), "Login Info");
-        adapter.addFragment(new BtPatientFragment(), "Patients");
-        adapter.addFragment(new BtSurveyFragment(), "Survey");
-        adapter.addFragment(new BtCollectionFragment(), "Collection");
-        viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(4);
-    }
 
     @Override
 
@@ -191,12 +156,15 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         if (myThreadBeConnected != null) {
             myThreadBeConnected.cancel();
         }
-        if(myThreadConnected!=null){
+
+      /*  if (myThreadConnected != null) {
             myThreadConnected.cancel();
-        }
+        }*/
+
     }
 
     @Override
@@ -240,36 +208,12 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     public void onBtnClick(View view) {
         int id = view.getId();
 
-        switch (id) {
-            case R.id.btn_send:
-                if (myThreadConnected != null) {
-                    try {
-                        DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendData(realm, transferModel));
-                        myThreadConnected.write(bytesToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
 
-            case R.id.btn_send_survey:
-                if (myThreadConnected != null) {
-                    try {
-                        DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendSurveyData(realm));
-                        myThreadConnected.write(bytesToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-        }
     }
 
     @Override
     public void changeUi() {
-        tabs.setVisibility(View.VISIBLE);
+        // tabs.setVisibility(View.VISIBLE);
         inputPane.setVisibility(View.VISIBLE);
         pulsator.setVisibility(View.GONE);
     }
@@ -290,6 +234,17 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     }
 
     @Override
+    public void dataReceived(MTransferModel transferModel) {
+        Toast.makeText(getApplicationContext(), " User List: " + transferModel.getUserList().size() +
+                "\n patient List: " + transferModel.getPatientsList().size() +
+                "\n Survey List: " + transferModel.getSurveyList().size(), Toast.LENGTH_SHORT).show();
+
+        patientCount.setText(transferModel.getPatientsList().size()+" ");
+        loginCount.setText(transferModel.getUserList().size()+ " ");
+        surveyCount.setText(transferModel.getSurveyList().size()+" ");
+    }
+
+    @Override
     public void disconnectThread() {
         Snackbar snackbar = Snackbar
                 .make(coordinatorLayout, "Disconnected..!", Snackbar.LENGTH_LONG)
@@ -301,67 +256,20 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
                 });
 
         snackbar.show();
+
+
+        if (myThreadBeConnected != null) {
+            myThreadBeConnected.cancel();
+        }
+
+      /*  if (myThreadConnected != null) {
+            myThreadConnected.cancel();
+        }*/
+
+
     }
-
-
-
-    HashMap<Long, User> userData = new HashMap<>();
-    HashMap<Long, Patients> patientData = new HashMap<>();
-    HashMap<Long, Survey> surveyData = new HashMap<>();
 
     @Override
     public void collectData(TransferModel transferModel) {
-
-        //this.transferModel = transferModel;
-
-        //Toast.makeText(getApplicationContext(),"Called..!",Toast.LENGTH_SHORT).show();
-        //this.transferModel.setName(transferModel.getName()+"");
-        //this.transferModel.getSurveyList().addAll(transferModel.getSurveyList());
-        //this.transferModel.getPatientsList().addAll(transferModel.getPatientsList());
-        //this.transferModel.getUserList().addAll(transferModel.getUserList());
-
-        if (transferModel.getUserList() != null) {
-            if (transferModel.getName().equals("true")) {
-                userData.put(transferModel.getUserList().get(0).getId(), transferModel.getUserList().get(0));
-            } else {
-                userData.remove(transferModel.getUserList().get(0).getId());
-            }
-        } else if (transferModel.getPatientsList() != null) {
-            if (transferModel.getName().equals("true")) {
-                patientData.put(transferModel.getPatientsList().get(0).getId(), transferModel.getPatientsList().get(0));
-            } else {
-                patientData.remove(transferModel.getPatientsList().get(0).getId());
-            }
-        } else if (transferModel.getSurveyList() != null) {
-            if (transferModel.getName().equals("true")) {
-                surveyData.put(transferModel.getSurveyList().get(0).getId(), transferModel.getSurveyList().get(0));
-            } else {
-                surveyData.remove(transferModel.getSurveyList().get(0).getId());
-            }
-        }
-
-
-        List<User> userList=new ArrayList<>();
-        List<Patients> patientsList=new ArrayList<>();
-        List<Survey> surveyList=new ArrayList<>();
-
-        for (Map.Entry m : userData.entrySet()) {
-            userList.add((User) m.getValue());
-        }
-
-        for (Map.Entry m : patientData.entrySet()) {
-            patientsList.add((Patients) m.getValue());
-        }
-
-        for (Map.Entry m : surveyData.entrySet()) {
-            surveyList.add((Survey) m.getValue());
-        }
-
-        this.transferModel.setName("sending");
-        this.transferModel.setSurveyList(surveyList);
-        this.transferModel.setUserList(userList);
-        this.transferModel.setPatientsList(patientsList);
-
-        Log.v("asdf","asdf");
     }
 }
