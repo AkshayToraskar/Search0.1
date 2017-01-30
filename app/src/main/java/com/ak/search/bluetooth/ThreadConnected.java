@@ -73,7 +73,7 @@ public class ThreadConnected extends Thread {
                 Log.v(TAG, msgReceived);
 
 
-                if (connectedInputStream.available() == 0) {
+                if (connectedInputStream.available() == 0 && bytes<200) {
 
                     Log.v("End of data", "asdf");
 
@@ -115,7 +115,7 @@ public class ThreadConnected extends Thread {
                     public void run() {
                         //textStatus.setText(msgConnectionLost);
                         changeUIFromThread.changeStatus(msgConnectionLost);
-                        changeUIFromThread.disconnectThread();
+                      //  changeUIFromThread.disconnectThread();
                     }
                 });
             } catch (ClassNotFoundException e) {
@@ -124,7 +124,7 @@ public class ThreadConnected extends Thread {
 
                     @Override
                     public void run() {
-                        changeUIFromThread.disconnectThread();
+                       // changeUIFromThread.disconnectThread();
                     }
                 });
             }
@@ -144,6 +144,7 @@ public class ThreadConnected extends Thread {
             while (currentIndex < size) {
                 int currentLength = Math.min(size - currentIndex, CHUNK_SIZE);
                 connectedOutputStream.write(buffer, currentIndex, currentLength);
+                connectedOutputStream.flush();
                 currentIndex += currentLength;
             }
         } catch (IOException e) {
@@ -153,7 +154,7 @@ public class ThreadConnected extends Thread {
     }
 
     public void cancel() {
-        if (connectedInputStream != null) {
+        /*if (connectedInputStream != null) {
             try {connectedInputStream.close();} catch (Exception e) {}
             connectedInputStream = null;
         }
@@ -161,7 +162,7 @@ public class ThreadConnected extends Thread {
         if (connectedOutputStream != null) {
             try {connectedOutputStream.close();} catch (Exception e) {}
             connectedOutputStream = null;
-        }
+        }*/
 
         if (connectedBluetoothSocket != null) {
             try {connectedBluetoothSocket.close();} catch (Exception e) {}

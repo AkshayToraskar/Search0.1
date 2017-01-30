@@ -89,6 +89,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     @BindView(R.id.viewpager)
     ViewPager viewPager;
 
+    @BindView(R.id.btn_send)
+    Button btnSend;
+
     public ThreadConnectBTdevice myThreadConnectBTdevice;
     ThreadConnected myThreadConnected;
 
@@ -237,11 +240,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     }
 
 
-    public void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
-        myThreadConnected.start();
-    }
-
     private void setup() {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
 
@@ -280,7 +278,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                 }
                 break;
 
-            case R.id.btn_send_survey:
+            /*case R.id.btn_send_survey:
                 if (myThreadConnected != null) {
                     try {
                         DataUtils dataUtils = new DataUtils();
@@ -290,7 +288,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                         e.printStackTrace();
                     }
                 }
-                break;
+                break;*/
 
         }
     }
@@ -315,7 +313,8 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
 
     @Override
     public void startThread(BluetoothSocket socket) {
-        startThreadConnected(socket);
+        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
+        myThreadConnected.start();
     }
 
     @Override
@@ -395,5 +394,13 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         this.transferModel.setSurveyList(surveyList);
         this.transferModel.setUserList(userList);
         this.transferModel.setPatientsList(patientsList);
+
+        if(userList.size()>0 || patientsList.size()>0 || surveyList.size()>0){
+            btnSend.setEnabled(true);
+        }
+        else{
+            btnSend.setEnabled(false);
+        }
+
     }
 }

@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
@@ -32,10 +34,13 @@ public class BtLoginFragment extends Fragment {
     private List<User> usersList;
     @BindView(R.id.rv_user)
     RecyclerView recyclerView;
+    @BindView(R.id.cb_select_all)
+    CheckBox cbSelectAll;
+
     private BtUsersAdapter mAdapter;
     Realm realm;
     View view;
-CollectDataInfo collectDataInfo;
+    CollectDataInfo collectDataInfo;
 
     public BtLoginFragment() {
     }
@@ -44,28 +49,35 @@ CollectDataInfo collectDataInfo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_bt_login, container, false);
+        view = inflater.inflate(R.layout.fragment_bt_login, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<User> results = realm.where(User.class).findAll();
 
-        usersList=new ArrayList<>();
+        usersList = new ArrayList<>();
         usersList.addAll(results);
 
-        mAdapter = new BtUsersAdapter(collectDataInfo,getContext(), usersList);
+        mAdapter = new BtUsersAdapter(collectDataInfo, getContext(), usersList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
 
+        cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mAdapter.selectAll(b);
+            }
+        });
 
-        return  view;
+
+        return view;
     }
 
 

@@ -2,6 +2,7 @@ package com.ak.search.bluetooth.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class BtPatientAdapter extends RecyclerView.Adapter<BtPatientAdapter.MyVi
     private Context context;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
-
+boolean  isSelectedAll;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
@@ -73,6 +74,20 @@ public class BtPatientAdapter extends RecyclerView.Adapter<BtPatientAdapter.MyVi
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
         holder.cbName.setText(user.getPatientname());
+
+
+        if (!isSelectedAll) {
+            holder.cbName.setChecked(false);
+        }
+        else{
+            holder.cbName.setChecked(true);
+        }
+    }
+
+    public void selectAll(boolean val) {
+        Log.e("onClickSelectAll", "yes");
+        isSelectedAll = val;
+        notifyDataSetChanged();
     }
 
     @Override

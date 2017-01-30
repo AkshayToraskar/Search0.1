@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientAdapter;
@@ -39,6 +41,8 @@ public class BtSurveyFragment extends Fragment {
     Realm realm;
     View view;
     CollectDataInfo collectDataInfo;
+    @BindView(R.id.cb_select_all)
+    CheckBox cbSelectAll;
 
     public BtSurveyFragment() {
         // Required empty public constructor
@@ -67,6 +71,13 @@ public class BtSurveyFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mAdapter.selectAll(b);
+            }
+        });
 
         return view;
     }

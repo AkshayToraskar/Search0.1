@@ -3,6 +3,7 @@ package com.ak.search.bluetooth.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
     private Context context;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
+    boolean isSelectedAll;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
@@ -42,7 +44,7 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    List<User> user=new ArrayList<User>();
+                    List<User> user = new ArrayList<User>();
                     user.add(userList.get(getPosition()));
                     transferModel.setName(String.valueOf(b));
                     transferModel.setUserList(user);
@@ -74,6 +76,13 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = userList.get(position);
         holder.cbName.setText(user.getName());
+
+        if (!isSelectedAll) {
+            holder.cbName.setChecked(false);
+        }
+        else{
+            holder.cbName.setChecked(true);
+        }
     }
 
     @Override
@@ -84,5 +93,11 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
     @Override
     public int getItemCount() {
         return userList.size();
+    }
+
+    public void selectAll(boolean val) {
+        Log.e("onClickSelectAll", "yes");
+        isSelectedAll = val;
+        notifyDataSetChanged();
     }
 }

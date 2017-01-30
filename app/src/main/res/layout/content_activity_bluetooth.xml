@@ -61,6 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
+                    android:gravity="center"
                     android:weightSum="10">
 
                     <TextView
@@ -74,7 +75,10 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_main" />
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/colorText"
+                        android:background="@drawable/bg_badge" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -92,12 +96,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
+                    android:gravity="center"
                     android:weightSum="10">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="9"
+
                         android:text="Patient Info" />
 
                     <TextView
@@ -105,7 +111,10 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_main" />
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/colorText"
+                        android:background="@drawable/bg_badge" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -123,6 +132,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
+                    android:gravity="center"
                     android:weightSum="10">
 
                     <TextView
@@ -136,7 +146,10 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_main" />
+                        android:gravity="center"
+                        android:text="0"
+                        android:textColor="@color/colorText"
+                        android:background="@drawable/bg_badge" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

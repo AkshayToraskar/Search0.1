@@ -128,8 +128,6 @@ public class ThreadBeConnected extends Thread {
 
     public void cancel() {
 
-
-
         if (bluetoothServerSocket != null) {
             try {bluetoothServerSocket.close();} catch (Exception e) {}
             bluetoothServerSocket = null;

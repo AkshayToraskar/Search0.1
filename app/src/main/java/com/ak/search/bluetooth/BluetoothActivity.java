@@ -120,7 +120,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
         //generate UUID on web: http://www.famkruithof.net/uuid/uuidgen
         //have to match the UUID on the another device of the BT connection
-        myUUID = UUID.fromString("ec79da00-853f-11e4-b4a9-0800200c9a66");
+        myUUID = UUID.fromString("03e159d0-e6b8-11e6-9598-0800200c9a66");
         myName = myUUID.toString();
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -199,10 +199,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
         myThreadBeConnected.start();
     }
 
-    public void startThreadConnected(BluetoothSocket socket) {
-        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
-        myThreadConnected.start();
-    }
+
 
 
     public void onBtnClick(View view) {
@@ -230,7 +227,8 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
     @Override
     public void startThread(BluetoothSocket socket) {
-        startThreadConnected(socket);
+        myThreadConnected = new ThreadConnected(changeUIFromThread, socket, this);
+        myThreadConnected.start();
     }
 
     @Override
@@ -258,9 +256,9 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
         snackbar.show();
 
 
-        if (myThreadBeConnected != null) {
+      /*  if (myThreadBeConnected != null) {
             myThreadBeConnected.cancel();
-        }
+        }*/
 
       /*  if (myThreadConnected != null) {
             myThreadConnected.cancel();
