@@ -13,7 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.ak.search.R;
+import com.ak.search.adapter.DataCollectionAdapter;
 import com.ak.search.adapter.PatientAdapter;
+import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.opencsv.CSVWriter;
 
@@ -27,26 +29,34 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class GetSurveyActivity extends AppCompatActivity {
 
     long surveyId;
-    private List<Patients> patientList;
+    private List<DataCollection> patientList;
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
     @BindView(R.id.spnSurveyName)
     Spinner spnSurveyName;
 
-    public PatientAdapter mAdapter;
+    public DataCollectionAdapter mAdapter;
     ArrayAdapter<String> spnSurveyNameAdapter;
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_survey);
         ButterKnife.bind(this);
+        realm=Realm.getDefaultInstance();
+
+        RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
         patientList = new ArrayList<>();
+
+        patientList.addAll(results);
 
         getSupportActionBar().setTitle("Patient List");
 
@@ -77,7 +87,7 @@ public class GetSurveyActivity extends AppCompatActivity {
         spnSurveyName.setAdapter(spnSurveyNameAdapter);*/
 
 
-        mAdapter = new PatientAdapter(this, patientList);
+        mAdapter = new DataCollectionAdapter(this, patientList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

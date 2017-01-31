@@ -18,65 +18,39 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_btlist"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:visibility="visible" />
 
 
-        <!--<ListView
-            android:id="@+id/lv_pairedlist"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />-->
-
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_inputpane"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="invisible"
-            android:weightSum="10">
+            android:visibility="gone">
 
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="8.5"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+                android:layout_height="match_parent"
+                android:layout_above="@+id/btn_send"
+                android:layout_weight="9.5"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-            <!--<include layout="@layout/content_bluetooth_inputpane"/>-->
-
-            <LinearLayout
+            <Button
+                android:id="@+id/btn_send"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="horizontal"
-                android:layout_weight="1.5"
-                >
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:enabled="false"
+                android:onClick="onBtnClick"
+                android:text="send" />
 
-
-                <!--<Button
-                    android:id="@+id/btn_send_survey"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onBtnClick"
-                    android:text="Send All"/>-->
-
-                <Button
-                    android:id="@+id/btn_send"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:onClick="onBtnClick"
-                    android:enabled="false"
-                    android:text="send"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,9 +1,6 @@
-package com.ak.search.bluetooth.adapter;
+package com.ak.search.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,15 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ak.search.R;
-import com.ak.search.activity.ShowSurveyActivity;
 import com.ak.search.app.CollectDataInfo;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.TransferModel;
-import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +21,10 @@ import java.util.List;
  * Created by dg hdghfd on 29-11-2016.
  */
 
-public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistoryAdapter.MyViewHolder> {
+public class DataCollectionAdapter extends RecyclerView.Adapter<DataCollectionAdapter.MyViewHolder> {
 
     private List<DataCollection> patientsList;
     private Context context;
-    CollectDataInfo collectDataInfo;
     TransferModel transferModel;
 boolean isSelectedAll;
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -50,7 +42,6 @@ boolean isSelectedAll;
                     dataCollectionList.add(patientsList.get(getPosition()));
                     transferModel.setDataCollectionList(dataCollectionList);
                     transferModel.setName(String.valueOf(b));
-                    collectDataInfo.collectData(transferModel);
                 }
             });
 
@@ -58,10 +49,9 @@ boolean isSelectedAll;
     }
 
 
-    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo,Context context, List<DataCollection> patientsList) {
+    public DataCollectionAdapter(Context context, List<DataCollection> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
-        this.collectDataInfo=collectDataInfo;
         transferModel=new TransferModel();
     }
 

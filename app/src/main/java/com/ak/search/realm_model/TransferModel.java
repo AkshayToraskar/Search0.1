@@ -11,17 +11,15 @@ import java.util.List;
  * Created by dg hdghfd on 10-01-2017.
  */
 
-public class TransferModel implements Serializable{
+public class TransferModel implements Serializable {
 
     String name;
-  //  List<Test1> test1List;
+    //  List<Test1> test1List;
 
     List<User> userList;
     List<Patients> patientsList;
     List<Survey> surveyList;
-
-    Survey survey;
-
+    List<DataCollection> dataCollectionList;
 
 
     public String getName() {
@@ -65,11 +63,11 @@ public class TransferModel implements Serializable{
         this.surveyList = surveyList;
     }
 
-    public Survey getSurvey() {
-        return survey;
+    public List<DataCollection> getDataCollectionList() {
+        return dataCollectionList;
     }
 
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
+    public void setDataCollectionList(List<DataCollection> dataCollectionList) {
+        this.dataCollectionList = dataCollectionList;
     }
 }

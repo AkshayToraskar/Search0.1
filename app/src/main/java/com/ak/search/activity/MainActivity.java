@@ -16,6 +16,8 @@ import com.ak.search.R;
 import com.ak.search.app.ManageFragment;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
+import com.ak.search.bluetooth.BluetoothActivity;
+import com.ak.search.bluetooth.BluetoothClientActivity;
 import com.ak.search.fragment.AdminFragment;
 import com.ak.search.fragment.PatientFragment;
 import com.ak.search.fragment.SuperviserFragment;
@@ -183,28 +185,12 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 startActivity(new Intent(this, GetSurveyActivity.class));
                 break;
 
-            case R.id.btn_start_survey:
+            case R.id.btn_bluetooth:
+                startActivity(new Intent(this, BluetoothActivity.class));
+                break;
 
-                /*if (validate.validateString(txt_patient_name.getText().toString())) {
-                    txt_patient_name.setError("Enter Patient Name");
-                    return;
-                }else {
-                    txt_patient_name.setError(null);
-                }
-
-                if(surveyId==-1){
-                    Toast.makeText(getApplicationContext(),"MSurvey is not selected",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                //Intent i=new Intent(this, GetSurveyActivity.class);
-
-
-                Intent i=new Intent(this, QuestionsActivity.class);
-                i.putExtra("surveyId",surveyId);
-                i.putExtra("patientName",txt_patient_name.getText().toString());
-                startActivity(i);*/
-
+            case R.id.btn_bluetooth_client:
+                startActivity(new Intent(this, BluetoothClientActivity.class));
                 break;
 
 

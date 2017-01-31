@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -24,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,7 +78,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
     public static UUID myUUID;
     @BindView(R.id.ll_inputpane)
-    LinearLayout inputPane;
+    RelativeLayout inputPane;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -349,6 +351,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     HashMap<Long, User> userData = new HashMap<>();
     HashMap<Long, Patients> patientData = new HashMap<>();
     HashMap<Long, Survey> surveyData = new HashMap<>();
+    HashMap<Long, DataCollection> dataCollection=new HashMap<>();
 
 
     @Override
@@ -372,11 +375,18 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             } else {
                 surveyData.remove(transferModel.getSurveyList().get(0).getId());
             }
+        }else if (transferModel.getDataCollectionList() != null) {
+            if (transferModel.getName().equals("true")) {
+                dataCollection.put(transferModel.getDataCollectionList().get(0).getId(), transferModel.getDataCollectionList().get(0));
+            } else {
+                dataCollection.remove(transferModel.getDataCollectionList().get(0).getId());
+            }
         }
 
         List<User> userList = new ArrayList<>();
         List<Patients> patientsList = new ArrayList<>();
         List<Survey> surveyList = new ArrayList<>();
+        List<DataCollection> dataCollectionList=new ArrayList<>();
 
         for (Map.Entry m : userData.entrySet()) {
             userList.add((User) m.getValue());
@@ -390,12 +400,17 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             surveyList.add((Survey) m.getValue());
         }
 
+        for (Map.Entry m : dataCollection.entrySet()) {
+            dataCollectionList.add((DataCollection) m.getValue());
+        }
+
         this.transferModel.setName("sending");
         this.transferModel.setSurveyList(surveyList);
         this.transferModel.setUserList(userList);
         this.transferModel.setPatientsList(patientsList);
+        this.transferModel.setDataCollectionList(dataCollectionList);
 
-        if(userList.size()>0 || patientsList.size()>0 || surveyList.size()>0){
+        if(userList.size()>0 || patientsList.size()>0 || surveyList.size()>0 || dataCollectionList.size()>0){
             btnSend.setEnabled(true);
         }
         else{

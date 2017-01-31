@@ -18,7 +18,7 @@ public class MTransferModel implements Serializable{
     List<MPatients> patientsList;
     List<MSurvey> surveyList;
 
-    MSurvey survey;
+    List<MDataCollection> dataCollectionsList;
 
 
 
@@ -63,11 +63,11 @@ public class MTransferModel implements Serializable{
         this.surveyList = surveyList;
     }
 
-    public MSurvey getSurvey() {
-        return survey;
+    public List<MDataCollection> getDataCollectionsList() {
+        return dataCollectionsList;
     }
 
-    public void setSurvey(MSurvey survey) {
-        this.survey = survey;
+    public void setDataCollectionsList(List<MDataCollection> dataCollectionsList) {
+        this.dataCollectionsList = dataCollectionsList;
     }
 }

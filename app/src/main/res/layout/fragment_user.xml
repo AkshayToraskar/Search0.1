@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     tools:context="com.ak.search.fragment.UserFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:layout_height="fill_parent">
 
        <!-- <LinearLayout
             android:layout_width="match_parent"
@@ -42,10 +41,69 @@
             android:id="@+id/rv_survey"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
+            android:layout_above="@+id/cv_ie"
             android:layout_weight="4" />
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_ie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:elevation="10dp"
+            app:cardCornerRadius="2dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Import/Export" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btn_bluetooth_client"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorText"
+                        android:onClick="onBtnClick"
+                        android:text="Send" />
+
+                    <Button
+                        android:id="@+id/btn_bluetooth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/colorText"
+                        android:onClick="onBtnClick"
+                        android:text="Receive" />
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
 
 
 </FrameLayout>

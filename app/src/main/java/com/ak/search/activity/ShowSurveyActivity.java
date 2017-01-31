@@ -3,6 +3,7 @@ package com.ak.search.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -54,6 +55,11 @@ public class ShowSurveyActivity extends AppCompatActivity {
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            RecyclerView.ItemDecoration itemDecoration = new
+                    DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(itemDecoration);
+
             recyclerView.setAdapter(mAdapter);
 
            // Log.v("GET SURVEY", "" + surveyId);

@@ -13,7 +13,10 @@ public class MDataCollection implements Serializable {
     long id;
     long surveyid;
 
-    MPatients MPatients;
+    String timestamp;
+    long lat, lng;
+
+    MPatients patients;
     List<MAnswers> answerses;
 
     public long getId() {
@@ -32,12 +35,36 @@ public class MDataCollection implements Serializable {
         this.surveyid = surveyid;
     }
 
-    public MPatients getMPatients() {
-        return MPatients;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setMPatients(MPatients MPatients) {
-        this.MPatients = MPatients;
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public long getLat() {
+        return lat;
+    }
+
+    public void setLat(long lat) {
+        this.lat = lat;
+    }
+
+    public long getLng() {
+        return lng;
+    }
+
+    public void setLng(long lng) {
+        this.lng = lng;
+    }
+
+    public MPatients getPatients() {
+        return patients;
+    }
+
+    public void setPatients(MPatients patients) {
+        this.patients = patients;
     }
 
     public List<MAnswers> getAnswerses() {

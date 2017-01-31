@@ -5,11 +5,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.adapter.SurveyAdapter;
@@ -35,6 +38,8 @@ public class BtCollectionFragment extends Fragment {
     private List<DataCollection> dataCollectionList;
     @BindView(R.id.rv_data_collection)
     RecyclerView recyclerView;
+    @BindView(R.id.cb_select_all)
+    CheckBox cbSelectAll;
     private BtSurveyHistoryAdapter mAdapter;
     Realm realm;
     View view;
@@ -67,7 +72,19 @@ public class BtCollectionFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
+
         recyclerView.setAdapter(mAdapter);
+
+        cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mAdapter.selectAll(b);
+            }
+        });
 
         return view;
     }

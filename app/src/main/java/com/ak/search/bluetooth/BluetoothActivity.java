@@ -79,6 +79,8 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     TextView loginCount;
     @BindView(R.id.tv_patient_info_count)
     TextView patientCount;
+    @BindView(R.id.tv_data_collection_count)
+    TextView dataCollectionCount;
 
 
     private static final int REQUEST_ENABLE_BT = 1;
@@ -235,11 +237,13 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
     public void dataReceived(MTransferModel transferModel) {
         Toast.makeText(getApplicationContext(), " User List: " + transferModel.getUserList().size() +
                 "\n patient List: " + transferModel.getPatientsList().size() +
-                "\n Survey List: " + transferModel.getSurveyList().size(), Toast.LENGTH_SHORT).show();
+                "\n Survey List: " + transferModel.getSurveyList().size()+
+                "\n Data Collection List: " + transferModel.getDataCollectionsList().size(), Toast.LENGTH_SHORT).show();
 
         patientCount.setText(transferModel.getPatientsList().size()+" ");
         loginCount.setText(transferModel.getUserList().size()+ " ");
         surveyCount.setText(transferModel.getSurveyList().size()+" ");
+        dataCollectionCount.setText(transferModel.getDataCollectionsList().size()+" ");
     }
 
     @Override

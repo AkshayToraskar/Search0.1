@@ -11,10 +11,10 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 15-12-2016.
  */
 
-@Parcel(implementations = { PatientsRealmProxy.class },
+@Parcel(implementations = {PatientsRealmProxy.class},
         value = Parcel.Serialization.FIELD,
-        analyze = { Patients.class })
-public class Patients extends RealmObject{
+        analyze = {Patients.class})
+public class Patients extends RealmObject {
     @PrimaryKey
     long id;
     String patientname;

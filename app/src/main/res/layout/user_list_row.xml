@@ -23,6 +23,7 @@
             android:layout_alignParentTop="true"
             android:text="Name"
             android:textSize="16dp"
+            android:padding="15dp"
             android:textStyle="bold" />
 
 
