@@ -106,7 +106,10 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     allRb.add(rb);
                 }
             }
-            allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+
+            if(answerList.get(position).getSelectedopt()!=0) {
+                allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+            }
 
 
             /*if (questions.getAnswers() != null) {
@@ -125,8 +128,13 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         }
 
 
-        if (!questions.getText()) {
+        if (!questions.getNumber()) {
             holder.etNumAns.setVisibility(GONE);
+        }
+        else {
+            if (questions.getNumber() != null) {
+                holder.etNumAns.setText(answerList.get(position).getNumAns());
+            }
         }
 
         if (!questions.getCheckbox()) {
@@ -148,7 +156,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 //allEds.add(text);
 
 
-                if (answerList.get(position).getSelectedChk()!=null && !answerList.get(position).getSelectedChk().equals("")) {
+                if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
 
                     String[] a = answerList.get(position).getSelectedChk().split(",");
 
@@ -190,12 +198,13 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         for (int i = 0; i < holder.rgOption.getChildCount(); i++) {
             holder.rgOption.getChildAt(i).setEnabled(false);
         }
-        if(lstChkbox!=null) {
-            for (int i=0; i<lstChkbox.size(); i++){
+        if (lstChkbox != null) {
+            for (int i = 0; i < lstChkbox.size(); i++) {
                 lstChkbox.get(i).setEnabled(false);
             }
         }
     }
+
 
     @Override
     public int getItemCount() {

@@ -6,7 +6,6 @@
     tools:context="com.ak.search.fragment.SuperviserFragment">
 
     <LinearLayout
-        android:id="@+id/ll_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
@@ -30,7 +29,6 @@
                 android:weightSum="5">
 
                 <EditText
-                    android:id="@+id/txt_patient_name"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
@@ -43,7 +41,6 @@
                     android:layout_weight="4" />
 
                 <Button
-                    android:id="@+id/btn_start_survey"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"

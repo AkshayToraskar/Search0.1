@@ -108,7 +108,7 @@ public class DataUtils {
                                 op.setOpt(surveys.get(i).getQuestions().get(j).getChkb().get(k).getOpt());
                                 optChk.add(op);
                             }
-                            que.setOptions(optChk);
+                            que.setChkb(optChk);
                         }
 
                         ques.add(que);
