@@ -218,6 +218,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                                 ans.setPatientid(a.getPatientid());
                                 ans.setAns(a.getAns());
                                 ans.setSelectedopt(a.getSelectedopt());
+                                ans.setNumAns(a.getNumAns());
+                                ans.setByteArrayImage(a.getByteArrayImage());
+                                ans.setDate(a.getDate());
+                                ans.setTime(a.getTime());
+                                ans.setSelectedChk(a.getSelectedChk());
                                 answerses.add(ans);
 
                             }
@@ -249,11 +254,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                             }
 
                             dataCollection = realm.createObject(DataCollection.class, collectionId);
-                            dataCollection.setSurveyid(surveyId);
+                            dataCollection.setSurveyid(survey.getId());
                             dataCollection.setPatients(patients1);
                             dataCollection.setAnswerses(answerses);
 
-                            String timeStamp = new SimpleDateFormat("dd.MM.yyyy.HH.mm.ss").format(new Date());
+                            String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
                             dataCollection.setLat(0);
                             dataCollection.setLng(0);
                             dataCollection.setTimestamp(timeStamp);

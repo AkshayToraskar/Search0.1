@@ -14,8 +14,11 @@ import android.widget.TextView;
 import com.ak.search.R;
 import com.ak.search.activity.ShowSurveyActivity;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.Survey;
 
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
@@ -25,15 +28,17 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
 
     private List<DataCollection> patientsList;
     private Context context;
+    Realm realm;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
+        public TextView tvName, tvDateTime;
         public ImageView ivDelete;
 
         public MyViewHolder(View view) {
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+            tvDateTime = (TextView) view.findViewById(R.id.tvDateTime);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,11 +62,14 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                             .setMessage("Would you like to delete?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                          //          MPatients patients = MPatients.findById(MPatients.class, patientsList.get(getPosition()).getId());
-                        //            patients.delete();
 
-                                    patientsList.remove(getPosition());
-
+                                    final DataCollection dataCollection = realm.where(DataCollection.class).equalTo("id", patientsList.get(getPosition()).getId()).findFirst();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            dataCollection.deleteFromRealm();
+                                        }
+                                    });
                                     notifyDataSetChanged();
 
                                 }
@@ -82,6 +90,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     public SurveyHistoryAdapter(Context context, List<DataCollection> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -95,7 +104,11 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
-        holder.tvName.setText(user.getPatients().getAddress()+" ");
+
+        Survey survey = realm.where(Survey.class).equalTo("id", user.getSurveyid()).findFirst();
+
+        holder.tvName.setText(survey.getName() + " ");
+        holder.tvDateTime.setText(user.getTimestamp() + " ");
     }
 
     @Override
