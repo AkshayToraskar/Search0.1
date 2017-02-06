@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -196,6 +197,14 @@ public class QuestionFragment extends Fragment {
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
                     cb.setText(questions.getChkb().get(i).getOpt());
+
+                    cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                            getSelectedChkbox();
+                        }
+                    });
+
                     llCheck.addView(cb);
                     lstChkbox.add(cb);
                 }
@@ -241,7 +250,7 @@ public class QuestionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 ans.setAns(String.valueOf(editable));
-                getSelectedChkbox();
+                //getSelectedChkbox();
                 answer.onAnswerSave(ans);
             }
         });
@@ -260,7 +269,7 @@ public class QuestionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 ans.setNumAns(String.valueOf(editable));
-                getSelectedChkbox();
+                //getSelectedChkbox();
                 answer.onAnswerSave(ans);
             }
         });
@@ -328,7 +337,7 @@ public class QuestionFragment extends Fragment {
             byte[] byteArray = stream.toByteArray();
 
             ans.setByteArrayImage(byteArray);
-            getSelectedChkbox();
+            //getSelectedChkbox();
             answer.onAnswerSave(ans);
         }
     }
@@ -352,7 +361,7 @@ public class QuestionFragment extends Fragment {
                         tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                         ans.setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        getSelectedChkbox();
+                        //getSelectedChkbox();
                         answer.onAnswerSave(ans);
                     }
                 }, mYear, mMonth, mDay);
@@ -376,7 +385,7 @@ public class QuestionFragment extends Fragment {
 
                         tvTime.setText(hourOfDay + ":" + minute);
                         ans.setTime(hourOfDay + ":" + minute);
-                        getSelectedChkbox();
+                        //getSelectedChkbox();
                         answer.onAnswerSave(ans);
                     }
                 }, mHour, mMinute, false);
@@ -385,20 +394,28 @@ public class QuestionFragment extends Fragment {
 
     public void getSelectedChkbox() {
         if (!lstChkbox.isEmpty()) {
-            List<Integer> lstChecked = new ArrayList<>();
+           // List<Integer> lstChecked = new ArrayList<>();
+            //int i=lstChkbox.size();
+
+            String checkedData="";
 
             for (int i = 0; i < lstChkbox.size(); i++) {
                 if (lstChkbox.get(i).isChecked()) {
-                    lstChecked.add(i);
+                    //lstChecked.add(i);
+                    checkedData=checkedData+"1";
+                }
+                else{
+                    checkedData=checkedData+"0";
                 }
             }
 
-            String checkedData="";
-            for (int i = 0; i < lstChecked.size(); i++) {
+
+            /*for (int i = 0; i < lstChecked.size(); i++) {
                 checkedData = checkedData+","+i;
-            }
+            }*/
 
             ans.setSelectedChk(checkedData);
+            answer.onAnswerSave(ans);
         }
     }
 

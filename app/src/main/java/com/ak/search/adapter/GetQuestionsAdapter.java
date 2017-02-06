@@ -88,26 +88,26 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         } else {
 
 
-            for (int i = 0; i < answerList.get(position).getQuestions().getOptions().size(); i++) {
+            for (int i = 0; i < questions.getOptions().size(); i++) {
 
-                if (i < 2) {
-                    holder.rbOpt1.setText(answerList.get(position).getQuestions().getOptions().get(0).getOpt());
-                    holder.rbOpt2.setText(answerList.get(position).getQuestions().getOptions().get(1).getOpt());
+                if (i == 0) {
+                    holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
                     allRb.add(holder.rbOpt1);
+                } else if (i == 1) {
+                    holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
                     allRb.add(holder.rbOpt2);
-
                 } else {
                     RadioButton rb = new RadioButton(context);
                     rb.setLayoutParams(new ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rb.setText(answerList.get(position).getQuestions().getOptions().get(i).getOpt());
+                    rb.setText(questions.getOptions().get(i).getOpt());
                     holder.rgOption.addView(rb);
                     allRb.add(rb);
                 }
             }
 
-            if(answerList.get(position).getSelectedopt()!=0) {
+            if (answerList.get(position).getSelectedopt() != -1) {
                 allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
             }
 
@@ -130,8 +130,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         if (!questions.getNumber()) {
             holder.etNumAns.setVisibility(GONE);
-        }
-        else {
+        } else {
             if (questions.getNumber() != null) {
                 holder.etNumAns.setText(answerList.get(position).getNumAns());
             }
@@ -152,18 +151,30 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     cb.setText(questions.getChkb().get(i).getOpt());
                     holder.llChck.addView(cb);
                     lstChkbox.add(cb);
-                }
-                //allEds.add(text);
+                    //}
+                    //allEds.add(text);
 
 
-                if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
+                    if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
 
-                    String[] a = answerList.get(position).getSelectedChk().split(",");
+                        String a = answerList.get(position).getSelectedChk();
+                        if (a != null) {
+                            String val = String.valueOf(a.charAt(i));
 
-                    for (int i = 0; i < a.length; i++) {
+                            if (val.equals("1")) {
+                                cb.setChecked(true);
+                            } else {
+                                cb.setChecked(false);
+                            }
+                        }
+
+
+
+                    /*for (int i = 0; i < a.length; i++) {
                         if (a[i] != null && !a[i].equals("")) {
                             lstChkbox.get(Integer.parseInt(a[i])).setChecked(true);
                         }
+                    }*/
                     }
                 }
             }
@@ -171,21 +182,33 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         }
 
 
-        if (!questions.getDate()) {
+        if (!questions.getDate())
+
+        {
             holder.tvDate.setVisibility(GONE);
-        } else {
+        } else
+
+        {
             holder.tvDate.setText(answerList.get(position).getDate());
         }
 
-        if (!questions.getTime()) {
+        if (!questions.getTime())
+
+        {
             holder.tvTime.setVisibility(GONE);
-        } else {
+        } else
+
+        {
             holder.tvTime.setText(answerList.get(position).getTime());
         }
 
-        if (!questions.getImage()) {
+        if (!questions.getImage())
+
+        {
             holder.ivSelImg.setVisibility(GONE);
-        } else {
+        } else
+
+        {
             if (answerList.get(position).getByteArrayImage() != null) {
                 Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
                 holder.ivSelImg.setImageBitmap(bmp);
@@ -195,14 +218,22 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         holder.etAnswer.setEnabled(false);
         holder.etNumAns.setEnabled(false);
-        for (int i = 0; i < holder.rgOption.getChildCount(); i++) {
+        for (
+                int i = 0;
+                i < holder.rgOption.getChildCount(); i++)
+
+        {
             holder.rgOption.getChildAt(i).setEnabled(false);
         }
-        if (lstChkbox != null) {
+
+        if (lstChkbox != null)
+
+        {
             for (int i = 0; i < lstChkbox.size(); i++) {
                 lstChkbox.get(i).setEnabled(false);
             }
         }
+
     }
 
 
