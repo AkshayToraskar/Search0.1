@@ -15,30 +15,20 @@ public class MyPagerAdapter  extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragments;
 
-
     public MyPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
-
         super(fm);
-
         this.fragments = fragments;
 
     }
 
     @Override
-
     public Fragment getItem(int position) {
-
         return this.fragments.get(position);
-
     }
 
-
     @Override
-
     public int getCount() {
-
         return this.fragments.size();
-
     }
 
 }

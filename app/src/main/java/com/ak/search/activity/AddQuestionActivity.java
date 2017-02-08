@@ -10,16 +10,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.ak.search.R;
 import com.ak.search.app.Validate;
+import com.ak.search.realm_model.ConditionalOptions;
 import com.ak.search.realm_model.Options;
 import com.ak.search.realm_model.Questions;
+import com.ak.search.realm_model.Survey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +75,33 @@ public class AddQuestionActivity extends AppCompatActivity {
     CheckBox cb_compulsary;
     @BindView(R.id.cb_checkbox)
     CheckBox cb_checkbox;
+    @BindView(R.id.cb_options_condition)
+    CheckBox cb_options_condition;
 
-    List<EditText> allEds, allEdsChk;
+    @BindView(R.id.txt_opt1_conditional)
+    EditText et_opt1_conditional;
+    @BindView(R.id.txt_opt2_conditional)
+    EditText et_opt2_conditional;
+    @BindView(R.id.ll_option_condition)
+    LinearLayout ll_option_conditional;
+    @BindView(R.id.btn_add_more_option_conditional)
+    Button btn_add_more_option_conditional;
+    @BindView(R.id.spn_op1)
+    Spinner spnOp1;
+    @BindView(R.id.spn_op2)
+    Spinner spnOp2;
+
+
+    List<EditText> allEds, allEdsChk, allEdsOptConditional;
+    List<Spinner> allSpnCondition;
     public Questions questions;
-    public List<Options> option,checkboxOpt;
+    public List<Options> option, checkboxOpt;
+    public List<ConditionalOptions> conditionalOptions;
 
     public boolean update;
 
+    String[] sur;
+    List<Survey> surveys;
 
     long questionsId;
     Realm realm;
@@ -96,7 +120,10 @@ public class AddQuestionActivity extends AppCompatActivity {
         validate = new Validate();
 
         allEds = new ArrayList<EditText>();
-        allEdsChk=new ArrayList<>();
+        allEdsChk = new ArrayList<>();
+        allEdsOptConditional = new ArrayList<>();
+        allSpnCondition = new ArrayList<>();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         questions = new Questions();
@@ -107,7 +134,26 @@ public class AddQuestionActivity extends AppCompatActivity {
         allEdsChk.add(et_chk1);
         allEdsChk.add(et_chk2);
 
+        allEdsOptConditional.add(et_opt1_conditional);
+        allEdsOptConditional.add(et_opt2_conditional);
+        allSpnCondition.add(spnOp1);
+        allSpnCondition.add(spnOp2);
+
         lstQuestion = new RealmList<Questions>();
+
+
+        surveys = realm.where(Survey.class).findAll();
+        sur = new String[surveys.size()];
+
+        for (int i = 0; i < surveys.size(); i++) {
+            sur[i] = surveys.get(i).getName();
+        }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+                R.layout.simple_spinner_dropdown_item, sur);
+        spnOp1.setAdapter(adapter);
+        spnOp2.setAdapter(adapter);
 
 
         if (getIntent().getExtras() != null) {
@@ -131,9 +177,10 @@ public class AddQuestionActivity extends AppCompatActivity {
                 cb_picture.setChecked(questions.getImage());
                 cb_compulsary.setChecked(questions.getCompulsary());
                 cb_checkbox.setChecked(questions.getCheckbox());
+                cb_options_condition.setChecked(questions.getOptCondition());
                 showOption(questions.getOpt());
                 showCheckbox(questions.getCheckbox());
-
+                showOptionConditional(questions.getOptCondition());
                 txt_question.setText(questions.getQuestion());
 
                 option = questions.getOptions();
@@ -181,6 +228,41 @@ public class AddQuestionActivity extends AppCompatActivity {
                     }
 
                 }
+
+
+                conditionalOptions=questions.getOptionContidion();
+                for(int i=0; i<conditionalOptions.size(); i++){
+                    if (i == 0) {
+                        et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
+                        spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                    } else if (i == 1) {
+                        et_opt2_conditional.setText(conditionalOptions.get(i).getOpt());
+                        spnOp2.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                    } else {
+                        LinearLayout ll = new LinearLayout(this);
+                        ll.setWeightSum(7);
+                        EditText text2 = new EditText(this);
+                        text2.setLayoutParams(new LinearLayout.LayoutParams(
+                                0,
+                                ViewGroup.LayoutParams.WRAP_CONTENT, 4));
+                        text2.setText(conditionalOptions.get(i).getOpt());
+                        Spinner spn = new Spinner(this);
+                        spn.setLayoutParams(new LinearLayout.LayoutParams(
+                                0,
+                                ViewGroup.LayoutParams.WRAP_CONTENT, 3));
+
+                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.
+                                R.layout.simple_spinner_dropdown_item, sur);
+                        spn.setAdapter(adapter1);
+                        spn.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                        ll.addView(text2);
+                        ll.addView(spn);
+                        ll_option_conditional.addView(ll);
+                        allEdsOptConditional.add(text2);
+                        allSpnCondition.add(spn);
+                    }
+                }
+
 
                 //}
 
@@ -236,7 +318,27 @@ public class AddQuestionActivity extends AppCompatActivity {
             }
         });
 
+        cb_options_condition.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                showOptionConditional(b);
+            }
+        });
 
+
+    }
+
+    public int getSurveyPosition(long surveyId){
+        int pos=0;
+
+        for(int i=0; i<surveys.size(); i++){
+            if(surveys.get(i).getId()==surveyId){
+                pos=i;
+                break;
+            }
+        }
+
+        return pos;
     }
 
     @Override
@@ -402,6 +504,32 @@ public class AddQuestionActivity extends AppCompatActivity {
                 ll_check.addView(text1);
                 allEdsChk.add(text1);
                 break;
+
+            case R.id.btn_add_more_option_conditional:
+
+                LinearLayout ll = new LinearLayout(this);
+                ll.setWeightSum(7);
+                EditText text2 = new EditText(this);
+                text2.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 4));
+                text2.setHint("option");
+                Spinner spn = new Spinner(this);
+                spn.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 3));
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+                        R.layout.simple_spinner_dropdown_item, sur);
+                spn.setAdapter(adapter);
+
+                ll.addView(text2);
+                ll.addView(spn);
+                ll_option_conditional.addView(ll);
+                allEdsOptConditional.add(text2);
+                allSpnCondition.add(spn);
+
+                break;
         }
     }
 
@@ -423,6 +551,16 @@ public class AddQuestionActivity extends AppCompatActivity {
         } else {
             ll_check.setVisibility(View.GONE);
             btn_add_more_checkbox.setVisibility(View.GONE);
+        }
+    }
+
+    public void showOptionConditional(boolean val) {
+        if (val) {
+            ll_option_conditional.setVisibility(View.VISIBLE);
+            btn_add_more_option_conditional.setVisibility(View.VISIBLE);
+        } else {
+            ll_option_conditional.setVisibility(View.GONE);
+            btn_add_more_option_conditional.setVisibility(View.GONE);
         }
     }
 
@@ -452,6 +590,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                 questions.setCompulsary(cb_compulsary.isChecked());
                 questions.setCheckbox(cb_checkbox.isChecked());
                 questions.setOpt(cb_option.isChecked());
+                questions.setOptCondition(cb_options_condition.isChecked());
 
                 RealmList<Options> options = new RealmList<>();
                 if (questions.getOptions() != null) {
@@ -462,6 +601,11 @@ public class AddQuestionActivity extends AppCompatActivity {
                 RealmList<Options> chk = new RealmList<>();
                 if (questions.getChkb() != null) {
                     questions.getChkb().clear();
+                }
+
+                RealmList<ConditionalOptions> conditionalOptionses = new RealmList<ConditionalOptions>();
+                if (questions.getOptionContidion() != null) {
+                    questions.getOptionContidion().clear();
                 }
 
                 //MOptions opt1 = new MOptions();
@@ -503,7 +647,6 @@ public class AddQuestionActivity extends AppCompatActivity {
                 questions.setOptions(options);
 
 
-
                 if (cb_checkbox.isChecked()) {
                     if (allEdsChk.size() >= 0) {
                         for (int i = 0; i < allEdsChk.size(); i++) {
@@ -531,7 +674,29 @@ public class AddQuestionActivity extends AppCompatActivity {
                 }
                 questions.setChkb(chk);
 
+                if (cb_options_condition.isChecked()) {
+                    if (allEdsOptConditional.size() >= 0) {
+                        for (int i = 0; i < allEdsOptConditional.size(); i++) {
+                            int optionsId;
+                            try {
+                                optionsId = realm.where(ConditionalOptions.class).max("id").intValue() + 1;
+                            } catch (Exception ex) {
+                                Log.v("exception", ex.toString());
+                                optionsId = 1;
+                            }
 
+
+                            long surveyId = surveys.get(allSpnCondition.get(i).getSelectedItemPosition()).getId();
+
+                            ConditionalOptions opt1 = realm.createObject(ConditionalOptions.class, optionsId);
+                            //opt1.setId(j);
+                            opt1.setOpt(allEdsOptConditional.get(i).getText().toString());
+                            opt1.setSurveyid(surveyId);
+                            conditionalOptionses.add(opt1);
+                        }
+                    }
+                }
+                questions.setOptionContidion(conditionalOptionses);
 
 
                 if (update) {

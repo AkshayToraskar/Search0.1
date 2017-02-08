@@ -31,7 +31,10 @@ public class Questions extends RealmObject{
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Options> chkb;
 
-    Boolean text, number, date, time, image, compulsary, opt, checkbox;
+    @ParcelPropertyConverter(RealmListParcelConverter.class)
+    RealmList<ConditionalOptions> optionContidion;
+
+    Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition;
 
 
     public long getId() {
@@ -131,5 +134,21 @@ public class Questions extends RealmObject{
 
     public void setCheckbox(Boolean checkbox) {
         this.checkbox = checkbox;
+    }
+
+    public RealmList<ConditionalOptions> getOptionContidion() {
+        return optionContidion;
+    }
+
+    public void setOptionContidion(RealmList<ConditionalOptions> optionContidion) {
+        this.optionContidion = optionContidion;
+    }
+
+    public Boolean getOptCondition() {
+        return optCondition;
+    }
+
+    public void setOptCondition(Boolean optCondition) {
+        this.optCondition = optCondition;
     }
 }
