@@ -63,10 +63,11 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 
-                                    final DataCollection dataCollection = realm.where(DataCollection.class).equalTo("id", patientsList.get(getPosition()).getId()).findFirst();
+
                                     realm.executeTransaction(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
+                                            DataCollection dataCollection = realm.where(DataCollection.class).equalTo("id", patientsList.get(getPosition()).getId()).findFirst();
                                             dataCollection.deleteFromRealm();
                                         }
                                     });

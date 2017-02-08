@@ -53,10 +53,18 @@ public class QuestionFragment extends Fragment {
     @BindView(R.id.rg_options)
     RadioGroup rg_option;
 
+    @BindView(R.id.rg_options_conditional)
+    RadioGroup rg_option_conditional;
+
     @BindView(R.id.rb_opt1)
     RadioButton rb_opt1;
     @BindView(R.id.rb_opt2)
     RadioButton rb_opt2;
+
+    @BindView(R.id.rb_opt1_conditional)
+    RadioButton rb_opt1_conditional;
+    @BindView(R.id.rb_opt2_conditional)
+    RadioButton rb_opt2_conditional;
 
     @BindView(R.id.txt_answer)
     EditText et_answer;
@@ -118,7 +126,7 @@ public class QuestionFragment extends Fragment {
 
         lstChkbox = new ArrayList<>();
 
-        Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
+        final Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
         //MSurvey survey=MSurvey.findById(MSurvey.class,Integer.parseInt(message.getSurveyid()));
         //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
@@ -213,6 +221,33 @@ public class QuestionFragment extends Fragment {
 
         }
 
+
+        if (!questions.getOptCondition()) {
+            rg_option_conditional.setVisibility(GONE);
+            //ans.setse(-1);
+        } else {
+
+            if (questions.getOptionContidion().size() > 0) {
+                for (int i = 0; i < questions.getOptionContidion().size(); i++) {
+                    if (i == 0) {
+                        rb_opt1_conditional.setText(questions.getOptionContidion().get(0).getOpt());
+                    } else if (i == 1) {
+                        rb_opt2_conditional.setText(questions.getOptionContidion().get(1).getOpt());
+                    } else {
+                        RadioButton rb = new RadioButton(getContext());
+                        rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        rb.setText(questions.getOptionContidion().get(i).getOpt());
+                        rg_option_conditional.addView(rb);
+                    }
+                    //allEds.add(text);
+                }
+            }
+
+        }
+
+
         if (!questions.getNumber()) {
             et_number.setVisibility(GONE);
             ans.setNumAns("-");
@@ -286,6 +321,18 @@ public class QuestionFragment extends Fragment {
             }
         });
 
+
+        rg_option_conditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                int id = rg_option_conditional.getCheckedRadioButtonId();
+                View radioButton = rg_option_conditional.findViewById(id);
+                //ans.setSelectedopt(rg_option.indexOfChild(radioButton));
+                long surveyId = questions.getOptionContidion().get(rg_option_conditional.indexOfChild(radioButton)).getSurveyid();
+                answer.onAddSurvey(surveyId);
+            }
+        });
 
         btnDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,18 +441,17 @@ public class QuestionFragment extends Fragment {
 
     public void getSelectedChkbox() {
         if (!lstChkbox.isEmpty()) {
-           // List<Integer> lstChecked = new ArrayList<>();
+            // List<Integer> lstChecked = new ArrayList<>();
             //int i=lstChkbox.size();
 
-            String checkedData="";
+            String checkedData = "";
 
             for (int i = 0; i < lstChkbox.size(); i++) {
                 if (lstChkbox.get(i).isChecked()) {
                     //lstChecked.add(i);
-                    checkedData=checkedData+"1";
-                }
-                else{
-                    checkedData=checkedData+"0";
+                    checkedData = checkedData + "1";
+                } else {
+                    checkedData = checkedData + "0";
                 }
             }
 

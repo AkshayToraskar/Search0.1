@@ -67,7 +67,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     Patients patients;
 
     public static HashMap<Long, Answers> answers;
-
+    int currentPage;
     DataCollection dataCollection;
 
     //public ArrayList<MAnswers> ans;
@@ -85,8 +85,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
         if (getIntent().getExtras() != null) {
             survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
             patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
-
-
 
 
             // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
@@ -212,7 +210,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                                 Answers a = (Answers) m.getValue();
                                 Answers ans = realm.createObject(Answers.class);
 
-                                Questions questions=realm.where(Questions.class).equalTo("id",a.getQuestions().getId()).findFirst();
+                                Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
 
                                 ans.setQuestions(questions);
                                 ans.setPatientid(a.getPatientid());
@@ -308,7 +306,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             //answers.put(position,qf.getAns());
 
 
-            int currentPage = pager.getCurrentItem();
+            currentPage = pager.getCurrentItem();
 
             txt_page_count.setText(currentPage + 1 + "/" + (fragments.size() - 1));
 
@@ -399,6 +397,23 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
         }
 
         //Log.v("asdf",""+ans.getAns());
+    }
+
+    @Override
+    public void onAddSurvey(long id) {
+        Log.v("Survey ID", "asdf " + id+" Current page"+currentPage);
+        Survey survey=realm.where(Survey.class).equalTo("id",id).findFirst();
+
+        pager.setOffscreenPageLimit(fragments.size()+survey.getQuestions().size());
+
+
+
+        for (int i = 0; i < survey.getQuestions().size(); i++) {
+            fragments.add(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
+        }
+
+        adapterViewPager.notifyDataSetChanged();
+
     }
 
     @Override
