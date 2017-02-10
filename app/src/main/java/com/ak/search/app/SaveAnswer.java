@@ -7,6 +7,6 @@ import com.ak.search.realm_model.Answers;
  */
 
 public interface SaveAnswer {
-    public void onAnswerSave(Answers ans);
-    public void onAddSurvey(long id);
+    void onAnswerSave(Answers ans);
+    void onAddSurvey(long id, int pos);
 }

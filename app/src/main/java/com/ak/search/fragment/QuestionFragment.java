@@ -330,7 +330,7 @@ public class QuestionFragment extends Fragment {
                 View radioButton = rg_option_conditional.findViewById(id);
                 //ans.setSelectedopt(rg_option.indexOfChild(radioButton));
                 long surveyId = questions.getOptionContidion().get(rg_option_conditional.indexOfChild(radioButton)).getSurveyid();
-                answer.onAddSurvey(surveyId);
+                //answer.onAddSurvey(surveyId);
             }
         });
 

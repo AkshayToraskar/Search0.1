@@ -376,8 +376,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
         questionReviewFragment.setArguments(args);
         fList.add(questionReviewFragment);
 
-        //fList.add(QuestionFragment.newInstance("Fragment 2"));
-        //fList.add(QuestionFragment.newInstance("Fragment 3"));
 
 
         return fList;
@@ -400,7 +398,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     }
 
     @Override
-    public void onAddSurvey(long id) {
+    public void onAddSurvey(long id, int pos) {
         Log.v("Survey ID", "asdf " + id+" Current page"+currentPage);
         Survey survey=realm.where(Survey.class).equalTo("id",id).findFirst();
 
@@ -409,8 +407,10 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
 
         for (int i = 0; i < survey.getQuestions().size(); i++) {
-            fragments.add(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
+            //fragments.add(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
+            adapterViewPager.addFragment(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
         }
+
 
         adapterViewPager.notifyDataSetChanged();
 

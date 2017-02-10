@@ -19,81 +19,155 @@
         android:elevation="10dp"
         app:cardCornerRadius="2dp">-->
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/tv_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:padding="10sp"
+            android:text="Question ?"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvQuestion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="Questions"
-                android:textSize="16dp"
-                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/txt_answer"
+        <EditText
+            android:id="@+id/txt_answer"
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Answer" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Answer" />
 
-            <EditText
-                android:id="@+id/txt_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Answer" />
+        <EditText
+            android:id="@+id/txt_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="Answer" />
+
+        <LinearLayout
+            android:id="@+id/ll_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <TextView
                 android:id="@+id/txt_date"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Date"/>
+                android:layout_weight="2" />
+
+            <Button
+                android:id="@+id/btn_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select Date" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <TextView
                 android:id="@+id/txt_time"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_time"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Time"/>
+                android:layout_weight="1"
+                android:text="Select Time" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
 
 
             <ImageView
-                android:id="@+id/iv_selImage"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                android:src="@drawable/brain"/>
-
-
-            <RadioGroup
-                android:id="@+id/rg_options"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RadioButton
-                    android:id="@+id/rb_opt1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Options 1" />
-
-                <RadioButton
-                    android:id="@+id/rb_opt2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Options 2" />
-
-            </RadioGroup>
-
-            <LinearLayout
-                android:id="@+id/ll_check"
-                android:layout_width="match_parent"
+                android:id="@+id/iv_capture"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_weight="2"
+                android:src="@drawable/brain" />
+            <Button
+                android:id="@+id/btn_capture_image"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
-
+                android:text="choose Image" />
 
         </LinearLayout>
+
+
+        <RadioGroup
+            android:id="@+id/rg_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_opt1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Options 1" />
+
+            <RadioButton
+                android:id="@+id/rb_opt2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Options 2" />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/rg_options_conditional"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_opt1_conditional"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Options 1" />
+
+            <RadioButton
+                android:id="@+id/rb_opt2_conditional"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Options 2" />
+
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/ll_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+
+
+    </LinearLayout>
     <!--</android.support.v7.widget.CardView>-->
 
 </RelativeLayout>

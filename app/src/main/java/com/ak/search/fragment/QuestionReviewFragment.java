@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.ak.search.R;
 import com.ak.search.activity.QuestionsActivity;
 import com.ak.search.adapter.GetQuestionsAdapter;
+import com.ak.search.app.SaveAnswer;
 import com.ak.search.app.UpdateReviewAnswer;
 import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.Questions;
@@ -93,8 +94,9 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
 
                 }*/
 
+            SaveAnswer saveAnswer = null;
 
-            mAdapter = new GetQuestionsAdapter(getContext(), answersList);
+            mAdapter = new GetQuestionsAdapter(getContext(), answersList,saveAnswer);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.ak.search.R;
 import com.ak.search.adapter.GetQuestionsAdapter;
+import com.ak.search.app.SaveAnswer;
 import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.DataCollection;
 
@@ -49,9 +50,10 @@ public class ShowSurveyActivity extends AppCompatActivity {
 
 
          //   MPatients patients= MPatients.findById(MPatients.class,patientId);
+            SaveAnswer saveAnswer = null;
 
 
-            mAdapter = new GetQuestionsAdapter(this, getCollectionData());
+            mAdapter = new GetQuestionsAdapter(this, getCollectionData(),saveAnswer);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

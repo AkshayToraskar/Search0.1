@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.ak.search.R;
 import com.ak.search.activity.PatientActivity;
 import com.ak.search.activity.QuestionsActivity;
+import com.ak.search.activity.StartSurveyActivity;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Survey;
 
@@ -86,7 +87,7 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
             @Override
             public void onClick(View view) {
                 //Intent intent = new Intent(context, NewSurveyActivity.class);
-                Intent intent = new Intent(act, QuestionsActivity.class);
+                Intent intent = new Intent(act, StartSurveyActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("survey", Parcels.wrap(Survey.class,survey));
                 bundle.putParcelable("patient", Parcels.wrap(Patients.class, PatientActivity.patients));

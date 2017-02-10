@@ -31,4 +31,9 @@ public class MyPagerAdapter  extends FragmentStatePagerAdapter {
         return this.fragments.size();
     }
 
+    public void addFragment(int position,Fragment frag){
+        fragments.add(frag);
+        notifyDataSetChanged();
+    }
+
 }
