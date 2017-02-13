@@ -12,13 +12,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.GetQuestionsAdapter;
 import com.ak.search.app.SaveAnswer;
 import com.ak.search.fragment.QuestionFragment;
 import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Questions;
 import com.ak.search.realm_model.Survey;
@@ -26,13 +30,17 @@ import com.ak.search.realm_model.Survey;
 import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmList;
 
 public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer {
 
@@ -40,6 +48,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     Realm realm;
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
+
+    public boolean update;
+
     Patients patients;
     List<Questions> questionsList;
     public GetQuestionsAdapter mAdapter;
@@ -48,8 +59,12 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public static HashMap<Long, Answers> answers;
     public static int CAMERA_REQUEST = 11;
 
+    public static int positionImg;
+
     public static int pos = 0, length = 0;
     SaveAnswer saveAnswer;
+    DataCollection dataCollection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +78,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         saveAnswer = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        update = false;
 
         if (getIntent().getExtras() != null) {
             survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
@@ -99,19 +116,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                discardSurvey();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void discardSurvey() {
         new AlertDialog.Builder(this)
@@ -135,7 +139,24 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        mAdapter.onActivityResult(requestCode, resultCode, data);
+        mAdapter.onActivityResult(requestCode, resultCode, data, positionImg);
+
+        /*if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            //ivCapture.setImageBitmap(photo);
+
+
+           *//* ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            //ans.setByteArrayImage(byteArray);
+            //getSelectedChkbox();
+            //answer.onAnswerSave(ans);
+
+            answersList.get(positionImg).setByteArrayImage(byteArray);
+            mAdapter.notifyDataSetChanged();*//*
+        }*/
     }
 
     @Override
@@ -150,9 +171,13 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void onAddSurvey(long id, int pos) {
 
 
-        if (this.pos != 0 && length != 0) {
-            for(int i=pos;i<length; i++) {
-                answersList.remove(i);
+        if (this.pos != 0 || this.length != 0) {
+            int count = 0;
+            if (count < this.length) {
+                for (int i = this.pos + 1; i <= (this.pos + this.length); i++) {
+                    answersList.remove(this.pos + 1);
+                    count++;
+                }
             }
         }
 
@@ -170,5 +195,99 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
         mAdapter.notifyDataSetChanged();
 
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        pos = 0;
+        length = 0;
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_survey, menu);
+        if (update) {
+            menu.getItem(1).setTitle("update");
+
+        } else {
+            menu.getItem(0).setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                discardSurvey();
+                break;
+
+            case R.id.action_save_survey:
+
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+
+                        RealmList<Answers> answerses = new RealmList<Answers>();
+                        for (int i = 0; i < answersList.size(); i++) {
+                            Answers a = answersList.get(i);
+                            Answers ans = realm.createObject(Answers.class);
+
+                            Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
+
+                            ans.setQuestions(questions);
+                            ans.setPatientid(a.getPatientid());
+                            ans.setAns(a.getAns());
+                            ans.setSelectedopt(a.getSelectedopt());
+                            ans.setNumAns(a.getNumAns());
+                            ans.setByteArrayImage(a.getByteArrayImage());
+                            ans.setDate(a.getDate());
+                            ans.setTime(a.getTime());
+                            ans.setSelectedChk(a.getSelectedChk());
+                            answerses.add(ans);
+
+                        }
+
+
+                        Patients patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
+
+
+                        int collectionId;
+                        try {
+                            collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
+                        } catch (Exception ex) {
+                            Log.v("exception", ex.toString());
+                            collectionId = 1;
+                        }
+
+                        dataCollection = realm.createObject(DataCollection.class, collectionId);
+                        dataCollection.setSurveyid(survey.getId());
+                        dataCollection.setPatients(patients1);
+                        dataCollection.setAnswerses(answerses);
+
+                        String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
+                        dataCollection.setLat(0);
+                        dataCollection.setLng(0);
+                        dataCollection.setTimestamp(timeStamp);
+
+                        realm.copyToRealmOrUpdate(dataCollection);
+
+                        Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
+                        finish();
+
+                    }
+                });
+
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
