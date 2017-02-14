@@ -53,7 +53,7 @@ public class ShowSurveyActivity extends AppCompatActivity {
             SaveAnswer saveAnswer = null;
 
 
-            mAdapter = new GetQuestionsAdapter(this, getCollectionData(),saveAnswer);
+            mAdapter = new GetQuestionsAdapter(this, getCollectionData(),saveAnswer,realm,false);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

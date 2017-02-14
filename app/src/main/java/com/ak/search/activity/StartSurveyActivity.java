@@ -97,11 +97,21 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 answ.setPatientid(patients.getId());
                 answ.setQuestions(survey.getQuestions().get(i));
 
+                answ.setSelectedopt(-1);
+                answ.setSelectedOptConditional(-1);
+                answ.setSelectedChk("");
+                answ.setAns("");
+                answ.setNumAns("");
+                answ.setDate("");
+                answ.setTime("");
+                byte[] a = {-1};
+                answ.setByteArrayImage(a);
+
                 answersList.add(answ);
             }
 
 
-            mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer);
+            mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm,true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -186,12 +196,34 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         this.pos = pos;
         this.length = survey.getQuestions().size();
 
-        for (int i = 0; i < survey.getQuestions().size(); i++) {
+       /* for (int i = 0; i < survey.getQuestions().size(); i++) {
             Answers answ = new Answers();
             answ.setPatientid(patients.getId());
             answ.setQuestions(survey.getQuestions().get(i));
             answersList.add((pos + 1) + i, answ);
         }
+*/
+
+        for (int i = 0; i < survey.getQuestions().size(); i++) {
+
+            Answers answ = new Answers();
+
+            answ.setPatientid(patients.getId());
+            answ.setQuestions(survey.getQuestions().get(i));
+
+            answ.setSelectedopt(-1);
+            answ.setSelectedOptConditional(-1);
+            answ.setSelectedChk("");
+            answ.setAns("");
+            answ.setNumAns("");
+            answ.setDate("");
+            answ.setTime("");
+            byte[] a = {-1};
+            answ.setByteArrayImage(a);
+
+            answersList.add((pos+1)+i,answ);
+        }
+
 
         mAdapter.notifyDataSetChanged();
 

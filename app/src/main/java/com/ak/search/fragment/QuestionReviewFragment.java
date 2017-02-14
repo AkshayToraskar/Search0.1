@@ -96,7 +96,7 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
 
             SaveAnswer saveAnswer = null;
 
-            mAdapter = new GetQuestionsAdapter(getContext(), answersList,saveAnswer);
+            mAdapter = new GetQuestionsAdapter(getContext(), answersList,saveAnswer,realm,false);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

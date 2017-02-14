@@ -39,6 +39,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 import static android.view.View.GONE;
 
@@ -54,6 +55,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     public static int CAMERA_REQUEST = 11;
     private int mYear, mMonth, mDay, mHour, mMinute;
     SaveAnswer saveAnswer;
+    Realm realm;
+    boolean validate;
+    boolean enable;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_question)
@@ -88,6 +92,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         Button btnSelectTime;
         @BindView(R.id.btn_capture_image)
         Button btnSelectImage;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -171,10 +176,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         }
     }
 
-    public GetQuestionsAdapter(Context context, List<Answers> answerList, SaveAnswer saveAnswer) {
+    public GetQuestionsAdapter(Context context, List<Answers> answerList, SaveAnswer saveAnswer, Realm realm, boolean enable) {
         this.answerList = answerList;
         this.context = context;
         this.saveAnswer = saveAnswer;
+        this.realm = realm;
+        this.enable = enable;
     }
 
     @Override
@@ -189,232 +196,298 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         //holder.setIsRecyclable(false);
         final Questions questions = answerList.get(position).getQuestions();
-        boolean validate = true;
+        validate = true;
 
-        if (questions.getQuestion() != null) {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
 
 
-            holder.tvQuestion.setText(questions.getQuestion());
-            List<RadioButton> allRb = new ArrayList<>();
-            final List<CheckBox> lstChkbox = new ArrayList<>();
+                if (questions.getQuestion() != null) {
 
-            if (!questions.getOpt()) {
-                holder.rgOption.setVisibility(GONE);
-                answerList.get(position).setSelectedopt(-1);
-            } else {
-                for (int i = 0; i < questions.getOptions().size(); i++) {
-                    if (i == 0) {
-                        holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
-                        allRb.add(holder.rbOpt1);
-                    } else if (i == 1) {
-                        holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
-                        allRb.add(holder.rbOpt2);
+
+                    holder.tvQuestion.setText(questions.getQuestion());
+                    List<RadioButton> allRb = new ArrayList<>();
+                    List<RadioButton> allRbCon = new ArrayList<>();
+                    final List<CheckBox> lstChkbox = new ArrayList<>();
+
+                    if (!questions.getOpt()) {
+                        holder.rgOption.setVisibility(GONE);
+                        answerList.get(position).setSelectedopt(-1);
                     } else {
-                        RadioButton rb = new RadioButton(context);
-                        rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rb.setText(questions.getOptions().get(i).getOpt());
-                        holder.rgOption.addView(rb);
-                        allRb.add(rb);
+                        holder.rgOption.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < questions.getOptions().size(); i++) {
+                            if (i == 0) {
+                                holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
+                                allRb.add(holder.rbOpt1);
+                            } else if (i == 1) {
+                                holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
+                                allRb.add(holder.rbOpt2);
+                            } else {
+                                RadioButton rb = new RadioButton(context);
+                                rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rb.setText(questions.getOptions().get(i).getOpt());
+                                holder.rgOption.addView(rb);
+                                allRb.add(rb);
+                            }
+                        }
+                        if (answerList.get(position).getSelectedopt() != -1) {
+                            allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+                        }
+
+                        if (!enable) {
+                            for (int i = 0; i < holder.rgOption.getChildCount(); i++) {
+                                ((RadioButton) holder.rgOption.getChildAt(i)).setEnabled(false);
+                            }
+                        }
+
+                        //  holder.rgOption.check(answerList.get(position).getSelectedopt());
+
                     }
-                }
 
-
-
-            }
-
-
-            if (!questions.getOptCondition()) {
-                holder.rgOptionConditional.setVisibility(GONE);
-
-            } else {
-                for (int i = 0; i < questions.getOptionContidion().size(); i++) {
-                    if (i == 0) {
-                        holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(0).getOpt());
-                        allRb.add(holder.rbOpt1Conditional);
-                    } else if (i == 1) {
-                        holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(1).getOpt());
-                        allRb.add(holder.rbOpt2Conditional);
+                    if (!questions.getOptCondition()) {
+                        holder.rgOptionConditional.setVisibility(GONE);
+                        answerList.get(position).setSelectedOptConditional(-1);
                     } else {
-                        RadioButton rb = new RadioButton(context);
-                        rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rb.setText(questions.getOptionContidion().get(i).getOpt());
-                        holder.rgOptionConditional.addView(rb);
-                        allRb.add(rb);
+                        holder.rgOptionConditional.setVisibility(View.VISIBLE);
+                        for (int i = 0; i < questions.getOptionContidion().size(); i++) {
+                            if (i == 0) {
+                                holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(0).getOpt());
+                                allRbCon.add(holder.rbOpt1Conditional);
+                            } else if (i == 1) {
+                                holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(1).getOpt());
+                                allRbCon.add(holder.rbOpt2Conditional);
+                            } else {
+                                RadioButton rb = new RadioButton(context);
+                                rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rb.setText(questions.getOptionContidion().get(i).getOpt());
+                                holder.rgOptionConditional.addView(rb);
+                                allRbCon.add(rb);
+                            }
+                        }
+                        if (answerList.get(position).getSelectedOptConditional() != -1) {
+                            allRbCon.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
+                        }
+
+                        if (!enable) {
+                            for (int i = 0; i < holder.rgOptionConditional.getChildCount(); i++) {
+                                ((RadioButton) holder.rgOptionConditional.getChildAt(i)).setEnabled(false);
+                            }
+                        }
+
+                        //holder.rgOptionConditional.check(answerList.get(position).getSelectedOptConditional());
                     }
-                }
+
+                    if (!questions.getText()) {
+                        holder.etAnswer.setVisibility(GONE);
+                        answerList.get(position).setAns("-");
+                    } else {
+                        holder.etAnswer.setVisibility(View.VISIBLE);
+                        if (questions.getText() != null) {
+
+                            holder.etAnswer.setText(answerList.get(position).getAns());
 
 
-            }
+                        }
 
-            if (!questions.getText()) {
-                holder.etAnswer.setVisibility(GONE);
-                answerList.get(position).setAns("-");
-            } else {
-                if (questions.getText() != null) {
-                    holder.etAnswer.setText(answerList.get(position).getAns());
+                        if (!enable) {
+                            holder.etAnswer.setEnabled(false);
+                        }
+                    }
 
+                    if (!questions.getNumber()) {
+                        holder.etNumAns.setVisibility(GONE);
+                        answerList.get(position).setNumAns("-");
+                    } else {
+                        holder.etNumAns.setVisibility(View.VISIBLE);
+                        if (questions.getNumber() != null) {
 
+                            holder.etNumAns.setText(answerList.get(position).getNumAns());
+                        }
 
-                }
-            }
+                        if (!enable) {
+                            holder.etNumAns.setEnabled(false);
+                        }
+                    }
 
-            if (!questions.getNumber()) {
-                holder.etNumAns.setVisibility(GONE);
-                answerList.get(position).setNumAns("-");
-            } else {
-                if (questions.getNumber() != null) {
-                    holder.etNumAns.setText(answerList.get(position).getNumAns());
-                }
-            }
+                    if (!questions.getCheckbox()) {
+                        holder.llChck.setVisibility(GONE);
+                        answerList.get(position).setSelectedChk("-");
+                    } else {
+                        holder.llChck.setVisibility(View.VISIBLE);
+                        if (questions.getChkb().size() > 0) {
 
-            if (!questions.getCheckbox()) {
-                holder.llChck.setVisibility(GONE);
-                answerList.get(position).setSelectedChk("-");
-            } else {
-                if (questions.getChkb().size() > 0) {
+                            holder.llChck.removeAllViews();
 
-                    holder.llChck.removeAllViews();
+                            for (int i = 0; i < questions.getChkb().size(); i++) {
 
-                    for (int i = 0; i < questions.getChkb().size(); i++) {
+                                CheckBox cb = new CheckBox(context);
+                                cb.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                cb.setText(questions.getChkb().get(i).getOpt());
+                                holder.llChck.addView(cb);
+                                lstChkbox.add(cb);
 
-                        CheckBox cb = new CheckBox(context);
-                        cb.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        cb.setText(questions.getChkb().get(i).getOpt());
-                        holder.llChck.addView(cb);
-                        lstChkbox.add(cb);
+                                if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
 
-                        if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("-")) {
+                                    String a = answerList.get(position).getSelectedChk();
+                                    if (a != null) {
+                                        String val = String.valueOf(a.charAt(i));
 
-                            String a = answerList.get(position).getSelectedChk();
-                            if (a != null) {
-                                String val = String.valueOf(a.charAt(i));
-
-                                if (val.equals("1")) {
-                                    cb.setChecked(true);
-                                } else {
-                                    cb.setChecked(false);
+                                        if (val.equals("1")) {
+                                            cb.setChecked(true);
+                                        } else {
+                                            cb.setChecked(false);
+                                        }
+                                    }
                                 }
                             }
+
+                            if (!enable) {
+
+                                for (int i = 0; i < lstChkbox.size(); i++) {
+                                    lstChkbox.get(i).setEnabled(false);
+                                }
+                            }
+
+
+                            for (int i = 0; i < lstChkbox.size(); i++) {
+                                lstChkbox.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                        getSelectedChkbox(position, lstChkbox);
+                                    }
+                                });
+                            }
+                        }
+
+                    }
+
+                    if (!questions.getDate()) {
+                        holder.tvDate.setVisibility(GONE);
+                        holder.btnSelectDate.setVisibility(GONE);
+                        answerList.get(position).setDate("-");
+                    } else {
+                        holder.tvDate.setVisibility(View.VISIBLE);
+                        holder.btnSelectDate.setVisibility(View.VISIBLE);
+                        holder.tvDate.setText(answerList.get(position).getDate());
+
+                        if (!enable) {
+                            holder.btnSelectDate.setVisibility(GONE);
+                        }
+                    }
+
+                    if (!questions.getTime()) {
+                        holder.tvTime.setVisibility(GONE);
+                        holder.btnSelectTime.setVisibility(GONE);
+                        answerList.get(position).setTime("-");
+                    } else {
+                        holder.tvTime.setVisibility(View.VISIBLE);
+                        holder.btnSelectTime.setVisibility(View.VISIBLE);
+                        holder.tvTime.setText(answerList.get(position).getTime());
+
+                        if (!enable) {
+                            holder.btnSelectTime.setVisibility(GONE);
+                        }
+                    }
+
+                    if (!questions.getImage()) {
+                        byte aa[] = {-1};
+                        answerList.get(position).setByteArrayImage(aa);
+                        holder.ivSelImg.setVisibility(GONE);
+                        holder.btnSelectImage.setVisibility(GONE);
+                    } else {
+
+                        holder.ivSelImg.setVisibility(View.VISIBLE);
+                        holder.btnSelectImage.setVisibility(View.VISIBLE);
+
+                        if (answerList.get(position).getByteArrayImage() != null) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
+                            holder.ivSelImg.setImageBitmap(bmp);
+                        }
+
+                        if (!enable) {
+                            holder.btnSelectImage.setVisibility(GONE);
                         }
                     }
 
 
-                    for (int i = 0; i < lstChkbox.size(); i++) {
-                        lstChkbox.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                getSelectedChkbox(position, lstChkbox);
+                    holder.etAnswer.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            if (editable != null) {
+                                answerList.get(position).setAns(String.valueOf(editable));
+                                saveAnswer.onAnswerSave(answerList.get(position));
                             }
-                        });
+                        }
+                    });
+
+                    holder.etNumAns.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+                            if (editable != null)
+                                answerList.get(position).setNumAns(String.valueOf(editable));
+                            saveAnswer.onAnswerSave(answerList.get(position));
+                        }
+                    });
+
+                    holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                            int id = holder.rgOption.getCheckedRadioButtonId();
+                            View radioButton = holder.rgOption.findViewById(id);
+                            answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
+                            saveAnswer.onAnswerSave(answerList.get(position));
+                            notifyDataSetChanged();
+                        }
+                    });
+
+
+                    holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                            int id = holder.rgOptionConditional.getCheckedRadioButtonId();
+                            View radioButton = holder.rgOptionConditional.findViewById(id);
+                            answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
+                            long surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
+                            saveAnswer.onAddSurvey(surveyId, position);
+                            notifyDataSetChanged();
+                        }
+                    });
+
+                    if (questions.getCompulsary()) {
+                        if (!validate) {
+                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryText));
+                        } else {
+
+                        }
                     }
                 }
-
             }
-
-            if (!questions.getDate()) {
-                holder.tvDate.setVisibility(GONE);
-                holder.btnSelectDate.setVisibility(GONE);
-                answerList.get(position).setDate("-");
-            } else {
-                holder.tvDate.setText(answerList.get(position).getDate());
-            }
-
-            if (!questions.getTime()) {
-                holder.tvTime.setVisibility(GONE);
-                holder.btnSelectTime.setVisibility(GONE);
-                answerList.get(position).setTime("-");
-            } else {
-                holder.tvTime.setText(answerList.get(position).getTime());
-            }
-
-            if (!questions.getImage())
-
-            {
-                byte aa[] = {-1};
-                answerList.get(position).setByteArrayImage(aa);
-                holder.ivSelImg.setVisibility(GONE);
-                holder.btnSelectImage.setVisibility(GONE);
-            } else {
-                if (answerList.get(position).getByteArrayImage() != null) {
-                    Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
-                    holder.ivSelImg.setImageBitmap(bmp);
-                }
-            }
-
-
-            holder.etAnswer.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    answerList.get(position).setAns(String.valueOf(editable));
-                    saveAnswer.onAnswerSave(answerList.get(position));
-                }
-            });
-
-            holder.etNumAns.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    answerList.get(position).setNumAns(String.valueOf(editable));
-                    saveAnswer.onAnswerSave(answerList.get(position));
-                }
-            });
-
-            holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    int id = holder.rgOption.getCheckedRadioButtonId();
-                    View radioButton = holder.rgOption.findViewById(id);
-                    answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
-                    saveAnswer.onAnswerSave(answerList.get(position));
-                    notifyDataSetChanged();
-                }
-            });
-
-
-            holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    int id = holder.rgOptionConditional.getCheckedRadioButtonId();
-                    View radioButton = holder.rgOptionConditional.findViewById(id);
-                    answerList.get(position).setSelectedopt(holder.rgOptionConditional.indexOfChild(radioButton));
-                    long surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
-                    saveAnswer.onAddSurvey(surveyId, position);
-                    notifyDataSetChanged();
-                }
-            });
-
-            if (questions.getCompulsary()) {
-                if (!validate) {
-                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryText));
-                }
-                else{
-
-                }
-            }
-        }
+        });
     }
 
     public void getSelectedChkbox(int position, List<CheckBox> lstCheckbox) {
