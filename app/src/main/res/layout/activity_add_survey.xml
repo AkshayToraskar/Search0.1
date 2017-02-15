@@ -23,6 +23,12 @@
             android:layout_margin="5dp"
             android:hint="Survey Name" />
 
+        <CheckBox
+            android:id="@+id/cb_nested_survey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="include in nested Survey?"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"

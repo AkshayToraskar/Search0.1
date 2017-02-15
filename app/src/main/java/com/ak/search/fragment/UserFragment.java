@@ -40,7 +40,6 @@ public class UserFragment extends Fragment {
     //public static MPatients patients;
 
     public UserFragment() {
-        // Required empty public constructor
     }
 
 
@@ -51,14 +50,12 @@ public class UserFragment extends Fragment {
         ButterKnife.bind(this, view);
         realm = Realm.getDefaultInstance();
 
-        surveysList = realm.where(Survey.class).findAll();
+        surveysList = realm.where(Survey.class).equalTo("nested",false).findAll();
 
         /*if (getArguments() != null) {
             patients = Parcels.unwrap(getArguments().getParcelable("PatientData"));
-
             tvPatientName.setText(patients.getPatientname());
             tvPatientAddress.setText(patients.getAddress());
-
         }*/
         //  surveysList = MSurvey.listAll(MSurvey.class);
 

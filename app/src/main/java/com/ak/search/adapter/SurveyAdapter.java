@@ -14,6 +14,8 @@ import com.ak.search.realm_model.Survey;
 
 import java.util.List;
 
+import static android.view.View.GONE;
+
 /**
  * Created by dg hdghfd on 29-11-2016.
  */
@@ -24,12 +26,12 @@ private List<Survey> surveysList;
 private Context context;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvName;
+    public TextView tvName,tvSubsurvey;
 
     public MyViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
-
+tvSubsurvey=(TextView)view.findViewById(R.id.tv_subsurvey);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +59,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.user_list_row, parent, false);
+                .inflate(R.layout.survey_list_row, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -66,6 +68,12 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Survey survey = surveysList.get(position);
         holder.tvName.setText(survey.getName());
+
+        if(!survey.getNested())
+        {
+            holder.tvSubsurvey.setVisibility(GONE);
+        }
+
     }
 
     @Override

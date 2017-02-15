@@ -22,7 +22,7 @@ public class Survey extends RealmObject{
 
     @PrimaryKey
     long id;
-
+boolean nested;
     String name;
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
@@ -54,4 +54,12 @@ public class Survey extends RealmObject{
         this.name = name;
     }
 
+
+    public boolean getNested() {
+        return nested;
+    }
+
+    public void setNested(boolean nested) {
+        this.nested = nested;
+    }
 }

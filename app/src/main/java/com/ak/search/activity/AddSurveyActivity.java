@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.ak.search.R;
@@ -34,7 +35,8 @@ public class AddSurveyActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_survey_name)
     EditText txt_survey_name;
-
+@BindView(R.id.cb_nested_survey)
+    CheckBox cbNestedSurvey;
 
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
@@ -73,6 +75,8 @@ public class AddSurveyActivity extends AppCompatActivity {
             survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
 
             Log.v("SURVEY NAME", "dasf " + survey.getName() + "=====" + survey.getQuestions().size());
+
+            cbNestedSurvey.setChecked(survey.getNested());
             questionsList.clear();
             questionsList.addAll(survey.getQuestions());
 
@@ -98,6 +102,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                     // Add a survey
                     survey = realm.createObject(Survey.class, surveyId);
                     //survey.setId(surveyId);
+                    survey.setNested(cbNestedSurvey.isChecked());
                     survey.setName("MSurvey " + String.valueOf(sessionManager.getSurveyId()));
                     realm.copyToRealmOrUpdate(survey);
                     //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
@@ -180,6 +185,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                         //survey = realm.where(MSurvey.class).equalTo("id", surveyId).findFirst();
                         survey.setName(txt_survey_name.getText().toString());
 
+                        survey.setNested(cbNestedSurvey.isChecked());
                         /*RealmList que = new RealmList();
                         for (int i = 0; i < 3; i++) {
 
