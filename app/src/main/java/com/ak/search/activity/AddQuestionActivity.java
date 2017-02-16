@@ -142,7 +142,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         lstQuestion = new RealmList<Questions>();
 
 
-        surveys = realm.where(Survey.class).findAll();
+        surveys = realm.where(Survey.class).notEqualTo("id",AddSurveyActivity.survey.getId()).equalTo("nested",true).findAll();
         sur = new String[surveys.size()];
 
         for (int i = 0; i < surveys.size(); i++) {

@@ -11,7 +11,7 @@ public class Answers extends RealmObject {
 
 
     long patientid;
-    int selectedopt,selectedOptConditional;
+    int selectedopt,selectedOptConditional,parentPos;
     String selectedChk;
     String ans,numAns,date,time;
     Questions questions;
@@ -92,6 +92,14 @@ public class Answers extends RealmObject {
 
     public void setByteArrayImage(byte[] byteArrayImage) {
         this.byteArrayImage = byteArrayImage;
+    }
+
+    public int getParentPos() {
+        return parentPos;
+    }
+
+    public void setParentPos(int parentPos) {
+        this.parentPos = parentPos;
     }
 
     public int getSelectedOptConditional() {

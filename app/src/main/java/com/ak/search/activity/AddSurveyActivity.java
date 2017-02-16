@@ -35,7 +35,7 @@ public class AddSurveyActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_survey_name)
     EditText txt_survey_name;
-@BindView(R.id.cb_nested_survey)
+    @BindView(R.id.cb_nested_survey)
     CheckBox cbNestedSurvey;
 
     @BindView(R.id.rv_questions)
@@ -295,9 +295,9 @@ public class AddSurveyActivity extends AppCompatActivity {
         //questionsList.clear();
         questionsList.addAll(survey.getQuestions());
 
-        for(int i=0; i<survey.getQuestions().size(); i++) {
-            Log.v("asfd", "???????" + survey.getQuestions().get(i).getQuestion()+" size"+survey.getQuestions().get(i).getOptions().size());
-            for(int j=0; j<survey.getQuestions().get(i).getOptions().size(); j++){
+        for (int i = 0; i < survey.getQuestions().size(); i++) {
+            Log.v("asfd", "???????" + survey.getQuestions().get(i).getQuestion() + " size" + survey.getQuestions().get(i).getOptions().size());
+            for (int j = 0; j < survey.getQuestions().get(i).getOptions().size(); j++) {
                 Log.v("asfd", "//" + survey.getQuestions().get(i).getOptions().get(j).getOpt());
             }
 

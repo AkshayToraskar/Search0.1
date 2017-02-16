@@ -100,7 +100,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                 answ.setPatientid(patients.getId());
                 answ.setQuestions(survey.getQuestions().get(i));
-
+                answ.setParentPos(0);
                 answ.setSelectedopt(-1);
                 answ.setSelectedOptConditional(-1);
                 answ.setSelectedChk("");
@@ -182,21 +182,45 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
     @Override
-    public void onAddSurvey(long id, int pos) {
-
+    public void onAddSurvey(long id, int pos, int parentPos) {
+        boolean newEntry = true;
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
-        deleteQuestions(pos);
+        int surveysize = survey.getQuestions().size();
 
-       /* if (addQueHashMap.size() > 0) {
+        if (addQueHashMap.size() > 0) {
             for (Map.Entry m : addQueHashMap.entrySet()) {
                 MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
-                addToHashMap(id,pos,nestedAddQue.getLengh(),nestedAddQue.getPos());
+
+                if (nestedAddQue.getPos() == pos) {
+                    deleteQuestions(pos);
+
+
+
+
+
+                    if (nestedAddQue.getSurveyId() != id) {
+                        addToHashMap(id, pos, surveysize, parentPos, 0);
+
+                        newEntry = false;
+                    }
+
+                }
+
+                if (nestedAddQue.getPos() == parentPos) {
+                    addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
+                }
+
+
+
 
             }
         }
-        else {*/
-            addToHashMap(id, pos, survey.getQuestions().size(),0);
-        //}
+
+
+        if (newEntry) {
+            addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
+        }
+
 
         addNewQuestion(pos, survey);
         Log.v("Survey ID", "asdf " + id);
@@ -206,29 +230,38 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     public void deleteQuestions(int pos) {
         if (addQueHashMap.size() > 0) {
-            for (Map.Entry m : addQueHashMap.entrySet()) {
-                MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
-                if (nestedAddQue.getPos() == pos) {
-                    int count = 0;
-                    if (count < nestedAddQue.getLengh()) {
-                        for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + nestedAddQue.getLengh()); i++) {
-                            answersList.remove(nestedAddQue.getPos() + 1);
-                            count++;
-                        }
+            // for (Map.Entry m : addQueHashMap.entrySet()) {
+            MNestedAddQue nestedAddQue = addQueHashMap.get(pos);
+
+            if(nestedAddQue!=null) {
+                //if (nestedAddQue.getPos() == pos) {
+                int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
+
+                int count = 0;
+                if (count < totalSize) {
+                    for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
+
+
+
+                        answersList.remove(nestedAddQue.getPos() + 1);
+                        count++;
                     }
                 }
             }
+            //}
+            //}
         }
     }
 
 
-    public void addToHashMap(long id, int pos, int length,int parentPos) {
+    public void addToHashMap(long id, int pos, int length, int parentPos, int childLength) {
 
         MNestedAddQue nestedAddQue = new MNestedAddQue();
         nestedAddQue.setSurveyId(id);
         nestedAddQue.setPos(pos);
         nestedAddQue.setLengh(length);
         nestedAddQue.setParentPos(parentPos);
+        nestedAddQue.setChildLength(childLength);
         addQueHashMap.put(pos, nestedAddQue);
 
 
@@ -240,7 +273,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             Answers answ = new Answers();
             answ.setPatientid(patients.getId());
             answ.setQuestions(survey.getQuestions().get(i));
-
+            answ.setParentPos(pos);
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");

@@ -5,7 +5,7 @@ package com.ak.search.model;
  */
 
 public class MNestedAddQue {
-    int pos, lengh, parentPos;
+    int pos, lengh, parentPos, childLength;
     long surveyId;
 
     public int getPos() {
@@ -38,5 +38,13 @@ public class MNestedAddQue {
 
     public void setParentPos(int parentPos) {
         this.parentPos = parentPos;
+    }
+
+    public int getChildLength() {
+        return childLength;
+    }
+
+    public void setChildLength(int childLength) {
+        this.childLength = childLength;
     }
 }

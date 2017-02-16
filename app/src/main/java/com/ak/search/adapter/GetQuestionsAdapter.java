@@ -473,7 +473,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                             View radioButton = holder.rgOptionConditional.findViewById(id);
                             answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
                             long surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
-                            saveAnswer.onAddSurvey(surveyId, position);
+                            saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos());
                             notifyDataSetChanged();
                         }
                     });
