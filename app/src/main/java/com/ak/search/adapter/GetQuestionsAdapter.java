@@ -219,9 +219,11 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         for (int i = 0; i < questions.getOptions().size(); i++) {
                             if (i == 0) {
                                 holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
+
                                 allRb.add(holder.rbOpt1);
                             } else if (i == 1) {
                                 holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
+
                                 allRb.add(holder.rbOpt2);
                             } else {
                                 RadioButton rb = new RadioButton(context);
@@ -229,6 +231,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         ViewGroup.LayoutParams.MATCH_PARENT,
                                         ViewGroup.LayoutParams.WRAP_CONTENT));
                                 rb.setText(questions.getOptions().get(i).getOpt());
+
                                 holder.rgOption.addView(rb);
                                 allRb.add(rb);
                             }
@@ -255,9 +258,11 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         for (int i = 0; i < questions.getOptionContidion().size(); i++) {
                             if (i == 0) {
                                 holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(0).getOpt());
+
                                 allRbCon.add(holder.rbOpt1Conditional);
                             } else if (i == 1) {
                                 holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(1).getOpt());
+
                                 allRbCon.add(holder.rbOpt2Conditional);
                             } else {
                                 RadioButton rb = new RadioButton(context);
@@ -265,13 +270,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         ViewGroup.LayoutParams.MATCH_PARENT,
                                         ViewGroup.LayoutParams.WRAP_CONTENT));
                                 rb.setText(questions.getOptionContidion().get(i).getOpt());
+
                                 holder.rgOptionConditional.addView(rb);
+
                                 allRbCon.add(rb);
                             }
                         }
-                        if (answerList.get(position).getSelectedOptConditional() != -1) {
+                        /*if (answerList.get(position).getSelectedOptConditional() != -1) {
                             allRbCon.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
-                        }
+                        }*/
 
                         if (!enable) {
                             for (int i = 0; i < holder.rgOptionConditional.getChildCount(); i++) {

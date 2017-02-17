@@ -195,9 +195,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     deleteQuestions(pos);
 
 
-
-
-
                     if (nestedAddQue.getSurveyId() != id) {
                         addToHashMap(id, pos, surveysize, parentPos, 0);
 
@@ -211,8 +208,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 }
 
 
-
-
             }
         }
 
@@ -221,9 +216,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
         }
 
-
         addNewQuestion(pos, survey);
-        Log.v("Survey ID", "asdf " + id);
 
 
     }
@@ -233,16 +226,13 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             // for (Map.Entry m : addQueHashMap.entrySet()) {
             MNestedAddQue nestedAddQue = addQueHashMap.get(pos);
 
-            if(nestedAddQue!=null) {
+            if (nestedAddQue != null) {
                 //if (nestedAddQue.getPos() == pos) {
                 int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
 
                 int count = 0;
-                if (count < totalSize) {
+                if (count < totalSize && (nestedAddQue.getPos() + 1) < answersList.size()) {
                     for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
-
-
-
                         answersList.remove(nestedAddQue.getPos() + 1);
                         count++;
                     }
