@@ -13,4 +13,11 @@ public class Validate {
             return false;
     }
 
+    public boolean validateRB(int id) {
+        if (id == -1)
+            return true;
+        else
+            return false;
+    }
+
 }

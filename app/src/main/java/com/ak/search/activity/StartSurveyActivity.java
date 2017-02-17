@@ -115,6 +115,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             }
 
 
+            Answers answ = new Answers();
+            answ.setPatientid(patients.getId());
+            answ.setQuestions(null);
+            answ.setParentPos(0);
+            answ.setSelectedopt(-1);
+            answ.setSelectedOptConditional(-1);
+            answ.setSelectedChk("");
+            answ.setAns("");
+            answ.setNumAns("");
+            answ.setDate("");
+            answ.setTime("");
+            byte[] a = {-1};
+            answ.setByteArrayImage(a);
+            answersList.add(answ);
+
+
             mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm, true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
@@ -216,6 +232,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
         }
 
+
         addNewQuestion(pos, survey);
 
 
@@ -231,7 +248,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
 
                 int count = 0;
-                if (count < totalSize && (nestedAddQue.getPos() + 1) < answersList.size()) {
+                if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size()-1)) {
                     for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
                         answersList.remove(nestedAddQue.getPos() + 1);
                         count++;
@@ -323,7 +340,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
                         RealmList<Answers> answerses = new RealmList<Answers>();
-                        for (int i = 0; i < answersList.size(); i++) {
+                        for (int i = 0; i < answersList.size()-1; i++) {
                             Answers a = answersList.get(i);
                             Answers ans = realm.createObject(Answers.class);
 

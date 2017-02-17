@@ -23,7 +23,7 @@ public class Questions extends RealmObject{
     @PrimaryKey
     long id;
 
-    String question;
+    String question, typeQuestion;
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Options> options;
@@ -33,6 +33,8 @@ public class Questions extends RealmObject{
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<ConditionalOptions> optionContidion;
+
+
 
     Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition;
 
@@ -53,7 +55,13 @@ public class Questions extends RealmObject{
         this.options = options;
     }
 
+    public String getTypeQuestion() {
+        return typeQuestion;
+    }
 
+    public void setTypeQuestion(String typeQuestion) {
+        this.typeQuestion = typeQuestion;
+    }
 
     public String getQuestion() {
         return question;

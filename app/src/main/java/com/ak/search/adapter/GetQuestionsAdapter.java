@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,14 @@ import android.widget.Toast;
 import com.ak.search.R;
 import com.ak.search.activity.StartSurveyActivity;
 import com.ak.search.app.SaveAnswer;
+import com.ak.search.app.Validate;
 import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.Questions;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,8 +59,10 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     private int mYear, mMonth, mDay, mHour, mMinute;
     SaveAnswer saveAnswer;
     Realm realm;
-    boolean validate;
-    boolean enable;
+    boolean enable, showerror = false;
+    private HashMap<Integer, Boolean> validateAnswers;
+
+    Validate validate;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_question)
@@ -93,10 +98,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         @BindView(R.id.btn_capture_image)
         Button btnSelectImage;
 
+        @BindView(R.id.btn_save)
+        Button btnSave;
+
 
         public MyViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
+            validateAnswers = new HashMap<>();
 
 
             btnSelectDate.setOnClickListener(new View.OnClickListener() {
@@ -160,6 +170,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 }
             });
 
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.v("validate size", " : " + validateAnswers.size());
+                    showerror = true;
+                    notifyDataSetChanged();
+                }
+            });
+
         }
     }
 
@@ -196,55 +215,354 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         //holder.setIsRecyclable(false);
         final Questions questions = answerList.get(position).getQuestions();
-        validate = true;
+
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
 
 
-                if (questions.getQuestion() != null) {
+                holder.tvQuestion.setVisibility(GONE);
+                holder.rgOption.setVisibility(GONE);
+                holder.rgOptionConditional.setVisibility(GONE);
+                holder.etAnswer.setVisibility(GONE);
+                holder.etNumAns.setVisibility(GONE);
+                holder.llChck.setVisibility(GONE);
+                holder.tvDate.setVisibility(GONE);
+                holder.btnSelectDate.setVisibility(GONE);
+                holder.tvTime.setVisibility(GONE);
+                holder.btnSelectTime.setVisibility(GONE);
+                holder.ivSelImg.setVisibility(GONE);
+                holder.btnSelectImage.setVisibility(GONE);
+                holder.btnSave.setVisibility(GONE);
 
+                if (answerList.get(position).getQuestions() != null) {
 
+                    holder.tvQuestion.setVisibility(View.VISIBLE);
                     holder.tvQuestion.setText(questions.getQuestion());
-                    List<RadioButton> allRb = new ArrayList<>();
-                    List<RadioButton> allRbCon = new ArrayList<>();
-                    final List<CheckBox> lstChkbox = new ArrayList<>();
+
+
+                    if (questions.getCompulsary() == true && showerror == true) {
+                        if(validateAnswers.get(position)!=null) {
+                            Boolean result = validateAnswers.get(position);
+                            if (result) {
+                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_dark_background));
+                            }
+                        }
+                    }
+
+
+                    String questionType = questions.getTypeQuestion();
+                    String[] quest = questionType.split(",");
+                    for (int l = 0; l < quest.length; l++) {
+                        int que = Integer.parseInt(quest[l]);
+                        switch (que) {
+
+                            //Text---------------------------------------
+                            case 1:
+                                holder.etAnswer.setVisibility(View.VISIBLE);
+                                if (answerList.get(position).getAns() != null) {
+                                    holder.etAnswer.setText(answerList.get(position).getAns());
+                                }
+
+                                if (!enable) {
+                                    holder.etAnswer.setEnabled(false);
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                    validateAnswers.put(position, v);
+                                }
+
+                                holder.etAnswer.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable editable) {
+                                        if (editable != null) {
+                                            answerList.get(position).setAns(String.valueOf(editable));
+                                            saveAnswer.onAnswerSave(answerList.get(position));
+                                        }
+                                    }
+                                });
+
+                                break;
+
+                            //Number---------------------------------------
+                            case 2:
+                                holder.etNumAns.setVisibility(View.VISIBLE);
+                                if (answerList.get(position).getNumAns() != null) {
+                                    holder.etNumAns.setText(answerList.get(position).getNumAns());
+                                }
+
+                                if (!enable) {
+                                    holder.etNumAns.setEnabled(false);
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    boolean v = validate.validateString(holder.etNumAns.getText().toString());
+                                    validateAnswers.put(position, v);
+                                }
+
+                                holder.etNumAns.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable editable) {
+                                        if (editable != null)
+                                            answerList.get(position).setNumAns(String.valueOf(editable));
+                                        saveAnswer.onAnswerSave(answerList.get(position));
+                                    }
+                                });
+                                break;
+
+                            //Date---------------------------------------
+                            case 3:
+                                holder.tvDate.setVisibility(View.VISIBLE);
+                                if (enable) {
+                                    holder.btnSelectDate.setVisibility(View.VISIBLE);
+                                }
+
+                                if (answerList.get(position).getDate() != null) {
+                                    holder.tvDate.setText(answerList.get(position).getDate());
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    boolean v = validate.validateString(holder.tvDate.getText().toString());
+                                    validateAnswers.put(position, v);
+                                }
+                                break;
+
+                            //Time---------------------------------------
+                            case 4:
+                                holder.tvTime.setVisibility(View.VISIBLE);
+                                if (enable) {
+                                    holder.btnSelectTime.setVisibility(View.VISIBLE);
+                                }
+
+                                if (answerList.get(position).getTime() != null) {
+                                    holder.tvTime.setText(answerList.get(position).getTime());
+                                }
+
+
+                                if (questions.getCompulsary()) {
+                                    boolean v = validate.validateString(holder.tvTime.getText().toString());
+                                    validateAnswers.put(position, v);
+                                }
+                                break;
+
+                            //Image---------------------------------------
+                            case 5:
+
+                                holder.ivSelImg.setVisibility(View.VISIBLE);
+                                if (enable) {
+                                    holder.btnSelectImage.setVisibility(View.VISIBLE);
+                                }
+
+                                if (answerList.get(position).getByteArrayImage() != null) {
+                                    Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
+                                    holder.ivSelImg.setImageBitmap(bmp);
+                                }
+
+
+                                break;
+
+                            //Compulsary---------------------------------------
+                            case 6:
+                                break;
+
+                            //Checkbox---------------------------------------
+                            case 7:
+                                final List<CheckBox> lstChkbox = new ArrayList<>();
+                                holder.llChck.setVisibility(View.VISIBLE);
+                                if (questions.getChkb().size() > 0) {
+
+                                    holder.llChck.removeAllViews();
+
+                                    for (int i = 0; i < questions.getChkb().size(); i++) {
+
+                                        CheckBox cb = new CheckBox(context);
+                                        cb.setLayoutParams(new ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        cb.setText(questions.getChkb().get(i).getOpt());
+                                        holder.llChck.addView(cb);
+                                        lstChkbox.add(cb);
+
+                                        if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
+
+                                            String a = answerList.get(position).getSelectedChk();
+                                            if (a != null) {
+                                                String val = String.valueOf(a.charAt(i));
+
+                                                if (val.equals("1")) {
+                                                    cb.setChecked(true);
+                                                } else {
+                                                    cb.setChecked(false);
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                                    if (questions.getCompulsary()) {
+                                        boolean v = validate.validateString(answerList.get(position).getSelectedChk());
+                                        validateAnswers.put(position, v);
+                                    }
+
+
+                                    if (!enable) {
+
+                                        for (int i = 0; i < lstChkbox.size(); i++) {
+                                            lstChkbox.get(i).setEnabled(false);
+                                        }
+                                    }
+
+
+                                    for (int i = 0; i < lstChkbox.size(); i++) {
+                                        lstChkbox.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                            @Override
+                                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                                getSelectedChkbox(position, lstChkbox);
+                                            }
+                                        });
+                                    }
+                                }
+                                break;
+
+                            //Options-----------------------------------------
+                            case 8:
+                                List<RadioButton> allRb = new ArrayList<>();
+                                holder.rgOption.setVisibility(View.VISIBLE);
+                                for (int i = 0; i < questions.getOptions().size(); i++) {
+                                    if (i == 0) {
+                                        holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
+
+                                        allRb.add(holder.rbOpt1);
+                                    } else if (i == 1) {
+                                        holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
+
+                                        allRb.add(holder.rbOpt2);
+                                    } else {
+                                        RadioButton rb = new RadioButton(context);
+                                        rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        rb.setText(questions.getOptions().get(i).getOpt());
+
+                                        holder.rgOption.addView(rb);
+                                        allRb.add(rb);
+                                    }
+                                }
+                                if (answerList.get(position).getSelectedopt() != -1) {
+                                    allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    // boolean v=validate.validateRB(answerList.get(position).getSelectedopt());
+                                    // validateAnswers.put(position,v);
+                                }
+
+
+                                holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                                        int id = holder.rgOption.getCheckedRadioButtonId();
+                                        View radioButton = holder.rgOption.findViewById(id);
+                                        answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
+                                        saveAnswer.onAnswerSave(answerList.get(position));
+                                        notifyDataSetChanged();
+                                    }
+                                });
+
+                                if (!enable) {
+                                    for (int i = 0; i < holder.rgOption.getChildCount(); i++) {
+                                        ((RadioButton) holder.rgOption.getChildAt(i)).setEnabled(false);
+                                    }
+                                }
+
+                                break;
+
+
+                            //Conditional---------------------------------------
+                            case 9:
+                                List<RadioButton> allRbCon = new ArrayList<>();
+                                holder.rgOptionConditional.setVisibility(View.VISIBLE);
+                                for (int i = 0; i < questions.getOptionContidion().size(); i++) {
+                                    if (i == 0) {
+                                        holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(0).getOpt());
+
+                                        allRbCon.add(holder.rbOpt1Conditional);
+                                    } else if (i == 1) {
+                                        holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(1).getOpt());
+
+                                        allRbCon.add(holder.rbOpt2Conditional);
+                                    } else {
+                                        RadioButton rb = new RadioButton(context);
+                                        rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                                        rb.setText(questions.getOptionContidion().get(i).getOpt());
+
+                                        holder.rgOptionConditional.addView(rb);
+
+                                        allRbCon.add(rb);
+                                    }
+                                }
+                                if (answerList.get(position).getSelectedOptConditional() != -1) {
+                                    allRbCon.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
+                                }
+
+                                if (!enable) {
+                                    for (int i = 0; i < holder.rgOptionConditional.getChildCount(); i++) {
+                                        ((RadioButton) holder.rgOptionConditional.getChildAt(i)).setEnabled(false);
+                                    }
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    //   boolean v=validate.validateRB(answerList.get(position).getSelectedOptConditional());
+                                    //   validateAnswers.put(position,v);
+                                }
+
+                                holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                                        int id = holder.rgOptionConditional.getCheckedRadioButtonId();
+                                        View radioButton = holder.rgOptionConditional.findViewById(id);
+                                        answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
+                                        long surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
+                                        saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos());
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                                break;
+
+                        }
+                    }
+
+
+                    /*
+
+
+                    final
 
                     if (!questions.getOpt()) {
                         holder.rgOption.setVisibility(GONE);
                         answerList.get(position).setSelectedopt(-1);
                     } else {
-                        holder.rgOption.setVisibility(View.VISIBLE);
-                        for (int i = 0; i < questions.getOptions().size(); i++) {
-                            if (i == 0) {
-                                holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
 
-                                allRb.add(holder.rbOpt1);
-                            } else if (i == 1) {
-                                holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
-
-                                allRb.add(holder.rbOpt2);
-                            } else {
-                                RadioButton rb = new RadioButton(context);
-                                rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                                rb.setText(questions.getOptions().get(i).getOpt());
-
-                                holder.rgOption.addView(rb);
-                                allRb.add(rb);
-                            }
-                        }
-                        if (answerList.get(position).getSelectedopt() != -1) {
-                            allRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
-                        }
-
-                        if (!enable) {
-                            for (int i = 0; i < holder.rgOption.getChildCount(); i++) {
-                                ((RadioButton) holder.rgOption.getChildAt(i)).setEnabled(false);
-                            }
-                        }
 
                         //  holder.rgOption.check(answerList.get(position).getSelectedopt());
 
@@ -254,37 +572,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         holder.rgOptionConditional.setVisibility(GONE);
                         answerList.get(position).setSelectedOptConditional(-1);
                     } else {
-                        holder.rgOptionConditional.setVisibility(View.VISIBLE);
-                        for (int i = 0; i < questions.getOptionContidion().size(); i++) {
-                            if (i == 0) {
-                                holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(0).getOpt());
 
-                                allRbCon.add(holder.rbOpt1Conditional);
-                            } else if (i == 1) {
-                                holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(1).getOpt());
-
-                                allRbCon.add(holder.rbOpt2Conditional);
-                            } else {
-                                RadioButton rb = new RadioButton(context);
-                                rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                                rb.setText(questions.getOptionContidion().get(i).getOpt());
-
-                                holder.rgOptionConditional.addView(rb);
-
-                                allRbCon.add(rb);
-                            }
-                        }
-                        /*if (answerList.get(position).getSelectedOptConditional() != -1) {
-                            allRbCon.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
-                        }*/
-
-                        if (!enable) {
-                            for (int i = 0; i < holder.rgOptionConditional.getChildCount(); i++) {
-                                ((RadioButton) holder.rgOptionConditional.getChildAt(i)).setEnabled(false);
-                            }
-                        }
 
                         //holder.rgOptionConditional.check(answerList.get(position).getSelectedOptConditional());
                     }
@@ -293,85 +581,21 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         holder.etAnswer.setVisibility(GONE);
                         answerList.get(position).setAns("-");
                     } else {
-                        holder.etAnswer.setVisibility(View.VISIBLE);
-                        if (questions.getText() != null) {
 
-                            holder.etAnswer.setText(answerList.get(position).getAns());
-
-
-                        }
-
-                        if (!enable) {
-                            holder.etAnswer.setEnabled(false);
-                        }
                     }
 
                     if (!questions.getNumber()) {
                         holder.etNumAns.setVisibility(GONE);
                         answerList.get(position).setNumAns("-");
                     } else {
-                        holder.etNumAns.setVisibility(View.VISIBLE);
-                        if (questions.getNumber() != null) {
 
-                            holder.etNumAns.setText(answerList.get(position).getNumAns());
-                        }
-
-                        if (!enable) {
-                            holder.etNumAns.setEnabled(false);
-                        }
                     }
 
                     if (!questions.getCheckbox()) {
                         holder.llChck.setVisibility(GONE);
                         answerList.get(position).setSelectedChk("-");
                     } else {
-                        holder.llChck.setVisibility(View.VISIBLE);
-                        if (questions.getChkb().size() > 0) {
 
-                            holder.llChck.removeAllViews();
-
-                            for (int i = 0; i < questions.getChkb().size(); i++) {
-
-                                CheckBox cb = new CheckBox(context);
-                                cb.setLayoutParams(new ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                                cb.setText(questions.getChkb().get(i).getOpt());
-                                holder.llChck.addView(cb);
-                                lstChkbox.add(cb);
-
-                                if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {
-
-                                    String a = answerList.get(position).getSelectedChk();
-                                    if (a != null) {
-                                        String val = String.valueOf(a.charAt(i));
-
-                                        if (val.equals("1")) {
-                                            cb.setChecked(true);
-                                        } else {
-                                            cb.setChecked(false);
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (!enable) {
-
-                                for (int i = 0; i < lstChkbox.size(); i++) {
-                                    lstChkbox.get(i).setEnabled(false);
-                                }
-                            }
-
-
-                            for (int i = 0; i < lstChkbox.size(); i++) {
-                                lstChkbox.get(i).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                        getSelectedChkbox(position, lstChkbox);
-                                    }
-                                });
-                            }
-                        }
 
                     }
 
@@ -380,13 +604,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         holder.btnSelectDate.setVisibility(GONE);
                         answerList.get(position).setDate("-");
                     } else {
-                        holder.tvDate.setVisibility(View.VISIBLE);
-                        holder.btnSelectDate.setVisibility(View.VISIBLE);
-                        holder.tvDate.setText(answerList.get(position).getDate());
 
-                        if (!enable) {
-                            holder.btnSelectDate.setVisibility(GONE);
-                        }
                     }
 
                     if (!questions.getTime()) {
@@ -394,13 +612,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         holder.btnSelectTime.setVisibility(GONE);
                         answerList.get(position).setTime("-");
                     } else {
-                        holder.tvTime.setVisibility(View.VISIBLE);
-                        holder.btnSelectTime.setVisibility(View.VISIBLE);
-                        holder.tvTime.setText(answerList.get(position).getTime());
 
-                        if (!enable) {
-                            holder.btnSelectTime.setVisibility(GONE);
-                        }
                     }
 
                     if (!questions.getImage()) {
@@ -410,88 +622,28 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                         holder.btnSelectImage.setVisibility(GONE);
                     } else {
 
-                        holder.ivSelImg.setVisibility(View.VISIBLE);
-                        holder.btnSelectImage.setVisibility(View.VISIBLE);
 
-                        if (answerList.get(position).getByteArrayImage() != null) {
-                            Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
-                            holder.ivSelImg.setImageBitmap(bmp);
-                        }
-
-                        if (!enable) {
-                            holder.btnSelectImage.setVisibility(GONE);
-                        }
                     }
 
-
-                    holder.etAnswer.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable editable) {
-                            if (editable != null) {
-                                answerList.get(position).setAns(String.valueOf(editable));
-                                saveAnswer.onAnswerSave(answerList.get(position));
-                            }
-                        }
-                    });
-
-                    holder.etNumAns.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable editable) {
-                            if (editable != null)
-                                answerList.get(position).setNumAns(String.valueOf(editable));
-                            saveAnswer.onAnswerSave(answerList.get(position));
-                        }
-                    });
-
-                    holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                            int id = holder.rgOption.getCheckedRadioButtonId();
-                            View radioButton = holder.rgOption.findViewById(id);
-                            answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
-                            saveAnswer.onAnswerSave(answerList.get(position));
-                            notifyDataSetChanged();
-                        }
-                    });
+                    */
 
 
-                    holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                            int id = holder.rgOptionConditional.getCheckedRadioButtonId();
-                            View radioButton = holder.rgOptionConditional.findViewById(id);
-                            answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
-                            long surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
-                            saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos());
-                            notifyDataSetChanged();
-                        }
-                    });
 
-                    if (questions.getCompulsary()) {
-                        if (!validate) {
-                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryText));
-                        } else {
-
-                        }
+                    /*if (questions.getCompulsary()) {
+                        validateAnswers.put(position, validate);
+                    } else {
+                        validateAnswers.put(position, true);
                     }
+
+                    if (showerror) {
+                        if (!validateAnswers.get(position)) {
+                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_dark_background));
+                        }
+                    }*/
+
+
+                } else {
+                    holder.btnSave.setVisibility(View.VISIBLE);
                 }
             }
         });

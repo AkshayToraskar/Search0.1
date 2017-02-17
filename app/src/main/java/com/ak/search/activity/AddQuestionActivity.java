@@ -142,7 +142,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         lstQuestion = new RealmList<Questions>();
 
 
-        surveys = realm.where(Survey.class).notEqualTo("id",AddSurveyActivity.survey.getId()).equalTo("nested",true).findAll();
+        surveys = realm.where(Survey.class).notEqualTo("id", AddSurveyActivity.survey.getId()).equalTo("nested", true).findAll();
         sur = new String[surveys.size()];
 
         for (int i = 0; i < surveys.size(); i++) {
@@ -230,8 +230,8 @@ public class AddQuestionActivity extends AppCompatActivity {
                 }
 
 
-                conditionalOptions=questions.getOptionContidion();
-                for(int i=0; i<conditionalOptions.size(); i++){
+                conditionalOptions = questions.getOptionContidion();
+                for (int i = 0; i < conditionalOptions.size(); i++) {
                     if (i == 0) {
                         et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
                         spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
@@ -328,12 +328,12 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     }
 
-    public int getSurveyPosition(long surveyId){
-        int pos=0;
+    public int getSurveyPosition(long surveyId) {
+        int pos = 0;
 
-        for(int i=0; i<surveys.size(); i++){
-            if(surveys.get(i).getId()==surveyId){
-                pos=i;
+        for (int i = 0; i < surveys.size(); i++) {
+            if (surveys.get(i).getId() == surveyId) {
+                pos = i;
                 break;
             }
         }
@@ -582,15 +582,50 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                 // questions.setSurveyid(surveyid);
                 questions.setQuestion(txt_question.getText().toString());
-                questions.setText(cb_text.isChecked());
-                questions.setNumber(cb_number.isChecked());
-                questions.setDate(cb_date.isChecked());
-                questions.setTime(cb_time.isChecked());
-                questions.setImage(cb_picture.isChecked());
-                questions.setCompulsary(cb_compulsary.isChecked());
-                questions.setCheckbox(cb_checkbox.isChecked());
-                questions.setOpt(cb_option.isChecked());
-                questions.setOptCondition(cb_options_condition.isChecked());
+
+
+                questions.setText(cb_text.isChecked());//1
+                questions.setNumber(cb_number.isChecked());//2
+                questions.setDate(cb_date.isChecked());//3
+                questions.setTime(cb_time.isChecked());//4
+                questions.setImage(cb_picture.isChecked());//5
+                questions.setCompulsary(cb_compulsary.isChecked());//6
+                questions.setCheckbox(cb_checkbox.isChecked());//7
+                questions.setOpt(cb_option.isChecked());//8
+                questions.setOptCondition(cb_options_condition.isChecked());//9
+
+                String typeQuestion = "";
+
+                if (cb_text.isChecked()) {
+                    typeQuestion = typeQuestion + "1,";
+                }
+                if (cb_number.isChecked()) {
+                    typeQuestion = typeQuestion + "2,";
+                }
+                if (cb_date.isChecked()) {
+                    typeQuestion = typeQuestion + "3,";
+                }
+                if (cb_time.isChecked()) {
+                    typeQuestion = typeQuestion + "4,";
+                }
+                if (cb_picture.isChecked()) {
+                    typeQuestion = typeQuestion + "5,";
+                }
+                if (cb_compulsary.isChecked()) {
+                    typeQuestion = typeQuestion + "6,";
+                }
+                if (cb_checkbox.isChecked()) {
+                    typeQuestion = typeQuestion + "7,";
+                }
+                if (cb_option.isChecked()) {
+                    typeQuestion = typeQuestion + "8,";
+                }
+                if (cb_options_condition.isChecked()) {
+                    typeQuestion = typeQuestion + "9,";
+                }
+
+                questions.setTypeQuestion(typeQuestion);
+
 
                 RealmList<Options> options = new RealmList<>();
                 if (questions.getOptions() != null) {
