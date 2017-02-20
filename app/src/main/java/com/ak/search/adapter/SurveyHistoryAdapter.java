@@ -20,6 +20,8 @@ import java.util.List;
 
 import io.realm.Realm;
 
+import static android.view.View.GONE;
+
 /**
  * Created by dg hdghfd on 29-11-2016.
  */
@@ -29,6 +31,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     private List<DataCollection> patientsList;
     private Context context;
     Realm realm;
+    boolean superviserLogin;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvName, tvDateTime;
@@ -88,10 +91,11 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     }
 
 
-    public SurveyHistoryAdapter(Context context, List<DataCollection> patientsList) {
+    public SurveyHistoryAdapter(Context context, List<DataCollection> patientsList, boolean superviserLogin) {
         this.patientsList = patientsList;
         this.context = context;
         realm = Realm.getDefaultInstance();
+        this.superviserLogin=superviserLogin;
     }
 
     @Override
@@ -110,6 +114,14 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
 
         holder.tvName.setText(survey.getName() + " ");
         holder.tvDateTime.setText(user.getTimestamp() + " ");
+
+        if(superviserLogin){
+            holder.ivDelete.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.ivDelete.setVisibility(GONE);
+        }
     }
 
     @Override

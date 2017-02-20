@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ak.search.activity.MainActivity">
 
-    <item
+    <!--<item
         android:id="@+id/action_patient_data"
         android:icon="@drawable/ic_receipt_black_24dp"
         android:title="Logout"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 
     <item
         android:id="@+id/action_logout"

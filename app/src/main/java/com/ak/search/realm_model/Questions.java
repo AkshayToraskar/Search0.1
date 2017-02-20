@@ -36,7 +36,7 @@ public class Questions extends RealmObject{
 
 
 
-    Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition;
+    Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition, patientName;
 
 
     public long getId() {
@@ -158,5 +158,13 @@ public class Questions extends RealmObject{
 
     public void setOptCondition(Boolean optCondition) {
         this.optCondition = optCondition;
+    }
+
+    public Boolean getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(Boolean patientName) {
+        this.patientName = patientName;
     }
 }

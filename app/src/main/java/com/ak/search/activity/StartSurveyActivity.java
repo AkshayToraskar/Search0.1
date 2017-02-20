@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.ak.search.R;
 import com.ak.search.adapter.GetQuestionsAdapter;
 import com.ak.search.app.SaveAnswer;
+import com.ak.search.app.SessionManager;
 import com.ak.search.fragment.QuestionFragment;
 import com.ak.search.model.MNestedAddQue;
 import com.ak.search.realm_model.Answers;
@@ -27,6 +28,7 @@ import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Questions;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.User;
 
 import org.parceler.Parcels;
 
@@ -52,7 +54,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     public boolean update;
 
-    Patients patients;
+    public static Patients patients;
     List<Questions> questionsList;
     public GetQuestionsAdapter mAdapter;
     private List<Answers> answersList;
@@ -67,7 +69,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     //  public static long id=-1;
     SaveAnswer saveAnswer;
     DataCollection dataCollection;
-
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +84,13 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         saveAnswer = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        sessionManager=new SessionManager(this);
 
         update = false;
 
         if (getIntent().getExtras() != null) {
             survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
-            patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
+            // patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
             // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
@@ -98,7 +101,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                 Answers answ = new Answers();
 
-                answ.setPatientid(patients.getId());
+                answ.setPatientid(0);
                 answ.setQuestions(survey.getQuestions().get(i));
                 answ.setParentPos(0);
                 answ.setSelectedopt(-1);
@@ -116,7 +119,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
             Answers answ = new Answers();
-            answ.setPatientid(patients.getId());
+            answ.setPatientid(0);
             answ.setQuestions(null);
             answ.setParentPos(0);
             answ.setSelectedopt(-1);
@@ -191,7 +194,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     @Override
     public void onAnswerSave(Answers ans) {
-        ans.setPatientid(patients.getId());
+        if (patients != null) {
+            ans.setPatientid(patients.getId());
+        }
         answers.put(ans.getQuestions().getId(), ans);
 
 
@@ -248,7 +253,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
 
                 int count = 0;
-                if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size()-1)) {
+                if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size() - 1)) {
                     for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
                         answersList.remove(nestedAddQue.getPos() + 1);
                         count++;
@@ -278,7 +283,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         for (int i = 0; i < survey.getQuestions().size(); i++) {
 
             Answers answ = new Answers();
-            answ.setPatientid(patients.getId());
+            answ.setPatientid(0);
             answ.setQuestions(survey.getQuestions().get(i));
             answ.setParentPos(pos);
             answ.setSelectedopt(-1);
@@ -340,7 +345,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
                         RealmList<Answers> answerses = new RealmList<Answers>();
-                        for (int i = 0; i < answersList.size()-1; i++) {
+                        for (int i = 0; i < answersList.size() - 1; i++) {
                             Answers a = answersList.get(i);
                             Answers ans = realm.createObject(Answers.class);
 
@@ -359,9 +364,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                         }
 
-
-                        Patients patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
-
+                        Patients patients1=null;
+                        if (patients != null) {
+                            patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
+                        }
 
                         int collectionId;
                         try {
@@ -375,6 +381,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                         dataCollection.setSurveyid(survey.getId());
                         dataCollection.setPatients(patients1);
                         dataCollection.setAnswerses(answerses);
+
+
+                        dataCollection.setFieldworkerId(sessionManager.getUserId());
+                        dataCollection.setSuperwiserId(0);
 
                         String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
                         dataCollection.setLat(0);

@@ -50,9 +50,15 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
 
         if (sessionManager.isLoggedIn()) {
-            Intent i = new Intent(this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+            if (sessionManager.getLoginType() == 3) {
+                Intent i = new Intent(this, SelectSurveyActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
         }
 
     }
@@ -83,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent i = new Intent(this, MainActivity.class);
                     //  i.putExtra(USERNAME, txt_username.getText().toString());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    sessionManager.setLogin(true, "admin", 1);
+                    sessionManager.setLogin(true, "admin", 1, 0);
                     //  i.putExtra(ISADMIN, true);
                     startActivity(i);
                 } else {
@@ -94,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     String username = "";
                     int type = 0;
-
+                    long userId = 0;
                     List<User> user = realm.where(User.class).equalTo("name", txt_username.getText().toString()).findAll();
 
 
@@ -103,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                             loginStatus = true;
                             username = user.get(j).getName();
                             type = user.get(j).getType();
+                            userId = user.get(j).getId();
                         }
                     }
 
@@ -112,12 +119,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
                     if (loginStatus) {
-                        Intent i = new Intent(this, MainActivity.class);
-                        // i.putExtra(USERNAME, username);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        sessionManager.setLogin(true, username, type);
-                        i.putExtra(ISADMIN, isAdmin);
-                        startActivity(i);
+                        if (type == 3) {
+                            Intent i = new Intent(this, SelectSurveyActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            sessionManager.setLogin(true, username, type, userId);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(this, MainActivity.class);
+                            // i.putExtra(USERNAME, username);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            sessionManager.setLogin(true, username, type, userId);
+                            i.putExtra(ISADMIN, isAdmin);
+                            startActivity(i);
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
                     }

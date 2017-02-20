@@ -77,6 +77,8 @@ public class AddQuestionActivity extends AppCompatActivity {
     CheckBox cb_checkbox;
     @BindView(R.id.cb_options_condition)
     CheckBox cb_options_condition;
+    @BindView(R.id.cb_patient_name)
+    CheckBox cb_patient_name;
 
     @BindView(R.id.txt_opt1_conditional)
     EditText et_opt1_conditional;
@@ -178,6 +180,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                 cb_compulsary.setChecked(questions.getCompulsary());
                 cb_checkbox.setChecked(questions.getCheckbox());
                 cb_options_condition.setChecked(questions.getOptCondition());
+                cb_patient_name.setChecked(questions.getPatientName());
                 showOption(questions.getOpt());
                 showCheckbox(questions.getCheckbox());
                 showOptionConditional(questions.getOptCondition());
@@ -583,16 +586,18 @@ public class AddQuestionActivity extends AppCompatActivity {
                 // questions.setSurveyid(surveyid);
                 questions.setQuestion(txt_question.getText().toString());
 
-
+                questions.setCompulsary(cb_compulsary.isChecked());
                 questions.setText(cb_text.isChecked());//1
                 questions.setNumber(cb_number.isChecked());//2
                 questions.setDate(cb_date.isChecked());//3
                 questions.setTime(cb_time.isChecked());//4
                 questions.setImage(cb_picture.isChecked());//5
-                questions.setCompulsary(cb_compulsary.isChecked());//6
+                questions.setPatientName(cb_patient_name.isChecked());
                 questions.setCheckbox(cb_checkbox.isChecked());//7
                 questions.setOpt(cb_option.isChecked());//8
                 questions.setOptCondition(cb_options_condition.isChecked());//9
+
+                //patient name 6
 
                 String typeQuestion = "";
 
@@ -611,7 +616,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                 if (cb_picture.isChecked()) {
                     typeQuestion = typeQuestion + "5,";
                 }
-                if (cb_compulsary.isChecked()) {
+                if (cb_patient_name.isChecked()) {
                     typeQuestion = typeQuestion + "6,";
                 }
                 if (cb_checkbox.isChecked()) {

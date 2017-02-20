@@ -12,7 +12,7 @@ public class DataCollection extends RealmObject {
 
     @PrimaryKey
     long id;
-    long surveyid;
+    long surveyid, fieldworkerId, superwiserId;
 
     String timestamp;
     long lat, lng;
@@ -74,5 +74,21 @@ public class DataCollection extends RealmObject {
 
     public void setLng(long lng) {
         this.lng = lng;
+    }
+
+    public long getFieldworkerId() {
+        return fieldworkerId;
+    }
+
+    public void setFieldworkerId(long fieldworkerId) {
+        this.fieldworkerId = fieldworkerId;
+    }
+
+    public long getSuperwiserId() {
+        return superwiserId;
+    }
+
+    public void setSuperwiserId(long superwiserId) {
+        this.superwiserId = superwiserId;
     }
 }

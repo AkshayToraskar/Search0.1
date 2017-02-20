@@ -28,10 +28,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ak.search.R;
+import com.ak.search.activity.SelectPatientsActivity;
 import com.ak.search.activity.StartSurveyActivity;
 import com.ak.search.app.SaveAnswer;
 import com.ak.search.app.Validate;
 import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Questions;
 
 import java.io.ByteArrayOutputStream;
@@ -56,11 +58,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     private Context context;
 
     public static int CAMERA_REQUEST = 11;
+    public static int PATIENT_REQUEST = 12;
     private int mYear, mMonth, mDay, mHour, mMinute;
     SaveAnswer saveAnswer;
     Realm realm;
     boolean enable, showerror = false;
-    private HashMap<Integer, Boolean> validateAnswers;
+    public static HashMap<Integer, Boolean> validateAnswers;
 
     Validate validate;
 
@@ -71,6 +74,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         TextView tvDate;
         @BindView(R.id.txt_time)
         TextView tvTime;
+        @BindView(R.id.txt_patient)
+        TextView tvPatient;
         @BindView(R.id.txt_answer)
         EditText etAnswer;
         @BindView(R.id.txt_number)
@@ -91,12 +96,17 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         ImageView ivSelImg;
         @BindView(R.id.ll_check)
         LinearLayout llChck;
+        @BindView(R.id.ll_patient_name)
+        LinearLayout llPatient;
         @BindView(R.id.btn_date)
         Button btnSelectDate;
         @BindView(R.id.btn_time)
         Button btnSelectTime;
         @BindView(R.id.btn_capture_image)
         Button btnSelectImage;
+        @BindView(R.id.btn_patientname)
+        Button btnPatientName;
+
 
         @BindView(R.id.btn_save)
         Button btnSave;
@@ -105,8 +115,6 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         public MyViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-
-            validateAnswers = new HashMap<>();
 
 
             btnSelectDate.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +187,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 }
             });
 
+            btnPatientName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, SelectPatientsActivity.class);
+                    ((Activity) context).startActivityForResult(i, PATIENT_REQUEST);
+                }
+            });
+
         }
     }
 
@@ -193,6 +209,23 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
             answerList.get(pos).setByteArrayImage(byteArray);
             notifyDataSetChanged();
         }
+
+        if (requestCode == PATIENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            /*Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();*/
+
+            Long id = (long) data.getExtras().get("data");
+            for (int i = 0; i < answerList.size(); i++) {
+                answerList.get(i).setPatientid(id);
+            }
+
+            StartSurveyActivity.patients = realm.where(Patients.class).equalTo("id", id).findFirst();
+
+            notifyDataSetChanged();
+        }
     }
 
     public GetQuestionsAdapter(Context context, List<Answers> answerList, SaveAnswer saveAnswer, Realm realm, boolean enable) {
@@ -201,6 +234,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         this.saveAnswer = saveAnswer;
         this.realm = realm;
         this.enable = enable;
+
+        validateAnswers = new HashMap<>();
     }
 
     @Override
@@ -235,6 +270,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 holder.ivSelImg.setVisibility(GONE);
                 holder.btnSelectImage.setVisibility(GONE);
                 holder.btnSave.setVisibility(GONE);
+                holder.btnPatientName.setVisibility(GONE);
+                holder.llPatient.setVisibility(GONE);
+                holder.tvPatient.setVisibility(GONE);
 
                 if (answerList.get(position).getQuestions() != null) {
 
@@ -243,10 +281,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
 
                     if (questions.getCompulsary() == true && showerror == true) {
-                        if(validateAnswers.get(position)!=null) {
+                        if (validateAnswers.get(position) != null) {
                             Boolean result = validateAnswers.get(position);
-                            if (result) {
+                            if (!result) {
                                 holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_dark_background));
+                            } else {
+                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorText));
                             }
                         }
                     }
@@ -270,8 +310,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
                                 if (questions.getCompulsary()) {
-                                    boolean v = validate.validateString(holder.etAnswer.getText().toString());
-                                    validateAnswers.put(position, v);
+                                    if (answerList.get(position).getAns() != null && !answerList.get(position).getAns().equals("")) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
                                 }
 
                                 holder.etAnswer.addTextChangedListener(new TextWatcher() {
@@ -287,7 +331,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     public void afterTextChanged(Editable editable) {
                                         if (editable != null) {
                                             answerList.get(position).setAns(String.valueOf(editable));
-                                            saveAnswer.onAnswerSave(answerList.get(position));
+                                           // saveAnswer.onAnswerSave(answerList.get(position));
                                         }
                                     }
                                 });
@@ -306,8 +350,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
                                 if (questions.getCompulsary()) {
-                                    boolean v = validate.validateString(holder.etNumAns.getText().toString());
-                                    validateAnswers.put(position, v);
+                                    if (answerList.get(position).getNumAns() != null && !answerList.get(position).getNumAns().equals("")) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
                                 }
 
                                 holder.etNumAns.addTextChangedListener(new TextWatcher() {
@@ -323,7 +371,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     public void afterTextChanged(Editable editable) {
                                         if (editable != null)
                                             answerList.get(position).setNumAns(String.valueOf(editable));
-                                        saveAnswer.onAnswerSave(answerList.get(position));
+                                       // saveAnswer.onAnswerSave(answerList.get(position));
                                     }
                                 });
                                 break;
@@ -340,8 +388,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
                                 if (questions.getCompulsary()) {
-                                    boolean v = validate.validateString(holder.tvDate.getText().toString());
-                                    validateAnswers.put(position, v);
+                                    if (answerList.get(position).getDate() != null && !answerList.get(position).getDate().equals("")) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
                                 }
                                 break;
 
@@ -358,8 +410,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
 
                                 if (questions.getCompulsary()) {
-                                    boolean v = validate.validateString(holder.tvTime.getText().toString());
-                                    validateAnswers.put(position, v);
+                                    if (answerList.get(position).getTime() != null && !answerList.get(position).getTime().equals("")) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
                                 }
                                 break;
 
@@ -376,11 +432,44 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     holder.ivSelImg.setImageBitmap(bmp);
                                 }
 
+                                if (questions.getCompulsary()) {
+                                    if (answerList.get(position).getByteArrayImage().length > 1) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
+                                }
+
 
                                 break;
 
-                            //Compulsary---------------------------------------
+                            //patient name---------------------------------------
                             case 6:
+                                holder.llPatient.setVisibility(View.VISIBLE);
+                                holder.tvPatient.setVisibility(View.VISIBLE);
+                                if (enable) {
+                                    holder.btnPatientName.setVisibility(View.VISIBLE);
+                                }
+
+                                if (answerList.get(position).getPatientid() != 0) {
+
+                                    Patients p = realm.where(Patients.class).equalTo("id", answerList.get(position).getPatientid()).findFirst();
+
+                                    holder.tvPatient.setText(p.getPatientname());
+
+                                }
+
+                                if (questions.getCompulsary()) {
+                                    if (answerList.get(position).getPatientid() != 0) {
+                                        //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                        validateAnswers.put(position, true);
+                                    } else {
+                                        validateAnswers.put(position, false);
+                                    }
+                                }
+
+
                                 break;
 
                             //Checkbox---------------------------------------
@@ -418,8 +507,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
 
                                     if (questions.getCompulsary()) {
-                                        boolean v = validate.validateString(answerList.get(position).getSelectedChk());
-                                        validateAnswers.put(position, v);
+                                        if (answerList.get(position).getSelectedChk() != null && !answerList.get(position).getSelectedChk().equals("")) {//boolean v = validate.validateString();
+                                            validateAnswers.put(position, true);
+                                        } else {
+                                            validateAnswers.put(position, false);
+                                        }
+
                                     }
 
 
@@ -471,8 +564,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
                                 if (questions.getCompulsary()) {
-                                    // boolean v=validate.validateRB(answerList.get(position).getSelectedopt());
-                                    // validateAnswers.put(position,v);
+                                    if (questions.getCompulsary()) {
+                                        if (answerList.get(position).getSelectedopt() != -1) {
+                                            //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                            validateAnswers.put(position, true);
+                                        } else {
+                                            validateAnswers.put(position, false);
+                                        }
+                                    }
                                 }
 
 
@@ -532,8 +631,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
                                 if (questions.getCompulsary()) {
-                                    //   boolean v=validate.validateRB(answerList.get(position).getSelectedOptConditional());
-                                    //   validateAnswers.put(position,v);
+                                    if (questions.getCompulsary()) {
+                                        if (answerList.get(position).getSelectedOptConditional() != -1) {
+                                            //boolean v = validate.validateString(holder.etAnswer.getText().toString());
+                                            validateAnswers.put(position, true);
+                                        } else {
+                                            validateAnswers.put(position, false);
+                                        }
+                                    }
                                 }
 
                                 holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

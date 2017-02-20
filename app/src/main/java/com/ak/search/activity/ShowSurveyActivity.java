@@ -32,6 +32,8 @@ public class ShowSurveyActivity extends AppCompatActivity {
     DataCollection dataCollection;
     Realm realm;
 
+    boolean superviserLogin=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,17 @@ public class ShowSurveyActivity extends AppCompatActivity {
          //   MPatients patients= MPatients.findById(MPatients.class,patientId);
             SaveAnswer saveAnswer = null;
 
+            if(SelectSurveyActivity.SuperviserLogin!=0)
+            {
+                superviserLogin=true;
+            }
 
-            mAdapter = new GetQuestionsAdapter(this, getCollectionData(),saveAnswer,realm,false);
-            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                mAdapter = new GetQuestionsAdapter(this, getCollectionData(), saveAnswer, realm, superviserLogin);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
             RecyclerView.ItemDecoration itemDecoration = new
                     DividerItemDecoration(this, DividerItemDecoration.VERTICAL);

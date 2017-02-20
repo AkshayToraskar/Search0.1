@@ -1,6 +1,8 @@
 package com.ak.search.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,7 @@ import io.realm.RealmList;
 
 public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdapter.MyViewHolder> {
 
-    private RealmList<Patients> questionsList;
+    private RealmList<Patients> patientList;
     private Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,13 +42,18 @@ public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdap
                     //MainActivity.transaction.replace(R.id.main_frame, new UserFragment());
                     //MainActivity.transaction.commit();
 
-                    MainActivity.manageFragment.changeFragment(questionsList.get(getPosition()));
+                    //MainActivity.manageFragment.changeFragment(questionsList.get(getPosition()));
 
-                    /*FragmentTransaction fragmentTransaction = getA.beginTransaction();
+                                        /*FragmentTransaction fragmentTransaction = getA.beginTransaction();
                     fragmentTransaction.replace(mContainerId, fragment, tag);
                     fragmentTransaction.addToBackStack(tag);
                     fragmentTransaction.commitAllowingStateLoss();*/
 
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("data",patientList.get(getPosition()).getId());
+                    ((Activity)context).setResult(Activity.RESULT_OK,returnIntent);
+                    ((Activity)context).finish();
 
 
                 }
@@ -56,7 +63,7 @@ public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdap
 
 
     public SearchPatientAdapter(Context context, RealmList<Patients> questionsList) {
-        this.questionsList = questionsList;
+        this.patientList = questionsList;
         this.context = context;
     }
 
@@ -70,13 +77,13 @@ public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdap
 
     @Override
     public void onBindViewHolder(SearchPatientAdapter.MyViewHolder holder, int position) {
-        Patients patients = questionsList.get(position);
+        Patients patients = patientList.get(position);
         holder.tvName.setText(patients.getPatientname());
         holder.tvAddress.setText(patients.getAddress());
     }
 
     @Override
     public int getItemCount() {
-        return questionsList.size();
+        return patientList.size();
     }
 }

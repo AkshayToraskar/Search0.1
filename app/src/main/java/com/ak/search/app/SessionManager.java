@@ -20,7 +20,7 @@ public class SessionManager {
     private static final String PREF_NAME = "Search";
 
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
-
+    private static final String KEY_USERID = "UserId";
     private static final String KEY_USERNAME = "Username";
     private static final String KEY_TYPE = "Type";
 
@@ -34,10 +34,11 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(boolean isLoggedIn,String Username, int Type) {
+    public void setLogin(boolean isLoggedIn,String Username, int Type, long id) {
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
         editor.putString(KEY_USERNAME,Username);
         editor.putInt(KEY_TYPE,Type);
+        editor.putLong(KEY_USERID,id);
         editor.commit();
         Log.d(TAG, "MUser login session modified!");
     }
@@ -50,6 +51,9 @@ public class SessionManager {
         return  pref.getBoolean(KEY_TYPE,false);
     }*/
 
+    public long getUserId(){
+        return pref.getLong(KEY_USERID,0);
+    }
 
     public int getLoginType()
     {
@@ -58,6 +62,11 @@ public class SessionManager {
 
     public boolean isLoggedIn(){
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
+    }
+
+    public void setUserId(long id){
+        editor.putLong(KEY_USERID,id);
+        editor.commit();
     }
 
 

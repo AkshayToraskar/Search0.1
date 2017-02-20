@@ -95,8 +95,16 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 case 3:
                     //UserFragment userFragment=new UserFragment();
                     //transaction.add(R.id.main_frame, new UserFragment());
-                    transaction.add(R.id.main_frame, new PatientFragment());
-                    transaction.commit();
+                    //transaction.add(R.id.main_frame, new PatientFragment());
+                    //transaction.commit();
+
+                   // Intent i=new Intent(this,SelectSurveyActivity.class);
+
+                    //Bundle args = new Bundle();
+                    //args.putParcelable("PatientData", Parcels.wrap(MPatients.class,patients));
+                    //i.putExtra("PatientData",Parcels.wrap(Patients.class,patients));
+                   // startActivity(i);
+
                     break;
             }
 
@@ -125,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (loginType == 1) {
+        /*if (loginType == 1) {
             menu.getItem(0).setVisible(false);
-        }
+        }*/
 
 
         return true;
@@ -145,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                         .setMessage("Would you like to logout?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                sessionManager.setLogin(false, "", 0);
+                                sessionManager.setLogin(false, "", 0,0);
                                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(i);
@@ -159,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                         .show();
                 break;
 
-            case R.id.action_patient_data:
+            /*case R.id.action_patient_data:
                 startActivity(new Intent(this, GetSurveyActivity.class));
-                break;
+                break;*/
 
 
         }
@@ -204,11 +212,11 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
 
         //UserFragment userFragment=new UserFragment();
 
-        Intent i=new Intent(this,PatientActivity.class);
+        Intent i=new Intent(this,SelectSurveyActivity.class);
 
         //Bundle args = new Bundle();
         //args.putParcelable("PatientData", Parcels.wrap(MPatients.class,patients));
-        i.putExtra("PatientData",Parcels.wrap(Patients.class,patients));
+        //i.putExtra("PatientData",Parcels.wrap(Patients.class,patients));
         startActivity(i);
 
         //userFragment.setArguments(args);

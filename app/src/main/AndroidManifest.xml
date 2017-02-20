@@ -102,7 +102,7 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden" />
         -->
         <activity
-            android:name=".activity.PatientActivity"
+            android:name=".activity.SelectSurveyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".bluetooth.BluetoothActivity"
@@ -112,7 +112,9 @@
             android:name=".bluetooth.BluetoothClientActivity"
             android:label="@string/title_activity_send"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.StartSurveyActivity"></activity>
+        <activity android:name=".activity.StartSurveyActivity" />
+        <activity android:name=".activity.SelectPatientsActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

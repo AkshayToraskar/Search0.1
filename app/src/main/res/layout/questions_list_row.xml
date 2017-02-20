@@ -78,6 +78,30 @@ android:visibility="gone"
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_patient_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/txt_patient"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+
+            <Button
+                android:id="@+id/btn_patientname"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Select Patient" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
