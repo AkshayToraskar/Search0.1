@@ -113,8 +113,14 @@
             android:label="@string/title_activity_send"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.StartSurveyActivity" />
-        <activity android:name=".activity.SelectPatientsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.SelectPatientsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".activity.PatientsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

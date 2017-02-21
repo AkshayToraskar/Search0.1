@@ -9,7 +9,7 @@ import com.ak.search.R;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static int SPLASH_TIME_OUT=3000;
+    public static int SPLASH_TIME_OUT=1000;
 
 
     @Override

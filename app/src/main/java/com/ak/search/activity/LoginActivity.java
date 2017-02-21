@@ -151,6 +151,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        realm.close();
+        if(realm != null) {
+            realm.close();
+        }
     }
 }

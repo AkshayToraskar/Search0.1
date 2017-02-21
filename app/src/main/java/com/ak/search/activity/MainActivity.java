@@ -189,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 startActivity(new Intent(this, SurveyActivity.class));
                 break;
 
+            case R.id.btn_patients:
+                startActivity(new Intent(this, PatientsActivity.class));
+                break;
+
             case R.id.btn_data:
                 startActivity(new Intent(this, GetSurveyActivity.class));
                 break;
@@ -235,4 +239,6 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
         else
             super.onBackPressed();
     }
+
+
 }

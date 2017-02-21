@@ -37,11 +37,11 @@
             android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvDateTime"
+                android:id="@+id/tvAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:text="Date time" />
+                android:text="Address" />
 
         </LinearLayout>
 

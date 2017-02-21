@@ -24,12 +24,12 @@ private List<User> userList;
 private Context context;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvName;
+    public TextView tvName,tvUserType;
 
     public MyViewHolder(View view) {
         super(view);
         tvName = (TextView) view.findViewById(R.id.tvName);
-
+tvUserType=(TextView)view.findViewById(R.id.tv_user_type);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +65,22 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = userList.get(position);
         holder.tvName.setText(user.getName());
+
+        String usertype="";
+        switch (user.getType()){
+            case 1:
+                usertype="admin";
+                break;
+
+            case 2:
+                usertype="superviser";
+                break;
+
+            case 3:
+                usertype="field worker";
+                break;
+        }
+        holder.tvUserType.setText(usertype);
     }
 
     @Override

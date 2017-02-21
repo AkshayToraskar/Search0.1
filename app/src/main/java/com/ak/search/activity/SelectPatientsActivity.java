@@ -138,4 +138,12 @@ public class SelectPatientsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(realm != null) {
+            realm.close();
+        }
+    }
 }

@@ -36,7 +36,6 @@
                 android:id="@+id/btn_login_logout"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onBtnClick"
                 android:layout_height="wrap_content"
                 android:text="Superwiser Login"/>
 
@@ -44,7 +43,6 @@
                 android:id="@+id/btn_send"
                 android:layout_weight="1"
                 android:visibility="gone"
-                android:onClick="onBtnClick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Send Data"/>

@@ -17,6 +17,8 @@ import com.ak.search.realm_model.Patients;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 /**
  * Created by dg hdghfd on 29-11-2016.
  */
@@ -25,28 +27,30 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
 
     private List<Patients> patientsList;
     private Context context;
+    private Realm realm;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName;
+        public TextView tvName, tvAddress;
         public ImageView ivDelete;
 
         public MyViewHolder(View view) {
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+            tvAddress = (TextView) view.findViewById(R.id.tvAddress);
 
-            view.setOnClickListener(new View.OnClickListener() {
+           /* view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
-                    Intent i = new Intent(context, ShowSurveyActivity.class);
+                    //Intent i = new Intent(context, ShowSurveyActivity.class);
                   //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
                   //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
-                    context.startActivity(i);
+                  //  context.startActivity(i);
                 }
-            });
+            });*/
 
 
             ivDelete.setOnClickListener(new View.OnClickListener() {
@@ -57,11 +61,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
                             .setMessage("Would you like to delete?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                          //          MPatients patients = MPatients.findById(MPatients.class, patientsList.get(getPosition()).getId());
-                        //            patients.delete();
-
-                                    patientsList.remove(getPosition());
-
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            Patients patients = realm.where(Patients.class).equalTo("id", patientsList.get(getPosition()).getId()).findFirst();
+                                            patients.deleteFromRealm();
+                                            patientsList.remove(getPosition());
+                                        }
+                                    });
                                     notifyDataSetChanged();
 
                                 }
@@ -79,9 +86,10 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     }
 
 
-    public PatientAdapter(Context context, List<Patients> patientsList) {
+    public PatientAdapter(Context context, List<Patients> patientsList, Realm realm) {
         this.patientsList = patientsList;
         this.context = context;
+        this.realm = realm;
     }
 
     @Override
@@ -96,6 +104,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
         holder.tvName.setText(user.getPatientname());
+        holder.tvAddress.setText(user.getAddress());
     }
 
     @Override

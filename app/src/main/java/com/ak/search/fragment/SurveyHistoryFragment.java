@@ -119,6 +119,7 @@ public class SurveyHistoryFragment extends Fragment {
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_login);
         dialog.setCancelable(false);
+        dialog.setTitle("Superviser Login");
         Button login = (Button) dialog.findViewById(R.id.btn_login);
 
         final EditText txt_username = (EditText) dialog.findViewById(R.id.et_username);

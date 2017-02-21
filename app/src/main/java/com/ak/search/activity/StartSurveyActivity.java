@@ -173,23 +173,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         mAdapter.onActivityResult(requestCode, resultCode, data, positionImg);
-
-        /*if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            //ivCapture.setImageBitmap(photo);
-
-
-           *//* ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            //ans.setByteArrayImage(byteArray);
-            //getSelectedChkbox();
-            //answer.onAnswerSave(ans);
-
-            answersList.get(positionImg).setByteArrayImage(byteArray);
-            mAdapter.notifyDataSetChanged();*//*
-        }*/
     }
 
     @Override
@@ -302,11 +285,11 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
     @Override
-    protected void onDestroy() {
-        //pos = 0;
-        // length = 0;
-        // id=-1;
+    public void onDestroy() {
         super.onDestroy();
+        if(realm != null) {
+            realm.close();
+        }
     }
 
     @Override
@@ -405,4 +388,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

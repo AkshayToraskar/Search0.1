@@ -1,19 +1,18 @@
 package com.ak.search.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.ak.search.R;
-import com.ak.search.adapter.SurveyAdapter;
-import com.ak.search.realm_model.Survey;
+import com.ak.search.adapter.PatientAdapter;
+import com.ak.search.realm_model.Patients;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,32 +22,32 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class SurveyActivity extends AppCompatActivity {
+public class PatientsActivity extends AppCompatActivity {
 
-    private List<Survey> surveysList;
-    @BindView(R.id.rv_survey)
+    private List<Patients> patientList;
+    @BindView(R.id.rv_patient)
     RecyclerView recyclerView;
-    public static SurveyAdapter mAdapter;
+    public PatientAdapter mAdapter;
     Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_survey);
+        setContentView(R.layout.activity_patients);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm=Realm.getDefaultInstance();
 
-        //  usersList = MUser.listAll(MUser.class);
 
-        RealmResults<Survey> results = realm.where(Survey.class).findAll();
+        RealmResults<Patients> results = realm.where(Patients.class).findAll();
         //surveysList = MSurvey.listAll(MSurvey.class);
-        surveysList=new ArrayList<>();
-        surveysList.addAll(results);
+        patientList=new ArrayList<>();
+        patientList.addAll(results);
 
-        mAdapter = new SurveyAdapter(this, surveysList);
+        mAdapter = new PatientAdapter(this, patientList,realm);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -56,23 +55,28 @@ public class SurveyActivity extends AppCompatActivity {
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(mAdapter);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(SurveyActivity.this, AddSurveyActivity.class));
-            }
-        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        surveysList.clear();
+        patientList.clear();
         //surveysList.addAll(MSurvey.listAll(MSurvey.class));
-        surveysList.addAll(realm.where(Survey.class).findAll());
+        patientList.addAll(realm.where(Patients.class).findAll());
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -82,5 +86,17 @@ public class SurveyActivity extends AppCompatActivity {
             realm.close();
         }
     }
+
+    public void onBtnClick(View view){
+        int id=view.getId();
+
+        switch (id){
+            case R.id.btn_import_csv:
+
+                break;
+        }
+
+    }
+
 
 }

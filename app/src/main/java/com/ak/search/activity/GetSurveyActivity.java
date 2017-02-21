@@ -1,7 +1,10 @@
 package com.ak.search.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,10 +14,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.DataCollectionAdapter;
 import com.ak.search.adapter.PatientAdapter;
+import com.ak.search.adapter.SurveyHistoryAdapter;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.opencsv.CSVWriter;
@@ -35,14 +40,14 @@ import io.realm.RealmResults;
 public class GetSurveyActivity extends AppCompatActivity {
 
     long surveyId;
-    private List<DataCollection> patientList;
+    private List<DataCollection> surveyHistory;
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
-    @BindView(R.id.spnSurveyName)
-    Spinner spnSurveyName;
+    /*@BindView(R.id.spnSurveyName)
+    Spinner spnSurveyName;*/
 
-    public DataCollectionAdapter mAdapter;
+    public SurveyHistoryAdapter mAdapter;
     ArrayAdapter<String> spnSurveyNameAdapter;
     Realm realm;
 
@@ -51,14 +56,14 @@ public class GetSurveyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_survey);
         ButterKnife.bind(this);
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
-        RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
-        patientList = new ArrayList<>();
+        //RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
+        //patientList = new ArrayList<>();
 
-        patientList.addAll(results);
+        //patientList.addAll(results);
 
-        getSupportActionBar().setTitle("Patient List");
+        getSupportActionBar().setTitle("Collected Data");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -87,8 +92,13 @@ public class GetSurveyActivity extends AppCompatActivity {
         spnSurveyName.setAdapter(spnSurveyNameAdapter);*/
 
 
-        mAdapter = new DataCollectionAdapter(this, patientList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        surveyHistory = new ArrayList<>();
+
+        surveyHistory.addAll(realm.where(DataCollection.class).findAll());
+
+
+        mAdapter = new SurveyHistoryAdapter(this, surveyHistory, true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -145,14 +155,26 @@ public class GetSurveyActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_export:
-                generateCSV();
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Export Data")
+                        .setMessage("Would you like to Export data to csv?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                generateCSV();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // user doesn't want to logout
+                            }
+                        })
+                        .show();
+
                 break;
         }
 
-
         return super.onOptionsItemSelected(item);
-
-
     }
 
 
@@ -168,18 +190,13 @@ public class GetSurveyActivity extends AppCompatActivity {
 
         try {
 
-
-
             File myDirectory = new File(Environment.getExternalStorageDirectory(), "SEARCH");
-
-            if(!myDirectory.exists()) {
+            if (!myDirectory.exists()) {
                 myDirectory.mkdirs();
             }
-
             String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() +File.separator +"SEARCH"+ File.separator +"PatientData "+currentDateTimeString+".csv";
+            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "SEARCH" + File.separator + "PatientData " + currentDateTimeString + ".csv";
             CSVWriter writer = null;
             writer = new CSVWriter(new FileWriter(csv));
 
@@ -191,14 +208,22 @@ public class GetSurveyActivity extends AppCompatActivity {
             data.add(new String[]{"Germ3423any", "asdf"});
             writer.writeAll(data);
             writer.close();
+            Log.v("asdf", "SUCCESS");
 
-            Log.v("asdf","SUCCESS");
+            Toast.makeText(getApplicationContext(),"Data Exported Successfully",Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(realm != null) {
+            realm.close();
+        }
+    }
 
 
 }

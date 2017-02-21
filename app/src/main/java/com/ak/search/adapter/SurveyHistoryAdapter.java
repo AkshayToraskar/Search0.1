@@ -41,7 +41,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-            tvDateTime = (TextView) view.findViewById(R.id.tvDateTime);
+            tvDateTime = (TextView) view.findViewById(R.id.tvAddress);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -50,7 +50,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
                     Intent i = new Intent(context, ShowSurveyActivity.class);
-                    //i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
+                    i.putExtra("superviserLogin", superviserLogin);
                     i.putExtra("collectionid", patientsList.get(getPosition()).getId());
                     context.startActivity(i);
                 }
@@ -72,6 +72,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
                                         public void execute(Realm realm) {
                                             DataCollection dataCollection = realm.where(DataCollection.class).equalTo("id", patientsList.get(getPosition()).getId()).findFirst();
                                             dataCollection.deleteFromRealm();
+                                            patientsList.remove(getPosition());
                                         }
                                     });
                                     notifyDataSetChanged();
