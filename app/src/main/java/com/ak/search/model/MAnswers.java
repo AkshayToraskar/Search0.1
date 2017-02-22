@@ -11,7 +11,7 @@ public class MAnswers implements Serializable {
 
 
     long patientid;
-    int selectedopt;
+    int selectedopt,selectedOptConditional,parentPos;
     String selectedChk;
     String ans,numAns,date,time;
     MQuestions MQuestions;
@@ -88,5 +88,21 @@ public class MAnswers implements Serializable {
 
     public void setByteArrayImage(byte[] byteArrayImage) {
         this.byteArrayImage = byteArrayImage;
+    }
+
+    public int getSelectedOptConditional() {
+        return selectedOptConditional;
+    }
+
+    public void setSelectedOptConditional(int selectedOptConditional) {
+        this.selectedOptConditional = selectedOptConditional;
+    }
+
+    public int getParentPos() {
+        return parentPos;
+    }
+
+    public void setParentPos(int parentPos) {
+        this.parentPos = parentPos;
     }
 }

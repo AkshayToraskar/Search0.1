@@ -17,7 +17,6 @@ public class MTransferModel implements Serializable{
     List<MUser> userList;
     List<MPatients> patientsList;
     List<MSurvey> surveyList;
-
     List<MDataCollection> dataCollectionsList;
 
 

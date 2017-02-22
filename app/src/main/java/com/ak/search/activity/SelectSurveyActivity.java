@@ -21,6 +21,8 @@ import com.ak.search.R;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
+import com.ak.search.bluetooth.BluetoothActivity;
+import com.ak.search.bluetooth.BluetoothClientActivity;
 import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.SurveyHistoryFragment;
 import com.ak.search.fragment.UserFragment;
@@ -98,10 +100,8 @@ public class SelectSurveyActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (loginType == 1) {
-            menu.getItem(0).setVisible(false);
-        }
+        getMenuInflater().inflate(R.menu.menu_main_fieldworker, menu);
+
 
 
         return true;
@@ -112,6 +112,15 @@ public class SelectSurveyActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         switch (id) {
+
+            case R.id.action_send:
+                startActivity(new Intent(this, BluetoothClientActivity.class));
+                break;
+
+            case R.id.action_receive:
+                startActivity(new Intent(this, BluetoothActivity.class));
+                break;
+
             case R.id.action_logout:
 
                 new AlertDialog.Builder(this)

@@ -21,6 +21,7 @@ public class MPatients implements Serializable {
     long id;
     String patientname;
     String Address;
+    int sex, age;
 
     //RealmList<MAnswers> answers;
 
@@ -55,5 +56,21 @@ public class MPatients implements Serializable {
 
     public void setPatientname(String patientname) {
         this.patientname = patientname;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

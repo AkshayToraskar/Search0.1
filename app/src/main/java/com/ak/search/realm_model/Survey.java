@@ -15,14 +15,14 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-@Parcel(implementations = { SurveyRealmProxy.class },
+@Parcel(implementations = {SurveyRealmProxy.class},
         value = Parcel.Serialization.FIELD,
-        analyze = { Survey.class })
-public class Survey extends RealmObject{
+        analyze = {Survey.class})
+public class Survey extends RealmObject {
 
     @PrimaryKey
     long id;
-boolean nested;
+    boolean nested;
     String name;
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)

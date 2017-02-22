@@ -80,8 +80,9 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);
             recyclerView.setAdapter(mAdapter);
-
-            getSupportActionBar().setTitle(dataCollection.getPatients().getPatientname() + " ");
+            if (dataCollection.getPatients() != null) {
+                getSupportActionBar().setTitle(dataCollection.getPatients().getPatientname() + " ");
+            }
         }
 
     }
@@ -91,7 +92,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_show_survey, menu);
 
-        if(!superviserLogin){
+        if (!superviserLogin) {
             menu.getItem(0).setVisible(false);
         }
 
@@ -182,8 +183,8 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
     }
 
-    public void addQue(List<Answers> ans){
-        for(int i=0; i<ans.size(); i++){
+    public void addQue(List<Answers> ans) {
+        for (int i = 0; i < ans.size(); i++) {
             Answers answ = new Answers();
             answ.setPatientid(ans.get(i).getPatientid());
             answ.setQuestions(ans.get(i).getQuestions());
@@ -253,7 +254,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
 
                 RealmList<Answers> answerses = new RealmList<Answers>();
-                for (int i = 0; i < answersList.size() - 1; i++) {
+                for (int i = 0; i < answersList.size(); i++) {
                     Answers a = answersList.get(i);
                     Answers ans = realm.createObject(Answers.class);
 
@@ -272,7 +273,11 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
                 }
 
-                Patients patients1 = dataCollection.getPatients();
+                Patients patients1 = null;
+
+                if (dataCollection.getPatients() != null) {
+                    patients1 = dataCollection.getPatients();
+                }
                 //if (patients != null) {
                 //    patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
                 //}
@@ -286,7 +291,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                     collectionId = 1;
                 }*/
 
-                dataCollection = realm.where(DataCollection.class).equalTo("id",dataCollection.getId()).findFirst();
+                dataCollection = realm.where(DataCollection.class).equalTo("id", dataCollection.getId()).findFirst();
                 dataCollection.setSurveyid(dataCollection.getSurveyid());
                 dataCollection.setPatients(patients1);
                 dataCollection.setAnswerses(answerses);
@@ -312,7 +317,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }

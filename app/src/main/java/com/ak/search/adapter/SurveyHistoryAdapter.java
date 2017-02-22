@@ -43,6 +43,8 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
             tvDateTime = (TextView) view.findViewById(R.id.tvAddress);
 
+
+
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -111,11 +113,12 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
 
-        Survey survey = realm.where(Survey.class).equalTo("id", user.getSurveyid()).findFirst();
+        if(user.getSurveyid()!=0) {
+            Survey survey = realm.where(Survey.class).equalTo("id", user.getSurveyid()).findFirst();
 
-        holder.tvName.setText(survey.getName() + " ");
-        holder.tvDateTime.setText(user.getTimestamp() + " ");
-
+            holder.tvName.setText(survey.getName() + " ");
+            holder.tvDateTime.setText(user.getTimestamp() + " ");
+        }
         if(superviserLogin){
             holder.ivDelete.setVisibility(View.VISIBLE);
         }

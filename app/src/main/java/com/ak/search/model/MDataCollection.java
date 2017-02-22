@@ -11,7 +11,7 @@ public class MDataCollection implements Serializable {
 
 
     long id;
-    long surveyid;
+    long surveyid, fieldworkerId, superwiserId;
 
     String timestamp;
     long lat, lng;
@@ -73,5 +73,21 @@ public class MDataCollection implements Serializable {
 
     public void setAnswerses(List<MAnswers> answerses) {
         this.answerses = answerses;
+    }
+
+    public long getFieldworkerId() {
+        return fieldworkerId;
+    }
+
+    public void setFieldworkerId(long fieldworkerId) {
+        this.fieldworkerId = fieldworkerId;
+    }
+
+    public long getSuperwiserId() {
+        return superwiserId;
+    }
+
+    public void setSuperwiserId(long superwiserId) {
+        this.superwiserId = superwiserId;
     }
 }

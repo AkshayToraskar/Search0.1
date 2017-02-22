@@ -13,6 +13,8 @@ public class MSurvey implements Serializable {
 
     long id;
     String name;
+    boolean nested;
+
     List<MQuestions> questions;
 
     public long getId() {
@@ -40,4 +42,11 @@ public class MSurvey implements Serializable {
         this.name = name;
     }
 
+    public boolean getNested() {
+        return nested;
+    }
+
+    public void setNested(boolean nested) {
+        this.nested = nested;
+    }
 }

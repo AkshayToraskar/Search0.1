@@ -12,13 +12,14 @@ public class MQuestions implements Serializable {
 
     long id;
 
-    String question;
+    String question, typeQuestion;
 
     List<MOptions> options;
 
     List<MOptions> chkb;
+    List<MConditionalOptions> optionContidion;
 
-    Boolean text, number, date, time, image, compulsary, opt, checkbox;
+    Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition, patientName;
 
 
     public long getId() {
@@ -118,5 +119,37 @@ public class MQuestions implements Serializable {
 
     public void setCheckbox(Boolean checkbox) {
         this.checkbox = checkbox;
+    }
+
+    public String getTypeQuestion() {
+        return typeQuestion;
+    }
+
+    public void setTypeQuestion(String typeQuestion) {
+        this.typeQuestion = typeQuestion;
+    }
+
+    public List<MConditionalOptions> getOptionContidion() {
+        return optionContidion;
+    }
+
+    public void setOptionContidion(List<MConditionalOptions> optionContidion) {
+        this.optionContidion = optionContidion;
+    }
+
+    public Boolean getOptCondition() {
+        return optCondition;
+    }
+
+    public void setOptCondition(Boolean optCondition) {
+        this.optCondition = optCondition;
+    }
+
+    public Boolean getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(Boolean patientName) {
+        this.patientName = patientName;
     }
 }

@@ -1,6 +1,7 @@
 package com.ak.search.bluetooth;
 
 import com.ak.search.model.MAnswers;
+import com.ak.search.model.MConditionalOptions;
 import com.ak.search.model.MDataCollection;
 import com.ak.search.model.MOptions;
 import com.ak.search.model.MPatients;
@@ -9,6 +10,7 @@ import com.ak.search.model.MSurvey;
 import com.ak.search.model.MUser;
 import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.Answers;
+import com.ak.search.realm_model.ConditionalOptions;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Options;
 import com.ak.search.realm_model.Patients;
@@ -61,6 +63,8 @@ public class DataUtils {
                 pa.setId(patients.get(i).getId());
                 pa.setAddress(patients.get(i).getAddress());
                 pa.setPatientname(patients.get(i).getPatientname());
+                pa.setSex(patients.get(i).getSex());
+                pa.setAge(patients.get(i).getAge());
                 mPatientsList.add(pa);
             }
         }
@@ -72,11 +76,15 @@ public class DataUtils {
                 MSurvey sur = new MSurvey();
                 sur.setId(surveys.get(i).getId());
                 sur.setName(surveys.get(i).getName());
+                sur.setNested(surveys.get(i).getNested());
 
                 List<MQuestions> ques = new ArrayList<>();
                 if (surveys.get(i).getQuestions() != null) {
                     for (int j = 0; j < surveys.get(i).getQuestions().size(); j++) {
                         MQuestions que = new MQuestions();
+
+                        que.setTypeQuestion(surveys.get(i).getQuestions().get(j).getTypeQuestion());
+
                         que.setId(surveys.get(i).getQuestions().get(j).getId());
                         que.setOpt(surveys.get(i).getQuestions().get(j).getOpt());
                         que.setQuestion(surveys.get(i).getQuestions().get(j).getQuestion());
@@ -88,6 +96,8 @@ public class DataUtils {
                         que.setImage(surveys.get(i).getQuestions().get(j).getImage());
                         que.setNumber(surveys.get(i).getQuestions().get(j).getNumber());
                         que.setTime(surveys.get(i).getQuestions().get(j).getTime());
+                        que.setOptCondition(surveys.get(i).getQuestions().get(j).getOptCondition());
+                        que.setPatientName(surveys.get(i).getQuestions().get(j).getPatientName());
 
                         List<MOptions> opt = new ArrayList<>();
                         if (surveys.get(i).getQuestions().get(j).getOptions() != null) {
@@ -98,6 +108,18 @@ public class DataUtils {
                                 opt.add(op);
                             }
                             que.setOptions(opt);
+                        }
+
+                        List<MConditionalOptions> optC = new ArrayList<>();
+                        if (surveys.get(i).getQuestions().get(j).getOptions() != null) {
+                            for (int k = 0; k < surveys.get(i).getQuestions().get(j).getOptions().size(); k++) {
+                                MConditionalOptions op = new MConditionalOptions();
+                                op.setId(surveys.get(i).getQuestions().get(j).getOptionContidion().get(k).getId());
+                                op.setOpt(surveys.get(i).getQuestions().get(j).getOptionContidion().get(k).getOpt());
+                                op.setSurveyid(surveys.get(i).getQuestions().get(j).getOptionContidion().get(k).getSurveyid());
+                                optC.add(op);
+                            }
+                            que.setOptionContidion(optC);
                         }
 
                         List<MOptions> optChk = new ArrayList<>();
@@ -132,11 +154,15 @@ public class DataUtils {
                 dataColl.setTimestamp(dataCollections.get(i).getTimestamp());
                 dataColl.setLng(dataCollections.get(i).getLng());
                 dataColl.setLat(dataCollections.get(i).getLat());
+                dataColl.setFieldworkerId(dataCollections.get(i).getFieldworkerId());
+                dataColl.setSurveyid(dataCollections.get(i).getSuperwiserId());
 
                 MPatients mPatients = new MPatients();
                 mPatients.setId(dataCollections.get(i).getPatients().getId());
                 mPatients.setPatientname(dataCollections.get(i).getPatients().getPatientname());
                 mPatients.setAddress(dataCollections.get(i).getPatients().getAddress());
+                mPatients.setAge(dataCollections.get(i).getPatients().getAge());
+                mPatients.setSex(dataCollections.get(i).getPatients().getSex());
                 dataColl.setPatients(mPatients);
 
                 List<MAnswers> answerses = new ArrayList<>();
@@ -151,6 +177,8 @@ public class DataUtils {
                         answers.setDate(dataCollections.get(i).getAnswerses().get(j).getDate());
                         answers.setTime(dataCollections.get(i).getAnswerses().get(j).getTime());
                         answers.setByteArrayImage(dataCollections.get(i).getAnswerses().get(j).getByteArrayImage());
+                        answers.setSelectedOptConditional(dataCollections.get(i).getAnswerses().get(j).getSelectedOptConditional());
+                        answers.setParentPos(dataCollections.get(i).getAnswerses().get(j).getParentPos());
 
                         MQuestions mQuestions = new MQuestions();
                         mQuestions.setId(dataCollections.get(i).getAnswerses().get(j).getQuestions().getId());
@@ -163,7 +191,9 @@ public class DataUtils {
                         mQuestions.setCompulsary(dataCollections.get(i).getAnswerses().get(j).getQuestions().getCompulsary());
                         mQuestions.setOpt(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOpt());
                         mQuestions.setCheckbox(dataCollections.get(i).getAnswerses().get(j).getQuestions().getCheckbox());
-
+                        mQuestions.setTypeQuestion(dataCollections.get(i).getAnswerses().get(j).getQuestions().getTypeQuestion());
+                        mQuestions.setOptCondition(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptCondition());
+                        mQuestions.setPatientName(dataCollections.get(i).getAnswerses().get(j).getQuestions().getPatientName());
 
                         List<MOptions> options = new ArrayList<>();
                         if (dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptions() != null) {
@@ -175,6 +205,18 @@ public class DataUtils {
                             }
                         }
                         mQuestions.setOptions(options);
+
+                        List<MConditionalOptions> options1 = new ArrayList<>();
+                        if (dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptionContidion() != null) {
+                            for (int k = 0; k < dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptionContidion().size(); k++) {
+                                MConditionalOptions op = new MConditionalOptions();
+                                op.setId(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptionContidion().get(k).getId());
+                                op.setOpt(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptionContidion().get(k).getOpt());
+                                op.setSurveyid(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptionContidion().get(k).getSurveyid());
+                                options1.add(op);
+                            }
+                        }
+                        mQuestions.setOptionContidion(options1);
 
                         List<MOptions> chkb = new ArrayList<>();
                         if (dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptions() != null) {
@@ -250,6 +292,8 @@ public class DataUtils {
                                                      //pa.setId(data.getPatientsList().get(i).getId());
                                                      pa.setAddress(data.getPatientsList().get(i).getAddress());
                                                      pa.setPatientname(data.getPatientsList().get(i).getPatientname());
+                                                     pa.setSex(data.getPatientsList().get(i).getSex());
+                                                     pa.setAge(data.getPatientsList().get(i).getAge());
                                                      //mPatientsList.add(pa);
                                                      realm.copyToRealmOrUpdate(pa);
                                                  } else {
@@ -257,6 +301,8 @@ public class DataUtils {
                                                      //pa.setId(data.getPatientsList().get(i).getId());
                                                      up.setAddress(data.getPatientsList().get(i).getAddress());
                                                      up.setPatientname(data.getPatientsList().get(i).getPatientname());
+                                                     up.setSex(data.getPatientsList().get(i).getSex());
+                                                     up.setAge(data.getPatientsList().get(i).getAge());
                                                      //mPatientsList.add(pa);
                                                      realm.copyToRealmOrUpdate(up);
                                                  }
@@ -376,6 +422,8 @@ public class DataUtils {
 
                                                  //dataColl.setId(data.getDataCollectionsList().get(i).getId());
                                                  dataColl.setSurveyid(data.getDataCollectionsList().get(i).getSurveyid());
+                                                 dataColl.setFieldworkerId(data.getDataCollectionsList().get(i).getFieldworkerId());
+                                                 dataColl.setSuperwiserId(data.getDataCollectionsList().get(i).getSuperwiserId());
                                                  dataColl.setTimestamp(data.getDataCollectionsList().get(i).getTimestamp());
                                                  dataColl.setLng(data.getDataCollectionsList().get(i).getLng());
                                                  dataColl.setLat(data.getDataCollectionsList().get(i).getLat());
@@ -392,7 +440,8 @@ public class DataUtils {
                                                  //mPatients.setId(data.getDataCollectionsList().get(i).getPatients().getId());
                                                  mPatients.setPatientname(data.getDataCollectionsList().get(i).getPatients().getPatientname());
                                                  mPatients.setAddress(data.getDataCollectionsList().get(i).getPatients().getAddress());
-
+                                                 mPatients.setSex(data.getDataCollectionsList().get(i).getPatients().getSex());
+                                                 mPatients.setAge(data.getDataCollectionsList().get(i).getPatients().getAge());
                                                  realm.copyToRealmOrUpdate(mPatients);
                                                  dataColl.setPatients(mPatients);
 
@@ -401,7 +450,7 @@ public class DataUtils {
                                                      for (int j = 0; j < data.getDataCollectionsList().get(i).getAnswerses().size(); j++) {
                                                          //MAnswers answers = new MAnswers();
                                                          // Answers ans = realm.where(Answers.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getPatientid()).findFirst();
-                                                         Answers answers =realm.createObject(Answers.class);
+                                                         Answers answers = realm.createObject(Answers.class);
                                                          // if (ans != null) {
                                                          //     answers = realm.where(Answers.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getPatientid()).findFirst();
                                                          // } else {
@@ -416,6 +465,9 @@ public class DataUtils {
                                                          answers.setTime(data.getDataCollectionsList().get(i).getAnswerses().get(j).getTime());
                                                          answers.setByteArrayImage(data.getDataCollectionsList().get(i).getAnswerses().get(j).getByteArrayImage());
 
+                                                         answers.setSelectedOptConditional(data.getDataCollectionsList().get(i).getAnswerses().get(j).getSelectedOptConditional());
+                                                         answers.setParentPos(data.getDataCollectionsList().get(i).getAnswerses().get(j).getParentPos());
+
                                                          Questions mQue = realm.where(Questions.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getId()).findFirst();
                                                          Questions mQuestions;
                                                          if (mQue != null) {
@@ -426,6 +478,7 @@ public class DataUtils {
                                                          // mQuestions.setId(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getId());
                                                          mQuestions.setQuestion(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getQuestion());
                                                          mQuestions.setText(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOpt());
+                                                         mQuestions.setTypeQuestion(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getTypeQuestion());
                                                          mQuestions.setNumber(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getNumber());
                                                          mQuestions.setDate(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getDate());
                                                          mQuestions.setTime(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getTime());
@@ -433,7 +486,8 @@ public class DataUtils {
                                                          mQuestions.setCompulsary(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getCompulsary());
                                                          mQuestions.setOpt(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOpt());
                                                          mQuestions.setCheckbox(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getCheckbox());
-
+                                                         mQuestions.setOptCondition(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptCondition());
+                                                         mQuestions.setPatientName(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getPatientName());
 
                                                          RealmList<Options> options = new RealmList<Options>();
                                                          if (data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptions() != null) {
@@ -451,6 +505,24 @@ public class DataUtils {
                                                              }
                                                          }
                                                          mQuestions.setOptions(options);
+
+                                                         RealmList<ConditionalOptions> options1 = new RealmList<ConditionalOptions>();
+                                                         if (data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion() != null) {
+                                                             for (int k = 0; k < data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().size(); k++) {
+                                                                 ConditionalOptions op = realm.where(ConditionalOptions.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getId()).findFirst();
+                                                                 ConditionalOptions o;
+                                                                 if (op != null) {
+                                                                     o = realm.where(ConditionalOptions.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getId()).findFirst();
+                                                                 } else {
+                                                                     o = realm.createObject(ConditionalOptions.class, data.getSurveyList().get(i).getQuestions().get(j).getOptionContidion().get(k).getId());
+                                                                 }
+                                                                 o.setOpt(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getOpt());
+                                                                 o.setSurveyid(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getSurveyid());
+                                                                 realm.copyToRealmOrUpdate(o);
+                                                                 options1.add(o);
+                                                             }
+                                                         }
+                                                         mQuestions.setOptionContidion(options1);
 
                                                          RealmList<Options> chkb = new RealmList<Options>();
                                                          if (data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptions() != null) {

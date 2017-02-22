@@ -19,6 +19,9 @@ public class Patients extends RealmObject {
     long id;
     String patientname;
     String Address;
+    int sex, age;
+
+
 
     //RealmList<MAnswers> answers;
 
@@ -53,5 +56,21 @@ public class Patients extends RealmObject {
 
     public void setPatientname(String patientname) {
         this.patientname = patientname;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }
