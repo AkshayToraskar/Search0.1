@@ -43,8 +43,8 @@ public class SurveyHistoryFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.btn_login_logout)
     Button btnLoginLogout;
-    @BindView(R.id.btn_send)
-    Button btnSend;
+    /*@BindView(R.id.btn_send)
+    Button btnSend;*/
     Dialog dialog;
    /* @BindView(R.id.spnSurveyName)
     Spinner spnSurveyName;*/
@@ -76,7 +76,7 @@ public class SurveyHistoryFragment extends Fragment {
 
         surveyHistory=new ArrayList<>();
 
-        surveyHistory.addAll(realm.where(DataCollection.class).findAll());
+        surveyHistory.addAll(realm.where(DataCollection.class).equalTo("fieldworkerId",SelectSurveyActivity.sessionManager.getUserId()).findAll());
 
 
 
@@ -110,7 +110,7 @@ public class SurveyHistoryFragment extends Fragment {
         surveyHistory.clear();
         // List<MUser> results = ;
 
-        surveyHistory.addAll(realm.where(DataCollection.class).equalTo("id",SelectSurveyActivity.sessionManager.getUserId()).findAll());
+        surveyHistory.addAll(realm.where(DataCollection.class).equalTo("fieldworkerId",SelectSurveyActivity.sessionManager.getUserId()).findAll());
         mAdapter.notifyDataSetChanged();
 
     }
@@ -138,7 +138,7 @@ public class SurveyHistoryFragment extends Fragment {
 
                         SelectSurveyActivity.SuperviserLogin=user.getId();
                         btnLoginLogout.setText("Logout");
-                        btnSend.setVisibility(View.VISIBLE);
+                        //btnSend.setVisibility(View.VISIBLE);
 
 
                         mAdapter = new SurveyHistoryAdapter(getContext(), surveyHistory,true);
@@ -166,7 +166,7 @@ public class SurveyHistoryFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         SelectSurveyActivity.SuperviserLogin = 0;
                         btnLoginLogout.setText("Superviser Login");
-                        btnSend.setVisibility(GONE);
+                        //btnSend.setVisibility(GONE);
 
                         mAdapter = new SurveyHistoryAdapter(getContext(), surveyHistory,false);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());

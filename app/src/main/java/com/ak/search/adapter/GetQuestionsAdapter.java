@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -181,9 +182,21 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v("validate size", " : " + validateAnswers.size());
-                    showerror = true;
-                    notifyDataSetChanged();
+
+                    boolean validate = true;
+
+                    for (Map.Entry m : validateAnswers.entrySet()) {
+                        if ((boolean) m.getValue() == false) {
+                            validate = false;
+                        }
+                    }
+
+                    if (validate) {
+                        saveAnswer.saveCollection();
+                    } else {
+                        showerror = true;
+                        notifyDataSetChanged();
+                    }
                 }
             });
 
@@ -331,7 +344,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     public void afterTextChanged(Editable editable) {
                                         if (editable != null) {
                                             answerList.get(position).setAns(String.valueOf(editable));
-                                           // saveAnswer.onAnswerSave(answerList.get(position));
+                                            // saveAnswer.onAnswerSave(answerList.get(position));
                                         }
                                     }
                                 });
@@ -371,7 +384,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     public void afterTextChanged(Editable editable) {
                                         if (editable != null)
                                             answerList.get(position).setNumAns(String.valueOf(editable));
-                                       // saveAnswer.onAnswerSave(answerList.get(position));
+                                        // saveAnswer.onAnswerSave(answerList.get(position));
                                     }
                                 });
                                 break;

@@ -3,6 +3,8 @@ package com.ak.search.model;
 
 import org.parceler.Parcel;
 
+import java.io.Serializable;
+
 import io.realm.ConditionalOptionsRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -11,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-public class MConditionalOptions{
+public class MConditionalOptions  implements Serializable {
 
 
     long id;

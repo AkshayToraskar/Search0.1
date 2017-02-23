@@ -164,6 +164,11 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         addNewQuestion(pos, survey);
     }
 
+    @Override
+    public void saveCollection() {
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

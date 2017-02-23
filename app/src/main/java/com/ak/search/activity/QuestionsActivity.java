@@ -417,6 +417,11 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     }
 
     @Override
+    public void saveCollection() {
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();

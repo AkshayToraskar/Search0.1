@@ -39,13 +39,13 @@
                 android:layout_height="wrap_content"
                 android:text="Superwiser Login"/>
 
-            <Button
+            <!--<Button
                 android:id="@+id/btn_send"
                 android:layout_weight="1"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send Data"/>
+                android:text="Send Data"/>-->
 
         </LinearLayout>
 

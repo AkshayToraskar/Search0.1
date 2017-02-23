@@ -226,6 +226,69 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     }
 
+    @Override
+    public void saveCollection() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+
+                RealmList<Answers> answerses = new RealmList<Answers>();
+                for (int i = 0; i < answersList.size() - 1; i++) {
+                    Answers a = answersList.get(i);
+                    Answers ans = realm.createObject(Answers.class);
+
+                    Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
+
+                    ans.setQuestions(questions);
+                    ans.setPatientid(a.getPatientid());
+                    ans.setAns(a.getAns());
+                    ans.setSelectedopt(a.getSelectedopt());
+                    ans.setNumAns(a.getNumAns());
+                    ans.setByteArrayImage(a.getByteArrayImage());
+                    ans.setDate(a.getDate());
+                    ans.setTime(a.getTime());
+                    ans.setSelectedChk(a.getSelectedChk());
+                    answerses.add(ans);
+
+                }
+
+                Patients patients1=null;
+                if (patients != null) {
+                    patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
+                }
+
+                int collectionId;
+                try {
+                    collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
+                } catch (Exception ex) {
+                    Log.v("exception", ex.toString());
+                    collectionId = 1;
+                }
+
+                dataCollection = realm.createObject(DataCollection.class, collectionId);
+                dataCollection.setSurveyid(survey.getId());
+                dataCollection.setPatients(patients1);
+                dataCollection.setAnswerses(answerses);
+
+
+                dataCollection.setFieldworkerId(sessionManager.getUserId());
+                dataCollection.setSuperwiserId(0);
+
+                String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
+                dataCollection.setLat(0);
+                dataCollection.setLng(0);
+                dataCollection.setTimestamp(timeStamp);
+
+                realm.copyToRealmOrUpdate(dataCollection);
+
+                Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        });
+    }
+
     public void deleteQuestions(int pos) {
         if (addQueHashMap.size() > 0) {
             // for (Map.Entry m : addQueHashMap.entrySet()) {
@@ -298,7 +361,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         discardSurvey();
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_survey, menu);
         if (update) {
@@ -308,7 +371,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             menu.getItem(0).setVisible(false);
         }
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -320,9 +383,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 discardSurvey();
                 break;
 
-            case R.id.action_save_survey:
+           /* case R.id.action_save_survey:
 
-                realm.executeTransaction(new Realm.Transaction() {
+                *//*realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
 
@@ -380,14 +443,15 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                         finish();
 
                     }
-                });
+                });*//*
 
 
-                break;
+                break;*/
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
 
 }

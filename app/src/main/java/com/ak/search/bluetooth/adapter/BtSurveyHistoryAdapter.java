@@ -76,8 +76,12 @@ boolean isSelectedAll;
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
-        holder.cbName.setText(user.getPatients().getAddress()+" ");
+        if(user.getPatients()!=null) {
+            holder.cbName.setText(user.getPatients().getPatientname() + " ");
+        }else
+        {holder.cbName.setText("asdf");
 
+        }
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
         }

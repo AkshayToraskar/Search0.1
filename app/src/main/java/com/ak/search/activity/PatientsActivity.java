@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +110,7 @@ public class PatientsActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
+                intent.setType("text/*");
                 startActivityForResult(intent, REQUEST_CODE);
 
                 break;
@@ -122,24 +123,16 @@ public class PatientsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            String filePath = null;
-            Uri _uri = data.getData();
-            Log.d("","URI = "+ _uri);
-            if (_uri != null && "content".equals(_uri.getScheme())) {
-                Cursor cursor = this.getContentResolver().query(_uri, new String[] { MediaStore.Files.FileColumns.DATA }, null, null, null);
-                cursor.moveToFirst();
-                filePath = cursor.getString(0);
-                cursor.close();
-            } else {
-                filePath = _uri.getPath();
-            }
-            Log.d("","Chosen path = "+ filePath);
+           // String filePath = null;
+            String str = data.getData().getPath();
+            Log.v("asdf","URI = "+ str);
 
 
-            parseCSVData(filePath);
         }
 
     }
+
+
 
     private void parseCSVData(String string)
     {
