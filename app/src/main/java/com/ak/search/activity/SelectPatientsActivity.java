@@ -50,7 +50,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        loadData();
+        //loadData();
 
         patientsList=new RealmList<>();
 
@@ -115,7 +115,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
 
 
 
-    public void loadData() {
+    /*public void loadData() {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -137,7 +137,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     @Override
     public void onDestroy() {

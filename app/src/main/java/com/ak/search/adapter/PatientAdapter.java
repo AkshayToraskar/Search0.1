@@ -30,15 +30,19 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     private Realm realm;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName, tvAddress;
+        public TextView tvVillage, tvHouse, tvFamily, tvIndividual, tvName, tvSex, tvAge;
         public ImageView ivDelete;
 
         public MyViewHolder(View view) {
             super(view);
+            tvVillage = (TextView) view.findViewById(R.id.tvVillageNo);
+            tvHouse = (TextView) view.findViewById(R.id.tvHouseId);
+            tvFamily = (TextView) view.findViewById(R.id.tvFamilyId);
+            tvIndividual = (TextView) view.findViewById(R.id.tvIndividualId);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-            tvAddress = (TextView) view.findViewById(R.id.tvAddress);
-
+            tvSex = (TextView) view.findViewById(R.id.tvSex);
+            tvAge = (TextView) view.findViewById(R.id.tvAge);
            /* view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -103,8 +107,25 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
-        holder.tvName.setText(user.getPatientname());
-        holder.tvAddress.setText(user.getAddress());
+        String ids=String.valueOf(user.getId());
+        holder.tvVillage.setText("Village No: "+ids.charAt(0)+ ", ");
+        holder.tvHouse.setText("House No: "+ids.charAt(1) + ", ");
+        holder.tvFamily.setText("Family No: "+ids.charAt(2) + ", ");
+        holder.tvIndividual.setText("Id No: "+ids.charAt(3) + " ");
+        holder.tvName.setText(user.getPatientname() + " ");
+        holder.tvAge.setText("Age: " + user.getAge() + " ");
+        String sex = "";
+        switch (user.getSex()) {
+
+            case 1:
+                sex = "Male";
+                break;
+            case 2:
+                sex = "Female";
+                break;
+        }
+        holder.tvSex.setText(sex + " ");
+
     }
 
     @Override

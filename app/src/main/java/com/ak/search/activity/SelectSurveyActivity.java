@@ -1,6 +1,5 @@
 package com.ak.search.activity;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,27 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
 import com.ak.search.app.SessionManager;
-import com.ak.search.app.Validate;
 import com.ak.search.bluetooth.BluetoothActivity;
 import com.ak.search.bluetooth.BluetoothClientActivity;
-import com.ak.search.fragment.SuperviserFragment;
 import com.ak.search.fragment.SurveyHistoryFragment;
 import com.ak.search.fragment.UserFragment;
-import com.ak.search.realm_model.Patients;
-import com.ak.search.realm_model.User;
-
-import org.parceler.Parcels;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

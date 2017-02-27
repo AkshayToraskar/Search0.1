@@ -19,11 +19,8 @@ import com.ak.search.app.Validate;
 import com.ak.search.bluetooth.BluetoothActivity;
 import com.ak.search.bluetooth.BluetoothClientActivity;
 import com.ak.search.fragment.AdminFragment;
-import com.ak.search.fragment.PatientFragment;
-import com.ak.search.fragment.SuperviserFragment;
+import com.ak.search.fragment.SupervisorFragment;
 import com.ak.search.realm_model.Patients;
-
-import org.parceler.Parcels;
 
 import butterknife.ButterKnife;
 
@@ -87,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                     break;
 
                 case 2:
-                    // SuperviserFragment superviserFragment=new SuperviserFragment();
-                    transaction.add(R.id.main_frame, new SuperviserFragment());
+                    // SupervisorFragment superviserFragment=new SupervisorFragment();
+                    transaction.add(R.id.main_frame, new SupervisorFragment());
                     transaction.commit();
                     break;
 

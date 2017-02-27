@@ -12,10 +12,10 @@ import com.ak.search.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SuperviserFragment extends Fragment {
+public class SupervisorFragment extends Fragment {
 
 
-    public SuperviserFragment() {
+    public SupervisorFragment() {
         // Required empty public constructor
     }
 

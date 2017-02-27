@@ -20,37 +20,37 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder> {
 
-private List<User> userList;
-private Context context;
+    private List<User> userList;
+    private Context context;
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
-    public TextView tvName,tvUserType;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvName, tvUserType;
 
-    public MyViewHolder(View view) {
-        super(view);
-        tvName = (TextView) view.findViewById(R.id.tvName);
-tvUserType=(TextView)view.findViewById(R.id.tv_user_type);
+        public MyViewHolder(View view) {
+            super(view);
+            tvName = (TextView) view.findViewById(R.id.tvName);
+            tvUserType = (TextView) view.findViewById(R.id.tv_user_type);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-               // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
+                    // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
-                Intent i=new Intent(context, AddUserActivity.class);
-                i.putExtra("userId",userList.get(getPosition()).getId());
-                context.startActivity(i);
-            }
-        });
+                    Intent i = new Intent(context, AddUserActivity.class);
+                    i.putExtra("userId", userList.get(getPosition()).getId());
+                    context.startActivity(i);
+                }
+            });
 
 
+        }
     }
-}
 
 
     public UsersAdapter(Context context, List<User> userList) {
         this.userList = userList;
-        this.context=context;
+        this.context = context;
     }
 
     @Override
@@ -66,18 +66,18 @@ tvUserType=(TextView)view.findViewById(R.id.tv_user_type);
         User user = userList.get(position);
         holder.tvName.setText(user.getName());
 
-        String usertype="";
-        switch (user.getType()){
+        String usertype = "";
+        switch (user.getType()) {
             case 1:
-                usertype="admin";
+                usertype = "admin";
                 break;
 
             case 2:
-                usertype="superviser";
+                usertype = "supervisor";
                 break;
 
             case 3:
-                usertype="field worker";
+                usertype = "field worker";
                 break;
         }
         holder.tvUserType.setText(usertype);

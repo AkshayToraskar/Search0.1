@@ -6,6 +6,7 @@
     tools:context="com.ak.search.fragment.AdminFragment">
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
@@ -19,40 +20,70 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_user"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/user"
+                        android:id="@+id/imageView2" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="15dp"
+                        android:orientation="horizontal">
 
-                        <ImageView
+
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/user"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/circle_shape"/>
+
+                            <TextView
+                                android:id="@+id/tv_user_count"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:textSize="25sp"
+                                android:text="0"/>
+
+                        </RelativeLayout>
+
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:text="USER"
+                            android:gravity="center"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
 
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
 
             </android.support.v7.widget.CardView>
@@ -60,32 +91,58 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_survey"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/survey"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="15dp"
+                        android:orientation="horizontal">
 
-                        <ImageView
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/survey"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/circle_shape"/>
+
+                            <TextView
+                                android:id="@+id/tv_survey_count"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="25sp"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:text="0"/>
+
+                        </RelativeLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:gravity="center"
                             android:text="SURVEY"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
@@ -93,7 +150,7 @@
 
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -108,40 +165,67 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_patients"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/search"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="15dp"
+                        android:orientation="horizontal">
 
-                        <ImageView
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/search"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/circle_shape"/>
+
+                            <TextView
+                                android:id="@+id/tv_patient_count"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="25sp"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:text="0"/>
+
+                        </RelativeLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:text="PATIENT'S"
+                            android:gravity="center"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
 
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
 
             </android.support.v7.widget.CardView>
@@ -149,32 +233,67 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_data"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/doc"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:paddingTop="15dp"
+                        android:orientation="horizontal">
 
-                        <ImageView
+
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/doc"/>
+                            android:layout_height="wrap_content">
+
+
+
+                            <ImageView
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:src="@drawable/circle_shape"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:id="@+id/imageView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tv_collected_data_count"
+                                android:layout_centerInParent="true"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="25sp"
+                                android:textColor="@android:color/white"
+                                android:textStyle="bold"
+                                android:text="0"/>
+
+                        </RelativeLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:gravity="center"
                             android:text="COLLECTED DATA"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
@@ -182,7 +301,7 @@
 
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
 
             </android.support.v7.widget.CardView>

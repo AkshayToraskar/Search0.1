@@ -41,7 +41,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
-            tvDateTime = (TextView) view.findViewById(R.id.tvAddress);
+            tvDateTime = (TextView) view.findViewById(R.id.tvDate);
 
 
 
@@ -104,7 +104,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.patient_list_row, parent, false);
+                .inflate(R.layout.survey_history_list_row, parent, false);
 
         return new MyViewHolder(itemView);
     }

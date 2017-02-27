@@ -468,9 +468,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getPatientid() != 0) {
 
                                     Patients p = realm.where(Patients.class).equalTo("id", answerList.get(position).getPatientid()).findFirst();
-
-                                    holder.tvPatient.setText(p.getPatientname());
-
+                                    if (p != null) {
+                                        holder.tvPatient.setText(p.getPatientname());
+                                    }
                                 }
 
                                 if (questions.getCompulsary()) {

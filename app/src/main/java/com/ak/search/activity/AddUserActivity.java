@@ -71,7 +71,7 @@ public class AddUserActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
 
-            getSupportActionBar().setTitle("Update MUser Info");
+            getSupportActionBar().setTitle("Update User Info");
 
             userId = getIntent().getExtras().getLong("userId");
 
