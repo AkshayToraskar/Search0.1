@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +19,9 @@ import android.widget.EditText;
 
 import com.ak.search.R;
 import com.ak.search.adapter.QuestionsAdapter;
+import com.ak.search.app.OnStartDragListener;
 import com.ak.search.app.SessionManager;
+import com.ak.search.app.SimpleItemTouchHelperCallback;
 import com.ak.search.app.Validate;
 import com.ak.search.realm_model.Options;
 import com.ak.search.realm_model.Questions;
@@ -31,7 +35,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class AddSurveyActivity extends AppCompatActivity {
+public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDragListener */{
 
     @BindView(R.id.txt_survey_name)
     EditText txt_survey_name;
@@ -54,6 +58,9 @@ public class AddSurveyActivity extends AppCompatActivity {
     public static Survey survey;
     public RealmList<Questions> questionsList;
 
+   /* ItemTouchHelper touchHelper;
+    OnStartDragListener onStartDragListener;*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,7 @@ public class AddSurveyActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
         sessionManager = new SessionManager(this);
+        //onStartDragListener = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         questionsList = new RealmList<>();
@@ -83,7 +91,7 @@ public class AddSurveyActivity extends AppCompatActivity {
             update = true;
         } else {
 
-            txt_survey_name.setText("MSurvey " + String.valueOf(sessionManager.getSurveyId()));
+            txt_survey_name.setText("Survey " + String.valueOf(sessionManager.getSurveyId()));
 
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
@@ -103,7 +111,7 @@ public class AddSurveyActivity extends AppCompatActivity {
                     survey = realm.createObject(Survey.class, surveyId);
                     //survey.setId(surveyId);
                     survey.setNested(cbNestedSurvey.isChecked());
-                    survey.setName("MSurvey " + String.valueOf(sessionManager.getSurveyId()));
+                    survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
                     realm.copyToRealmOrUpdate(survey);
                     //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
@@ -126,11 +134,18 @@ public class AddSurveyActivity extends AppCompatActivity {
             //     opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
         }
 
-        mAdapter = new QuestionsAdapter(this, questionsList);
+        mAdapter = new QuestionsAdapter(this, questionsList/*, onStartDragListener*/);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+        /*ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);*/
 
     }
 
@@ -310,8 +325,13 @@ public class AddSurveyActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }
+
+    /*@Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        touchHelper.startDrag(viewHolder);
+    }*/
 }

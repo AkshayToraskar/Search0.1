@@ -201,7 +201,7 @@ public class AddUserActivity extends AppCompatActivity {
                             user.setType(type);
 
                             realm.copyToRealmOrUpdate(user);
-                            Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "User Added Successfully !", Toast.LENGTH_SHORT).show();
 
                         }
                     });

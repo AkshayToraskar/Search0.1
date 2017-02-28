@@ -75,7 +75,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="USER"
+                            android:text="USERS"
                             android:gravity="center"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
@@ -217,7 +217,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="PATIENT'S"
+                            android:text="PATIENT"
                             android:gravity="center"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />

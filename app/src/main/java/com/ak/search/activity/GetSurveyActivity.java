@@ -201,16 +201,58 @@ public class GetSurveyActivity extends AppCompatActivity {
             writer = new CSVWriter(new FileWriter(csv));
 
             List<String[]> data = new ArrayList<String[]>();
-            data.add(new String[]{"India", "New Delhi"});
-            data.add(new String[]{"United States", "Washington D.C"});
-            data.add(new String[]{"Germany", "Berlin"});
-            data.add(new String[]{"asdf", "23423s"});
-            data.add(new String[]{"Germ3423any", "asdf"});
+            /*data.add(new String[]{"Id", "SurveyId", "FieldworkerId", "SupervisorId", "Timestamp", "Latitude", "Longitude",
+                    "Patient Name", "Sex", "Age", "QuestionId", "selectedOpt", "selectedOptConditional", "getSelectedCheck",
+                    "Ans", "NumAns", "Date", "Time", "Image"});*/
+            for (int i = 0; i < surveyHistory.size(); i++) {
+
+                List<String> strData = new ArrayList<>();
+
+                strData.add(String.valueOf(surveyHistory.get(i).getId()));
+                strData.add(String.valueOf(surveyHistory.get(i).getSurveyid()));
+                strData.add(String.valueOf(surveyHistory.get(i).getFieldworkerId()));
+                strData.add(String.valueOf(surveyHistory.get(i).getSuperwiserId()));
+                strData.add(String.valueOf(surveyHistory.get(i).getTimestamp()));
+                strData.add(String.valueOf(surveyHistory.get(i).getLat()));
+                strData.add(String.valueOf(surveyHistory.get(i).getLng()));
+                strData.add(surveyHistory.get(i).getPatients().getPatientname());
+                strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
+                strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
+
+                for (int j = 0; j < surveyHistory.get(i).getAnswerses().size(); j++) {
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getQuestions().getId()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedopt()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedOptConditional()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedChk()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getAns()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getNumAns()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getDate()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getTime()));
+                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getByteArrayImage()));
+                }
+
+                String str[] = new String[strData.size()];
+
+                for (int k = 0; k < strData.size(); k++) {
+
+                        str[k] = strData.get(k);
+
+                }
+
+                data.add(str);
+
+            }
+
+            //data.add(new String[]{"India", "New Delhi"});
+            //data.add(new String[]{"United States", "Washington D.C"});
+            //data.add(new String[]{"Germany", "Berlin"});
+            //data.add(new String[]{"asdf", "23423s"});
+            //data.add(new String[]{"Germ3423any", "asdf"});
             writer.writeAll(data);
             writer.close();
             Log.v("asdf", "SUCCESS");
 
-            Toast.makeText(getApplicationContext(),"Data Exported Successfully",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Data Exported Successfully", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -220,7 +262,7 @@ public class GetSurveyActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }
