@@ -107,8 +107,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         Button btnSelectImage;
         @BindView(R.id.btn_patientname)
         Button btnPatientName;
-
-
+        @BindView(R.id.tv_compulsary)
+        TextView tvCompulsary;
+        @BindView(R.id.view_divider)
+        View viewDivider;
+@BindView(R.id.llQuestion)
+LinearLayout llQuestion;
         @BindView(R.id.btn_save)
         Button btnSave;
 
@@ -286,6 +290,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 holder.btnPatientName.setVisibility(GONE);
                 holder.llPatient.setVisibility(GONE);
                 holder.tvPatient.setVisibility(GONE);
+                holder.tvCompulsary.setVisibility(GONE);
 
                 if (answerList.get(position).getQuestions() != null) {
 
@@ -293,14 +298,17 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     holder.tvQuestion.setText(questions.getQuestion());
 
 
-                    if (questions.getCompulsary() == true && showerror == true) {
-                        if (validateAnswers.get(position) != null) {
+                    if (questions.getCompulsary() == true) {
+                        holder.tvCompulsary.setVisibility(View.VISIBLE);
+                        if (showerror == true && validateAnswers.get(position) != null) {
+
                             Boolean result = validateAnswers.get(position);
                             if (!result) {
-                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_dark_background));
+                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryText));
                             } else {
                                 holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorText));
                             }
+
                         }
                     }
 
@@ -762,6 +770,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                 } else {
                     holder.btnSave.setVisibility(View.VISIBLE);
+                    holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
+                    holder.viewDivider.setVisibility(GONE);
+                    holder.llQuestion.setVisibility(GONE);
                 }
             }
         });

@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.app.Validate;
@@ -93,6 +94,8 @@ public class AddQuestionActivity extends AppCompatActivity {
     @BindView(R.id.spn_op2)
     Spinner spnOp2;
 
+    String typeQuestion;
+
 
     List<EditText> allEds, allEdsChk, allEdsOptConditional;
     List<Spinner> allSpnCondition;
@@ -145,9 +148,11 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
         surveys = realm.where(Survey.class).notEqualTo("id", AddSurveyActivity.survey.getId()).equalTo("nested", true).findAll();
-        sur = new String[surveys.size()];
+        sur = new String[surveys.size() + 1];
 
-        for (int i = 0; i < surveys.size(); i++) {
+        sur[0] = "-";
+
+        for (int i = 1; i < surveys.size(); i++) {
             sur[i] = surveys.get(i).getName();
         }
 
@@ -372,11 +377,47 @@ public class AddQuestionActivity extends AppCompatActivity {
                     txt_question.setError(null);
                 }
 
+                typeQuestion="";
+
+                if (cb_text.isChecked()) {
+                    typeQuestion = typeQuestion + "1,";
+                }
+                if (cb_number.isChecked()) {
+                    typeQuestion = typeQuestion + "2,";
+                }
+                if (cb_date.isChecked()) {
+                    typeQuestion = typeQuestion + "3,";
+                }
+                if (cb_time.isChecked()) {
+                    typeQuestion = typeQuestion + "4,";
+                }
+                if (cb_picture.isChecked()) {
+                    typeQuestion = typeQuestion + "5,";
+                }
+                if (cb_patient_name.isChecked()) {
+                    typeQuestion = typeQuestion + "6,";
+                }
+                if (cb_checkbox.isChecked()) {
+                    typeQuestion = typeQuestion + "7,";
+                }
+                if (cb_option.isChecked()) {
+                    typeQuestion = typeQuestion + "8,";
+                }
+                if (cb_options_condition.isChecked()) {
+                    typeQuestion = typeQuestion + "9,";
+                }
+
+                if(typeQuestion.equals("")){
+                    Toast.makeText(getApplicationContext(),"Select QuestionType",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+
                 if (update) {
 
 
                     saveUpdateQuestions();
-
+                    finish();
 
                     // questions.setSurveyid(surveyid);
                     /*questions.setQuestion(txt_question.getText().toString());
@@ -425,7 +466,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
                     saveUpdateQuestions();
-
+                    finish();
 
                     //   MOptions.saveInTx(options);
 
@@ -438,7 +479,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                 }
 
-                finish();
+
 
                 break;
 
@@ -599,35 +640,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                 //patient name 6
 
-                String typeQuestion = "";
 
-                if (cb_text.isChecked()) {
-                    typeQuestion = typeQuestion + "1,";
-                }
-                if (cb_number.isChecked()) {
-                    typeQuestion = typeQuestion + "2,";
-                }
-                if (cb_date.isChecked()) {
-                    typeQuestion = typeQuestion + "3,";
-                }
-                if (cb_time.isChecked()) {
-                    typeQuestion = typeQuestion + "4,";
-                }
-                if (cb_picture.isChecked()) {
-                    typeQuestion = typeQuestion + "5,";
-                }
-                if (cb_patient_name.isChecked()) {
-                    typeQuestion = typeQuestion + "6,";
-                }
-                if (cb_checkbox.isChecked()) {
-                    typeQuestion = typeQuestion + "7,";
-                }
-                if (cb_option.isChecked()) {
-                    typeQuestion = typeQuestion + "8,";
-                }
-                if (cb_options_condition.isChecked()) {
-                    typeQuestion = typeQuestion + "9,";
-                }
 
                 questions.setTypeQuestion(typeQuestion);
 
@@ -725,8 +738,12 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 optionsId = 1;
                             }
 
-
-                            long surveyId = surveys.get(allSpnCondition.get(i).getSelectedItemPosition()).getId();
+                            long surveyId;
+                            if (allSpnCondition.get(i).getSelectedItemPosition() != 0) {
+                                surveyId = surveys.get(allSpnCondition.get(i).getSelectedItemPosition()).getId();
+                            } else {
+                                surveyId = 0;
+                            }
 
                             ConditionalOptions opt1 = realm.createObject(ConditionalOptions.class, optionsId);
                             //opt1.setId(j);
@@ -756,7 +773,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }

@@ -138,9 +138,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-            RecyclerView.ItemDecoration itemDecoration = new
+           /* RecyclerView.ItemDecoration itemDecoration = new
                     DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-            recyclerView.addItemDecoration(itemDecoration);
+            recyclerView.addItemDecoration(itemDecoration);*/
             recyclerView.setAdapter(mAdapter);
 
 
@@ -189,40 +189,42 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void onAddSurvey(long id, int pos, int parentPos) {
         boolean newEntry = true;
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
-        int surveysize = survey.getQuestions().size();
 
-        if (addQueHashMap.size() > 0) {
-            for (Map.Entry m : addQueHashMap.entrySet()) {
-                MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
+        if(survey!=null) {
+            int surveysize = survey.getQuestions().size();
 
-                if (nestedAddQue.getPos() == pos) {
-                    deleteQuestions(pos);
+            if (addQueHashMap.size() > 0) {
+                for (Map.Entry m : addQueHashMap.entrySet()) {
+                    MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
+
+                    if (nestedAddQue.getPos() == pos) {
+                        deleteQuestions(pos);
 
 
-                    if (nestedAddQue.getSurveyId() != id) {
-                        addToHashMap(id, pos, surveysize, parentPos, 0);
+                        if (nestedAddQue.getSurveyId() != id) {
+                            addToHashMap(id, pos, surveysize, parentPos, 0);
 
-                        newEntry = false;
+                            newEntry = false;
+                        }
+
                     }
 
+                    if (nestedAddQue.getPos() == parentPos) {
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
+                    }
+
+
                 }
-
-                if (nestedAddQue.getPos() == parentPos) {
-                    addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
-                }
-
-
             }
+
+
+            if (newEntry) {
+                addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
+            }
+
+
+            addNewQuestion(pos, survey);
         }
-
-
-        if (newEntry) {
-            addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
-        }
-
-
-        addNewQuestion(pos, survey);
-
 
     }
 

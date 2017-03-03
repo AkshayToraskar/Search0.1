@@ -70,6 +70,11 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             dataCollection = realm.where(DataCollection.class).equalTo("id", collectionId).findFirst();
             answersList.clear();
             //answersList.addAll(dataCollection.getAnswerses());
+
+            Survey survey=realm.where(Survey.class).equalTo("id",dataCollection.getSurveyid()).findFirst();
+            if (survey!=null){
+                getSupportActionBar().setTitle(survey.getName());
+            }
             addQue(dataCollection.getAnswerses());
 
             mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm, superviserLogin);
@@ -77,8 +82,8 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-            RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-            recyclerView.addItemDecoration(itemDecoration);
+            /*RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(itemDecoration);*/
             recyclerView.setAdapter(mAdapter);
             if (dataCollection.getPatients() != null) {
                 getSupportActionBar().setTitle(dataCollection.getPatients().getPatientname() + " ");

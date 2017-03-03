@@ -98,42 +98,44 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
             questionType = questionType + "* ";
         }
 
-        String type[] = questions.getTypeQuestion().split(",");
-        for (int i = 0; i < type.length; i++) {
-            int t = Integer.parseInt(type[i]);
-            switch (t) {
-                case 1:
-                    questionType = questionType + "Text ";
-                    break;
-                case 2:
-                    questionType = questionType + "Number ";
-                    break;
-                case 3:
-                    questionType = questionType + "Date ";
-                    break;
-                case 4:
-                    questionType = questionType + "Time ";
-                    break;
-                case 5:
-                    questionType = questionType + "Image ";
-                    break;
-                case 6:
-                    questionType = questionType + "Patient Name ";
-                    break;
-                case 7:
-                    questionType = questionType + "Checkbox ";
-                    break;
-                case 8:
-                    questionType = questionType + "Option ";
-                    break;
-                case 9:
-                    questionType = questionType + "Conditional ";
-                    break;
+        if(questions.getTypeQuestion()!=null) {
+            String type[] = questions.getTypeQuestion().split(",");
+            for (int i = 0; i < type.length; i++) {
+                int t = Integer.parseInt(type[i]);
+                switch (t) {
+                    case 1:
+                        questionType = questionType + "Text ";
+                        break;
+                    case 2:
+                        questionType = questionType + "Number ";
+                        break;
+                    case 3:
+                        questionType = questionType + "Date ";
+                        break;
+                    case 4:
+                        questionType = questionType + "Time ";
+                        break;
+                    case 5:
+                        questionType = questionType + "Image ";
+                        break;
+                    case 6:
+                        questionType = questionType + "Patient Name ";
+                        break;
+                    case 7:
+                        questionType = questionType + "Checkbox ";
+                        break;
+                    case 8:
+                        questionType = questionType + "Option ";
+                        break;
+                    case 9:
+                        questionType = questionType + "Conditional ";
+                        break;
 
+                }
             }
-        }
 
-        holder.tvQuestionType.setText(questionType);
+            holder.tvQuestionType.setText(questionType);
+        }
 
 
         /*holder.ivDrag.setOnTouchListener(new View.OnTouchListener() {
