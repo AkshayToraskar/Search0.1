@@ -80,7 +80,7 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
         holder.tvSurveyName.setText(survey.getName());
 
       //  final List<MQuestions> questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(survey.getId()));
-        holder.tvSurveyQuestions.setText( survey.getQuestions().size()+" MQuestions");
+        holder.tvSurveyQuestions.setText( survey.getQuestions().size()+" Questions");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -224,6 +224,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
             addNewQuestion(pos, survey);
+
+            mAdapter.notifyDataSetChanged();
         }
 
     }
@@ -345,7 +347,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setByteArrayImage(a);
             answersList.add((pos + 1) + i, answ);
         }
-        mAdapter.notifyDataSetChanged();
+       // mAdapter.notifyDataSetChanged();
     }
 
 

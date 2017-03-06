@@ -152,8 +152,8 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         sur[0] = "-";
 
-        for (int i = 1; i < surveys.size(); i++) {
-            sur[i] = surveys.get(i).getName();
+        for (int i = 0; i < surveys.size(); i++) {
+            sur[i+1] = surveys.get(i).getName();
         }
 
 
@@ -339,10 +339,12 @@ public class AddQuestionActivity extends AppCompatActivity {
     public int getSurveyPosition(long surveyId) {
         int pos = 0;
 
-        for (int i = 0; i < surveys.size(); i++) {
-            if (surveys.get(i).getId() == surveyId) {
-                pos = i;
-                break;
+        if (surveyId != 0) {
+            for (int i = 0; i < surveys.size(); i++) {
+                if (surveys.get(i).getId() == surveyId) {
+                    pos = i+1;
+                    break;
+                }
             }
         }
 
@@ -377,7 +379,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                     txt_question.setError(null);
                 }
 
-                typeQuestion="";
+                typeQuestion = "";
 
                 if (cb_text.isChecked()) {
                     typeQuestion = typeQuestion + "1,";
@@ -407,8 +409,8 @@ public class AddQuestionActivity extends AppCompatActivity {
                     typeQuestion = typeQuestion + "9,";
                 }
 
-                if(typeQuestion.equals("")){
-                    Toast.makeText(getApplicationContext(),"Select QuestionType",Toast.LENGTH_SHORT).show();
+                if (typeQuestion.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Select QuestionType", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
@@ -478,7 +480,6 @@ public class AddQuestionActivity extends AppCompatActivity {
                     //finish();
 
                 }
-
 
 
                 break;
@@ -641,7 +642,6 @@ public class AddQuestionActivity extends AppCompatActivity {
                 //patient name 6
 
 
-
                 questions.setTypeQuestion(typeQuestion);
 
 
@@ -739,8 +739,9 @@ public class AddQuestionActivity extends AppCompatActivity {
                             }
 
                             long surveyId;
+                            Log.v("TAG","Selected Position===="+allSpnCondition.get(i).getSelectedItemPosition());
                             if (allSpnCondition.get(i).getSelectedItemPosition() != 0) {
-                                surveyId = surveys.get(allSpnCondition.get(i).getSelectedItemPosition()).getId();
+                                surveyId = surveys.get((allSpnCondition.get(i).getSelectedItemPosition())-1).getId();
                             } else {
                                 surveyId = 0;
                             }
