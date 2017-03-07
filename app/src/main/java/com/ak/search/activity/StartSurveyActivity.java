@@ -196,14 +196,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             if (addQueHashMap.size() > 0) {
                 for (Map.Entry m : addQueHashMap.entrySet()) {
                     MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
-
                     if (nestedAddQue.getPos() == pos) {
                         deleteQuestions(pos);
-
-
                         if (nestedAddQue.getSurveyId() != id) {
                             addToHashMap(id, pos, surveysize, parentPos, 0);
-
                             newEntry = false;
                         }
 
@@ -225,6 +221,29 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             addNewQuestion(pos, survey);
 
+            mAdapter.notifyDataSetChanged();
+        }else{
+            if (addQueHashMap.size() > 0) {
+                for (Map.Entry m : addQueHashMap.entrySet()) {
+                    MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
+
+                    if (nestedAddQue.getPos() == pos) {
+                        deleteQuestions(pos);
+
+
+                        if (nestedAddQue.getSurveyId() != id) {
+                            addToHashMap(id, pos, 0, parentPos, 0);
+                        }
+
+                    }
+
+                    if (nestedAddQue.getPos() == parentPos) {
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), 0);
+                    }
+
+
+                }
+            }
             mAdapter.notifyDataSetChanged();
         }
 
@@ -248,6 +267,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     ans.setPatientid(a.getPatientid());
                     ans.setAns(a.getAns());
                     ans.setSelectedopt(a.getSelectedopt());
+                    ans.setSelectedOptConditional(a.getSelectedOptConditional());
                     ans.setNumAns(a.getNumAns());
                     ans.setByteArrayImage(a.getByteArrayImage());
                     ans.setDate(a.getDate());
