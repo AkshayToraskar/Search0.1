@@ -84,17 +84,16 @@
                 android:id="@+id/txt_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:padding="10dp"
                 android:layout_margin="20dp"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Select Date"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_date_range_blue"
                 android:padding="10dp"
                 android:layout_margin="20dp"
                 android:visibility="gone" />
@@ -140,17 +139,16 @@
                 android:id="@+id/txt_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:padding="10dp"
                 android:layout_margin="20dp"
                 android:visibility="gone" />
 
             <Button
                 android:id="@+id/btn_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Select Time"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_time_blue"
                 android:padding="10dp"
                 android:layout_margin="20dp"
                 android:visibility="gone" />
@@ -162,15 +160,15 @@
             android:id="@+id/ll_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             android:weightSum="3">
 
 
             <ImageView
                 android:id="@+id/iv_capture"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_weight="2"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:src="@drawable/brain"
                 android:padding="10dp"
                 android:layout_margin="20dp"
@@ -178,12 +176,11 @@
 
             <Button
                 android:id="@+id/btn_capture_image"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:padding="10dp"
                 android:layout_margin="20dp"
-                android:text="choose Image"
+                android:background="@drawable/ic_capture_picture_black"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -201,12 +198,18 @@
                 android:id="@+id/rb_opt1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:button="@drawable/radio_button_switch"
+                android:background="@drawable/ra_background"
                 android:text="Options 1" />
 
             <RadioButton
                 android:id="@+id/rb_opt2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:background="@drawable/ra_background"
+                android:button="@drawable/radio_button_switch"
                 android:text="Options 2" />
 
         </RadioGroup>
@@ -223,12 +226,20 @@
                 android:id="@+id/rb_opt1_conditional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+
+                android:background="@drawable/ra_background"
+                android:button="@drawable/radio_button_switch"
                 android:text="Options 1" />
 
             <RadioButton
                 android:id="@+id/rb_opt2_conditional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
+                android:background="@drawable/ra_background"
+                android:textSize="18sp"
+                android:button="@drawable/radio_button_switch"
                 android:text="Options 2" />
 
         </RadioGroup>
@@ -247,18 +258,18 @@
             android:id="@+id/txt_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableRight="@drawable/text"
+            android:drawableRight="@drawable/text1"
             android:padding="10dp"
             android:drawablePadding="10dp"
             android:layout_margin="20dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/txt_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:drawableRight="@drawable/text"
+            android:drawableRight="@drawable/num"
             android:drawablePadding="10dp"
             android:layout_margin="20dp"
             android:padding="10dp"

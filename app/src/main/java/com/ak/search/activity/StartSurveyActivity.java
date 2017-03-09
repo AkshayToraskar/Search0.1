@@ -238,7 +238,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     }
 
                     if (nestedAddQue.getPos() == parentPos) {
-                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), 0);
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), 0, nestedAddQue.getPos(), 0);
                     }
 
 

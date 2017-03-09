@@ -340,6 +340,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 holder.tvDate.setVisibility(GONE);
                 holder.btnSelectDate.setVisibility(GONE);
                 holder.tvTime.setVisibility(GONE);
+
                 holder.btnSelectTime.setVisibility(GONE);
                 holder.ivSelImg.setVisibility(GONE);
                 holder.btnSelectImage.setVisibility(GONE);
@@ -607,12 +608,17 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             allRb.add(holder.rbOpt2);
                                         } else {
                                             RadioButton rb = new RadioButton(context);
-                                            rb.setLayoutParams(new ViewGroup.LayoutParams(
+                                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
                                                     ViewGroup.LayoutParams.MATCH_PARENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                                            params.setMargins(0,2,0,2);
+                                            rb.setLayoutParams(params);
                                             rb.setText(questions.getOptions().get(i).getOpt());
-
+                                            rb.setButtonDrawable(R.drawable.radio_button_switch);
+                                            rb.setBackgroundResource(R.drawable.ra_background);
+                                            rb.setTextSize(18);
                                             holder.rgOption.addView(rb);
+
                                             allRb.add(rb);
                                         }
                                     }
@@ -666,11 +672,16 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         } else {
 
                                             RadioButton rb = new RadioButton(context);
-                                            rb.setLayoutParams(new ViewGroup.LayoutParams(
-                                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                                            rb.setText(questions.getOptionContidion().get(i).getOpt());
 
+                                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
+                                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                                            params.setMargins(0, 2, 0, 2);
+                                            rb.setLayoutParams(params);
+                                            rb.setTextSize(18);
+                                            rb.setText(questions.getOptionContidion().get(i).getOpt());
+                                            rb.setBackgroundResource(R.drawable.ra_background);
+                                            rb.setButtonDrawable(R.drawable.radio_button_switch);
                                             holder.rgOptionConditional.addView(rb);
 
                                             allRbCon.add(rb);
