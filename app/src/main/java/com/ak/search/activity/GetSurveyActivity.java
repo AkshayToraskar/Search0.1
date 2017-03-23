@@ -219,9 +219,9 @@ public class GetSurveyActivity extends AppCompatActivity {
                 strData.add(String.valueOf(surveyHistory.get(i).getTimestamp()));
                 strData.add(String.valueOf(surveyHistory.get(i).getLat()));
                 strData.add(String.valueOf(surveyHistory.get(i).getLng()));
-                strData.add(surveyHistory.get(i).getPatients().getPatientname());
-                strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
-                strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
+               // strData.add(" "+surveyHistory.get(i).getPatients().getPatientname());
+               // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
+               // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
 
                 for (int j = 0; j < surveyHistory.get(i).getAnswerses().size(); j++) {
                     strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getQuestions().getId()));

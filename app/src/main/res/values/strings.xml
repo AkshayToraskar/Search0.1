@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Search</string>
+    <string name="app_name">Survey Collection</string>
 
     <string name="activity_login">Login</string>
     <string name="title_activity_user">User</string>

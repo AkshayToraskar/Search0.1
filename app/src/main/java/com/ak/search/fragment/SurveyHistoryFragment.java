@@ -123,7 +123,7 @@ public class SurveyHistoryFragment extends Fragment {
         dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.dialog_login);
         dialog.setCancelable(false);
-        dialog.setTitle("Superviser Login");
+        dialog.setTitle("Supervisor Login");
         Button login = (Button) dialog.findViewById(R.id.btn_login);
 
         final EditText txt_username = (EditText) dialog.findViewById(R.id.et_username);
@@ -169,7 +169,7 @@ public class SurveyHistoryFragment extends Fragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         SelectSurveyActivity.SuperviserLogin = 0;
-                        btnLoginLogout.setText("Superviser Login");
+                        btnLoginLogout.setText("Supervisor Login");
                         //btnSend.setVisibility(GONE);
 
                         mAdapter = new SurveyHistoryAdapter(getContext(), surveyHistory,false);

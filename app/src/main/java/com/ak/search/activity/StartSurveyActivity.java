@@ -202,26 +202,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                             addToHashMap(id, pos, surveysize, parentPos, 0);
                             newEntry = false;
                         }
-
                     }
 
                     if (nestedAddQue.getPos() == parentPos) {
                         addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
                     }
-
-
                 }
             }
-
 
             if (newEntry) {
                 addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
             }
 
-
             addNewQuestion(pos, survey);
 
             mAdapter.notifyDataSetChanged();
+            showHashmap();
         }else{
             if (addQueHashMap.size() > 0) {
                 for (Map.Entry m : addQueHashMap.entrySet()) {
@@ -229,25 +225,100 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                     if (nestedAddQue.getPos() == pos) {
                         deleteQuestions(pos);
-
-
                         if (nestedAddQue.getSurveyId() != id) {
                             addToHashMap(id, pos, 0, parentPos, 0);
+                            newEntry = false;
                         }
-
                     }
 
                     if (nestedAddQue.getPos() == parentPos) {
-                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), 0, nestedAddQue.getPos(), 0);
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), 0, nestedAddQue.getPos(), nestedAddQue.getChildLength());
                     }
-
-
                 }
             }
+
+            if (newEntry) {
+                addToHashMap(id, pos, 0, parentPos, 0);
+            }
+
             mAdapter.notifyDataSetChanged();
+            showHashmap();
         }
 
     }
+
+
+    public void showHashmap(){
+        for(Map.Entry m: addQueHashMap.entrySet()){
+            MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
+
+            Log.v("asdf","\n================\n Id:"+nestedAddQue.getSurveyId()+
+            "\n Pos:"+nestedAddQue.getPos()+
+            "\n Length:"+nestedAddQue.getLengh()+
+            "\n Parent Pos:"+nestedAddQue.getParentPos()+
+            "\n Child Length:"+nestedAddQue.getChildLength()+"\n =====================");
+
+        }
+    }
+
+
+
+    public void addToHashMap(long id, int pos, int length, int parentPos, int childLength) {
+
+        MNestedAddQue nestedAddQue = new MNestedAddQue();
+        nestedAddQue.setSurveyId(id);
+        nestedAddQue.setPos(pos);
+        nestedAddQue.setLengh(length);
+        nestedAddQue.setParentPos(parentPos);
+        nestedAddQue.setChildLength(childLength);
+        addQueHashMap.put(pos, nestedAddQue);
+
+
+    }
+
+    public void addNewQuestion(int pos, Survey survey) {
+        for (int i = 0; i < survey.getQuestions().size(); i++) {
+
+            Answers answ = new Answers();
+            answ.setPatientid(0);
+            answ.setQuestions(survey.getQuestions().get(i));
+            answ.setParentPos(pos);
+            answ.setSelectedopt(-1);
+            answ.setSelectedOptConditional(-1);
+            answ.setSelectedChk("");
+            answ.setAns("");
+            answ.setNumAns("");
+            answ.setDate("");
+            answ.setTime("");
+            byte[] a = {-1};
+            answ.setByteArrayImage(a);
+            answersList.add((pos + 1) + i, answ);
+        }
+        // mAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteQuestions(int pos) {
+        if (addQueHashMap.size() > 0) {
+            // for (Map.Entry m : addQueHashMap.entrySet()) {
+            MNestedAddQue nestedAddQue = addQueHashMap.get(pos);
+
+            if (nestedAddQue != null) {
+                //if (nestedAddQue.getPos() == pos) {
+                int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
+
+                int count = 0;
+                if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size() - 1)) {
+                    for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
+                        answersList.remove(nestedAddQue.getPos() + 1);
+                        count++;
+                    }
+                }
+            }
+            //}
+            //}
+        }
+    }
+
 
     @Override
     public void saveCollection() {
@@ -312,64 +383,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             }
         });
     }
-
-    public void deleteQuestions(int pos) {
-        if (addQueHashMap.size() > 0) {
-            // for (Map.Entry m : addQueHashMap.entrySet()) {
-            MNestedAddQue nestedAddQue = addQueHashMap.get(pos);
-
-            if (nestedAddQue != null) {
-                //if (nestedAddQue.getPos() == pos) {
-                int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
-
-                int count = 0;
-                if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size() - 1)) {
-                    for (int i = nestedAddQue.getPos() + 1; i <= (nestedAddQue.getPos() + totalSize); i++) {
-                        answersList.remove(nestedAddQue.getPos() + 1);
-                        count++;
-                    }
-                }
-            }
-            //}
-            //}
-        }
-    }
-
-
-    public void addToHashMap(long id, int pos, int length, int parentPos, int childLength) {
-
-        MNestedAddQue nestedAddQue = new MNestedAddQue();
-        nestedAddQue.setSurveyId(id);
-        nestedAddQue.setPos(pos);
-        nestedAddQue.setLengh(length);
-        nestedAddQue.setParentPos(parentPos);
-        nestedAddQue.setChildLength(childLength);
-        addQueHashMap.put(pos, nestedAddQue);
-
-
-    }
-
-    public void addNewQuestion(int pos, Survey survey) {
-        for (int i = 0; i < survey.getQuestions().size(); i++) {
-
-            Answers answ = new Answers();
-            answ.setPatientid(0);
-            answ.setQuestions(survey.getQuestions().get(i));
-            answ.setParentPos(pos);
-            answ.setSelectedopt(-1);
-            answ.setSelectedOptConditional(-1);
-            answ.setSelectedChk("");
-            answ.setAns("");
-            answ.setNumAns("");
-            answ.setDate("");
-            answ.setTime("");
-            byte[] a = {-1};
-            answ.setByteArrayImage(a);
-            answersList.add((pos + 1) + i, answ);
-        }
-       // mAdapter.notifyDataSetChanged();
-    }
-
 
     @Override
     public void onDestroy() {

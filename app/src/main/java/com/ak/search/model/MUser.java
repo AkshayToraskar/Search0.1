@@ -1,6 +1,8 @@
 package com.ak.search.model;
 
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -12,11 +14,16 @@ import io.realm.annotations.PrimaryKey;
 
 public class MUser implements Serializable{
 
-
+    @SerializedName("id")
     private long id;
 
-    private String name, password;
+    @SerializedName("name")
+    private String name;
 
+    @SerializedName("password")
+    private String password;
+
+    @SerializedName("type")
     private int type; //1-Admin, 2-Superviser, 3-MUser
 
     public long getId() {

@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ak.search.*;
+import com.ak.search.app.ApiClient;
+import com.ak.search.app.ApiInterface;
 import com.ak.search.app.SessionManager;
 import com.ak.search.app.Validate;
 import com.ak.search.bluetooth.BluetoothActivity;
 import com.ak.search.bluetooth.BluetoothClientActivity;
+import com.ak.search.model.Login;
 import com.ak.search.realm_model.User;
 
 import java.util.List;
@@ -20,6 +24,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -84,8 +91,10 @@ public class LoginActivity extends AppCompatActivity {
                     txt_username.setError(null);
                 }
 
+                checkLogin();
 
-                if (txt_username.getText().toString().equalsIgnoreCase("admin") && txt_password.getText().toString().equalsIgnoreCase("admin")) {
+
+                /*if (txt_username.getText().toString().equalsIgnoreCase("admin") && txt_password.getText().toString().equalsIgnoreCase("admin")) {
                     Intent i = new Intent(this, MainActivity.class);
                     //  i.putExtra(USERNAME, txt_username.getText().toString());
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -135,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
                     }
-                }
+                }*/
                 break;
 
             case R.id.btn_bluetooth:
@@ -154,5 +163,25 @@ public class LoginActivity extends AppCompatActivity {
         if(realm != null) {
             realm.close();
         }
+    }
+
+    public void checkLogin(){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<Login> call = apiService.getLogin(txt_username.getText().toString(),txt_password.getText().toString());
+        call.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login>call, Response<Login> response) {
+                Login login = (Login)response.body();
+                Log.d("asdf", "Name of user: "+login.getUser().getName());
+            }
+
+            @Override
+            public void onFailure(Call<Login>call, Throwable t) {
+                // Log error here since request failed
+                Log.e("asdf", t.toString());
+            }
+        });
     }
 }
