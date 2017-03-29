@@ -86,6 +86,42 @@
                             android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
 
+
+                    <RadioGroup
+                        android:id="@+id/rg_user_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <RadioButton
+                            android:id="@+id/rb_admin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Admin" />
+
+                        <RadioButton
+                            android:id="@+id/rb_superviser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Supervisor" />
+
+
+                        <RadioButton
+                            android:id="@+id/rb_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="User" />
+
+                    </RadioGroup>
+
+
                     <Button
                         android:id="@+id/btnLoginSubmit"
                         android:layout_width="match_parent"

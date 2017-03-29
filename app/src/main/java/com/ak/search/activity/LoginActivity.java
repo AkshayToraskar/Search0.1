@@ -1,12 +1,19 @@
 package com.ak.search.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.ak.search.*;
@@ -38,6 +45,18 @@ public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.rb_admin)
+    RadioButton rbAdmin;
+    @BindView(R.id.rb_superviser)
+    RadioButton rbSupervisor;
+    @BindView(R.id.rb_user)
+    RadioButton rbUser;
+
+    @BindView(R.id.rg_user_type)
+    RadioGroup rgUserType;
+
+    ProgressDialog progress;
 
     public static String USERNAME = "username", ISADMIN = "is_admin";
     private SessionManager sessionManager;
@@ -78,6 +97,13 @@ public class LoginActivity extends AppCompatActivity {
 
             case R.id.btnLoginSubmit:
 
+                View view1 = this.getCurrentFocus();
+                if (view1 != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
+                }
+
+
                 if (validate.validateString(txt_username.getText().toString())) {
                     txt_username.setError("Enter Username");
                     return;
@@ -91,60 +117,23 @@ public class LoginActivity extends AppCompatActivity {
                     txt_username.setError(null);
                 }
 
-                checkLogin();
+                if (rbAdmin.isChecked()) {
 
+                    if (isNetworkAvailable()) {
+                        checkAdminLogin();
 
-                /*if (txt_username.getText().toString().equalsIgnoreCase("admin") && txt_password.getText().toString().equalsIgnoreCase("admin")) {
-                    Intent i = new Intent(this, MainActivity.class);
-                    //  i.putExtra(USERNAME, txt_username.getText().toString());
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    sessionManager.setLogin(true, "admin", 1, 0);
-                    //  i.putExtra(ISADMIN, true);
-                    startActivity(i);
-                } else {
-
-                    // List<MUser> user = MUser.find(MUser.class, "name = ?", txt_username.getText().toString());
-
-                    boolean loginStatus = false, isAdmin = false;
-
-                    String username = "";
-                    int type = 0;
-                    long userId = 0;
-                    List<User> user = realm.where(User.class).equalTo("name", txt_username.getText().toString()).findAll();
-
-
-                    for (int j = 0; j < user.size(); j++) {
-                        if (user.get(j).getPassword().equals(txt_password.getText().toString())) {
-                            loginStatus = true;
-                            username = user.get(j).getName();
-                            type = user.get(j).getType();
-                            userId = user.get(j).getId();
-                        }
-                    }
-
-                    if (type == 1) {
-                        isAdmin = true;
-                    }
-
-
-                    if (loginStatus) {
-                        if (type == 3) {
-                            Intent i = new Intent(this, SelectSurveyActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            sessionManager.setLogin(true, username, type, userId);
-                            startActivity(i);
-                        } else {
-                            Intent i = new Intent(this, MainActivity.class);
-                            // i.putExtra(USERNAME, username);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            sessionManager.setLogin(true, username, type, userId);
-                            i.putExtra(ISADMIN, isAdmin);
-                            startActivity(i);
-                        }
+                        progress = new ProgressDialog(this);
+                        progress.setMessage("Please Wait");
+                        progress.show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "No Active Internet !", Toast.LENGTH_SHORT).show();
                     }
-                }*/
+
+                } else {
+                    checkOtherLogin();
+                }
+
+
                 break;
 
             case R.id.btn_bluetooth:
@@ -160,28 +149,72 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }
 
-    public void checkLogin(){
+    public void checkAdminLogin() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<Login> call = apiService.getLogin(txt_username.getText().toString(),txt_password.getText().toString());
+        Call<Login> call = apiService.getLogin(txt_username.getText().toString(), txt_password.getText().toString());
         call.enqueue(new Callback<Login>() {
             @Override
-            public void onResponse(Call<Login>call, Response<Login> response) {
-                Login login = (Login)response.body();
-                Log.d("asdf", "Name of user: "+login.getUser().getName());
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                Login login = response.body();
+                Log.d("asdf", "Name of user: " + login.getError_message());
+                progress.dismiss();
+
+                if (!login.isError()) {
+                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    sessionManager.setLogin(true, login.getUser().getName(), login.getUser().getType(), login.getUser().getId());
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<Login>call, Throwable t) {
+            public void onFailure(Call<Login> call, Throwable t) {
                 // Log error here since request failed
+                progress.dismiss();
                 Log.e("asdf", t.toString());
+                Toast.makeText(getApplicationContext(), "Internal server error..!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void checkOtherLogin() {
+
+        List<User> user = realm.where(User.class).equalTo("name", txt_username.getText().toString()).equalTo("password", txt_password.getText().toString()).findAll();
+
+        if (user.size() > 0) {
+            switch (rgUserType.getCheckedRadioButtonId()) {
+                case R.id.rb_user:
+                    Intent i = new Intent(this, SelectSurveyActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    sessionManager.setLogin(true, user.get(0).getName(), user.get(0).getType(), user.get(0).getId());
+                    startActivity(i);
+                    break;
+
+                case R.id.rb_superviser:
+                    Intent i1 = new Intent(this, MainActivity.class);
+                    i1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    sessionManager.setLogin(true, user.get(0).getName(), user.get(0).getType(), user.get(0).getId());
+                    startActivity(i1);
+                    break;
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

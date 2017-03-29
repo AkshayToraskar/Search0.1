@@ -99,7 +99,7 @@ public class PatientsActivity extends AppCompatActivity {
                 break;
 
             case R.id.action_import_survey:
-                Intent intent = new Intent(this, FilePickerActivity.class);
+                Intent intent = new Intent(this, FilePickerActivityLatest.class);
                 startActivityForResult(intent, REQUEST_CODE);
                 break;
         }

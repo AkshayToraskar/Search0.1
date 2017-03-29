@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,8 +23,10 @@ import com.ak.search.R;
 import com.ak.search.adapter.DataCollectionAdapter;
 import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
+import com.ak.search.model.MSurvey;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.Survey;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -45,12 +49,14 @@ public class GetSurveyActivity extends AppCompatActivity {
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
-    /*@BindView(R.id.spnSurveyName)
-    Spinner spnSurveyName;*/
+    @BindView(R.id.spnSurveyName)
+    Spinner spnSurveyName;
 
     public SurveyHistoryAdapter mAdapter;
     ArrayAdapter<String> spnSurveyNameAdapter;
     Realm realm;
+
+    List<Survey> lstSurveyData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,23 +86,10 @@ public class GetSurveyActivity extends AppCompatActivity {
 
         //patientList = MPatients.listAll(MPatients.class);
 
-        //List<MSurvey> surveyList = MSurvey.listAll(MSurvey.class);
-        /*final String surveyName[] = new String[surveyList.size() + 1];
-        surveyName[0] = "All";
-        for (int i = 0; i < surveyList.size(); i++) {
-            surveyName[i + 1] = surveyList.get(i).getName();
-        }*/
-
-
-        /*spnSurveyNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surveyName);
-        spnSurveyNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spnSurveyName.setAdapter(spnSurveyNameAdapter);*/
-
 
         surveyHistory = new ArrayList<>();
 
         surveyHistory.addAll(realm.where(DataCollection.class).findAll());
-
 
         mAdapter = new SurveyHistoryAdapter(this, surveyHistory, true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -108,44 +101,35 @@ public class GetSurveyActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
 
-       /* spnSurveyName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                    @Override
-                                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                                        String selectedItem = String.valueOf(spnSurveyName.getSelectedItem());
+        lstSurveyData = realm.where(Survey.class).equalTo("nested", false).findAll();
 
-                                                        if (selectedItem.equals("All")) {
-                                                            patientList.clear();
-                                                            patientList.addAll(MPatients.listAll(MPatients.class));
-                                                            mAdapter.notifyDataSetChanged();
-                                                        } else {
-                                                            List<MSurvey> selectedSurvey = MSurvey.find(MSurvey.class, "name = ?", selectedItem);
-
-                                                            if (selectedSurvey.size() > 0) {
-                                                                String surveyId1 = String.valueOf(selectedSurvey.get(0).getId());
-                                                                patientList.clear();
-                                                                patientList.addAll(MPatients.find(MPatients.class, "surveyid=?", surveyId1));
-                                                                mAdapter.notifyDataSetChanged();
-                                                            }
-                                                        }
-
-                                                    }
+        final String surveyName[] = new String[lstSurveyData.size()];
+        // surveyName[0] = "All";
+        for (int i = 0; i < lstSurveyData.size(); i++) {
+            surveyName[i] = lstSurveyData.get(i).getName();
+        }
 
 
-                                                    @Override
-                                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                                    }
-                                                }
-
-        );*/
+        spnSurveyNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surveyName);
+        spnSurveyNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+        spnSurveyName.setAdapter(spnSurveyNameAdapter);
 
 
+        spnSurveyName.setOnItemSelectedListener
+                (new AdapterView.OnItemSelectedListener() {
+                     @Override
+                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                         //String selectedItem = String.valueOf(spnSurveyName.getSelectedItem());
+                         surveyHistory.clear();
+                         surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i).getId()).findAll());
+                         mAdapter.notifyDataSetChanged();
+                     }
 
-
-         /*   Log.v("GET SURVEY", "" + surveyId);
-
-        }*/
-
+                     @Override
+                     public void onNothingSelected(AdapterView<?> adapterView) {
+                     }
+                 }
+                );
     }
 
     @Override
@@ -219,9 +203,9 @@ public class GetSurveyActivity extends AppCompatActivity {
                 strData.add(String.valueOf(surveyHistory.get(i).getTimestamp()));
                 strData.add(String.valueOf(surveyHistory.get(i).getLat()));
                 strData.add(String.valueOf(surveyHistory.get(i).getLng()));
-               // strData.add(" "+surveyHistory.get(i).getPatients().getPatientname());
-               // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
-               // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
+                // strData.add(" "+surveyHistory.get(i).getPatients().getPatientname());
+                // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
+                // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
 
                 for (int j = 0; j < surveyHistory.get(i).getAnswerses().size(); j++) {
                     strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getQuestions().getId()));
@@ -239,7 +223,7 @@ public class GetSurveyActivity extends AppCompatActivity {
 
                 for (int k = 0; k < strData.size(); k++) {
 
-                        str[k] = strData.get(k);
+                    str[k] = strData.get(k);
 
                 }
 
