@@ -1,7 +1,10 @@
 package com.ak.search.activity;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
@@ -16,7 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.SlidingDrawer;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
@@ -27,6 +34,7 @@ import com.ak.search.model.MSurvey;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.User;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
@@ -34,6 +42,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -52,11 +61,30 @@ public class GetSurveyActivity extends AppCompatActivity {
     @BindView(R.id.spnSurveyName)
     Spinner spnSurveyName;
 
-    public SurveyHistoryAdapter mAdapter;
-    ArrayAdapter<String> spnSurveyNameAdapter;
-    Realm realm;
+    @BindView(R.id.slidingDrawer)
+    SlidingDrawer slidingDrawer;
 
+    public SurveyHistoryAdapter mAdapter;
+    ArrayAdapter<String> spnSurveyNameAdapter,spnSupervisorNameAdapter;
+    Realm realm;
+    public static int PATIENT_REQUEST = 12;
     List<Survey> lstSurveyData;
+
+    List<User> lstUserData;
+
+    @BindView(R.id.ivArrow)
+    ImageView ivArrow;
+
+    @BindView(R.id.tvDate)
+    TextView tvDate;
+
+    @BindView(R.id.tvPatient)
+    TextView tvPatient;
+
+    @BindView(R.id.spnSupervisor)
+Spinner spnSupervisor;
+
+    private int mYear, mMonth, mDay, mHour, mMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +114,28 @@ public class GetSurveyActivity extends AppCompatActivity {
 
         //patientList = MPatients.listAll(MPatients.class);
 
+        slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
+            @Override
+            public void onDrawerOpened() {
+                // slideButton.setBackgroundResource(R.drawable.down_arrow_icon);
+                slidingDrawer.setBackgroundResource(R.color.cardview_light_background);
+
+                ivArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp));
+
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
+
+        slidingDrawer.setOnDrawerCloseListener(new SlidingDrawer.OnDrawerCloseListener() {
+            @Override
+            public void onDrawerClosed() {
+
+                recyclerView.setVisibility(View.VISIBLE);
+                //  slideButton.setBackgroundResource(R.drawable.upwar_arrow_icon);
+                slidingDrawer.setBackgroundColor(Color.TRANSPARENT);
+                ivArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp));
+            }
+        });
 
         surveyHistory = new ArrayList<>();
 
@@ -103,10 +153,10 @@ public class GetSurveyActivity extends AppCompatActivity {
 
         lstSurveyData = realm.where(Survey.class).equalTo("nested", false).findAll();
 
-        final String surveyName[] = new String[lstSurveyData.size()];
-        // surveyName[0] = "All";
+        final String surveyName[] = new String[lstSurveyData.size() + 1];
+        surveyName[0] = "All";
         for (int i = 0; i < lstSurveyData.size(); i++) {
-            surveyName[i] = lstSurveyData.get(i).getName();
+            surveyName[i + 1] = lstSurveyData.get(i).getName();
         }
 
 
@@ -115,13 +165,32 @@ public class GetSurveyActivity extends AppCompatActivity {
         spnSurveyName.setAdapter(spnSurveyNameAdapter);
 
 
+        lstUserData = realm.where(User.class).equalTo("type", 2).findAll();
+        final String supervisorName[] = new String[lstUserData.size() + 1];
+        supervisorName[0] = "All";
+        for (int i = 0; i < lstUserData.size(); i++) {
+            supervisorName[i + 1] = lstUserData.get(i).getName();
+        }
+
+
+        spnSupervisorNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, supervisorName);
+        spnSupervisorNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+        spnSupervisor.setAdapter(spnSupervisorNameAdapter);
+
+
         spnSurveyName.setOnItemSelectedListener
                 (new AdapterView.OnItemSelectedListener() {
                      @Override
                      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                          //String selectedItem = String.valueOf(spnSurveyName.getSelectedItem());
                          surveyHistory.clear();
-                         surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i).getId()).findAll());
+
+                         if (i == 0) {
+                             surveyHistory.addAll(realm.where(DataCollection.class).findAll());
+                         } else {
+                             surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i).getId()).findAll());
+                         }
+
                          mAdapter.notifyDataSetChanged();
                      }
 
@@ -255,5 +324,61 @@ public class GetSurveyActivity extends AppCompatActivity {
         }
     }
 
+    public void onBtnClick(View view) {
+        int id = view.getId();
+
+        switch (id) {
+            case R.id.btnSelectDate:
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+
+                break;
+
+            case R.id.btnSelectPatient:
+                Intent i = new Intent(this, SelectPatientsActivity.class);
+                startActivityForResult(i, PATIENT_REQUEST);
+                break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == PATIENT_REQUEST && resultCode == Activity.RESULT_OK) {
+            /*Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();*/
+
+            Long id = (long) data.getExtras().get("data");
+            Patients p = realm.where(Patients.class).equalTo("id", id).findFirst();
+            if (p != null) {
+                tvPatient.setText(p.getPatientname());
+            }
+
+            //StartSurveyActivity.patients = realm.where(Patients.class).equalTo("id", id).findFirst();
+
+
+        }
+    }
 
 }
