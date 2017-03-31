@@ -49,12 +49,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class GetSurveyActivity extends AppCompatActivity {
 
     long surveyId;
     private List<DataCollection> surveyHistory;
+    List<DataCollection> surveyHistoryFilter;
+
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
@@ -65,7 +68,7 @@ public class GetSurveyActivity extends AppCompatActivity {
     SlidingDrawer slidingDrawer;
 
     public SurveyHistoryAdapter mAdapter;
-    ArrayAdapter<String> spnSurveyNameAdapter,spnSupervisorNameAdapter;
+    ArrayAdapter<String> spnSurveyNameAdapter, spnSupervisorNameAdapter;
     Realm realm;
     public static int PATIENT_REQUEST = 12;
     List<Survey> lstSurveyData;
@@ -82,9 +85,12 @@ public class GetSurveyActivity extends AppCompatActivity {
     TextView tvPatient;
 
     @BindView(R.id.spnSupervisor)
-Spinner spnSupervisor;
+    Spinner spnSupervisor;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
+
+    Long patientId=(long)0;
+    String selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +144,7 @@ Spinner spnSupervisor;
         });
 
         surveyHistory = new ArrayList<>();
-
+        surveyHistoryFilter = new ArrayList<>();
         surveyHistory.addAll(realm.where(DataCollection.class).findAll());
 
         mAdapter = new SurveyHistoryAdapter(this, surveyHistory, true);
@@ -178,7 +184,7 @@ Spinner spnSupervisor;
         spnSupervisor.setAdapter(spnSupervisorNameAdapter);
 
 
-        spnSurveyName.setOnItemSelectedListener
+        /*spnSurveyName.setOnItemSelectedListener
                 (new AdapterView.OnItemSelectedListener() {
                      @Override
                      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -188,7 +194,7 @@ Spinner spnSupervisor;
                          if (i == 0) {
                              surveyHistory.addAll(realm.where(DataCollection.class).findAll());
                          } else {
-                             surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i).getId()).findAll());
+                             surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i-1).getId()).findAll());
                          }
 
                          mAdapter.notifyDataSetChanged();
@@ -198,7 +204,7 @@ Spinner spnSupervisor;
                      public void onNothingSelected(AdapterView<?> adapterView) {
                      }
                  }
-                );
+                );*/
     }
 
     @Override
@@ -342,6 +348,7 @@ Spinner spnSupervisor;
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
 
+                                selectedDate = dayOfMonth + "." + String.format("%02d", (monthOfYear + 1)) + "." + year;
                                 tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
 
@@ -355,6 +362,10 @@ Spinner spnSupervisor;
                 Intent i = new Intent(this, SelectPatientsActivity.class);
                 startActivityForResult(i, PATIENT_REQUEST);
                 break;
+
+            case R.id.btnApply:
+                applyFilter();
+                break;
         }
     }
 
@@ -363,22 +374,54 @@ Spinner spnSupervisor;
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == PATIENT_REQUEST && resultCode == Activity.RESULT_OK) {
-            /*Bitmap photo = (Bitmap) data.getExtras().get("data");
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();*/
-
-            Long id = (long) data.getExtras().get("data");
-            Patients p = realm.where(Patients.class).equalTo("id", id).findFirst();
+            patientId = (long) data.getExtras().get("data");
+            Patients p = realm.where(Patients.class).equalTo("id", patientId).findFirst();
             if (p != null) {
                 tvPatient.setText(p.getPatientname());
             }
 
-            //StartSurveyActivity.patients = realm.where(Patients.class).equalTo("id", id).findFirst();
-
-
         }
+    }
+
+    public void applyFilter() {
+
+        //surveyHistoryFilter.clear();
+       // boolean filter = false;
+
+        RealmQuery q=realm.where(DataCollection.class);
+
+        if (spnSurveyName.getSelectedItemPosition() > 0) {
+            q=q.equalTo("surveyid",lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
+            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId()).findAll());
+           // filter = true;
+        }
+
+        if (spnSupervisor.getSelectedItemPosition() > 0) {
+            q=q.equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId());
+            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId()).findAll());
+           // filter = true;
+        }
+
+        if(patientId!=0){
+            q=q.equalTo("patients.id", patientId);
+          //  filter=true;
+          //  surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("patients.id", patientId).findAll());
+        }
+
+        if (selectedDate != null) {
+            q=q.beginsWith("timestamp", selectedDate);
+            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("timestamp", selectedDate).findAll());
+           // filter = true;
+        }
+
+       // if (filter == false) {
+            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).findAll());
+       // }
+
+        surveyHistory.clear();
+        surveyHistory.addAll(q.findAll());
+        mAdapter.notifyDataSetChanged();
     }
 
 }

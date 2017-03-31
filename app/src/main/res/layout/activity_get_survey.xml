@@ -12,7 +12,8 @@
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:weightSum="1">
 
 
         <!--<View
@@ -24,10 +25,12 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_questions"
             android:layout_width="match_parent"
-            android:layout_height="716dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true" />
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="40dp"
+             />
 
     </LinearLayout>
 
@@ -93,52 +96,74 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
+                android:orientation="vertical"
                 android:layout_alignParentTop="true"
-                android:orientation="vertical">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:text="Survey"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="35dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="Survey"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
 
 
-                <Spinner
-                    android:id="@+id/spnSurveyName"
+                    <Spinner
+                        android:id="@+id/spnSurveyName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3">
+
+                    </Spinner>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp">
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="35dp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
 
-                </Spinner>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:text="Supervisor"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
-
-
-                <Spinner
-                    android:id="@+id/spnSupervisor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp">
-
-                </Spinner>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="Supervisor"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
 
 
+                    <Spinner
+                        android:id="@+id/spnSupervisor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3">
+
+                    </Spinner>
+
+                </LinearLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="35dp"
                     android:orientation="horizontal"
                     android:weightSum="5">
 
@@ -163,7 +188,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="35dp"
                     android:orientation="horizontal"
                     android:weightSum="5">
 
@@ -184,6 +211,16 @@
                         android:onClick="onBtnClick"
                         android:text="select Date" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnApply"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginTop="35dp"
+                    android:onClick="onBtnClick"
+                    android:text="Apply"/>
 
             </LinearLayout>
 
