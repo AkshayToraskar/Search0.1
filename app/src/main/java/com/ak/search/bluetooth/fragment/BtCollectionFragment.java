@@ -15,12 +15,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.ak.search.R;
-import com.ak.search.adapter.SurveyAdapter;
-import com.ak.search.adapter.SurveyHistoryAdapter;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.bluetooth.adapter.BtSurveyHistoryAdapter;
+import com.ak.search.bluetooth.adapters.BtSurveyHistoryAdapter;
 import com.ak.search.realm_model.DataCollection;
-import com.ak.search.realm_model.Survey;
 
 import java.util.ArrayList;
 import java.util.List;

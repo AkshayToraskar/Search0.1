@@ -1,4 +1,4 @@
-package com.ak.search.bluetooth.adapter;
+package com.ak.search.bluetooth.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +11,8 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.TransferModel;
+import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +21,9 @@ import java.util.List;
  * Created by dg hdghfd on 29-11-2016.
  */
 
-public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyViewHolder> {
+public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHolder> {
 
-    private List<Survey> surveysList;
+    private List<User> userList;
     private Context context;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
@@ -41,11 +41,10 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    List<Survey> surveys=new ArrayList<Survey>();
-                    surveys.add(surveysList.get(getPosition()));
+                    List<User> user = new ArrayList<User>();
+                    user.add(userList.get(getPosition()));
                     transferModel.setName(String.valueOf(b));
-                    transferModel.setSurveyList(surveys);
-
+                    transferModel.setUserList(user);
                     collectDataInfo.collectData(transferModel);
                 }
             });
@@ -55,11 +54,11 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
     }
 
 
-    public BtSurveyAdapter(CollectDataInfo collectDataInfo, Context context, List<Survey> surveysList) {
-        this.surveysList = surveysList;
+    public BtUsersAdapter(CollectDataInfo collectDataInfo, Context context, List<User> userList) {
+        this.userList = userList;
         this.context = context;
         this.collectDataInfo = collectDataInfo;
-        transferModel=new TransferModel();
+        transferModel = new TransferModel();
     }
 
     @Override
@@ -72,9 +71,8 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Survey survey = surveysList.get(position);
-        holder.cbName.setText(survey.getName());
-
+        User user = userList.get(position);
+        holder.cbName.setText(user.getName());
 
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
@@ -84,12 +82,6 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
         }
     }
 
-    public void selectAll(boolean val) {
-        Log.e("onClickSelectAll", "yes");
-        isSelectedAll = val;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -97,6 +89,12 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return surveysList.size();
+        return userList.size();
+    }
+
+    public void selectAll(boolean val) {
+        Log.e("onClickSelectAll", "yes");
+        isSelectedAll = val;
+        notifyDataSetChanged();
     }
 }

@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface ApiInterface {
     @FormUrlEncoded
-    @POST("search/Login.php")
+    @POST("DataCollectionApp/Login.php")
     Call<Login> getLogin(@Field("username") String username,
                          @Field("password") String password);
 

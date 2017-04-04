@@ -15,12 +15,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.ak.search.R;
-import com.ak.search.adapter.PatientAdapter;
-import com.ak.search.adapter.UsersAdapter;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.bluetooth.adapter.BtPatientAdapter;
+import com.ak.search.bluetooth.adapters.BtPatientAdapter;
 import com.ak.search.realm_model.Patients;
-import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;
 import java.util.List;

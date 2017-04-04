@@ -1,68 +1,123 @@
 package com.ak.search.bluetooth.adapter;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ak.search.R;
-import com.ak.search.activity.ShowSurveyActivity;
 import com.ak.search.app.CollectDataInfo;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.TransferModel;
-import com.ak.search.realm_model.User;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
  */
 
-public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistoryAdapter.MyViewHolder> {
-
-    private List<DataCollection> patientsList;
+public class BtSurveyHistoryAdapter extends BaseAdapter {
     private Context context;
-    CollectDataInfo collectDataInfo;
-    TransferModel transferModel;
-boolean isSelectedAll;
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public CheckBox cbName;
-        //public ImageView ivDelete;
+    private List<DataCollection> data;
+    private static LayoutInflater inflater = null;
 
-        public MyViewHolder(View view) {
-            super(view);
-            cbName = (CheckBox) view.findViewById(R.id.cbName);
+    public BtSurveyHistoryAdapter(Context a, List<DataCollection> d) {
+        context = a;
+        this.data = d;
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    List<DataCollection> dataCollectionList = new ArrayList<DataCollection>();
-                    dataCollectionList.add(patientsList.get(getPosition()));
-                    transferModel.setDataCollectionList(dataCollectionList);
-                    transferModel.setName(String.valueOf(b));
-                    collectDataInfo.collectData(transferModel);
-                }
-            });
-
-        }
     }
 
+    @Override
+    public int getCount() {
+        return data.size();
+    }
 
-    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo,Context context, List<DataCollection> patientsList) {
+    @Override
+    public Object getItem(int i) {
+        return i;
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        View vi = view;
+        if (view == null)
+            vi = inflater.inflate(R.layout.bt_list_row, null);
+
+        //TextView title = (TextView)vi.findViewById(R.id.title); // title
+
+        CheckBox cbName = (CheckBox) vi.findViewById(R.id.cbName);
+
+        DataCollection dataCollection = new DataCollection();
+        dataCollection = data.get(i);
+
+        // Setting all values in listview
+        cbName.setText(dataCollection.getTimestamp());
+
+        return vi;
+    }
+}
+
+
+
+
+
+
+
+
+/*extends RecyclerView.Adapter<BtSurveyHistoryAdapter.MyViewHolder> {
+
+private List<DataCollection> patientsList;
+private Context context;
+        CollectDataInfo collectDataInfo;
+        TransferModel transferModel;
+        boolean isSelectedAll;
+
+public class MyViewHolder extends RecyclerView.ViewHolder {
+    public CheckBox cbName;
+    //public ImageView ivDelete;
+
+    public MyViewHolder(View view) {
+        super(view);
+        cbName = (CheckBox) view.findViewById(R.id.cbName);
+
+        cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                List<DataCollection> dataCollectionList = new ArrayList<DataCollection>();
+                dataCollectionList.add(patientsList.get(getPosition()));
+                transferModel.setDataCollectionList(dataCollectionList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
+            }
+        });
+
+    }
+}
+
+
+    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo, Context context, List<DataCollection> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
-        this.collectDataInfo=collectDataInfo;
-        transferModel=new TransferModel();
+        this.collectDataInfo = collectDataInfo;
+        transferModel = new TransferModel();
     }
 
     @Override
@@ -76,16 +131,15 @@ boolean isSelectedAll;
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
-        if(user.getPatients()!=null) {
+        if (user.getPatients() != null) {
             holder.cbName.setText(user.getPatients().getPatientname() + " ");
-        }else
-        {holder.cbName.setText("asdf");
+        } else {
+            holder.cbName.setText("asdf");
 
         }
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
-        }
-        else{
+        } else {
             holder.cbName.setChecked(true);
         }
     }
@@ -105,4 +159,4 @@ boolean isSelectedAll;
         isSelectedAll = val;
         notifyDataSetChanged();
     }
-}
+}*/

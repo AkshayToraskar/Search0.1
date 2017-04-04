@@ -47,7 +47,7 @@ public class FilePickerActivityLatest extends AppCompatActivity {
         ButterKnife.bind(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setTitle("Import .csv file");
 
         // Set initial directory
         Directory = new File(DEFAULT_INITIAL_DIRECTORY);

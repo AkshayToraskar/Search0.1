@@ -15,11 +15,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.ak.search.R;
-import com.ak.search.adapter.PatientAdapter;
-import com.ak.search.adapter.SurveyAdapter;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.bluetooth.adapter.BtSurveyAdapter;
-import com.ak.search.realm_model.Patients;
+import com.ak.search.bluetooth.adapters.BtSurveyAdapter;
 import com.ak.search.realm_model.Survey;
 
 import java.util.ArrayList;

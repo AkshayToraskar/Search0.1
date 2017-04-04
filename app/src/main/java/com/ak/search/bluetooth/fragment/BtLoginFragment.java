@@ -16,7 +16,7 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.bluetooth.adapter.BtUsersAdapter;
+import com.ak.search.bluetooth.adapters.BtUsersAdapter;
 import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;

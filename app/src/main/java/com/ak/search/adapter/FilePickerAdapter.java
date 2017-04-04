@@ -49,10 +49,10 @@ public class FilePickerAdapter extends ArrayAdapter<File> {
         textView.setText(object.getName());
 
         if (object.isFile())
-            imageView.setImageResource(R.drawable.ic_widgets_black_24dp);
+            imageView.setImageResource(R.drawable.spreadsheet);
 
         else
-            imageView.setImageResource(R.drawable.ic_folder_black_24dp);
+            imageView.setImageResource(R.drawable.folders);
 
         return row;
     }

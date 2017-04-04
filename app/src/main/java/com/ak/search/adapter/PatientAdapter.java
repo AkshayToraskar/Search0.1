@@ -108,15 +108,16 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
         String ids=String.valueOf(user.getId());
-        holder.tvVillage.setText("Village No: "+ids.charAt(0)+ ", ");
-        holder.tvHouse.setText("House No: "+ids.charAt(1) + ", ");
-        holder.tvFamily.setText("Family No: "+ids.charAt(2) + ", ");
-        holder.tvIndividual.setText("Id No: "+ids.charAt(3) + " ");
+        if(ids.length()>4) {
+            holder.tvVillage.setText("Village No: " + ids.charAt(0) + ", ");
+            holder.tvHouse.setText("House No: " + ids.charAt(1) + ", ");
+            holder.tvFamily.setText("Family No: " + ids.charAt(2) + ", ");
+            holder.tvIndividual.setText("Id No: " + ids.charAt(3) + " ");
+        }
         holder.tvName.setText(user.getPatientname() + " ");
         holder.tvAge.setText("Age: " + user.getAge() + " ");
         String sex = "";
         switch (user.getSex()) {
-
             case 1:
                 sex = "Male";
                 break;

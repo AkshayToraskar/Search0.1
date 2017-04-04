@@ -8,8 +8,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-    //public static final String BASE_URL = "http://kmpl.ml/";
-    public static final String BASE_URL = "http://10.196.22.134/";
+    public static final String BASE_URL = "http://searchgadchiroli.org/";
+    //public static final String BASE_URL = "http://10.196.22.134/";
 
     private static Retrofit retrofit = null;
 

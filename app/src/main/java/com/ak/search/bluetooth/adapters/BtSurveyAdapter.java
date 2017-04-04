@@ -1,4 +1,4 @@
-package com.ak.search.bluetooth.adapter;
+package com.ak.search.bluetooth.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

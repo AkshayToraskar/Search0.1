@@ -153,7 +153,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void discardSurvey() {
         new AlertDialog.Builder(this)
                 .setTitle("Discard")
-                .setMessage("Would you like to Discard MSurvey?")
+                .setMessage("Would you like to Discard Survey?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //    MPatients patients = MPatients.findById(MPatients.class, patientId);

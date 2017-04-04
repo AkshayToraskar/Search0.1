@@ -11,7 +11,6 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.model.MTransferModel;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.TransferModel;
 
