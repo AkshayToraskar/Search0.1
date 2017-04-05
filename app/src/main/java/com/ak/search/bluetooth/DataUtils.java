@@ -523,7 +523,7 @@ public class DataUtils {
                                                                  if (op != null) {
                                                                      o = realm.where(Options.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptions().get(k).getId()).findFirst();
                                                                  } else {
-                                                                     o = realm.createObject(Options.class, data.getSurveyList().get(i).getQuestions().get(j).getOptions().get(k).getId());
+                                                                     o = realm.createObject(Options.class, data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptions().get(k).getId());
                                                                  }
                                                                  o.setOpt(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptions().get(k).getOpt());
                                                                  realm.copyToRealmOrUpdate(o);
@@ -540,7 +540,7 @@ public class DataUtils {
                                                                  if (op != null) {
                                                                      o = realm.where(ConditionalOptions.class).equalTo("id", data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getId()).findFirst();
                                                                  } else {
-                                                                     o = realm.createObject(ConditionalOptions.class, data.getSurveyList().get(i).getQuestions().get(j).getOptionContidion().get(k).getId());
+                                                                     o = realm.createObject(ConditionalOptions.class, data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getId());
                                                                  }
                                                                  o.setOpt(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getOpt());
                                                                  o.setSurveyid(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOptionContidion().get(k).getSurveyid());

@@ -16,8 +16,10 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
+import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtSurveyAdapter;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.TransferModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,9 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtSurveyFragment extends Fragment {
+public class BtSurveyFragment extends Fragment implements DataSelection {
 
-    private List<Survey> surveyList;
+    public static List<Survey> surveyList;
     @BindView(R.id.rv_survey)
     RecyclerView recyclerView;
     private BtSurveyAdapter mAdapter;
@@ -41,6 +43,8 @@ public class BtSurveyFragment extends Fragment {
     CollectDataInfo collectDataInfo;
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
+    TransferModel transferModel;
+    public static DataSelection dataSelection;
 
     public BtSurveyFragment() {
         // Required empty public constructor
@@ -51,20 +55,20 @@ public class BtSurveyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view=inflater.inflate(R.layout.fragment_bt_survey, container, false);
+        view = inflater.inflate(R.layout.fragment_bt_survey, container, false);
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
-        realm=Realm.getDefaultInstance();
-
+        realm = Realm.getDefaultInstance();
+        transferModel = new TransferModel();
         //  usersList = MUser.listAll(MUser.class);
-
+        dataSelection = this;
         RealmResults<Survey> results = realm.where(Survey.class).findAll();
 
-        surveyList=new ArrayList<>();
+        surveyList = new ArrayList<>();
         surveyList.addAll(results);
 
-        mAdapter = new BtSurveyAdapter(collectDataInfo,getContext(), surveyList);
+        mAdapter = new BtSurveyAdapter(collectDataInfo, getContext(), surveyList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -79,6 +83,12 @@ public class BtSurveyFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mAdapter.selectAll(b);
+
+
+                transferModel.setSurveyList(surveyList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
+
             }
         });
 
@@ -95,4 +105,8 @@ public class BtSurveyFragment extends Fragment {
         }
     }
 
+    @Override
+    public void checkAllData(Boolean bool) {
+
+    }
 }

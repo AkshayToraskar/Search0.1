@@ -98,7 +98,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     ThreadConnected myThreadConnected;
 
 
-
     public static ChangeUIFromThread changeUIFromThread;
     SessionManager sessionManager;
     Realm realm;
@@ -213,7 +212,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
 
 
         if (myThreadConnectBTdevice != null) {
@@ -337,7 +335,6 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         snackbar.show();
 
 
-
         if (myThreadConnectBTdevice != null) {
             myThreadConnectBTdevice.cancel();
         }
@@ -351,42 +348,78 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     HashMap<Long, User> userData = new HashMap<>();
     HashMap<Long, Patients> patientData = new HashMap<>();
     HashMap<Long, Survey> surveyData = new HashMap<>();
-    HashMap<Long, DataCollection> dataCollection=new HashMap<>();
+    HashMap<Long, DataCollection> dataCollection = new HashMap<>();
 
 
     @Override
     public void collectData(TransferModel transferModel) {
 
         if (transferModel.getUserList() != null) {
-            if (transferModel.getName().equals("true")) {
-                userData.put(transferModel.getUserList().get(0).getId(), transferModel.getUserList().get(0));
-            } else {
-                userData.remove(transferModel.getUserList().get(0).getId());
+            if(transferModel.getUserList().size()==BtLoginFragment.usersList.size()){
+                BtLoginFragment.dataSelection.checkAllData(true);
             }
-        } else if (transferModel.getPatientsList() != null) {
-            if (transferModel.getName().equals("true")) {
-                patientData.put(transferModel.getPatientsList().get(0).getId(), transferModel.getPatientsList().get(0));
-            } else {
-                patientData.remove(transferModel.getPatientsList().get(0).getId());
+            for (int i = 0; i < transferModel.getUserList().size(); i++) {
+                if (transferModel.getName().equals("true")) {
+                    userData.put(transferModel.getUserList().get(i).getId(), transferModel.getUserList().get(i));
+                } else {
+                    userData.remove(transferModel.getUserList().get(i).getId());
+                }
             }
-        } else if (transferModel.getSurveyList() != null) {
-            if (transferModel.getName().equals("true")) {
-                surveyData.put(transferModel.getSurveyList().get(0).getId(), transferModel.getSurveyList().get(0));
-            } else {
-                surveyData.remove(transferModel.getSurveyList().get(0).getId());
+        } else {
+            BtLoginFragment.dataSelection.checkAllData(false);
+        }
+
+        if (transferModel.getPatientsList() != null) {
+            if(transferModel.getPatientsList().size()==BtPatientFragment.patientsList.size()){
+                BtPatientFragment.dataSelection.checkAllData(true);
             }
-        }else if (transferModel.getDataCollectionList() != null) {
-            if (transferModel.getName().equals("true")) {
-                dataCollection.put(transferModel.getDataCollectionList().get(0).getId(), transferModel.getDataCollectionList().get(0));
-            } else {
-                dataCollection.remove(transferModel.getDataCollectionList().get(0).getId());
+
+            for (int i = 0; i < transferModel.getPatientsList().size(); i++) {
+                if (transferModel.getName().equals("true")) {
+                    patientData.put(transferModel.getPatientsList().get(i).getId(), transferModel.getPatientsList().get(i));
+                } else {
+                    patientData.remove(transferModel.getPatientsList().get(i).getId());
+                }
             }
+        } else {
+            BtPatientFragment.dataSelection.checkAllData(false);
+        }
+
+        if (transferModel.getSurveyList() != null) {
+            if(transferModel.getSurveyList().size()==BtSurveyFragment.surveyList.size()){
+                BtSurveyFragment.dataSelection.checkAllData(true);
+            }
+
+            for (int i = 0; i < transferModel.getSurveyList().size(); i++) {
+                if (transferModel.getName().equals("true")) {
+                    surveyData.put(transferModel.getSurveyList().get(i).getId(), transferModel.getSurveyList().get(i));
+                } else {
+                    surveyData.remove(transferModel.getSurveyList().get(i).getId());
+                }
+            }
+        } else {
+            BtSurveyFragment.dataSelection.checkAllData(false);
+        }
+        if (transferModel.getDataCollectionList() != null) {
+            if(transferModel.getDataCollectionList().size()==BtPatientFragment.patientsList.size()){
+                BtPatientFragment.dataSelection.checkAllData(true);
+            }
+
+            for (int i = 0; i < transferModel.getDataCollectionList().size(); i++) {
+                if (transferModel.getName().equals("true")) {
+                    dataCollection.put(transferModel.getDataCollectionList().get(i).getId(), transferModel.getDataCollectionList().get(i));
+                } else {
+                    dataCollection.remove(transferModel.getDataCollectionList().get(i).getId());
+                }
+            }
+        } else {
+            BtPatientFragment.dataSelection.checkAllData(false);
         }
 
         List<User> userList = new ArrayList<>();
         List<Patients> patientsList = new ArrayList<>();
         List<Survey> surveyList = new ArrayList<>();
-        List<DataCollection> dataCollectionList=new ArrayList<>();
+        List<DataCollection> dataCollectionList = new ArrayList<>();
 
         for (Map.Entry m : userData.entrySet()) {
             userList.add((User) m.getValue());
@@ -410,10 +443,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
         this.transferModel.setPatientsList(patientsList);
         this.transferModel.setDataCollectionList(dataCollectionList);
 
-        if(userList.size()>0 || patientsList.size()>0 || surveyList.size()>0 || dataCollectionList.size()>0){
+        if (userList.size() > 0 || patientsList.size() > 0 || surveyList.size() > 0 || dataCollectionList.size() > 0) {
             btnSend.setEnabled(true);
-        }
-        else{
+        } else {
             btnSend.setEnabled(false);
         }
 

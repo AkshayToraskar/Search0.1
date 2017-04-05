@@ -16,8 +16,10 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
+import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtSurveyHistoryAdapter;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.TransferModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,9 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtCollectionFragment extends Fragment {
+public class BtCollectionFragment extends Fragment implements DataSelection {
 
-    private List<DataCollection> dataCollectionList;
+    public static List<DataCollection> dataCollectionList;
     @BindView(R.id.rv_data_collection)
     RecyclerView recyclerView;
     @BindView(R.id.cb_select_all)
@@ -41,6 +43,8 @@ public class BtCollectionFragment extends Fragment {
     Realm realm;
     View view;
     CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
+    public static DataSelection dataSelection;
 
     public BtCollectionFragment() {
         // Required empty public constructor
@@ -51,21 +55,22 @@ public class BtCollectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view= inflater.inflate(R.layout.fragment_bt_collection, container, false);
+        view = inflater.inflate(R.layout.fragment_bt_collection, container, false);
+        transferModel = new TransferModel();
+        dataSelection = this;
 
+        ButterKnife.bind(this, view);
 
-        ButterKnife.bind(this,view);
-
-        realm=Realm.getDefaultInstance();
+        realm = Realm.getDefaultInstance();
 
         //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
 
-        dataCollectionList=new ArrayList<>();
+        dataCollectionList = new ArrayList<>();
         dataCollectionList.addAll(results);
 
-        mAdapter = new BtSurveyHistoryAdapter(collectDataInfo,getContext(), dataCollectionList);
+        mAdapter = new BtSurveyHistoryAdapter(collectDataInfo, getContext(), dataCollectionList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -80,6 +85,13 @@ public class BtCollectionFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mAdapter.selectAll(b);
+
+
+                transferModel.setDataCollectionList(dataCollectionList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
+
+
             }
         });
 
@@ -96,4 +108,8 @@ public class BtCollectionFragment extends Fragment {
         }
     }
 
+    @Override
+    public void checkAllData(Boolean bool) {
+
+    }
 }

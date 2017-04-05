@@ -27,7 +27,8 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
     private Context context;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
-boolean isSelectedAll;
+    boolean isSelectedAll;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
         //public ImageView ivDelete;
@@ -51,11 +52,11 @@ boolean isSelectedAll;
     }
 
 
-    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo,Context context, List<DataCollection> patientsList) {
+    public BtSurveyHistoryAdapter(CollectDataInfo collectDataInfo, Context context, List<DataCollection> patientsList) {
         this.patientsList = patientsList;
         this.context = context;
-        this.collectDataInfo=collectDataInfo;
-        transferModel=new TransferModel();
+        this.collectDataInfo = collectDataInfo;
+        transferModel = new TransferModel();
     }
 
     @Override
@@ -69,16 +70,15 @@ boolean isSelectedAll;
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
-        if(user.getPatients()!=null) {
+        if (user.getPatients() != null) {
             holder.cbName.setText(user.getPatients().getPatientname() + " ");
-        }else
-        {holder.cbName.setText("asdf");
+        } else {
+            holder.cbName.setText("asdf");
 
         }
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
-        }
-        else{
+        } else {
             holder.cbName.setChecked(true);
         }
     }

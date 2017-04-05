@@ -16,8 +16,10 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
+import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtPatientAdapter;
 import com.ak.search.realm_model.Patients;
+import com.ak.search.realm_model.TransferModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,9 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtPatientFragment extends Fragment {
+public class BtPatientFragment extends Fragment implements DataSelection {
 
-    private List<Patients> patientsList;
+    public static List<Patients> patientsList;
     @BindView(R.id.rv_patient)
     RecyclerView recyclerView;
     private BtPatientAdapter mAdapter;
@@ -41,6 +43,8 @@ public class BtPatientFragment extends Fragment {
     CollectDataInfo collectDataInfo;
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
+    TransferModel transferModel;
+    public static DataSelection dataSelection;
 
     public BtPatientFragment() {
 
@@ -51,19 +55,19 @@ public class BtPatientFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view=inflater.inflate(R.layout.fragment_bt_patient, container, false);
-        ButterKnife.bind(this,view);
+        view = inflater.inflate(R.layout.fragment_bt_patient, container, false);
+        ButterKnife.bind(this, view);
 
-        realm=Realm.getDefaultInstance();
-
+        realm = Realm.getDefaultInstance();
+        transferModel = new TransferModel();
         //  usersList = MUser.listAll(MUser.class);
-
+        dataSelection = this;
         RealmResults<Patients> results = realm.where(Patients.class).findAll();
 
-        patientsList=new ArrayList<>();
+        patientsList = new ArrayList<>();
         patientsList.addAll(results);
 
-        mAdapter = new BtPatientAdapter(collectDataInfo,getContext(), patientsList);
+        mAdapter = new BtPatientAdapter(collectDataInfo, getContext(), patientsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -78,6 +82,12 @@ public class BtPatientFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mAdapter.selectAll(b);
+
+
+                transferModel.setPatientsList(patientsList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
+
             }
         });
 
@@ -94,4 +104,8 @@ public class BtPatientFragment extends Fragment {
         }
     }
 
+    @Override
+    public void checkAllData(Boolean bool) {
+
+    }
 }

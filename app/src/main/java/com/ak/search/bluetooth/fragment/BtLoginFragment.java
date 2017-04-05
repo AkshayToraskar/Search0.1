@@ -16,7 +16,9 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
+import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtUsersAdapter;
+import com.ak.search.realm_model.TransferModel;
 import com.ak.search.realm_model.User;
 
 import java.util.ArrayList;
@@ -30,18 +32,19 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtLoginFragment extends Fragment {
+public class BtLoginFragment extends Fragment implements DataSelection {
 
-    private List<User> usersList;
+    public static List<User> usersList;
     @BindView(R.id.rv_user)
     RecyclerView recyclerView;
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
-
+    public static DataSelection dataSelection;
     private BtUsersAdapter mAdapter;
     Realm realm;
     View view;
     CollectDataInfo collectDataInfo;
+    TransferModel transferModel;
 
     public BtLoginFragment() {
     }
@@ -55,14 +58,14 @@ public class BtLoginFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         realm = Realm.getDefaultInstance();
-
+        transferModel = new TransferModel();
         //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<User> results = realm.where(User.class).findAll();
 
         usersList = new ArrayList<>();
         usersList.addAll(results);
-
+        dataSelection = this;
         mAdapter = new BtUsersAdapter(collectDataInfo, getContext(), usersList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -79,6 +82,11 @@ public class BtLoginFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mAdapter.selectAll(b);
+
+                transferModel.setUserList(usersList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
+
             }
         });
 
@@ -95,5 +103,10 @@ public class BtLoginFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
         }
+    }
+
+    @Override
+    public void checkAllData(Boolean bool) {
+
     }
 }
