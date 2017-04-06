@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
 import com.ak.search.realm_model.DataCollection;
+import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.TransferModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
@@ -28,14 +32,17 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
     boolean isSelectedAll;
+    Realm realm;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
+        public TextView tvInfo;
         //public ImageView ivDelete;
 
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
+            tvInfo = (TextView) view.findViewById(R.id.tvInfo);
 
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -57,6 +64,7 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
         this.context = context;
         this.collectDataInfo = collectDataInfo;
         transferModel = new TransferModel();
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -71,7 +79,10 @@ public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistory
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
         if (user.getPatients() != null) {
-            holder.cbName.setText(user.getPatients().getPatientname() + " ");
+            Survey survey = realm.where(Survey.class).equalTo("id", user.getSurveyid()).findFirst();
+
+            holder.cbName.setText(survey.getName());
+            holder.tvInfo.setText(user.getTimestamp());
         } else {
             holder.cbName.setText("asdf");
 

@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtPatientAdapter;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.TransferModel;
@@ -32,7 +31,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtPatientFragment extends Fragment implements DataSelection {
+public class BtPatientFragment extends Fragment{
 
     public static List<Patients> patientsList;
     @BindView(R.id.rv_patient)
@@ -44,7 +43,7 @@ public class BtPatientFragment extends Fragment implements DataSelection {
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
     TransferModel transferModel;
-    public static DataSelection dataSelection;
+
 
     public BtPatientFragment() {
 
@@ -61,7 +60,7 @@ public class BtPatientFragment extends Fragment implements DataSelection {
         realm = Realm.getDefaultInstance();
         transferModel = new TransferModel();
         //  usersList = MUser.listAll(MUser.class);
-        dataSelection = this;
+
         RealmResults<Patients> results = realm.where(Patients.class).findAll();
 
         patientsList = new ArrayList<>();
@@ -81,12 +80,11 @@ public class BtPatientFragment extends Fragment implements DataSelection {
         cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mAdapter.selectAll(b);
 
-
-                transferModel.setPatientsList(patientsList);
-                transferModel.setName(String.valueOf(b));
-                collectDataInfo.collectData(transferModel);
+                    mAdapter.selectAll(b);
+                    transferModel.setPatientsList(patientsList);
+                    transferModel.setName(String.valueOf(b));
+                    collectDataInfo.collectData(transferModel);
 
             }
         });
@@ -104,8 +102,5 @@ public class BtPatientFragment extends Fragment implements DataSelection {
         }
     }
 
-    @Override
-    public void checkAllData(Boolean bool) {
 
-    }
 }

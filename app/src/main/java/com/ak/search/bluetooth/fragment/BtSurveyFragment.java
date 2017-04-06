@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtSurveyAdapter;
 import com.ak.search.realm_model.Survey;
 import com.ak.search.realm_model.TransferModel;
@@ -32,7 +31,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtSurveyFragment extends Fragment implements DataSelection {
+public class BtSurveyFragment extends Fragment{
 
     public static List<Survey> surveyList;
     @BindView(R.id.rv_survey)
@@ -44,7 +43,7 @@ public class BtSurveyFragment extends Fragment implements DataSelection {
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
     TransferModel transferModel;
-    public static DataSelection dataSelection;
+
 
     public BtSurveyFragment() {
         // Required empty public constructor
@@ -62,7 +61,6 @@ public class BtSurveyFragment extends Fragment implements DataSelection {
         realm = Realm.getDefaultInstance();
         transferModel = new TransferModel();
         //  usersList = MUser.listAll(MUser.class);
-        dataSelection = this;
         RealmResults<Survey> results = realm.where(Survey.class).findAll();
 
         surveyList = new ArrayList<>();
@@ -82,12 +80,14 @@ public class BtSurveyFragment extends Fragment implements DataSelection {
         cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mAdapter.selectAll(b);
+
+                    mAdapter.selectAll(b);
 
 
-                transferModel.setSurveyList(surveyList);
-                transferModel.setName(String.valueOf(b));
-                collectDataInfo.collectData(transferModel);
+                    transferModel.setSurveyList(surveyList);
+                    transferModel.setName(String.valueOf(b));
+                    collectDataInfo.collectData(transferModel);
+
 
             }
         });
@@ -105,8 +105,5 @@ public class BtSurveyFragment extends Fragment implements DataSelection {
         }
     }
 
-    @Override
-    public void checkAllData(Boolean bool) {
 
-    }
 }

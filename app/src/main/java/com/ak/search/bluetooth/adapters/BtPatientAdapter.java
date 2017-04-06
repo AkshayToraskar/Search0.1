@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
@@ -31,11 +32,14 @@ boolean  isSelectedAll;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
+        public TextView tvInfo;
        // public ImageView ivDelete;
 
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
+            tvInfo=(TextView)view.findViewById(R.id.tvInfo);
+
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -74,6 +78,7 @@ boolean  isSelectedAll;
         Patients user = patientsList.get(position);
         holder.cbName.setText(user.getPatientname());
 
+        holder.tvInfo.setText("Age: "+user.getAge()+" id:"+user.getId());
 
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);

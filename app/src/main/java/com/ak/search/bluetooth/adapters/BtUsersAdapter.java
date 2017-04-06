@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
@@ -31,11 +32,12 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public CheckBox cbName;
+        public TextView tvInfo;
 
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
-
+tvInfo=(TextView)view.findViewById(R.id.tvInfo);
 
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -73,6 +75,17 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = userList.get(position);
         holder.cbName.setText(user.getName());
+        switch (user.getType()){
+            case 1:
+                holder.tvInfo.setText("Admin");
+                break;
+            case 2:
+                holder.tvInfo.setText("Supervisor");
+                break;
+            case 3:
+                holder.tvInfo.setText("Fieldworker");
+                break;
+        }
 
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);

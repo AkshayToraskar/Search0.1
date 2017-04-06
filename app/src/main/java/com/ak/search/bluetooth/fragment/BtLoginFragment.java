@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtUsersAdapter;
 import com.ak.search.realm_model.TransferModel;
 import com.ak.search.realm_model.User;
@@ -32,19 +31,19 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtLoginFragment extends Fragment implements DataSelection {
+public class BtLoginFragment extends Fragment {
 
     public static List<User> usersList;
     @BindView(R.id.rv_user)
     RecyclerView recyclerView;
     @BindView(R.id.cb_select_all)
     CheckBox cbSelectAll;
-    public static DataSelection dataSelection;
     private BtUsersAdapter mAdapter;
     Realm realm;
     View view;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
+
 
     public BtLoginFragment() {
     }
@@ -65,7 +64,6 @@ public class BtLoginFragment extends Fragment implements DataSelection {
 
         usersList = new ArrayList<>();
         usersList.addAll(results);
-        dataSelection = this;
         mAdapter = new BtUsersAdapter(collectDataInfo, getContext(), usersList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -81,11 +79,13 @@ public class BtLoginFragment extends Fragment implements DataSelection {
         cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mAdapter.selectAll(b);
 
-                transferModel.setUserList(usersList);
-                transferModel.setName(String.valueOf(b));
-                collectDataInfo.collectData(transferModel);
+                    mAdapter.selectAll(b);
+
+                    transferModel.setUserList(usersList);
+                    transferModel.setName(String.valueOf(b));
+                    collectDataInfo.collectData(transferModel);
+
 
             }
         });
@@ -105,8 +105,5 @@ public class BtLoginFragment extends Fragment implements DataSelection {
         }
     }
 
-    @Override
-    public void checkAllData(Boolean bool) {
 
-    }
 }

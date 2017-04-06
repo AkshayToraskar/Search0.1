@@ -4,10 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 
 import com.ak.search.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SplashActivity extends AppCompatActivity {
+
+    @BindView(R.id.ivGifImg)
+    ImageView ivGifImg;
 
     public static int SPLASH_TIME_OUT=1000;
 
@@ -16,6 +23,17 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        ButterKnife.bind(this);
+
+
+
+       /* Glide.with(this)
+                .load(R.raw.survey_collection)
+                .asGif()
+               // .placeholder(R.drawable.loading2)
+             //   .crossFade()
+                .into(ivGifImg);*/
 
         new Handler().postDelayed(new Runnable() {
             @Override

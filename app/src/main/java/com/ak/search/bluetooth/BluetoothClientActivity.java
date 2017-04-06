@@ -355,9 +355,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
     public void collectData(TransferModel transferModel) {
 
         if (transferModel.getUserList() != null) {
-            if(transferModel.getUserList().size()==BtLoginFragment.usersList.size()){
-                BtLoginFragment.dataSelection.checkAllData(true);
-            }
+
             for (int i = 0; i < transferModel.getUserList().size(); i++) {
                 if (transferModel.getName().equals("true")) {
                     userData.put(transferModel.getUserList().get(i).getId(), transferModel.getUserList().get(i));
@@ -365,14 +363,13 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                     userData.remove(transferModel.getUserList().get(i).getId());
                 }
             }
-        } else {
-            BtLoginFragment.dataSelection.checkAllData(false);
+
+
+
         }
 
         if (transferModel.getPatientsList() != null) {
-            if(transferModel.getPatientsList().size()==BtPatientFragment.patientsList.size()){
-                BtPatientFragment.dataSelection.checkAllData(true);
-            }
+
 
             for (int i = 0; i < transferModel.getPatientsList().size(); i++) {
                 if (transferModel.getName().equals("true")) {
@@ -381,14 +378,14 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                     patientData.remove(transferModel.getPatientsList().get(i).getId());
                 }
             }
-        } else {
-            BtPatientFragment.dataSelection.checkAllData(false);
+
+
+
+
         }
 
         if (transferModel.getSurveyList() != null) {
-            if(transferModel.getSurveyList().size()==BtSurveyFragment.surveyList.size()){
-                BtSurveyFragment.dataSelection.checkAllData(true);
-            }
+
 
             for (int i = 0; i < transferModel.getSurveyList().size(); i++) {
                 if (transferModel.getName().equals("true")) {
@@ -397,13 +394,12 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                     surveyData.remove(transferModel.getSurveyList().get(i).getId());
                 }
             }
-        } else {
-            BtSurveyFragment.dataSelection.checkAllData(false);
+
+
+
         }
         if (transferModel.getDataCollectionList() != null) {
-            if(transferModel.getDataCollectionList().size()==BtPatientFragment.patientsList.size()){
-                BtPatientFragment.dataSelection.checkAllData(true);
-            }
+
 
             for (int i = 0; i < transferModel.getDataCollectionList().size(); i++) {
                 if (transferModel.getName().equals("true")) {
@@ -412,8 +408,9 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                     dataCollection.remove(transferModel.getDataCollectionList().get(i).getId());
                 }
             }
-        } else {
-            BtPatientFragment.dataSelection.checkAllData(false);
+
+
+
         }
 
         List<User> userList = new ArrayList<>();

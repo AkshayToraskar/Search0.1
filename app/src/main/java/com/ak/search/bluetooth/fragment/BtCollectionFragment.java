@@ -16,7 +16,6 @@ import android.widget.CompoundButton;
 
 import com.ak.search.R;
 import com.ak.search.app.CollectDataInfo;
-import com.ak.search.app.DataSelection;
 import com.ak.search.bluetooth.adapters.BtSurveyHistoryAdapter;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.TransferModel;
@@ -32,7 +31,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BtCollectionFragment extends Fragment implements DataSelection {
+public class BtCollectionFragment extends Fragment{
 
     public static List<DataCollection> dataCollectionList;
     @BindView(R.id.rv_data_collection)
@@ -44,7 +43,7 @@ public class BtCollectionFragment extends Fragment implements DataSelection {
     View view;
     CollectDataInfo collectDataInfo;
     TransferModel transferModel;
-    public static DataSelection dataSelection;
+
 
     public BtCollectionFragment() {
         // Required empty public constructor
@@ -57,7 +56,7 @@ public class BtCollectionFragment extends Fragment implements DataSelection {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_bt_collection, container, false);
         transferModel = new TransferModel();
-        dataSelection = this;
+
 
         ButterKnife.bind(this, view);
 
@@ -84,12 +83,11 @@ public class BtCollectionFragment extends Fragment implements DataSelection {
         cbSelectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mAdapter.selectAll(b);
 
-
-                transferModel.setDataCollectionList(dataCollectionList);
-                transferModel.setName(String.valueOf(b));
-                collectDataInfo.collectData(transferModel);
+                    mAdapter.selectAll(b);
+                    transferModel.setDataCollectionList(dataCollectionList);
+                    transferModel.setName(String.valueOf(b));
+                    collectDataInfo.collectData(transferModel);
 
 
             }
@@ -108,8 +106,5 @@ public class BtCollectionFragment extends Fragment implements DataSelection {
         }
     }
 
-    @Override
-    public void checkAllData(Boolean bool) {
 
-    }
 }
