@@ -327,7 +327,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             public void execute(Realm realm) {
 
 
-                RealmList<Answers> answerses = new RealmList<Answers>();
+                RealmList<Answers> answerses = new RealmList<>();
                 for (int i = 0; i < answersList.size() - 1; i++) {
                     Answers a = answersList.get(i);
                     Answers ans = realm.createObject(Answers.class);
@@ -366,9 +366,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 dataCollection.setPatients(patients1);
                 dataCollection.setAnswerses(answerses);
 
-
-                dataCollection.setFieldworkerId(sessionManager.getUserId());
-                dataCollection.setSuperwiserId(0);
+                if(sessionManager.getLoginType()==2) {
+                    dataCollection.setSuperwiserId(sessionManager.getUserId());
+                    dataCollection.setFieldworkerId(0);
+                }
+                else if(sessionManager.getLoginType()==3) {
+                    dataCollection.setSuperwiserId(0);
+                    dataCollection.setFieldworkerId(sessionManager.getUserId());
+                }
 
                 String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
                 dataCollection.setLat(0);

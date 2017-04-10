@@ -49,7 +49,7 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="25dp"
                 android:text="Question ?"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -86,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:padding="10dp"
+                android:textSize="22sp"
                 android:layout_margin="20dp"
                 android:visibility="gone" />
 
@@ -114,6 +115,7 @@
                 android:layout_weight="2"
                 android:padding="10dp"
                 android:layout_margin="20dp"
+                android:textSize="22sp"
                 android:visibility="gone" />
 
             <Button
@@ -142,6 +144,7 @@
                 android:layout_weight="3"
                 android:padding="10dp"
                 android:layout_margin="20dp"
+                android:textSize="22sp"
                 android:visibility="gone" />
 
             <Button
@@ -198,7 +201,7 @@
                 android:id="@+id/rb_opt1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:button="@drawable/radio_button_switch"
                 android:background="@drawable/ra_background"
                 android:text="Options 1" />
@@ -207,7 +210,7 @@
                 android:id="@+id/rb_opt2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:background="@drawable/ra_background"
                 android:button="@drawable/radio_button_switch"
                 android:text="Options 2" />
@@ -226,7 +229,7 @@
                 android:id="@+id/rb_opt1_conditional"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="22sp"
 
                 android:background="@drawable/ra_background"
                 android:button="@drawable/radio_button_switch"
@@ -238,7 +241,7 @@
                 android:layout_height="wrap_content"
 
                 android:background="@drawable/ra_background"
-                android:textSize="18sp"
+                android:textSize="22sp"
                 android:button="@drawable/radio_button_switch"
                 android:text="Options 2" />
 
@@ -262,6 +265,7 @@
             android:padding="10dp"
             android:drawablePadding="10dp"
             android:layout_margin="20dp"
+            android:textSize="22sp"
             android:visibility="gone" />
 
         <EditText
@@ -269,6 +273,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:textSize="22sp"
             android:drawableRight="@drawable/num"
             android:drawablePadding="10dp"
             android:layout_margin="20dp"

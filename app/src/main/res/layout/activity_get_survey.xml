@@ -142,13 +142,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:text="Supervisor"
+                        android:text="Fieldworker"
                         android:textColor="@android:color/white"
                         android:textSize="18sp" />
 
 
                     <Spinner
-                        android:id="@+id/spnSupervisor"
+                        android:id="@+id/spnFieldworker"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3">

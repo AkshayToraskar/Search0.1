@@ -263,7 +263,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             public void execute(Realm realm) {
 
 
-                RealmList<Answers> answerses = new RealmList<Answers>();
+                RealmList<Answers> answerses = new RealmList<>();
                 for (int i = 0; i < answersList.size(); i++) {
                     Answers a = answersList.get(i);
                     Answers ans = realm.createObject(Answers.class);

@@ -68,7 +68,7 @@ public class GetSurveyActivity extends AppCompatActivity {
     SlidingDrawer slidingDrawer;
 
     public SurveyHistoryAdapter mAdapter;
-    ArrayAdapter<String> spnSurveyNameAdapter, spnSupervisorNameAdapter;
+    ArrayAdapter<String> spnSurveyNameAdapter, spnFiledworkerNameAdapter;
     Realm realm;
     public static int PATIENT_REQUEST = 12;
     List<Survey> lstSurveyData;
@@ -84,8 +84,8 @@ public class GetSurveyActivity extends AppCompatActivity {
     @BindView(R.id.tvPatient)
     TextView tvPatient;
 
-    @BindView(R.id.spnSupervisor)
-    Spinner spnSupervisor;
+    @BindView(R.id.spnFieldworker)
+    Spinner spnFieldWorker;
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
@@ -166,22 +166,22 @@ public class GetSurveyActivity extends AppCompatActivity {
         }
 
 
-        spnSurveyNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surveyName);
+        spnSurveyNameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, surveyName);
         spnSurveyNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
         spnSurveyName.setAdapter(spnSurveyNameAdapter);
 
 
-        lstUserData = realm.where(User.class).equalTo("type", 2).findAll();
-        final String supervisorName[] = new String[lstUserData.size() + 1];
-        supervisorName[0] = "All";
+        lstUserData = realm.where(User.class).equalTo("type", 3).findAll();
+        final String fieldworkderName[] = new String[lstUserData.size() + 1];
+        fieldworkderName[0] = "All";
         for (int i = 0; i < lstUserData.size(); i++) {
-            supervisorName[i + 1] = lstUserData.get(i).getName();
+            fieldworkderName[i + 1] = lstUserData.get(i).getName();
         }
 
 
-        spnSupervisorNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, supervisorName);
-        spnSupervisorNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spnSupervisor.setAdapter(spnSupervisorNameAdapter);
+        spnFiledworkerNameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fieldworkderName);
+        spnFiledworkerNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
+        spnFieldWorker.setAdapter(spnFiledworkerNameAdapter);
 
 
         /*spnSurveyName.setOnItemSelectedListener
@@ -397,8 +397,8 @@ public class GetSurveyActivity extends AppCompatActivity {
            // filter = true;
         }
 
-        if (spnSupervisor.getSelectedItemPosition() > 0) {
-            q=q.equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId());
+        if (spnFieldWorker.getSelectedItemPosition() > 0) {
+            q=q.equalTo("fieldworkerId", lstUserData.get(spnFieldWorker.getSelectedItemPosition() - 1).getId());
             //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId()).findAll());
            // filter = true;
         }

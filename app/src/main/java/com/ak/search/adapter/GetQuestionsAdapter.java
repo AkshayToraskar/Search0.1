@@ -538,6 +538,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                                 ViewGroup.LayoutParams.WRAP_CONTENT));
                                         cb.setText(questions.getChkb().get(i).getOpt());
+                                        cb.setTextSize(22);
                                         holder.llChck.addView(cb);
                                         lstChkbox.add(cb);
 
@@ -616,7 +617,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             rb.setText(questions.getOptions().get(i).getOpt());
                                             rb.setButtonDrawable(R.drawable.radio_button_switch);
                                             rb.setBackgroundResource(R.drawable.ra_background);
-                                            rb.setTextSize(18);
+                                            rb.setTextSize(22);
                                             holder.rgOption.addView(rb);
 
                                             allRb.add(rb);
@@ -678,7 +679,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                                     ViewGroup.LayoutParams.WRAP_CONTENT);
                                             params.setMargins(0, 2, 0, 2);
                                             rb.setLayoutParams(params);
-                                            rb.setTextSize(18);
+                                            rb.setTextSize(22);
                                             rb.setText(questions.getOptionContidion().get(i).getOpt());
                                             rb.setBackgroundResource(R.drawable.ra_background);
                                             rb.setButtonDrawable(R.drawable.radio_button_switch);
