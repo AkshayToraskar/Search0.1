@@ -16,6 +16,8 @@ import com.ak.search.activity.ShowSurveyActivity;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Survey;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import io.realm.Realm;
@@ -34,7 +36,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
     boolean superviserLogin;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvName, tvDateTime;
+        public TextView tvName, tvDateTime, tvPatientName;
         public ImageView ivDelete;
 
         public MyViewHolder(View view) {
@@ -42,7 +44,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
             tvDateTime = (TextView) view.findViewById(R.id.tvDate);
-
+tvPatientName=(TextView)view.findViewById(R.id.tvPatientName);
 
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +120,13 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
 
             holder.tvName.setText(survey.getName() + " ");
             holder.tvDateTime.setText(user.getTimestamp() + " ");
+
+            if(patientsList.get(position).getPatients()!=null){
+                holder.tvPatientName.setText(patientsList.get(position).getPatients().getPatientname());
+            }
+            else{
+                holder.tvPatientName.setVisibility(GONE);
+            }
         }
         if(superviserLogin){
             holder.ivDelete.setVisibility(View.VISIBLE);

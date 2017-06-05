@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDragListener */{
+public class AddSurveyActivity extends AppCompatActivity implements OnStartDragListener {
 
     @BindView(R.id.txt_survey_name)
     EditText txt_survey_name;
@@ -58,8 +58,8 @@ public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDra
     public static Survey survey;
     public RealmList<Questions> questionsList;
 
-   /* ItemTouchHelper touchHelper;
-    OnStartDragListener onStartDragListener;*/
+    ItemTouchHelper touchHelper;
+    OnStartDragListener onStartDragListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDra
         realm = Realm.getDefaultInstance();
 
         sessionManager = new SessionManager(this);
-        //onStartDragListener = this;
+        onStartDragListener = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         questionsList = new RealmList<>();
@@ -134,7 +134,7 @@ public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDra
             //     opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
         }
 
-        mAdapter = new QuestionsAdapter(this, questionsList/*, onStartDragListener*/);
+        mAdapter = new QuestionsAdapter(this, questionsList, onStartDragListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         RecyclerView.ItemDecoration itemDecoration = new
@@ -143,9 +143,9 @@ public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDra
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
-        /*ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
         touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);*/
+        touchHelper.attachToRecyclerView(recyclerView);
 
     }
 
@@ -330,8 +330,8 @@ public class AddSurveyActivity extends AppCompatActivity/* implements OnStartDra
         }
     }
 
-    /*@Override
+    @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         touchHelper.startDrag(viewHolder);
-    }*/
+    }
 }

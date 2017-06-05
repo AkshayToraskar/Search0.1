@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //permissionCheck();
 
-
+/*
         if (sessionManager.isLoggedIn()) {
             if (sessionManager.getLoginType() == 3) {
                 Intent i = new Intent(this, SelectSurveyActivity.class);
@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
-        }
+        }*/
 
     }
 
@@ -147,15 +147,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (rbAdmin.isChecked()) {
 
-                    if (isNetworkAvailable()) {
+                    //if (isNetworkAvailable()) {
                         checkAdminLogin();
 
-                        progress = new ProgressDialog(this);
+                        /*progress = new ProgressDialog(this);
                         progress.setMessage("Please Wait");
                         progress.show();
                     } else {
                         Toast.makeText(getApplicationContext(), "No Active Internet !", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
 
                 } else {
                     checkOtherLogin();
@@ -299,7 +299,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void checkAdminLogin() {
-        ApiInterface apiService =
+        /*ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
         Call<Login> call = apiService.getLogin(txt_username.getText().toString(), txt_password.getText().toString());
@@ -327,7 +327,16 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("asdf", t.toString());
                 Toast.makeText(getApplicationContext(), "Internal server error..!", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
+
+        if (txt_username.getText().toString().equals("admin") && txt_password.getText().toString().equals("admin")) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            sessionManager.setLogin(true, "admin", 1, 1);
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void checkOtherLogin() {

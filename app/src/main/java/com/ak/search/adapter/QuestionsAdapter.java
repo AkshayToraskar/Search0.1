@@ -25,13 +25,13 @@ import io.realm.RealmList;
  * Created by dg hdghfd on 29-11-2016.
  */
 
-public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyViewHolder>/* implements ItemTouchHelperAdapter */{
+public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
 
-    private RealmList<Questions> questionsList;
+    public static RealmList<Questions> questionsList;
     private Context context;
-   // private final OnStartDragListener mDragStartListener;
+    private final OnStartDragListener mDragStartListener;
 
-    /*@Override
+    @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
 
         Collections.swap(questionsList, fromPosition, toPosition);
@@ -45,17 +45,17 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
         questionsList.remove(position);
         notifyItemRemoved(position);
 
-    }*/
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvName, tvQuestionType;
-        //public ImageView ivDrag;
+        public ImageView ivDrag;
 
         public MyViewHolder(View view) {
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             tvQuestionType = (TextView) view.findViewById(R.id.tv_user_type);
-           // ivDrag =(ImageView)view.findViewById(R.id.ivDrag);
+            ivDrag =(ImageView)view.findViewById(R.id.ivDrag);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,10 +72,10 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
     }
 
 
-    public QuestionsAdapter(Context context, RealmList<Questions> questionsList/*, OnStartDragListener dragStartListener*/) {
+    public QuestionsAdapter(Context context, RealmList<Questions> questionsList, OnStartDragListener dragStartListener) {
         this.questionsList = questionsList;
         this.context = context;
-       // mDragStartListener = dragStartListener;
+        mDragStartListener = dragStartListener;
     }
 
     @Override
@@ -138,7 +138,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
         }
 
 
-        /*holder.ivDrag.setOnTouchListener(new View.OnTouchListener() {
+        holder.ivDrag.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -147,7 +147,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
                 }
                 return false;
             }
-        });*/
+        });
     }
 
     @Override
