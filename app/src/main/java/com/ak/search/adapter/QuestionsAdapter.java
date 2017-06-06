@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ak.search.activity.AddQuestionActivity;
 import com.ak.search.R;
+import com.ak.search.activity.AddSurveyActivity;
 import com.ak.search.app.ItemTouchHelperAdapter;
 import com.ak.search.app.OnStartDragListener;
 import com.ak.search.realm_model.Questions;
@@ -97,6 +98,15 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
         if (questionsList.get(position).getCompulsary()) {
             questionType = questionType + "* ";
         }
+
+
+        if(AddSurveyActivity.arrange){
+            holder.ivDrag.setVisibility(View.VISIBLE);
+        }
+        else{
+            holder.ivDrag.setVisibility(View.GONE);
+        }
+
 
         if(questions.getTypeQuestion()!=null) {
             String type[] = questions.getTypeQuestion().split(",");

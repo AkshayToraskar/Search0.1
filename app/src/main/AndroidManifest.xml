@@ -39,7 +39,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.UserActivity"
-            android:label="@string/title_activity_user"
+            android:label="@string/users"
             android:parentActivityName=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -108,11 +108,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".bluetooth.BluetoothActivity"
-            android:label="@string/title_activity_receive"
+            android:label="@string/receive"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".bluetooth.BluetoothClientActivity"
-            android:label="@string/title_activity_send"
+            android:label="@string/send"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.StartSurveyActivity" />
         <activity

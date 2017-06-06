@@ -141,7 +141,7 @@ public class SurveyHistoryFragment extends Fragment {
                         Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
 
                         SelectSurveyActivity.SuperviserLogin=user.getId();
-                        btnLoginLogout.setText("Logout");
+                        btnLoginLogout.setText(getString(R.string.logout));
                         //btnSend.setVisibility(View.VISIBLE);
 
 
@@ -164,12 +164,12 @@ public class SurveyHistoryFragment extends Fragment {
 
     public void callLogoutDialog() {
         new AlertDialog.Builder(getContext())
-                .setTitle("Logout")
-                .setMessage("Would you like to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.sure_logout))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         SelectSurveyActivity.SuperviserLogin = 0;
-                        btnLoginLogout.setText("Supervisor Login");
+                        btnLoginLogout.setText(getString(R.string.supervisor_login));
                         //btnSend.setVisibility(GONE);
 
                         mAdapter = new SurveyHistoryAdapter(getContext(), surveyHistory,false);
@@ -179,7 +179,7 @@ public class SurveyHistoryFragment extends Fragment {
                         recyclerView.setAdapter(mAdapter);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // user doesn't want to logout
                     }

@@ -54,7 +54,7 @@ public class PatientsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         realm = Realm.getDefaultInstance();
 
-        getSupportActionBar().setTitle("Patients");
+        getSupportActionBar().setTitle(getResources().getString(R.string.patients));
 
 
         RealmResults<Patients> results = realm.where(Patients.class).findAll();

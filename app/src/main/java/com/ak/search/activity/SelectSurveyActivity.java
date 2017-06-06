@@ -61,7 +61,7 @@ public class SelectSurveyActivity extends AppCompatActivity {
             username = sessionManager.getUsername();
             loginType = sessionManager.getLoginType();
 
-            getSupportActionBar().setTitle("Welcome " + username);
+            getSupportActionBar().setTitle(username+ " "+getResources().getString(R.string.welcome));
         } else {
             startActivity(new Intent(this, LoginActivity.class));
         }
@@ -78,8 +78,8 @@ public class SelectSurveyActivity extends AppCompatActivity {
         }*/
 
         PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new UserFragment(), "NEW SURVEY");
-        adapter.addFragment(new SurveyHistoryFragment(), "SURVEY HISTORY");
+        adapter.addFragment(new UserFragment(), getResources().getString(R.string.new_survey));
+        adapter.addFragment(new SurveyHistoryFragment(), getResources().getString(R.string.survey_history));
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -110,9 +110,9 @@ public class SelectSurveyActivity extends AppCompatActivity {
             case R.id.action_logout:
 
                 new AlertDialog.Builder(this)
-                        .setTitle("Logout")
-                        .setMessage("Would you like to logout?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.logout))
+                        .setMessage(getString(R.string.sure_logout))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 sessionManager.setLogin(false, "", 0, 0);
                                 Intent i = new Intent(SelectSurveyActivity.this, LoginActivity.class);
@@ -120,7 +120,7 @@ public class SelectSurveyActivity extends AppCompatActivity {
                                 startActivity(i);
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // user doesn't want to logout
                             }

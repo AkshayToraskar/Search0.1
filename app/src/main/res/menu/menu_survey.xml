@@ -12,4 +12,12 @@
         app:showAsAction="always"
         android:title="Save"/>
 
+    <item android:id="@+id/action_arrange"
+        app:showAsAction="never"
+        android:title="Arrange"/>
+
+    <item android:id="@+id/action_duplicate"
+        app:showAsAction="never"
+        android:title="Duplicate"/>
+
 </menu>

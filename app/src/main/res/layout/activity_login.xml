@@ -42,7 +42,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Login" />
+                        android:text="@string/login" />
 
                     <!--
                                 <ImageView
@@ -64,7 +64,7 @@
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/ic_account_box_black_24dp"
                             android:drawablePadding="10dp"
-                            android:hint="Username"
+                            android:hint="@string/username"
                             android:singleLine="true" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -81,7 +81,7 @@
                             android:drawableLeft="@drawable/ic_lock_black_24dp"
                             android:drawablePadding="10dp"
 
-                            android:hint="Password"
+                            android:hint="@string/password"
                             android:inputType="textPassword"
                             android:singleLine="true" />
                     </android.support.design.widget.TextInputLayout>
@@ -101,14 +101,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Admin" />
+                            android:text="@string/admin" />
 
                         <RadioButton
                             android:id="@+id/rb_superviser"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Supervisor" />
+                            android:text="@string/supervisor" />
 
 
                         <RadioButton
@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:checked="true"
-                            android:text="User" />
+                            android:text="@string/user" />
 
                     </RadioGroup>
 
@@ -158,7 +158,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Import/Export" />
+                        android:text="@string/import_export" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -176,7 +176,7 @@
                             android:background="@color/colorPrimary"
                             android:textColor="@color/colorText"
                             android:onClick="onBtnClick"
-                            android:text="Send" />
+                            android:text="@string/send" />
 
                         <Button
                             android:id="@+id/btn_bluetooth"
@@ -187,7 +187,7 @@
                             android:background="@color/colorPrimary"
                             android:textColor="@color/colorText"
                             android:onClick="onBtnClick"
-                            android:text="Receive" />
+                            android:text="@string/receive" />
 
 
 

@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
             transaction = getSupportFragmentManager().beginTransaction();
 
 
-            getSupportActionBar().setTitle("Welcome " + username);
+            getSupportActionBar().setTitle(username+" "+ getResources().getString(R.string.welcome));
 
 
             switch (loginType) {

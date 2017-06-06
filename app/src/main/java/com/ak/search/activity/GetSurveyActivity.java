@@ -104,7 +104,7 @@ public class GetSurveyActivity extends AppCompatActivity {
 
         //patientList.addAll(results);
 
-        getSupportActionBar().setTitle("Collected Data");
+        getSupportActionBar().setTitle(getResources().getString(R.string.collectedData));
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

@@ -25,6 +25,9 @@ public class Questions extends RealmObject{
 
     String question, typeQuestion;
 
+    //int question_pos
+    //Date timestamp
+
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Options> options;
 
@@ -33,8 +36,6 @@ public class Questions extends RealmObject{
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<ConditionalOptions> optionContidion;
-
-
 
     Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition, patientName;
 

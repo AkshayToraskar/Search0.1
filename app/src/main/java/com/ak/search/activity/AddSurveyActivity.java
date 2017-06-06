@@ -3,6 +3,7 @@ package com.ak.search.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,8 +15,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.QuestionsAdapter;
@@ -46,6 +50,9 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
     RecyclerView recyclerView;
     public static QuestionsAdapter mAdapter;
 
+    @BindView(R.id.btn_add_question)
+    FloatingActionButton fabAddQuestion;
+
     Validate validate;
 
     public static String SURVEYID = "surveyid";
@@ -60,6 +67,10 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
     ItemTouchHelper touchHelper;
     OnStartDragListener onStartDragListener;
+
+    public static boolean arrange = false;
+
+    Menu menus = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,6 +177,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_survey, menu);
+        menus = menu;
         if (update) {
             menu.getItem(1).setTitle("update");
 
@@ -297,6 +309,36 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                 SurveyActivity.mAdapter.notifyDataSetChanged();
                 finish();
                 break;
+
+            case R.id.action_arrange:
+
+                if (arrange) {
+                    menus.getItem(0).setVisible(true);
+                    menus.getItem(1).setVisible(true);
+                    menus.getItem(3).setVisible(true);
+
+                    menus.getItem(2).setShowAsAction(0);
+
+                    item.setTitle("Arrange");
+                    arrange = false;
+                    fabAddQuestion.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+                } else {
+                    menus.getItem(0).setVisible(false);
+                    menus.getItem(1).setVisible(false);
+                    menus.getItem(3).setVisible(false);
+
+                    menus.getItem(2).setShowAsAction(1);
+
+                    item.setTitle("Done");
+                    arrange = true;
+                    fabAddQuestion.animate().translationY(fabAddQuestion.getHeight() + 50).setInterpolator(new AccelerateInterpolator(2)).start();
+                }
+                mAdapter.notifyDataSetChanged();
+                break;
+
+            case R.id.action_duplicate:
+createDublicateSurvey();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -320,6 +362,50 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
         //  questionsList.addAll(MQuestions.find(MQuestions.class, "surveyid = ?", surveyId));
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void createDublicateSurvey(){
+
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                //long id = realm.where(MUser.class).max("id").longValue() + 1;
+
+
+                try {
+                    surveyId = realm.where(Survey.class).max("id").intValue() + 1;
+                } catch (Exception ex) {
+                    Log.v("exception", ex.toString());
+                    surveyId = 1;
+                }
+
+                // Add a survey
+                Survey dub_survey = realm.createObject(Survey.class, surveyId);
+                //survey.setId(surveyId);
+                dub_survey.setNested(survey.getNested());
+                dub_survey.setName("copy_"+survey.getName());
+                dub_survey.setQuestions(survey.getQuestions());
+
+
+                for(int i=0; i<survey.getQuestions().size(); i++) {
+                    try {
+                        surveyId = realm.where(Survey.class).max("id").intValue() + 1;
+                    } catch (Exception ex) {
+                        Log.v("exception", ex.toString());
+                        surveyId = 1;
+                    }
+
+
+                }
+
+
+                realm.copyToRealmOrUpdate(dub_survey);
+                Toast.makeText(getApplicationContext(), "Survey Replicated Successfully !", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     @Override
