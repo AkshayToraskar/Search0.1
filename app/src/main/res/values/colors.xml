@@ -7,4 +7,9 @@
     <color name="colorText">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
+
+    <color name="answered_questions_background">#7dd485</color>
+
+    <color name="pink">#558b2f</color>
+    <color name="indigo">#467327</color>
 </resources>

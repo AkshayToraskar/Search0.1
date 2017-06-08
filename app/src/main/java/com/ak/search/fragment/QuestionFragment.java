@@ -286,7 +286,7 @@ public class QuestionFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 ans.setAns(String.valueOf(editable));
                 //getSelectedChkbox();
-                answer.onAnswerSave(ans);
+                answer.onAnswerSave(0,ans);
             }
         });
 
@@ -305,7 +305,7 @@ public class QuestionFragment extends Fragment {
             public void afterTextChanged(Editable editable) {
                 ans.setNumAns(String.valueOf(editable));
                 //getSelectedChkbox();
-                answer.onAnswerSave(ans);
+                answer.onAnswerSave(0,ans);
             }
         });
 
@@ -317,7 +317,7 @@ public class QuestionFragment extends Fragment {
                 View radioButton = rg_option.findViewById(id);
                 ans.setSelectedopt(rg_option.indexOfChild(radioButton));
 
-                answer.onAnswerSave(ans);
+                answer.onAnswerSave(0,ans);
             }
         });
 
@@ -385,7 +385,7 @@ public class QuestionFragment extends Fragment {
 
             ans.setByteArrayImage(byteArray);
             //getSelectedChkbox();
-            answer.onAnswerSave(ans);
+            answer.onAnswerSave(0,ans);
         }
     }
 
@@ -409,7 +409,7 @@ public class QuestionFragment extends Fragment {
 
                         ans.setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                         //getSelectedChkbox();
-                        answer.onAnswerSave(ans);
+                        answer.onAnswerSave(0,ans);
                     }
                 }, mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -433,7 +433,7 @@ public class QuestionFragment extends Fragment {
                         tvTime.setText(hourOfDay + ":" + minute);
                         ans.setTime(hourOfDay + ":" + minute);
                         //getSelectedChkbox();
-                        answer.onAnswerSave(ans);
+                        answer.onAnswerSave(0,ans);
                     }
                 }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -461,7 +461,7 @@ public class QuestionFragment extends Fragment {
             }*/
 
             ans.setSelectedChk(checkedData);
-            answer.onAnswerSave(ans);
+            answer.onAnswerSave(0,ans);
         }
     }
 

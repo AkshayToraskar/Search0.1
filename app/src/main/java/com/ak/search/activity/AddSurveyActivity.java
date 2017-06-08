@@ -385,20 +385,49 @@ createDublicateSurvey();
                 //survey.setId(surveyId);
                 dub_survey.setNested(survey.getNested());
                 dub_survey.setName("copy_"+survey.getName());
-                dub_survey.setQuestions(survey.getQuestions());
+
+                RealmList<Questions> dub_question_list=new RealmList<Questions>();
+
 
 
                 for(int i=0; i<survey.getQuestions().size(); i++) {
+
+                    int questionId;
+
                     try {
-                        surveyId = realm.where(Survey.class).max("id").intValue() + 1;
+                        questionId = realm.where(Questions.class).max("id").intValue() + 1;
                     } catch (Exception ex) {
                         Log.v("exception", ex.toString());
-                        surveyId = 1;
+                        questionId = 1;
                     }
+                    Questions questions=realm.createObject(Questions.class,questionId);
+
+                    questions.setQuestion(survey.getQuestions().get(i).getQuestion());
+                    questions.setTypeQuestion(survey.getQuestions().get(i).getTypeQuestion());
+
+                    questions.setOptions(survey.getQuestions().get(i).getOptions());
+                    questions.setChkb(survey.getQuestions().get(i).getChkb());
+                    questions.setOptionContidion(survey.getQuestions().get(i).getOptionContidion());
+
+                    questions.setText(survey.getQuestions().get(i).getText());
+                    questions.setNumber(survey.getQuestions().get(i).getNumber());
+                    questions.setDate(survey.getQuestions().get(i).getDate());
+                    questions.setTime(survey.getQuestions().get(i).getTime());
+                    questions.setImage(survey.getQuestions().get(i).getImage());
+                    questions.setCompulsary(survey.getQuestions().get(i).getCompulsary());
+                    questions.setOpt(survey.getQuestions().get(i).getOpt());
+                    questions.setCheckbox(survey.getQuestions().get(i).getCheckbox());
+                    questions.setOptCondition(survey.getQuestions().get(i).getOptCondition());
+                    questions.setPatientName(survey.getQuestions().get(i).getPatientName());
+
+
+
+                    dub_question_list.add(questions);
 
 
                 }
 
+                dub_survey.setQuestions(dub_question_list);
 
                 realm.copyToRealmOrUpdate(dub_survey);
                 Toast.makeText(getApplicationContext(), "Survey Replicated Successfully !", Toast.LENGTH_SHORT).show();

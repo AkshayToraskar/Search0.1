@@ -122,7 +122,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
     @Override
-    public void onAnswerSave(Answers ans) {
+    public void onAnswerSave(int index,Answers ans) {
         if (patients != null) {
             ans.setPatientid(patients.getId());
         }

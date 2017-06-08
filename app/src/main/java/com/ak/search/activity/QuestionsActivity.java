@@ -383,7 +383,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     }
 
     @Override
-    public void onAnswerSave(Answers ans) {
+    public void onAnswerSave(int index,Answers ans) {
 
         ans.setPatientid(patients.getId());
 

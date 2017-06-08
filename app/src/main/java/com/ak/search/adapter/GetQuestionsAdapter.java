@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
@@ -71,7 +74,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     HashMap<Integer, List<RadioButton>> hashAllCondRb = new HashMap<>();
     Validate validate;
 
-    private boolean onBind;
+    private boolean onBind = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_question)
@@ -121,72 +124,83 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         @BindView(R.id.btn_save)
         Button btnSave;
 
+        Handler cstHandler = new Handler();
+
 
         public MyViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
 
 
-            btnSelectDate.setOnClickListener(new View.OnClickListener() {
+            //  if (!onBind) {
+
+            /*etAnswer.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onClick(View view) {
-                    final Calendar c = Calendar.getInstance();
-                    mYear = c.get(Calendar.YEAR);
-                    mMonth = c.get(Calendar.MONTH);
-                    mDay = c.get(Calendar.DAY_OF_MONTH);
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
 
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                            new DatePickerDialog.OnDateSetListener() {
+                }
 
-                                @Override
-                                public void onDateSet(DatePicker view, int year,
-                                                      int monthOfYear, int dayOfMonth) {
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable != null && !onBind) {
+                        onBind = true;
+                        answerList.get(getPosition()).setAns(String.valueOf(editable));
+                        saveAnswer.onAnswerSave(getPosition(), answerList.get(getPosition()));
+                        *//*etAnswer.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                notifyItemChanged(getPosition());
+                            }
+                        });*//*
 
-                                    tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
-                                    answerList.get(getPosition()).setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                                    //getSelectedChkbox();
-                                    saveAnswer.onAnswerSave(answerList.get(getPosition()));
-                                }
-                            }, mYear, mMonth, mDay);
-                    datePickerDialog.show();
+
+                        //  notifyItemChanged(getPosition());
+                        onBind = false;
+
+
+                    }
                 }
             });
 
-            btnSelectTime.setOnClickListener(new View.OnClickListener() {
+
+            etNumAns.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onClick(View view) {
-                    final Calendar c = Calendar.getInstance();
-                    mHour = c.get(Calendar.HOUR_OF_DAY);
-                    mMinute = c.get(Calendar.MINUTE);
-
-                    // Launch Time Picker Dialog
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(context,
-                            new TimePickerDialog.OnTimeSetListener() {
-
-                                @Override
-                                public void onTimeSet(TimePicker view, int hourOfDay,
-                                                      int minute) {
-
-                                    tvTime.setText(hourOfDay + ":" + minute);
-                                    answerList.get(getPosition()).setTime(hourOfDay + ":" + minute);
-                                    //getSelectedChkbox();
-                                    saveAnswer.onAnswerSave(answerList.get(getPosition()));
-                                }
-                            }, mHour, mMinute, false);
-                    timePickerDialog.show();
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-            });
 
-            btnSelectImage.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    StartSurveyActivity.positionImg = getPosition();
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    ((Activity) context).startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 }
-            });
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (editable != null && !onBind) {
+                        onBind = true;
+                        answerList.get(getPosition()).setNumAns(String.valueOf(editable));
+                        saveAnswer.onAnswerSave(getPosition(), answerList.get(getPosition()));
+
+                        *//*etNumAns.post(new Runnable() {
+                            @Override
+                            public void run() {
+                           //     notifyItemChanged(getPosition());
+                                notifyDataSetChanged();
+                            }
+                        });*//*
+
+                      // notifyDataSetChanged();
+
+                        //  notifyItemChanged(getPosition());
+                        onBind = false;
+                    }
+                }
+            });*/
+
 
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -209,68 +223,45 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 }
             });
 
-            btnPatientName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(context, SelectPatientsActivity.class);
-                    ((Activity) context).startActivityForResult(i, PATIENT_REQUEST);
-                }
-            });
 
-
-            etAnswer.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (editable != null) {
-                        answerList.get(getPosition()).setAns(String.valueOf(editable));
-                        saveAnswer.onAnswerSave(answerList.get(getPosition()));
-                    }
-                }
-            });
-
-            etNumAns.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (editable != null) {
-                        answerList.get(getPosition()).setNumAns(String.valueOf(editable));
-                        saveAnswer.onAnswerSave(answerList.get(getPosition()));
-                    }
-                }
-            });
-
-
-            rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    int id = rgOption.getCheckedRadioButtonId();
-                    View radioButton = rgOption.findViewById(id);
-                    answerList.get(getPosition()).setSelectedopt(rgOption.indexOfChild(radioButton));
-                    saveAnswer.onAnswerSave(answerList.get(getPosition()));
-                    // notifyItemChanged(getPosition());
-                    // notifyDataSetChanged();
-                }
-            });
-
-
-
+            // }
         }
     }
+
+
+    private class CustomWatcher implements TextWatcher {
+
+        private int pos;
+
+        private CustomWatcher(int pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            answerList.get(pos).setNumAns(String.valueOf(editable));
+            saveAnswer.onAnswerSave(pos, answerList.get(pos));
+                        /*etNumAns.post(new Runnable() {
+                            @Override
+                            public void run() {
+                           //     notifyItemChanged(getPosition());
+                                notifyDataSetChanged();
+                            }
+                        });*/
+            notifyItemChanged(pos);
+        }
+    }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data, int pos) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -325,6 +316,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         //holder.setIsRecyclable(false);
         final Questions questions = answerList.get(position).getQuestions();
 
+        // onBind = true;
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -383,9 +375,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                             //Text---------------------------------------
                             case 1:
+                                //   holder.etAnswer.addTextChangedListener(null);
+
                                 holder.etAnswer.setVisibility(View.VISIBLE);
-                                if (answerList.get(position).getAns() != null) {
+                                if (answerList.get(position).getAns() != null && !answerList.get(position).getAns().equals("")) {
                                     holder.etAnswer.setText(answerList.get(position).getAns());
+
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (!enable) {
@@ -402,13 +400,29 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
 
+                                CustomWatcher oldWatcher = (CustomWatcher) holder.etAnswer.getTag();
+                                if (oldWatcher != null)
+                                    holder.etAnswer.removeTextChangedListener(oldWatcher);
+
+                                //populate your editText with the model data here (before adding the new text watcher)
+
+                                CustomWatcher newWatcher = new CustomWatcher(position);
+                                holder.etAnswer.setTag(newWatcher);
+                                holder.etAnswer.addTextChangedListener(newWatcher);
+
+
                                 break;
 
                             //Number---------------------------------------
                             case 2:
+                                //   holder.etNumAns.addTextChangedListener(null);
+
                                 holder.etNumAns.setVisibility(View.VISIBLE);
-                                if (answerList.get(position).getNumAns() != null) {
+                                if (answerList.get(position).getNumAns() != null && !answerList.get(position).getNumAns().equals("")) {
                                     holder.etNumAns.setText(answerList.get(position).getNumAns());
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (!enable) {
@@ -424,18 +438,34 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 }
 
+                                CustomWatcher oldWatcher1 = (CustomWatcher) holder.etNumAns.getTag();
+                                if (oldWatcher1 != null)
+                                    holder.etNumAns.removeTextChangedListener(oldWatcher1);
+
+                                //populate your editText with the model data here (before adding the new text watcher)
+
+                                CustomWatcher newWatcher1 = new CustomWatcher(position);
+                                holder.etNumAns.setTag(newWatcher1);
+                                holder.etNumAns.addTextChangedListener(newWatcher1);
+
 
                                 break;
 
                             //Date---------------------------------------
                             case 3:
+
+                                holder.btnSelectDate.setOnClickListener(null);
+
                                 holder.tvDate.setVisibility(View.VISIBLE);
                                 if (enable) {
                                     holder.btnSelectDate.setVisibility(View.VISIBLE);
                                 }
 
-                                if (answerList.get(position).getDate() != null) {
+                                if (answerList.get(position).getDate() != null && !answerList.get(position).getDate().equals("")) {
                                     holder.tvDate.setText(answerList.get(position).getDate());
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -446,17 +476,56 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         validateAnswers.put(position, false);
                                     }
                                 }
+
+
+                                holder.btnSelectDate.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        final Calendar c = Calendar.getInstance();
+                                        mYear = c.get(Calendar.YEAR);
+                                        mMonth = c.get(Calendar.MONTH);
+                                        mDay = c.get(Calendar.DAY_OF_MONTH);
+
+
+                                        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                                                new DatePickerDialog.OnDateSetListener() {
+
+                                                    @Override
+                                                    public void onDateSet(DatePicker view, int year,
+                                                                          int monthOfYear, int dayOfMonth) {
+
+                                                        holder.tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+
+                                                        answerList.get(position).setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                                        //getSelectedChkbox();
+                                                        saveAnswer.onAnswerSave(position, answerList.get(position));
+
+                                                        notifyItemChanged(position);
+
+                                                    }
+                                                }, mYear, mMonth, mDay);
+                                        datePickerDialog.show();
+                                    }
+                                });
+
+
                                 break;
 
                             //Time---------------------------------------
                             case 4:
+
+                                holder.btnSelectTime.setOnClickListener(null);
+
                                 holder.tvTime.setVisibility(View.VISIBLE);
                                 if (enable) {
                                     holder.btnSelectTime.setVisibility(View.VISIBLE);
                                 }
 
-                                if (answerList.get(position).getTime() != null) {
+                                if (answerList.get(position).getTime() != null && !answerList.get(position).getTime().equals("")) {
                                     holder.tvTime.setText(answerList.get(position).getTime());
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
 
@@ -468,19 +537,51 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         validateAnswers.put(position, false);
                                     }
                                 }
+
+                                holder.btnSelectTime.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        final Calendar c = Calendar.getInstance();
+                                        mHour = c.get(Calendar.HOUR_OF_DAY);
+                                        mMinute = c.get(Calendar.MINUTE);
+
+                                        // Launch Time Picker Dialog
+                                        TimePickerDialog timePickerDialog = new TimePickerDialog(context,
+                                                new TimePickerDialog.OnTimeSetListener() {
+
+                                                    @Override
+                                                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                                                          int minute) {
+
+                                                        holder.tvTime.setText(hourOfDay + ":" + minute);
+                                                        answerList.get(position).setTime(hourOfDay + ":" + minute);
+                                                        //getSelectedChkbox();
+                                                        saveAnswer.onAnswerSave(position, answerList.get(position));
+                                                        notifyItemChanged(position);
+                                                    }
+                                                }, mHour, mMinute, false);
+                                        timePickerDialog.show();
+                                    }
+                                });
+
                                 break;
 
                             //Image---------------------------------------
                             case 5:
+
 
                                 holder.ivSelImg.setVisibility(View.VISIBLE);
                                 if (enable) {
                                     holder.btnSelectImage.setVisibility(View.VISIBLE);
                                 }
 
-                                if (answerList.get(position).getByteArrayImage() != null) {
+
+                                if (answerList.get(position).getByteArrayImage().length > 0) {
                                     Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
                                     holder.ivSelImg.setImageBitmap(bmp);
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -492,11 +593,23 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 }
 
+                                holder.btnSelectImage.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        StartSurveyActivity.positionImg = position;
+                                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                        ((Activity) context).startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                                        notifyItemChanged(position);
+                                    }
+                                });
+
 
                                 break;
 
                             //patient name---------------------------------------
                             case 6:
+
+
                                 holder.llPatient.setVisibility(View.VISIBLE);
                                 holder.tvPatient.setVisibility(View.VISIBLE);
                                 if (enable) {
@@ -509,6 +622,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     if (p != null) {
                                         holder.tvPatient.setText(p.getPatientname());
                                     }
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -519,6 +635,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         validateAnswers.put(position, false);
                                     }
                                 }
+
+                                holder.btnPatientName.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Intent i = new Intent(context, SelectPatientsActivity.class);
+                                        ((Activity) context).startActivityForResult(i, PATIENT_REQUEST);
+                                    }
+                                });
 
 
                                 break;
@@ -581,14 +705,28 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             @Override
                                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                                                 getSelectedChkbox(position, lstChkbox);
+                                                notifyItemChanged(position);
                                             }
                                         });
                                     }
+
+
+                                    if (answerList.get(position).getSelectedChk() != null) {
+                                        if (answerList.get(position).getSelectedChk().contains("1")) {
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                        } else {
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                                        }
+                                    }
+
+
                                 }
                                 break;
 
                             //Options-----------------------------------------
                             case 8:
+
+
                                 List<RadioButton> allRb = new ArrayList<>();
                                 holder.rgOption.setVisibility(View.VISIBLE);
                                 //holder.rgOption.removeAllViews();
@@ -609,10 +747,10 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             allRb.add(holder.rbOpt2);
                                         } else {
                                             RadioButton rb = new RadioButton(context);
-                                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                     ViewGroup.LayoutParams.MATCH_PARENT,
                                                     ViewGroup.LayoutParams.WRAP_CONTENT);
-                                            params.setMargins(0,2,0,2);
+                                            params.setMargins(0, 2, 0, 2);
                                             rb.setLayoutParams(params);
                                             rb.setText(questions.getOptions().get(i).getOpt());
                                             rb.setButtonDrawable(R.drawable.radio_button_switch);
@@ -630,6 +768,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getSelectedopt() != -1 && hashAllRb.get(position) != null) {
                                     List<RadioButton> alRb = hashAllRb.get(position);
                                     alRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -650,11 +791,28 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 }
 
+
+                                holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                                        int id = holder.rgOption.getCheckedRadioButtonId();
+                                        View radioButton = holder.rgOption.findViewById(id);
+                                        answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
+                                        saveAnswer.onAnswerSave(position, answerList.get(position));
+
+
+                                        //notifyItemChanged(position);
+                                        notifyDataSetChanged();
+                                    }
+                                });
+
                                 break;
 
 
                             //Conditional---------------------------------------
                             case 9:
+
+
                                 List<RadioButton> allRbCon = new ArrayList<>();
                                 holder.rgOptionConditional.setVisibility(View.VISIBLE);
                                 // holder.rgOptionConditional.removeAllViews();
@@ -674,7 +832,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                             RadioButton rb = new RadioButton(context);
 
-                                            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                                     ViewGroup.LayoutParams.MATCH_PARENT,
                                                     ViewGroup.LayoutParams.WRAP_CONTENT);
                                             params.setMargins(0, 2, 0, 2);
@@ -696,6 +854,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getSelectedOptConditional() != -1 && hashAllCondRb.get(position) != null) {
                                     List<RadioButton> alRb = hashAllCondRb.get(position);
                                     alRb.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                } else {
+                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                                 }
 
 
@@ -744,6 +905,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         //   }
                                         saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos());
                                         //notifyDataSetChanged();
+
+                                        notifyItemChanged(position);
                                     }
                                 });
 
@@ -775,6 +938,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 }
             }
         });
+
+        // onBind = false;
     }
 
     public void getSelectedChkbox(int position, List<CheckBox> lstCheckbox) {
@@ -787,6 +952,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 checkedData = checkedData + "0";
             }
         }
+
+
         answerList.get(position).setSelectedChk(checkedData);
     }
 

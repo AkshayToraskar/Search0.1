@@ -26,7 +26,7 @@ public class Questions extends RealmObject{
     String question, typeQuestion;
 
     //int question_pos
-    //Date timestamp
+
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
     RealmList<Options> options;

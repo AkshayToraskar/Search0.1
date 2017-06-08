@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -106,12 +107,12 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 answ.setParentPos(0);
                 answ.setSelectedopt(-1);
                 answ.setSelectedOptConditional(-1);
-                answ.setSelectedChk("");
-                answ.setAns("");
-                answ.setNumAns("");
-                answ.setDate("");
-                answ.setTime("");
-                byte[] a = {-1};
+                answ.setSelectedChk(null);
+                answ.setAns(null);
+                answ.setNumAns(null);
+                answ.setDate(null);
+                answ.setTime(null);
+                byte[] a = new byte[0];
                 answ.setByteArrayImage(a);
 
                 answersList.add(answ);
@@ -129,7 +130,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setNumAns("");
             answ.setDate("");
             answ.setTime("");
-            byte[] a = {-1};
+            byte[] a = {};
             answ.setByteArrayImage(a);
             answersList.add(answ);
 
@@ -176,13 +177,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
     @Override
-    public void onAnswerSave(Answers ans) {
+    public void onAnswerSave(int index,Answers ans) {
         if (patients != null) {
             ans.setPatientid(patients.getId());
         }
         answers.put(ans.getQuestions().getId(), ans);
 
 
+        answersList.set(index,ans);
+//        mAdapter.notifyDataSetChanged();
+
+        /*recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });*/
     }
 
     @Override
