@@ -19,6 +19,8 @@ public class MQuestions implements Serializable {
     List<MOptions> chkb;
     List<MConditionalOptions> optionContidion;
 
+    int question_pos;
+
     Boolean text, number, date, time, image, compulsary, opt, checkbox, optCondition, patientName;
 
 
@@ -151,5 +153,13 @@ public class MQuestions implements Serializable {
 
     public void setPatientName(Boolean patientName) {
         this.patientName = patientName;
+    }
+
+    public int getQuestion_pos() {
+        return question_pos;
+    }
+
+    public void setQuestion_pos(int question_pos) {
+        this.question_pos = question_pos;
     }
 }

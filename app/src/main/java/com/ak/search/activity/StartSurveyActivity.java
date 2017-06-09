@@ -45,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.Sort;
 
 public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer {
 
@@ -85,7 +86,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         saveAnswer = this;
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        sessionManager=new SessionManager(this);
+        sessionManager = new SessionManager(this);
 
         update = false;
 
@@ -94,16 +95,21 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             // patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
+//RealmList<Questions> questionsList=  survey.getQuestions().sort("question_pos", Sort.ASCENDING);
+
+            Survey surveyData = realm.where(Survey.class).equalTo("id", survey.getId()).findFirst();
+            List<Questions> questionsList = surveyData.getQuestions().sort("question_pos", Sort.ASCENDING);
+
             // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
             getSupportActionBar().setTitle(survey.getName() + " ");
 
 
-            for (int i = 0; i < survey.getQuestions().size(); i++) {
+            for (int i = 0; i < questionsList.size(); i++) {
 
                 Answers answ = new Answers();
 
                 answ.setPatientid(0);
-                answ.setQuestions(survey.getQuestions().get(i));
+                answ.setQuestions(questionsList.get(i));
                 answ.setParentPos(0);
                 answ.setSelectedopt(-1);
                 answ.setSelectedOptConditional(-1);
@@ -177,14 +183,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
     @Override
-    public void onAnswerSave(int index,Answers ans) {
+    public void onAnswerSave(int index, Answers ans) {
         if (patients != null) {
             ans.setPatientid(patients.getId());
         }
         answers.put(ans.getQuestions().getId(), ans);
 
 
-        answersList.set(index,ans);
+        answersList.set(index, ans);
 //        mAdapter.notifyDataSetChanged();
 
         /*recyclerView.post(new Runnable() {
@@ -200,7 +206,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         boolean newEntry = true;
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
 
-        if(survey!=null) {
+        if (survey != null) {
             int surveysize = survey.getQuestions().size();
 
             if (addQueHashMap.size() > 0) {
@@ -228,7 +234,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             mAdapter.notifyDataSetChanged();
             showHashmap();
-        }else{
+        } else {
             if (addQueHashMap.size() > 0) {
                 for (Map.Entry m : addQueHashMap.entrySet()) {
                     MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
@@ -258,19 +264,18 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
 
-    public void showHashmap(){
-        for(Map.Entry m: addQueHashMap.entrySet()){
+    public void showHashmap() {
+        for (Map.Entry m : addQueHashMap.entrySet()) {
             MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
 
-            Log.v("asdf","\n================\n Id:"+nestedAddQue.getSurveyId()+
-            "\n Pos:"+nestedAddQue.getPos()+
-            "\n Length:"+nestedAddQue.getLengh()+
-            "\n Parent Pos:"+nestedAddQue.getParentPos()+
-            "\n Child Length:"+nestedAddQue.getChildLength()+"\n =====================");
+            Log.v("asdf", "\n================\n Id:" + nestedAddQue.getSurveyId() +
+                    "\n Pos:" + nestedAddQue.getPos() +
+                    "\n Length:" + nestedAddQue.getLengh() +
+                    "\n Parent Pos:" + nestedAddQue.getParentPos() +
+                    "\n Child Length:" + nestedAddQue.getChildLength() + "\n =====================");
 
         }
     }
-
 
 
     public void addToHashMap(long id, int pos, int length, int parentPos, int childLength) {
@@ -358,7 +363,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                 }
 
-                Patients patients1=null;
+                Patients patients1 = null;
                 if (patients != null) {
                     patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
                 }
@@ -376,11 +381,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 dataCollection.setPatients(patients1);
                 dataCollection.setAnswerses(answerses);
 
-                if(sessionManager.getLoginType()==2) {
+                if (sessionManager.getLoginType() == 2) {
                     dataCollection.setSuperwiserId(sessionManager.getUserId());
                     dataCollection.setFieldworkerId(0);
-                }
-                else if(sessionManager.getLoginType()==3) {
+                } else if (sessionManager.getLoginType() == 3) {
                     dataCollection.setSuperwiserId(0);
                     dataCollection.setFieldworkerId(sessionManager.getUserId());
                 }
@@ -402,7 +406,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }
@@ -503,7 +507,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
 }

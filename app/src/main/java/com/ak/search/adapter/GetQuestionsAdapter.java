@@ -258,7 +258,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 notifyDataSetChanged();
                             }
                         });*/
-            notifyItemChanged(pos);
+           // notifyItemChanged(pos);
         }
     }
 

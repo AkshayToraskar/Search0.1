@@ -25,7 +25,7 @@ public class Questions extends RealmObject{
 
     String question, typeQuestion;
 
-    //int question_pos
+    int question_pos;
 
 
     @ParcelPropertyConverter(RealmListParcelConverter.class)
@@ -167,5 +167,13 @@ public class Questions extends RealmObject{
 
     public void setPatientName(Boolean patientName) {
         this.patientName = patientName;
+    }
+
+    public int getQuestion_pos() {
+        return question_pos;
+    }
+
+    public void setQuestion_pos(int question_pos) {
+        this.question_pos = question_pos;
     }
 }

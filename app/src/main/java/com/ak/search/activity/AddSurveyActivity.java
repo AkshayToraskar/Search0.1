@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
+import io.realm.Sort;
 
 public class AddSurveyActivity extends AppCompatActivity implements OnStartDragListener {
 
@@ -97,7 +98,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
             cbNestedSurvey.setChecked(survey.getNested());
             questionsList.clear();
-            questionsList.addAll(survey.getQuestions());
+            questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
 
             update = true;
         } else {
@@ -266,7 +267,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
             case R.id.action_delete_survey:
                 new AlertDialog.Builder(this)
                         .setTitle("Delete")
-                        .setMessage("Would you like to delete this survey and MQuestions?")
+                        .setMessage("Would you like to delete this Survey and Questions?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -337,7 +338,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                 break;
 
             case R.id.action_duplicate:
-createDublicateSurvey();
+                createDublicateSurvey();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -350,7 +351,7 @@ createDublicateSurvey();
 
         survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
         //questionsList.clear();
-        questionsList.addAll(survey.getQuestions());
+        questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
 
         for (int i = 0; i < survey.getQuestions().size(); i++) {
             Log.v("asfd", "???????" + survey.getQuestions().get(i).getQuestion() + " size" + survey.getQuestions().get(i).getOptions().size());
@@ -364,7 +365,7 @@ createDublicateSurvey();
         mAdapter.notifyDataSetChanged();
     }
 
-    public void createDublicateSurvey(){
+    public void createDublicateSurvey() {
 
         realm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -384,13 +385,12 @@ createDublicateSurvey();
                 Survey dub_survey = realm.createObject(Survey.class, surveyId);
                 //survey.setId(surveyId);
                 dub_survey.setNested(survey.getNested());
-                dub_survey.setName("copy_"+survey.getName());
+                dub_survey.setName("copy_" + survey.getName());
 
-                RealmList<Questions> dub_question_list=new RealmList<Questions>();
+                RealmList<Questions> dub_question_list = new RealmList<Questions>();
 
 
-
-                for(int i=0; i<survey.getQuestions().size(); i++) {
+                for (int i = 0; i < survey.getQuestions().size(); i++) {
 
                     int questionId;
 
@@ -400,7 +400,7 @@ createDublicateSurvey();
                         Log.v("exception", ex.toString());
                         questionId = 1;
                     }
-                    Questions questions=realm.createObject(Questions.class,questionId);
+                    Questions questions = realm.createObject(Questions.class, questionId);
 
                     questions.setQuestion(survey.getQuestions().get(i).getQuestion());
                     questions.setTypeQuestion(survey.getQuestions().get(i).getTypeQuestion());
@@ -419,7 +419,6 @@ createDublicateSurvey();
                     questions.setCheckbox(survey.getQuestions().get(i).getCheckbox());
                     questions.setOptCondition(survey.getQuestions().get(i).getOptCondition());
                     questions.setPatientName(survey.getQuestions().get(i).getPatientName());
-
 
 
                     dub_question_list.add(questions);

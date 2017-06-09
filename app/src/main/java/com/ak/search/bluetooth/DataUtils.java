@@ -89,7 +89,7 @@ public class DataUtils {
                         que.setOpt(surveys.get(i).getQuestions().get(j).getOpt());
                         que.setQuestion(surveys.get(i).getQuestions().get(j).getQuestion());
                         que.setText(surveys.get(i).getQuestions().get(j).getText());
-
+                        que.setQuestion_pos(surveys.get(i).getQuestions().get(j).getQuestion_pos());
                         que.setCheckbox(surveys.get(i).getQuestions().get(j).getCheckbox());
                         que.setCompulsary(surveys.get(i).getQuestions().get(j).getCompulsary());
                         que.setDate(surveys.get(i).getQuestions().get(j).getDate());
@@ -196,7 +196,7 @@ public class DataUtils {
                         mQuestions.setTypeQuestion(dataCollections.get(i).getAnswerses().get(j).getQuestions().getTypeQuestion());
                         mQuestions.setOptCondition(dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptCondition());
                         mQuestions.setPatientName(dataCollections.get(i).getAnswerses().get(j).getQuestions().getPatientName());
-
+                        mQuestions.setQuestion_pos(dataCollections.get(i).getAnswerses().get(j).getQuestions().getQuestion_pos());
                         List<MOptions> options = new ArrayList<>();
                         if (dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptions() != null) {
                             for (int k = 0; k < dataCollections.get(i).getAnswerses().get(j).getQuestions().getOptions().size(); k++) {
@@ -342,7 +342,7 @@ public class DataUtils {
                                                      qu.setOpt(data.getSurveyList().get(i).getQuestions().get(j).getOpt());
                                                      qu.setQuestion(data.getSurveyList().get(i).getQuestions().get(j).getQuestion());
                                                      qu.setText(data.getSurveyList().get(i).getQuestions().get(j).getText());
-
+                                                     qu.setQuestion_pos(data.getSurveyList().get(i).getQuestions().get(j).getQuestion_pos());
                                                      qu.setCheckbox(data.getSurveyList().get(i).getQuestions().get(j).getCheckbox());
                                                      qu.setCompulsary(data.getSurveyList().get(i).getQuestions().get(j).getCompulsary());
                                                      qu.setDate(data.getSurveyList().get(i).getQuestions().get(j).getDate());
@@ -504,6 +504,7 @@ public class DataUtils {
                                                          // mQuestions.setId(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getId());
                                                          mQuestions.setQuestion(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getQuestion());
                                                          mQuestions.setText(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getOpt());
+                                                         mQuestions.setQuestion_pos(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getQuestion_pos());
                                                          mQuestions.setTypeQuestion(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getTypeQuestion());
                                                          mQuestions.setNumber(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getNumber());
                                                          mQuestions.setDate(data.getDataCollectionsList().get(i).getAnswerses().get(j).getMQuestions().getDate());

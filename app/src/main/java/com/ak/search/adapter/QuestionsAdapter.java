@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.ak.search.realm_model.Questions;
 
 import java.util.Collections;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
@@ -32,11 +34,29 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
     private Context context;
     private final OnStartDragListener mDragStartListener;
 
+    Realm realm;
+
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
 
         Collections.swap(questionsList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                for (int i = 0; i < questionsList.size(); i++) {
+                    questionsList.get(i).setQuestion_pos(i);
+                }
+
+                realm.copyToRealmOrUpdate(questionsList);
+
+            }
+        });
+
+
+        Log.v("asdf", "asdf");
+
         return true;
     }
 
@@ -56,7 +76,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
             super(view);
             tvName = (TextView) view.findViewById(R.id.tvName);
             tvQuestionType = (TextView) view.findViewById(R.id.tv_user_type);
-            ivDrag =(ImageView)view.findViewById(R.id.ivDrag);
+            ivDrag = (ImageView) view.findViewById(R.id.ivDrag);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,6 +97,8 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
         this.questionsList = questionsList;
         this.context = context;
         mDragStartListener = dragStartListener;
+
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -100,15 +122,14 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
         }
 
 
-        if(AddSurveyActivity.arrange){
+        if (AddSurveyActivity.arrange) {
             holder.ivDrag.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             holder.ivDrag.setVisibility(View.GONE);
         }
 
 
-        if(questions.getTypeQuestion()!=null) {
+        if (questions.getTypeQuestion() != null) {
             String type[] = questions.getTypeQuestion().split(",");
             for (int i = 0; i < type.length; i++) {
                 int t = Integer.parseInt(type[i]);
