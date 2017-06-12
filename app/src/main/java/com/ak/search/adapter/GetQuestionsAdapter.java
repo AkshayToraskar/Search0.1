@@ -73,7 +73,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     HashMap<Integer, List<RadioButton>> hashAllRb = new HashMap<>();
     HashMap<Integer, List<RadioButton>> hashAllCondRb = new HashMap<>();
     Validate validate;
-
+    private RecyclerView mRecyclerView;
     private boolean onBind = false;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -231,10 +231,20 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
     private class CustomWatcher implements TextWatcher {
 
-        private int pos;
+        private int pos, type;// 1=ans 2=num ans
+        View view;
+        private boolean mActive;
 
-        private CustomWatcher(int pos) {
+
+        void setActive(boolean active) {
+            mActive = active;
+        }
+
+
+        private CustomWatcher(int pos, View view, int type) {
             this.pos = pos;
+            this.view = view;
+            this.type = type;
         }
 
         @Override
@@ -249,16 +259,37 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         @Override
         public void afterTextChanged(Editable editable) {
-            answerList.get(pos).setNumAns(String.valueOf(editable));
+
+            switch (type) {
+                case 0:
+                    answerList.get(pos).setAns(String.valueOf(editable));
+                    break;
+                case 1:
+                    answerList.get(pos).setNumAns(String.valueOf(editable));
+                    break;
+            }
             saveAnswer.onAnswerSave(pos, answerList.get(pos));
-                        /*etNumAns.post(new Runnable() {
-                            @Override
-                            public void run() {
-                           //     notifyItemChanged(getPosition());
-                                notifyDataSetChanged();
-                            }
-                        });*/
-           // notifyItemChanged(pos);
+
+            if (editable.length() > 0) {
+                view.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+            } else {
+                view.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+            }
+            /*if (mActive) {
+
+
+
+               *//* if (editable.length() == 1 || editable.length() == 0) {
+                    mRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {*//*
+                            notifyItemChanged(pos);
+                            // notifyDataSetChanged();
+                        }*/
+                 /*   });
+                }
+
+            }*/
         }
     }
 
@@ -308,6 +339,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.questions_list_row, parent, false);
         return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        mRecyclerView = recyclerView;
+        super.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
@@ -378,9 +415,24 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 //   holder.etAnswer.addTextChangedListener(null);
 
                                 holder.etAnswer.setVisibility(View.VISIBLE);
-                                if (answerList.get(position).getAns() != null && !answerList.get(position).getAns().equals("")) {
-                                    holder.etAnswer.setText(answerList.get(position).getAns());
 
+
+                                CustomWatcher oldWatcher = (CustomWatcher) holder.etAnswer.getTag();
+                                if (oldWatcher != null)
+                                    holder.etAnswer.removeTextChangedListener(oldWatcher);
+
+                                //populate your editText with the model data here (before adding the new text watcher)
+
+                                CustomWatcher newWatcher = new CustomWatcher(position, holder.itemView,0);
+                                holder.etAnswer.setTag(newWatcher);
+                                holder.etAnswer.addTextChangedListener(newWatcher);
+
+
+                                if (answerList.get(position).getAns() != null && !answerList.get(position).getAns().equals("")) {
+
+                                    // newWatcher.setActive(false);
+                                    holder.etAnswer.setText(answerList.get(position).getAns());
+                                    //  newWatcher.setActive(true);
                                     holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
                                 } else {
                                     holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
@@ -399,16 +451,16 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 }
 
-
-                                CustomWatcher oldWatcher = (CustomWatcher) holder.etAnswer.getTag();
-                                if (oldWatcher != null)
-                                    holder.etAnswer.removeTextChangedListener(oldWatcher);
-
-                                //populate your editText with the model data here (before adding the new text watcher)
-
-                                CustomWatcher newWatcher = new CustomWatcher(position);
-                                holder.etAnswer.setTag(newWatcher);
-                                holder.etAnswer.addTextChangedListener(newWatcher);
+                                /*holder.etAnswer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                    @Override
+                                    public void onFocusChange(View view, boolean b) {
+                                        if(holder.etAnswer.getText().length()>0){
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                        } else {
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                                        }
+                                    }
+                                });*/
 
 
                                 break;
@@ -417,9 +469,22 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                             case 2:
                                 //   holder.etNumAns.addTextChangedListener(null);
 
+                                CustomWatcher oldWatcher1 = (CustomWatcher) holder.etNumAns.getTag();
+                                if (oldWatcher1 != null)
+                                    holder.etNumAns.removeTextChangedListener(oldWatcher1);
+
+                                //populate your editText with the model data here (before adding the new text watcher)
+
+                                CustomWatcher newWatcher1 = new CustomWatcher(position, holder.itemView,1);
+                                holder.etNumAns.setTag(newWatcher1);
+                                holder.etNumAns.addTextChangedListener(newWatcher1);
+
                                 holder.etNumAns.setVisibility(View.VISIBLE);
                                 if (answerList.get(position).getNumAns() != null && !answerList.get(position).getNumAns().equals("")) {
+
+                                    //  newWatcher1.setActive(false);
                                     holder.etNumAns.setText(answerList.get(position).getNumAns());
+                                    // newWatcher1.setActive(true);
                                     holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
                                 } else {
                                     holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
@@ -438,16 +503,17 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 }
 
-                                CustomWatcher oldWatcher1 = (CustomWatcher) holder.etNumAns.getTag();
-                                if (oldWatcher1 != null)
-                                    holder.etNumAns.removeTextChangedListener(oldWatcher1);
 
-                                //populate your editText with the model data here (before adding the new text watcher)
-
-                                CustomWatcher newWatcher1 = new CustomWatcher(position);
-                                holder.etNumAns.setTag(newWatcher1);
-                                holder.etNumAns.addTextChangedListener(newWatcher1);
-
+                                /*holder.etNumAns.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                    @Override
+                                    public void onFocusChange(View view, boolean b) {
+                                        if(holder.etNumAns.getText().length()>0){
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                        } else {
+                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                                        }
+                                    }
+                                });*/
 
                                 break;
 
