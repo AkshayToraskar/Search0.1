@@ -21,6 +21,7 @@ public class Patients extends RealmObject {
     String Address;
     int sex, age;
 
+    String houseId;
 
 
     //RealmList<MAnswers> answers;
@@ -32,6 +33,14 @@ public class Patients extends RealmObject {
     public void setAnswers(RealmList<MAnswers> answers) {
         this.answers = answers;
     }*/
+
+    public String getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(String houseId) {
+        this.houseId = houseId;
+    }
 
     public String getAddress() {
         return Address;

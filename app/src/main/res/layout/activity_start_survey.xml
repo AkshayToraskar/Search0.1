@@ -7,13 +7,39 @@
 
     tools:context="com.ak.search.activity.StartSurveyActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_questions"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/cardview_dark_background"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tv_counter"
+                android:layout_width="wrap_content"
+                android:textColor="@android:color/white"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:padding="12dp"
+                android:text="2 of 6 Questions Answered" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_questions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

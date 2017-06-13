@@ -30,7 +30,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     private Realm realm;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvVillage, tvHouse, tvFamily, tvIndividual, tvName, tvSex, tvAge;
+        public TextView tvVillage, tvHouse, tvFamily, tvIndividual, tvName, tvSex, tvAge, tvMMUId;
         public ImageView ivDelete;
 
         public MyViewHolder(View view) {
@@ -43,6 +43,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
             tvSex = (TextView) view.findViewById(R.id.tvSex);
             tvAge = (TextView) view.findViewById(R.id.tvAge);
+            tvMMUId=(TextView)view.findViewById(R.id.tv_mmu);
            /* view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -107,13 +108,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
-        String ids=String.valueOf(user.getId());
+        String ids=user.getHouseId();
         if(ids.length()>=4) {
             holder.tvVillage.setText("Village No: " + ids.charAt(0) + ", ");
             holder.tvHouse.setText("House No: " + ids.charAt(1) + ", ");
             holder.tvFamily.setText("Family No: " + ids.charAt(2) + ", ");
             holder.tvIndividual.setText("Id No: " + ids.charAt(3) + " ");
         }
+        holder.tvMMUId.setText("MMUID: "+String.valueOf(user.getId()));
         holder.tvName.setText(user.getPatientname() + " ");
         holder.tvAge.setText("Age: " + user.getAge() + " ");
         String sex = "";

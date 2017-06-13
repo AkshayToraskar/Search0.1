@@ -17,6 +17,7 @@ public class Answers extends RealmObject {
     Questions questions;
     byte[] byteArrayImage;
 
+    boolean answered;
 
     public Questions getQuestions() {
         return questions;
@@ -27,8 +28,13 @@ public class Answers extends RealmObject {
     }
 
 
+    public boolean getAnswered() {
+        return answered;
+    }
 
-
+    public void setAnswered(boolean answered) {
+        this.answered = answered;
+    }
 
     public long getPatientid() {
         return patientid;

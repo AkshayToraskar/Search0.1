@@ -123,6 +123,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         LinearLayout llQuestion;
         @BindView(R.id.btn_save)
         Button btnSave;
+        @BindView(R.id.tv_question_counter)
+        TextView tvCounter;
 
         Handler cstHandler = new Handler();
 
@@ -266,15 +268,23 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     break;
                 case 1:
                     answerList.get(pos).setNumAns(String.valueOf(editable));
+
                     break;
             }
-            saveAnswer.onAnswerSave(pos, answerList.get(pos));
+
 
             if (editable.length() > 0) {
-                view.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+
+                answerList.get(pos).setAnswered(true);
             } else {
-                view.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                view.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+
+                answerList.get(pos).setAnswered(false);
             }
+
+            saveAnswer.onAnswerSave(pos, answerList.get(pos));
             /*if (mActive) {
 
 
@@ -303,6 +313,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
             byte[] byteArray = stream.toByteArray();
 
             answerList.get(pos).setByteArrayImage(byteArray);
+            answerList.get(pos).setAnswered(true);
             notifyItemChanged(pos);
         }
 
@@ -316,6 +327,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
             Long id = (long) data.getExtras().get("data");
             for (int i = 0; i < answerList.size(); i++) {
                 answerList.get(i).setPatientid(id);
+                answerList.get(pos).setAnswered(true);
             }
 
             StartSurveyActivity.patients = realm.where(Patients.class).equalTo("id", id).findFirst();
@@ -389,15 +401,18 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     holder.llQuestion.setVisibility(View.VISIBLE);
 
 
+                    holder.tvCounter.setText(String.valueOf(position + 1));
+
+
                     if (questions.getCompulsary() == true) {
                         holder.tvCompulsary.setVisibility(View.VISIBLE);
                         if (showerror == true && validateAnswers.get(position) != null) {
 
                             Boolean result = validateAnswers.get(position);
                             if (!result) {
-                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorSecondaryText));
+                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                             } else {
-                                holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.colorText));
+                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                             }
 
                         }
@@ -423,7 +438,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 //populate your editText with the model data here (before adding the new text watcher)
 
-                                CustomWatcher newWatcher = new CustomWatcher(position, holder.itemView,0);
+                                CustomWatcher newWatcher = new CustomWatcher(position, holder.tvCounter, 0);
                                 holder.etAnswer.setTag(newWatcher);
                                 holder.etAnswer.addTextChangedListener(newWatcher);
 
@@ -433,9 +448,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     // newWatcher.setActive(false);
                                     holder.etAnswer.setText(answerList.get(position).getAns());
                                     //  newWatcher.setActive(true);
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
                                 if (!enable) {
@@ -475,7 +490,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 //populate your editText with the model data here (before adding the new text watcher)
 
-                                CustomWatcher newWatcher1 = new CustomWatcher(position, holder.itemView,1);
+                                CustomWatcher newWatcher1 = new CustomWatcher(position, holder.tvCounter, 1);
                                 holder.etNumAns.setTag(newWatcher1);
                                 holder.etNumAns.addTextChangedListener(newWatcher1);
 
@@ -485,9 +500,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     //  newWatcher1.setActive(false);
                                     holder.etNumAns.setText(answerList.get(position).getNumAns());
                                     // newWatcher1.setActive(true);
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
                                 if (!enable) {
@@ -529,9 +544,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 if (answerList.get(position).getDate() != null && !answerList.get(position).getDate().equals("")) {
                                     holder.tvDate.setText(answerList.get(position).getDate());
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+
+
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+
+                                    answerList.get(position).setAnswered(false);
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -564,6 +585,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                                         answerList.get(position).setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                                                         //getSelectedChkbox();
+                                                        answerList.get(position).setAnswered(true);
                                                         saveAnswer.onAnswerSave(position, answerList.get(position));
 
                                                         notifyItemChanged(position);
@@ -589,9 +611,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 if (answerList.get(position).getTime() != null && !answerList.get(position).getTime().equals("")) {
                                     holder.tvTime.setText(answerList.get(position).getTime());
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+
+                                    answerList.get(position).setAnswered(false);
                                 }
 
 
@@ -621,6 +648,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                                         holder.tvTime.setText(hourOfDay + ":" + minute);
                                                         answerList.get(position).setTime(hourOfDay + ":" + minute);
+                                                        answerList.get(position).setAnswered(true);
                                                         //getSelectedChkbox();
                                                         saveAnswer.onAnswerSave(position, answerList.get(position));
                                                         notifyItemChanged(position);
@@ -645,9 +673,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getByteArrayImage().length > 0) {
                                     Bitmap bmp = BitmapFactory.decodeByteArray(answerList.get(position).getByteArrayImage(), 0, answerList.get(position).getByteArrayImage().length);
                                     holder.ivSelImg.setImageBitmap(bmp);
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+
+                                    answerList.get(position).setAnswered(false);
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -688,9 +721,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     if (p != null) {
                                         holder.tvPatient.setText(p.getPatientname());
                                     }
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+
+                                    answerList.get(position).setAnswered(false);
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -771,6 +809,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             @Override
                                             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                                                 getSelectedChkbox(position, lstChkbox);
+                                                answerList.get(position).setAnswered(true);
                                                 notifyItemChanged(position);
                                             }
                                         });
@@ -779,9 +818,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                     if (answerList.get(position).getSelectedChk() != null) {
                                         if (answerList.get(position).getSelectedChk().contains("1")) {
-                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                            holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+                                            answerList.get(position).setAnswered(true);
                                         } else {
-                                            holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                            holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+                                            answerList.get(position).setAnswered(false);
                                         }
                                     }
 
@@ -834,9 +876,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getSelectedopt() != -1 && hashAllRb.get(position) != null) {
                                     List<RadioButton> alRb = hashAllRb.get(position);
                                     alRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+                                    answerList.get(position).setAnswered(false);
                                 }
 
                                 if (questions.getCompulsary()) {
@@ -920,9 +965,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 if (answerList.get(position).getSelectedOptConditional() != -1 && hashAllCondRb.get(position) != null) {
                                     List<RadioButton> alRb = hashAllCondRb.get(position);
                                     alRb.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.answered_questions_background));
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
+                                    answerList.get(position).setAnswered(true);
                                 } else {
-                                    holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+
+                                    holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+                                    answerList.get(position).setAnswered(false);
                                 }
 
 
@@ -964,6 +1012,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
                                         int id = holder.rgOptionConditional.getCheckedRadioButtonId();
                                         View radioButton = holder.rgOptionConditional.findViewById(id);
+                                        answerList.get(position).setAnswered(true);
                                         long surveyId = 0;
                                         // if(i==0) {
                                         answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
@@ -1001,6 +1050,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     holder.itemView.setBackgroundColor(context.getResources().getColor(android.R.color.transparent));
                     holder.viewDivider.setVisibility(GONE);
                     holder.llQuestion.setVisibility(GONE);
+
+                    holder.tvCounter.setVisibility(GONE);
                 }
             }
         });

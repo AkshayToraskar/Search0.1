@@ -165,61 +165,61 @@ public class PatientsActivity extends AppCompatActivity {
         try {
             // File myFile = new File(string);
 
-            if(getFileExt(selectedFile.getName()).equals("csv")){
+            if (getFileExt(selectedFile.getName()).equals("csv")) {
 
 
+                reader = new CSVReader(new FileReader(selectedFile));
+                String[] row;
+                List<?> content = reader.readAll();
 
-            reader = new CSVReader(new FileReader(selectedFile));
-            String[] row;
-            List<?> content = reader.readAll();
+                int rowCount = 0;
 
-            int rowCount=0;
+                if (content != null) {
 
-            for (Object object : content) {
-                if(rowCount>0) {
-                    row = (String[]) object;
-                    for (int i = 0; i < row.length; i++) {
-                        // display CSV values
-                        System.out.println("Cell column index: " + i);
-                        System.out.println("Cell Value: " + row[i]);
-                        System.out.println("-------------");
-                    }
-
-                    final String strId = row[0] +row[2] + row[3] + row[5];
-
-                    final String[] finalRow = row;
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            long id=Long.parseLong(strId);
-                            Patients patients=realm.where(Patients.class).equalTo("id",id).findFirst();
-
-                            if(patients==null){
-                                patients = realm.createObject(Patients.class, id);
+                    for (Object object : content) {
+                        if (rowCount > 0) {
+                            row = (String[]) object;
+                            for (int i = 0; i < row.length; i++) {
+                                // display CSV values
+                                System.out.println("Cell column index: " + i);
+                                System.out.println("Cell Value: " + row[i]);
+                                System.out.println("-------------");
                             }
 
-                            patients.setPatientname(finalRow[6]);
-                            patients.setAge(Integer.parseInt(finalRow[7]));
-                            patients.setSex(Integer.parseInt(finalRow[8]));
-                            realm.copyToRealmOrUpdate(patients);
+                            final String strId = row[0] + row[2] + row[3] + row[5];
+
+                            final String[] finalRow = row;
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    long id = Long.parseLong(finalRow[13]);
+                                    Patients patients = realm.where(Patients.class).equalTo("id", id).findFirst();
+
+                                    if (patients == null) {
+                                        patients = realm.createObject(Patients.class, id);
+                                    }
+
+                                    patients.setHouseId(strId);
+                                    patients.setPatientname(finalRow[7]);
+                                    patients.setAge(Integer.parseInt(finalRow[8]));
+                                    patients.setSex(Integer.parseInt(finalRow[9]));
+                                    realm.copyToRealmOrUpdate(patients);
+                                }
+                            });
+
+                        } else {
+                            rowCount = rowCount + 1;
                         }
-                    });
 
-                }
-                else{
-                    rowCount=rowCount+1;
+
+                    }
                 }
 
+                patientList.addAll(realm.where(Patients.class).findAll());
+                mAdapter.notifyDataSetChanged();
 
-
-            }
-
-            patientList.addAll(realm.where(Patients.class).findAll());
-            mAdapter.notifyDataSetChanged();
-
-            Toast.makeText(getApplicationContext(),"Data Successfully Imported..!", Toast.LENGTH_SHORT).show();
-            }
-            else{
+                Toast.makeText(getApplicationContext(), "Data Successfully Imported..!", Toast.LENGTH_SHORT).show();
+            } else {
                 Toast.makeText(getApplicationContext(), "Select .csv file", Toast.LENGTH_SHORT).show();
             }
 

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
@@ -54,6 +55,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
 
+    @BindView(R.id.tv_counter)
+    TextView tvCounter;
+
     public boolean update;
 
     public static Patients patients;
@@ -72,6 +76,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     SaveAnswer saveAnswer;
     DataCollection dataCollection;
     SessionManager sessionManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +145,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setByteArrayImage(a);
             answersList.add(answ);
 
+            tvCounter.setText("0 of " + (answersList.size() - 1) + " Questions Answered");
+
 
             mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm, true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -191,6 +198,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
         answersList.set(index, ans);
+
+
+        int totalQuestions = answersList.size() - 1;
+        int answeredQuetions = getAnsweredCount();
+
+        tvCounter.setText(answeredQuetions + " of " + totalQuestions + " Questions Answered");
+
+
 //        mAdapter.notifyDataSetChanged();
 
         /*recyclerView.post(new Runnable() {
@@ -199,6 +214,19 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 mAdapter.notifyDataSetChanged();
             }
         });*/
+    }
+
+    public int getAnsweredCount() {
+
+        int count=0;
+
+        for(int i=0; i<answersList.size(); i++){
+           if(answersList.get(i).getAnswered()){
+               count++;
+           }
+        }
+
+        return count;
     }
 
     @Override
