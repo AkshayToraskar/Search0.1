@@ -396,7 +396,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     holder.tvQuestion.setVisibility(View.VISIBLE);
                     holder.tvQuestion.setText(questions.getQuestion());
 
-                   // holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
+                    // holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.cardview_light_background));
                     holder.viewDivider.setVisibility(View.VISIBLE);
                     holder.llQuestion.setVisibility(View.VISIBLE);
 
@@ -1019,7 +1019,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
                                         surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
                                         //   }
-                                        saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos());
+                                        saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
                                         //notifyDataSetChanged();
 
                                         notifyItemChanged(position);

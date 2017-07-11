@@ -7,12 +7,22 @@ package com.ak.search.model;
 public class NestedData {
 
     int pos, size;
-    long surveyId;
+    long surveyId, questionId;
 
-    public NestedData(int pos, int size, long surveyId){
+    public NestedData(int pos, int size, long surveyId, long questionId){
         this.pos=pos;
         this.size=size;
         this.surveyId=surveyId;
+        this.questionId=questionId;
+    }
+
+
+    public long getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(long questionId) {
+        this.questionId = questionId;
     }
 
     public int getPos() {

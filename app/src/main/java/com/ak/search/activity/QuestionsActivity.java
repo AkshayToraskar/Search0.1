@@ -398,7 +398,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     }
 
     @Override
-    public void onAddSurvey(long id, int pos,int parentPos) {
+    public void onAddSurvey(long id, int pos,int parentPos, long questionId) {
         Log.v("Survey ID", "asdf " + id+" Current page"+currentPage);
         Survey survey=realm.where(Survey.class).equalTo("id",id).findFirst();
 

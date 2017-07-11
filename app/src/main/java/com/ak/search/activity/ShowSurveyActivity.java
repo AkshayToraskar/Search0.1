@@ -131,7 +131,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
     @Override
-    public void onAddSurvey(long id, int pos, int parentPos) {
+    public void onAddSurvey(long id, int pos, int parentPos, long questionId) {
         boolean newEntry = true;
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
         int surveysize = survey.getQuestions().size();
