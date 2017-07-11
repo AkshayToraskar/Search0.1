@@ -43,20 +43,17 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
             tvSex = (TextView) view.findViewById(R.id.tvSex);
             tvAge = (TextView) view.findViewById(R.id.tvAge);
-            tvMMUId=(TextView)view.findViewById(R.id.tv_mmu);
+            tvMMUId = (TextView) view.findViewById(R.id.tv_mmu);
            /* view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
-
                     //Intent i = new Intent(context, ShowSurveyActivity.class);
                   //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
                   //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
                   //  context.startActivity(i);
                 }
             });*/
-
 
             ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,14 +105,14 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Patients user = patientsList.get(position);
-        String ids=user.getHouseId();
-        if(ids.length()>=4) {
+        String ids = user.getHouseId();
+        if (ids.length() >= 4) {
             holder.tvVillage.setText("Village No: " + ids.charAt(0) + ", ");
             holder.tvHouse.setText("House No: " + ids.charAt(1) + ", ");
             holder.tvFamily.setText("Family No: " + ids.charAt(2) + ", ");
             holder.tvIndividual.setText("Id No: " + ids.charAt(3) + " ");
         }
-        holder.tvMMUId.setText("MMUID: "+String.valueOf(user.getId()));
+        holder.tvMMUId.setText("MMUID: " + String.valueOf(user.getId()));
         holder.tvName.setText(user.getPatientname() + " ");
         holder.tvAge.setText("Age: " + user.getAge() + " ");
         String sex = "";

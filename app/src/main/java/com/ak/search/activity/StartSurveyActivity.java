@@ -25,6 +25,10 @@ import com.ak.search.app.SaveAnswer;
 import com.ak.search.app.SessionManager;
 import com.ak.search.fragment.QuestionFragment;
 import com.ak.search.model.MNestedAddQue;
+import com.ak.search.model.MyTreeNode;
+import com.ak.search.model.NestedData;
+import com.ak.search.model.NestedQuest;
+
 import com.ak.search.realm_model.Answers;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
@@ -37,8 +41,10 @@ import org.parceler.Parcels;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +83,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     DataCollection dataCollection;
     SessionManager sessionManager;
 
+    public static List<NestedQuest> nestedQuestList = new ArrayList<>();
+
+    NestedQuest tree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,13 +109,15 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             // patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
-//RealmList<Questions> questionsList=  survey.getQuestions().sort("question_pos", Sort.ASCENDING);
+            //RealmList<Questions> questionsList=  survey.getQuestions().sort("question_pos", Sort.ASCENDING);
 
             Survey surveyData = realm.where(Survey.class).equalTo("id", survey.getId()).findFirst();
             List<Questions> questionsList = surveyData.getQuestions().sort("question_pos", Sort.ASCENDING);
 
             // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
             getSupportActionBar().setTitle(survey.getName() + " ");
+
+            int trp = 0;
 
 
             for (int i = 0; i < questionsList.size(); i++) {
@@ -115,7 +126,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                 answ.setPatientid(0);
                 answ.setQuestions(questionsList.get(i));
-                answ.setParentPos(0);
+                answ.setParentPos(trp);
                 answ.setSelectedopt(-1);
                 answ.setSelectedOptConditional(-1);
                 answ.setSelectedChk(null);
@@ -133,7 +144,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             Answers answ = new Answers();
             answ.setPatientid(0);
             answ.setQuestions(null);
-            answ.setParentPos(0);
+            answ.setParentPos(trp);
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");
@@ -157,10 +168,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             recyclerView.addItemDecoration(itemDecoration);*/
             recyclerView.setAdapter(mAdapter);
 
+           // setupNestedData();
 
         }
-
-
     }
 
 
@@ -218,42 +228,169 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     public int getAnsweredCount() {
 
-        int count=0;
+        int count = 0;
 
-        for(int i=0; i<answersList.size(); i++){
-           if(answersList.get(i).getAnswered()){
-               count++;
-           }
+        for (int i = 0; i < answersList.size(); i++) {
+            if (answersList.get(i).getAnswered()) {
+                count++;
+            }
         }
 
         return count;
     }
 
     @Override
-    public void onAddSurvey(long id, int pos, int parentPos) {
+    public void onAddSurvey(long id, int pos, int treePos) {
+
+        Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
+
+        newLogic(pos, survey.getQuestions().size(), id);
+
+
+        //oldLogic(pos,id,treePos);
+
+
+    }
+
+
+   /* public NestedQuest addNestQuestion(int pos, long id, int treePos) {
+
+        NestedQuest nstQue = new NestedQuest();
+        nstQue.setPos(pos);
+        nstQue.setSurveyId(id);
+        nstQue.setTreePos(treePos);
+        return nstQue;
+
+    }*/
+
+    public void newLogic(int pos, int size, long surveyId) {
+
+
+
+        MyTreeNode<String> root = new MyTreeNode<>("Root");
+
+        MyTreeNode<String> child1 = new MyTreeNode<>("Child1");
+        child1.addChild("Grandchild1");
+        child1.addChild("Grandchild2");
+
+        MyTreeNode<String> child2 = new MyTreeNode<>("Child2");
+        child2.addChild("Grandchild3");
+
+
+        root.addChild(child1);
+        root.addChild(child2);
+        root.addChild("Child3");
+
+        root.addChildren(Arrays.<MyTreeNode>asList(
+                new MyTreeNode<>("Child4"),
+                new MyTreeNode<>("Child5"),
+                new MyTreeNode<>("Child6")
+        ));
+
+        root.getChildren().get(0).removeChild(0);
+
+        for(MyTreeNode node : root.getChildren()) {
+            System.out.println(node.getData());
+
+            Log.v("Children size"," "+node.getChildren().size());
+
+        }
+
+        Log.v("aa size","asdf ");
+
+
+        //NestedData data = new NestedData(pos, size, surveyId);
+
+        /*tree = new NestedQuest(data,
+                new NestedQuest(data,
+                        new NestedQuest(data),
+                        new NestedQuest(data),
+                        new NestedQuest(data),
+                        new NestedQuest(data,
+                                new NestedQuest(data),
+                                new NestedQuest(data),
+                                new NestedQuest(data,
+                                        new NestedQuest(data)
+                                )
+                        )
+                ),
+                new NestedQuest(data),
+                new NestedQuest(data),
+                new NestedQuest(data),
+                new NestedQuest(data)
+        );*/
+
+        /*Log.v("text", "test");
+
+        for (NestedData x : tree.inOrderView) {
+            // System.out.println(x);
+            //traverse the tree row wise
+
+            if(x.getPos()==pos){
+
+            }
+
+            Log.d("tree elements", " " + x.getPos() + "-" + x.getSize() + "-" + x.getSurveyId());
+        }*/
+    }
+
+
+    public void setupNestedData() {
+
+        List<NestedQuest> qList = new LinkedList<>();
+
+        int count = 0;
+        for (Answers ans : answersList) {
+            if (ans.getQuestions() != null) {
+                if (ans.getQuestions().getOptCondition()) {
+                    NestedData nestedData = new NestedData(count, 0, 0);
+                    NestedQuest nsQ = new NestedQuest(nestedData);
+                    qList.add(nsQ);
+                    count++;
+                }
+            }
+        }
+        NestedData nestedData = new NestedData(count, 0, 0);
+
+        NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
+        tree = new NestedQuest(nestedData, quests);
+    }
+
+
+    public void oldLogic(int pos, long id, int parentPos) {
+
         boolean newEntry = true;
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
 
+        // survey is assigned for nested entry
         if (survey != null) {
             int surveysize = survey.getQuestions().size();
 
             if (addQueHashMap.size() > 0) {
+
+                //check hashmap entry
                 for (Map.Entry m : addQueHashMap.entrySet()) {
                     MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
                     if (nestedAddQue.getPos() == pos) {
+
+                        //delete question from that position
                         deleteQuestions(pos);
+
+                        //update hashmap values
                         if (nestedAddQue.getSurveyId() != id) {
                             addToHashMap(id, pos, surveysize, parentPos, 0);
                             newEntry = false;
                         }
                     }
 
+                    //update parent hashmap values
                     if (nestedAddQue.getPos() == parentPos) {
-                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getSurveyLengh(), nestedAddQue.getParentPos(), surveysize);
                     }
                 }
             }
 
+            // add new entry in hashmap
             if (newEntry) {
                 addToHashMap(id, pos, survey.getQuestions().size(), parentPos, 0);
             }
@@ -262,7 +399,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             mAdapter.notifyDataSetChanged();
             showHashmap();
-        } else {
+        } else {//no survey is assigned to nested survey
             if (addQueHashMap.size() > 0) {
                 for (Map.Entry m : addQueHashMap.entrySet()) {
                     MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
@@ -274,9 +411,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                             newEntry = false;
                         }
                     }
-
                     if (nestedAddQue.getPos() == parentPos) {
-                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), 0, nestedAddQue.getPos(), nestedAddQue.getChildLength());
+                        addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), 0, nestedAddQue.getParentPos(), nestedAddQue.getChildLength());
                     }
                 }
             }
@@ -293,16 +429,21 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
     public void showHashmap() {
+
+        Log.v("asf", "-------===============-------");
+
         for (Map.Entry m : addQueHashMap.entrySet()) {
             MNestedAddQue nestedAddQue = (MNestedAddQue) m.getValue();
 
-            Log.v("asdf", "\n================\n Id:" + nestedAddQue.getSurveyId() +
+            Log.v("asdf", "\n---\n Id:" + nestedAddQue.getSurveyId() +
                     "\n Pos:" + nestedAddQue.getPos() +
-                    "\n Length:" + nestedAddQue.getLengh() +
+                    "\n Length:" + nestedAddQue.getSurveyLengh() +
                     "\n Parent Pos:" + nestedAddQue.getParentPos() +
-                    "\n Child Length:" + nestedAddQue.getChildLength() + "\n =====================");
+                    "\n Child Length:" + nestedAddQue.getChildLength() + "\n ---");
 
         }
+
+        Log.v("asf", "-------===============-------");
     }
 
 
@@ -311,11 +452,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         MNestedAddQue nestedAddQue = new MNestedAddQue();
         nestedAddQue.setSurveyId(id);
         nestedAddQue.setPos(pos);
-        nestedAddQue.setLengh(length);
+        nestedAddQue.setSurveyLengh(length);
         nestedAddQue.setParentPos(parentPos);
         nestedAddQue.setChildLength(childLength);
         addQueHashMap.put(pos, nestedAddQue);
-
 
     }
 
@@ -325,7 +465,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             Answers answ = new Answers();
             answ.setPatientid(0);
             answ.setQuestions(survey.getQuestions().get(i));
-            answ.setParentPos(pos);
+            //  answ.setParentPos(pos);
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");
@@ -342,12 +482,12 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     public void deleteQuestions(int pos) {
         if (addQueHashMap.size() > 0) {
-            // for (Map.Entry m : addQueHashMap.entrySet()) {
+
             MNestedAddQue nestedAddQue = addQueHashMap.get(pos);
 
             if (nestedAddQue != null) {
                 //if (nestedAddQue.getPos() == pos) {
-                int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
+                int totalSize = nestedAddQue.getSurveyLengh() + nestedAddQue.getChildLength();
 
                 int count = 0;
                 if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size() - 1)) {
@@ -357,8 +497,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     }
                 }
             }
-            //}
-            //}
         }
     }
 

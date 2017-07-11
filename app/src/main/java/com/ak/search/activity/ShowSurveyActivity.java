@@ -153,7 +153,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                 }
 
                 if (nestedAddQue.getPos() == parentPos) {
-                    addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getLengh(), nestedAddQue.getPos(), surveysize);
+                    addToHashMap(nestedAddQue.getSurveyId(), nestedAddQue.getPos(), nestedAddQue.getSurveyLengh(), nestedAddQue.getPos(), surveysize);
                 }
 
 
@@ -185,7 +185,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         MNestedAddQue nestedAddQue = new MNestedAddQue();
         nestedAddQue.setSurveyId(id);
         nestedAddQue.setPos(pos);
-        nestedAddQue.setLengh(length);
+        nestedAddQue.setSurveyLengh(length);
         nestedAddQue.setParentPos(parentPos);
         nestedAddQue.setChildLength(childLength);
         addQueHashMap.put(pos, nestedAddQue);
@@ -241,7 +241,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
             if (nestedAddQue != null) {
                 //if (nestedAddQue.getPos() == pos) {
-                int totalSize = nestedAddQue.getLengh() + nestedAddQue.getChildLength();
+                int totalSize = nestedAddQue.getSurveyLengh() + nestedAddQue.getChildLength();
 
                 int count = 0;
                 if (count < totalSize && (nestedAddQue.getPos() + 1) < (answersList.size() - 1)) {

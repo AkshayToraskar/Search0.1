@@ -3,7 +3,7 @@ package com.ak.search.realm_model;
 
 import org.parceler.Parcel;
 
-import io.realm.PatientsRealmProxy;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,9 +11,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 15-12-2016.
  */
 
-@Parcel(implementations = {PatientsRealmProxy.class},
-        value = Parcel.Serialization.FIELD,
-        analyze = {Patients.class})
+
 public class Patients extends RealmObject {
     @PrimaryKey
     long id;
