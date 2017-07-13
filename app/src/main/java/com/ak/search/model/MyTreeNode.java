@@ -70,7 +70,7 @@ public class MyTreeNode<T>{
 
 
     //class to iterate over the set of values rowwize
-    static class InOrderIterator implements Iterator<NestedData> {
+    static class InOrderIterator implements Iterator<MyTreeNode> {
         //queue to handle elements of tree
         final Queue<MyTreeNode> queue = new LinkedList<MyTreeNode>();
 
@@ -87,12 +87,12 @@ public class MyTreeNode<T>{
 
         //get the  next element
         @Override
-        public NestedData next() {
+        public MyTreeNode next() {
             MyTreeNode node = queue.remove();
             queue.addAll(node.children);
 
             return
-                    (NestedData) node.data;
+                    node;
         }
 
         //check for exceptions
@@ -103,9 +103,9 @@ public class MyTreeNode<T>{
     }
 
     // traverse the tree
-    public Iterable<NestedData> inOrderView = new Iterable<NestedData>() {
+    public Iterable<MyTreeNode> inOrderView = new Iterable<MyTreeNode>() {
         @Override
-        public Iterator<NestedData> iterator() {
+        public Iterator<MyTreeNode> iterator() {
             return new InOrderIterator(MyTreeNode.this);
         }
     };

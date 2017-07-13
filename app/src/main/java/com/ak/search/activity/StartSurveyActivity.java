@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -266,95 +267,47 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void newLogic(int pos, int size, long surveyId, long questionId) {
 
 
-        // MyTreeNode<NestedData> child1 = new MyTreeNode<>(nsd);
-        // child1.addChild(nsd);
-        //  child1.addChild(nsd);
-
-        //  MyTreeNode<NestedData> child2 = new MyTreeNode<>(nsd);
-        //  child2.addChild(nsd);
-
-
-        //   root.addChild(child1);
-        //   root.addChild(child2);
-
-
-        //   root.addChild(nsd);
-
-     /*   root.addChildren(Arrays.<MyTreeNode>asList(
-                new MyTreeNode<>(nsd),
-                new MyTreeNode<>(nsd),
-                new MyTreeNode<>(nsd)
-        ));*/
-
-        //root.getChildren().get(0).removeChild(0);
-
-        for (MyTreeNode node : root.getChildren()) {
-            // System.out.println(node.getData());
-            NestedData ns = (NestedData) node.getData();
-            if (pos == ns.getPos()) {
-                NestedData nsd = new NestedData(pos, size, surveyId, 0);
-                node.addChild(new MyTreeNode<>(nsd));
-            }
-
-
-            System.out.println(ns.getPos());
-        }
-
-
-        for (NestedData x : root.inOrderView) {
+        for (MyTreeNode x : root.inOrderView) {
             // System.out.println(x);
             //traverse the tree row wise
 
-            if (x != null) {
+            if (x.getData() != null) {
 
-                Log.d("questionId",""+questionId);
-                Log.d("tree elements", " " + x.getPos() + "-" + x.getSize() + "-" + x.getSurveyId()+ "-" + x.getQuestionId());
+                NestedData nsd = (NestedData) x.getData();
 
-                if (x.getQuestionId() == questionId) {
+                Log.d("questionId", "" + questionId);
+                Log.d("tree elements", " " + nsd.getPos() + "-" + nsd.getSize() + "-" + nsd.getSurveyId() + "-" + nsd.getQuestionId());
 
+                if (nsd.getQuestionId() == questionId) {
+                    List<MyTreeNode> lstChildren = x.getChildren();
+                    for (int i = 0; i < lstChildren.size(); i++) {
+                        x.removeChild(i);
+                        deleteQuestion(questionId, pos);
+                    }
+
+                    NestedData nsd1 = new NestedData(pos, size, surveyId, questionId);
+                    x.addChild(nsd1);
+
+                    addQuestion(pos, surveyId);
                 }
-
-
             }
         }
 
 
+        mAdapter.notifyDataSetChanged();
         Log.v("aa size", "asdf ");
 
+    }
 
-        //NestedData data = new NestedData(pos, size, surveyId);
 
-        /*tree = new NestedQuest(data,
-                new NestedQuest(data,
-                        new NestedQuest(data),
-                        new NestedQuest(data),
-                        new NestedQuest(data),
-                        new NestedQuest(data,
-                                new NestedQuest(data),
-                                new NestedQuest(data),
-                                new NestedQuest(data,
-                                        new NestedQuest(data)
-                                )
-                        )
-                ),
-                new NestedQuest(data),
-                new NestedQuest(data),
-                new NestedQuest(data),
-                new NestedQuest(data)
-        );*/
-
-        /*Log.v("text", "test");
-
-        for (NestedData x : tree.inOrderView) {
-            // System.out.println(x);
-            //traverse the tree row wise
-
-            if(x.getPos()==pos){
-
+    public void deleteQuestion(long questionId, int pos) {
+        for (int i = 0; i < answersList.size(); i++) {
+            if(answersList.get(i).getQuestions()!=null) {
+                if (answersList.get(i).getQuestions().getId() == questionId && i == pos) {
+                    answersList.remove(i);
+                }
             }
-
-            Log.d("tree elements", " " + x.getPos() + "-" + x.getSize() + "-" + x.getSurveyId());
-        }*/
+        }
     }
 
 
@@ -381,7 +334,93 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
         root = new MyTreeNode<>(null);
         root.addChildren(qList);
+
+
     }
+
+    public void addQuestion(int pos, long surveyId) {
+
+        Survey survey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
+
+        for (int i = 0; i < survey.getQuestions().size(); i++) {
+
+            Answers answ = new Answers();
+            answ.setPatientid(0);
+            answ.setQuestions(survey.getQuestions().get(i));
+            //  answ.setParentPos(pos);
+            answ.setSelectedopt(-1);
+            answ.setSelectedOptConditional(-1);
+            answ.setSelectedChk("");
+            answ.setAns("");
+            answ.setNumAns("");
+            answ.setDate("");
+            answ.setTime("");
+            byte[] a = {-1};
+            answ.setByteArrayImage(a);
+            answersList.add((pos + 1) + i, answ);
+        }
+        // mAdapter.notifyDataSetChanged();
+    }
+
+
+
+
+
+
+        // MyTreeNode<NestedData> child1 = new MyTreeNode<>(nsd);
+        // child1.addChild(nsd);
+        //  child1.addChild(nsd);
+        //  MyTreeNode<NestedData> child2 = new MyTreeNode<>(nsd);
+        //  child2.addChild(nsd);
+        //   root.addChild(child1);
+        //   root.addChild(child2);
+        //   root.addChild(nsd);
+     /*   root.addChildren(Arrays.<MyTreeNode>asList(
+                new MyTreeNode<>(nsd),
+                new MyTreeNode<>(nsd),
+                new MyTreeNode<>(nsd)
+        ));*/
+        //root.getChildren().get(0).removeChild(0);
+        /*for (MyTreeNode node : root.getChildren()) {
+            // System.out.println(node.getData());
+            NestedData ns = (NestedData) node.getData();
+            if (pos == ns.getPos()) {
+                NestedData nsd = new NestedData(pos, size, surveyId, 0);
+                node.addChild(new MyTreeNode<>(nsd));
+            }
+            System.out.println(ns.getPos());
+        }*/
+        //NestedData data = new NestedData(pos, size, surveyId);
+        /*tree = new NestedQuest(data,
+                new NestedQuest(data,
+                        new NestedQuest(data),
+                        new NestedQuest(data),
+                        new NestedQuest(data),
+                        new NestedQuest(data,
+                                new NestedQuest(data),
+                                new NestedQuest(data),
+                                new NestedQuest(data,
+                                        new NestedQuest(data)
+                                )
+                        )
+                ),
+                new NestedQuest(data),
+                new NestedQuest(data),
+                new NestedQuest(data),
+                new NestedQuest(data)
+        );*/
+
+        /*Log.v("text", "test");
+        for (NestedData x : tree.inOrderView) {
+            // System.out.println(x);
+            //traverse the tree row wise
+            if(x.getPos()==pos){
+            }
+            Log.d("tree elements", " " + x.getPos() + "-" + x.getSize() + "-" + x.getSurveyId());
+        }*/
+   // }
+
+
 
 
     public void oldLogic(int pos, long id, int parentPos) {
