@@ -32,8 +32,8 @@ public class MyTreeNode<T>{
         children.add(newChild);
     }
 
-    public void removeChild(int index){
-        children.remove(index);
+    public void removeChild(List<T> child){
+        children.removeAll(child);
     }
 
     public void addChildren(List<MyTreeNode> children) {

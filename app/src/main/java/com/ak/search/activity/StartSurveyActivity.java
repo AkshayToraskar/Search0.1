@@ -106,25 +106,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         update = false;
 
         if (getIntent().getExtras() != null) {
-            survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
+
             // patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
-
-
             //RealmList<Questions> questionsList=  survey.getQuestions().sort("question_pos", Sort.ASCENDING);
+            // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
 
+            survey = Parcels.unwrap(getIntent().getExtras().getParcelable("survey"));
             Survey surveyData = realm.where(Survey.class).equalTo("id", survey.getId()).findFirst();
             List<Questions> questionsList = surveyData.getQuestions().sort("question_pos", Sort.ASCENDING);
 
-            // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
+
             getSupportActionBar().setTitle(survey.getName() + " ");
-
             int trp = 0;
-
 
             for (int i = 0; i < questionsList.size(); i++) {
 
                 Answers answ = new Answers();
-
                 answ.setPatientid(0);
                 answ.setQuestions(questionsList.get(i));
                 answ.setParentPos(trp);
@@ -137,7 +134,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 answ.setTime(null);
                 byte[] a = new byte[0];
                 answ.setByteArrayImage(a);
-
                 answersList.add(answ);
             }
 
@@ -159,7 +155,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             tvCounter.setText("0 of " + (answersList.size() - 1) + " Questions Answered");
 
-
             mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm, true);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
@@ -168,8 +163,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
             recyclerView.addItemDecoration(itemDecoration);*/
             recyclerView.setAdapter(mAdapter);
-
-            setupNestedData();
+            root = new MyTreeNode<>(null);
+            setupNestedData(root, 0, answersList.size());
 
         }
     }
@@ -206,37 +201,20 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             ans.setPatientid(patients.getId());
         }
         answers.put(ans.getQuestions().getId(), ans);
-
-
         answersList.set(index, ans);
-
-
         int totalQuestions = answersList.size() - 1;
         int answeredQuetions = getAnsweredCount();
-
         tvCounter.setText(answeredQuetions + " of " + totalQuestions + " Questions Answered");
-
-
-//        mAdapter.notifyDataSetChanged();
-
-        /*recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });*/
     }
 
     public int getAnsweredCount() {
 
         int count = 0;
-
         for (int i = 0; i < answersList.size(); i++) {
             if (answersList.get(i).getAnswered()) {
                 count++;
             }
         }
-
         return count;
     }
 
@@ -244,55 +222,148 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void onAddSurvey(long id, int pos, int treePos, long questionId) {
 
         Survey survey = realm.where(Survey.class).equalTo("id", id).findFirst();
-
-        newLogic(pos, survey.getQuestions().size(), id, questionId);
-
-
+        if (id != 0) {
+            newLogic(pos, survey.getQuestions().size(), id, questionId);
+        } else {
+            newLogic(pos, 0, 0, questionId);
+        }
         //oldLogic(pos,id,treePos);
-
-
     }
 
 
-   /* public NestedQuest addNestQuestion(int pos, long id, int treePos) {
+    @Override
+    public void saveCollection() {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
 
-        NestedQuest nstQue = new NestedQuest();
-        nstQue.setPos(pos);
-        nstQue.setSurveyId(id);
-        nstQue.setTreePos(treePos);
-        return nstQue;
+                RealmList<Answers> answerses = new RealmList<>();
+                for (int i = 0; i < answersList.size() - 1; i++) {
+                    Answers a = answersList.get(i);
+                    Answers ans = realm.createObject(Answers.class);
 
-    }*/
+                    Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
+
+                    ans.setQuestions(questions);
+                    ans.setPatientid(a.getPatientid());
+                    ans.setAns(a.getAns());
+                    ans.setSelectedopt(a.getSelectedopt());
+                    ans.setSelectedOptConditional(a.getSelectedOptConditional());
+                    ans.setNumAns(a.getNumAns());
+                    ans.setByteArrayImage(a.getByteArrayImage());
+                    ans.setDate(a.getDate());
+                    ans.setTime(a.getTime());
+                    ans.setSelectedChk(a.getSelectedChk());
+                    answerses.add(ans);
+
+                }
+
+                Patients patients1 = null;
+                if (patients != null) {
+                    patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
+                }
+
+                int collectionId;
+                try {
+                    collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
+                } catch (Exception ex) {
+                    Log.v("exception", ex.toString());
+                    collectionId = 1;
+                }
+
+                dataCollection = realm.createObject(DataCollection.class, collectionId);
+                dataCollection.setSurveyid(survey.getId());
+                dataCollection.setPatients(patients1);
+                dataCollection.setAnswerses(answerses);
+
+                if (sessionManager.getLoginType() == 2) {
+                    dataCollection.setSuperwiserId(sessionManager.getUserId());
+                    dataCollection.setFieldworkerId(0);
+                } else if (sessionManager.getLoginType() == 3) {
+                    dataCollection.setSuperwiserId(0);
+                    dataCollection.setFieldworkerId(sessionManager.getUserId());
+                }
+
+                String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
+                dataCollection.setLat(0);
+                dataCollection.setLng(0);
+                dataCollection.setTimestamp(timeStamp);
+
+                realm.copyToRealmOrUpdate(dataCollection);
+
+                Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (realm != null) {
+            realm.close();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        discardSurvey();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                discardSurvey();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     public void newLogic(int pos, int size, long surveyId, long questionId) {
 
-
+        int nesPos = pos;
         for (MyTreeNode x : root.inOrderView) {
-            // System.out.println(x);
-            //traverse the tree row wise
 
+            //traverse the tree row wise
             if (x.getData() != null) {
 
                 NestedData nsd = (NestedData) x.getData();
-
-                Log.d("questionId", "" + questionId);
-                Log.d("tree elements", " " + nsd.getPos() + "-" + nsd.getSize() + "-" + nsd.getSurveyId() + "-" + nsd.getQuestionId());
+                Log.d("questionId", "" + questionId + " eleQueId:" + nsd.getQuestionId() + ", Position:" + pos + " elePOs:" + nsd.getPos());
+                Log.d("tree elements", " size:" + nsd.getSize() + ", SurveyId:" + nsd.getSurveyId());
 
                 if (nsd.getQuestionId() == questionId) {
                     List<MyTreeNode> lstChildren = x.getChildren();
+
+
+                    nesPos++;
+                    //remove all child of current node
                     for (int i = 0; i < lstChildren.size(); i++) {
-                        x.removeChild(i);
-                        deleteQuestion(questionId, pos);
+                        NestedData ns = (NestedData) lstChildren.get(i).getData();
+                        deleteQuestion(ns.getPos(), ns.getSize()-1);
+
                     }
 
-                    NestedData nsd1 = new NestedData(pos, size, surveyId, questionId);
-                    x.addChild(nsd1);
-
-                    addQuestion(pos, surveyId);
+                    x.removeChild(lstChildren);
+                    // add new child to current node
+                    if (surveyId != 0) {
+                        // Survey survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
+                        // NestedData nsd1 = new NestedData(nesPos, survey.getQuestions().size(), surveyId, questionId);
+                        // x.addChild(nsd1);
+                        addQuestion(nesPos, survey, x);
+                    }
                 }
             }
-        }
 
+            Log.d("tree elements", " size:");
+        }
 
         mAdapter.notifyDataSetChanged();
         Log.v("aa size", "asdf ");
@@ -300,47 +371,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
 
-    public void deleteQuestion(long questionId, int pos) {
-        for (int i = 0; i < answersList.size(); i++) {
-            if(answersList.get(i).getQuestions()!=null) {
-                if (answersList.get(i).getQuestions().getId() == questionId && i == pos) {
-                    answersList.remove(i);
-                }
-            }
-        }
-    }
+    public void addQuestion(int pos, Survey survey, MyTreeNode node) {
 
-
-    public void setupNestedData() {
-
-
-        List<MyTreeNode> qList = new LinkedList<>();
-
-        int count = 0;
-        for (Answers ans : answersList) {
-            if (ans.getQuestions() != null) {
-                if (ans.getQuestions().getOptCondition()) {
-
-                    NestedData nestedData = new NestedData(count, 0, survey.getId(), answersList.get(count).getQuestions().getId());
-                    MyTreeNode myTreeNode = new MyTreeNode(nestedData);
-                    qList.add(myTreeNode);
-
-                }
-            }
-            count++;
-        }
-        // NestedData nestedData = new NestedData(count, 0, 0);
-
-        //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
-        root = new MyTreeNode<>(null);
-        root.addChildren(qList);
-
-
-    }
-
-    public void addQuestion(int pos, long surveyId) {
-
-        Survey survey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
+        // Survey survey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
 
         for (int i = 0; i < survey.getQuestions().size(); i++) {
 
@@ -357,9 +390,70 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setTime("");
             byte[] a = {-1};
             answ.setByteArrayImage(a);
-            answersList.add((pos + 1) + i, answ);
+            answersList.add(pos + i, answ);
+
+           // addNestedData(node, pos + i, survey.getQuestions().get(i).getId(), survey.getId(), survey.getQuestions().size());
+
+            setupNestedData(node,pos,survey.getQuestions().size());
         }
         // mAdapter.notifyDataSetChanged();
+    }
+
+
+    public void deleteQuestion(int pos, int size) {
+        for (int i = pos; i < (pos + size); i++) {
+            answersList.remove(pos);
+        }
+    }
+
+
+    public void setupNestedData(MyTreeNode myTree, int pos, int size) {
+
+        List<MyTreeNode> qList = new LinkedList<>();
+        //int count = 0;
+        //for (Answers ans : answersList) {
+        for (int i = pos; i < pos+size; i++) {
+            Answers ans = answersList.get(i);
+            if (ans.getQuestions() != null) {
+                //  if (ans.getQuestions().getOptCondition()) {
+                NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
+                MyTreeNode myTreeNode = new MyTreeNode(nestedData);
+                qList.add(myTreeNode);
+
+                //   }
+            }
+            // count++;
+        }
+        // NestedData nestedData = new NestedData(count, 0, 0);
+        //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
+
+        myTree.addChildren(qList);
+        Log.v("root size", "" + root.getChildren().size());
+    }
+
+    public void addNestedData(MyTreeNode node, int pos, long questionId, long surveyId, int size) {
+
+
+        //int count = 0;
+        //for (Answers ans : answersList) {
+        //  for(int i=pos; i<size; i++){
+        // Answers ans=answersList.get(i);
+        //      if (ans.getQuestions() != null) {
+        //  if (ans.getQuestions().getOptCondition()) {
+        NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
+        //  MyTreeNode myTreeNode = new MyTreeNode(nestedData);
+        //  qList.add(myTreeNode);
+        //   }
+        //  }
+        // count++;
+        //  }
+        // NestedData nestedData = new NestedData(count, 0, 0);
+
+        //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
+
+        node.addChild(nestedData);
+
+        Log.v("root size", "" + root.getChildren().size());
     }
 
 
@@ -367,21 +461,43 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
 
-        // MyTreeNode<NestedData> child1 = new MyTreeNode<>(nsd);
-        // child1.addChild(nsd);
-        //  child1.addChild(nsd);
-        //  MyTreeNode<NestedData> child2 = new MyTreeNode<>(nsd);
-        //  child2.addChild(nsd);
-        //   root.addChild(child1);
-        //   root.addChild(child2);
-        //   root.addChild(nsd);
-     /*   root.addChildren(Arrays.<MyTreeNode>asList(
+
+
+
+
+}
+
+
+/*
+
+  public NestedQuest addNestQuestion(int pos, long id, int treePos) {
+
+        NestedQuest nstQue = new NestedQuest();
+        nstQue.setPos(pos);
+        nstQue.setSurveyId(id);
+        nstQue.setTreePos(treePos);
+        return nstQue;
+
+    }
+
+
+
+
+    // MyTreeNode<NestedData> child1 = new MyTreeNode<>(nsd);
+    // child1.addChild(nsd);
+    //  child1.addChild(nsd);
+    //  MyTreeNode<NestedData> child2 = new MyTreeNode<>(nsd);
+    //  child2.addChild(nsd);
+    //   root.addChild(child1);
+    //   root.addChild(child2);
+    //   root.addChild(nsd);
+     *//*   root.addChildren(Arrays.<MyTreeNode>asList(
                 new MyTreeNode<>(nsd),
                 new MyTreeNode<>(nsd),
                 new MyTreeNode<>(nsd)
-        ));*/
-        //root.getChildren().get(0).removeChild(0);
-        /*for (MyTreeNode node : root.getChildren()) {
+        ));*//*
+    //root.getChildren().get(0).removeChild(0);
+        *//*for (MyTreeNode node : root.getChildren()) {
             // System.out.println(node.getData());
             NestedData ns = (NestedData) node.getData();
             if (pos == ns.getPos()) {
@@ -389,9 +505,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 node.addChild(new MyTreeNode<>(nsd));
             }
             System.out.println(ns.getPos());
-        }*/
-        //NestedData data = new NestedData(pos, size, surveyId);
-        /*tree = new NestedQuest(data,
+        }*//*
+    //NestedData data = new NestedData(pos, size, surveyId);
+        *//*tree = new NestedQuest(data,
                 new NestedQuest(data,
                         new NestedQuest(data),
                         new NestedQuest(data),
@@ -408,19 +524,17 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 new NestedQuest(data),
                 new NestedQuest(data),
                 new NestedQuest(data)
-        );*/
+        );*//*
 
-        /*Log.v("text", "test");
+        *//*Log.v("text", "test");
         for (NestedData x : tree.inOrderView) {
             // System.out.println(x);
             //traverse the tree row wise
             if(x.getPos()==pos){
             }
             Log.d("tree elements", " " + x.getPos() + "-" + x.getSize() + "-" + x.getSurveyId());
-        }*/
-   // }
-
-
+        }*//*
+    // }
 
 
     public void oldLogic(int pos, long id, int parentPos) {
@@ -564,181 +678,21 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 }
             }
         }
-    }
-
-
-    @Override
-    public void saveCollection() {
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-
-                RealmList<Answers> answerses = new RealmList<>();
-                for (int i = 0; i < answersList.size() - 1; i++) {
-                    Answers a = answersList.get(i);
-                    Answers ans = realm.createObject(Answers.class);
-
-                    Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
-
-                    ans.setQuestions(questions);
-                    ans.setPatientid(a.getPatientid());
-                    ans.setAns(a.getAns());
-                    ans.setSelectedopt(a.getSelectedopt());
-                    ans.setSelectedOptConditional(a.getSelectedOptConditional());
-                    ans.setNumAns(a.getNumAns());
-                    ans.setByteArrayImage(a.getByteArrayImage());
-                    ans.setDate(a.getDate());
-                    ans.setTime(a.getTime());
-                    ans.setSelectedChk(a.getSelectedChk());
-                    answerses.add(ans);
-
-                }
-
-                Patients patients1 = null;
-                if (patients != null) {
-                    patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
-                }
-
-                int collectionId;
-                try {
-                    collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
-                } catch (Exception ex) {
-                    Log.v("exception", ex.toString());
-                    collectionId = 1;
-                }
-
-                dataCollection = realm.createObject(DataCollection.class, collectionId);
-                dataCollection.setSurveyid(survey.getId());
-                dataCollection.setPatients(patients1);
-                dataCollection.setAnswerses(answerses);
-
-                if (sessionManager.getLoginType() == 2) {
-                    dataCollection.setSuperwiserId(sessionManager.getUserId());
-                    dataCollection.setFieldworkerId(0);
-                } else if (sessionManager.getLoginType() == 3) {
-                    dataCollection.setSuperwiserId(0);
-                    dataCollection.setFieldworkerId(sessionManager.getUserId());
-                }
-
-                String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
-                dataCollection.setLat(0);
-                dataCollection.setLng(0);
-                dataCollection.setTimestamp(timeStamp);
-
-                realm.copyToRealmOrUpdate(dataCollection);
-
-                Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
-                finish();
-
-            }
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realm != null) {
-            realm.close();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        discardSurvey();
-    }
-
-   /* @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_survey, menu);
-        if (update) {
-            menu.getItem(1).setTitle("update");
-
-        } else {
-            menu.getItem(0).setVisible(false);
-        }
-        return true;
     }*/
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                discardSurvey();
-                break;
-
-           /* case R.id.action_save_survey:
-
-                *//*realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
 
 
-                        RealmList<Answers> answerses = new RealmList<Answers>();
-                        for (int i = 0; i < answersList.size() - 1; i++) {
-                            Answers a = answersList.get(i);
-                            Answers ans = realm.createObject(Answers.class);
-
-                            Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
-
-                            ans.setQuestions(questions);
-                            ans.setPatientid(a.getPatientid());
-                            ans.setAns(a.getAns());
-                            ans.setSelectedopt(a.getSelectedopt());
-                            ans.setNumAns(a.getNumAns());
-                            ans.setByteArrayImage(a.getByteArrayImage());
-                            ans.setDate(a.getDate());
-                            ans.setTime(a.getTime());
-                            ans.setSelectedChk(a.getSelectedChk());
-                            answerses.add(ans);
-
-                        }
-
-                        Patients patients1=null;
-                        if (patients != null) {
-                            patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
-                        }
-
-                        int collectionId;
-                        try {
-                            collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
-                        } catch (Exception ex) {
-                            Log.v("exception", ex.toString());
-                            collectionId = 1;
-                        }
-
-                        dataCollection = realm.createObject(DataCollection.class, collectionId);
-                        dataCollection.setSurveyid(survey.getId());
-                        dataCollection.setPatients(patients1);
-                        dataCollection.setAnswerses(answerses);
 
 
-                        dataCollection.setFieldworkerId(sessionManager.getUserId());
-                        dataCollection.setSuperwiserId(0);
-
-                        String timeStamp = new SimpleDateFormat("dd.MM.yyyy:HH.mm.ss").format(new Date());
-                        dataCollection.setLat(0);
-                        dataCollection.setLng(0);
-                        dataCollection.setTimestamp(timeStamp);
-
-                        realm.copyToRealmOrUpdate(dataCollection);
-
-                        Toast.makeText(getApplicationContext(), "DONE", Toast.LENGTH_SHORT).show();
-                        finish();
-
-                    }
-                });*//*
 
 
-                break;*/
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
-}
+
+
+
+
+
+
+
+
