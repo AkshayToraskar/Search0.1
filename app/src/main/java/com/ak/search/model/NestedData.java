@@ -16,8 +16,9 @@ public class NestedData {
         this.questionId=questionId;
     }
 
-    public NestedData(long questionId){
+    public NestedData(long questionId, int pos){
         this.questionId=questionId;
+        this.pos=pos;
     }
 
 

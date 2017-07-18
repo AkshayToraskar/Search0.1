@@ -343,7 +343,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 Log.d("tree elements", " size:" + nsd.getSize() + ", SurveyId:" + nsd.getSurveyId());
 
 
-                if (nsd.getQuestionId() == questionId) {
+                if (nsd.getQuestionId() == questionId && nsd.getPos()==pos) {
                     List<MyTreeNode> lstChildren = x.getChildren();
 
                     qFlag = true;
@@ -473,7 +473,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setByteArrayImage(a);
             answersList.add(pos + i, answ);
 
-            addNestedData(node, survey.getQuestions().get(i).getId());
+            addNestedData(node, survey.getQuestions().get(i).getId(), pos+i);
 
             // setupNestedData(node,pos,survey.getQuestions().size());
         }
@@ -498,7 +498,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             if (ans.getQuestions() != null) {
                 //  if (ans.getQuestions().getOptCondition()) {
                 //NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
-                NestedData nestedData=new NestedData(answersList.get(i).getQuestions().getId());
+                NestedData nestedData=new NestedData(answersList.get(i).getQuestions().getId(),i);
                 MyTreeNode myTreeNode = new MyTreeNode(nestedData);
                 qList.add(myTreeNode);
 
@@ -513,9 +513,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         Log.v("root size", "" + root.getChildren().size());
     }
 
-    public void addNestedData(MyTreeNode node, long questionId) {
+    public void addNestedData(MyTreeNode node, long questionId,int pos) {
 
-        NestedData nestedData = new NestedData(questionId);
+        NestedData nestedData = new NestedData(questionId, pos);
         //NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
         node.addChild(nestedData);
         Log.v("root size", "" + root.getChildren().size());

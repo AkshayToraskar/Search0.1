@@ -927,6 +927,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 List<RadioButton> allRbCon = new ArrayList<>();
                                 holder.rgOptionConditional.setVisibility(View.VISIBLE);
+
+
+
                                 // holder.rgOptionConditional.removeAllViews();
                                 Log.v("TAG", "CONDITIONAL " + questions.getOptionContidion().size());
                                 if (hashAllCondRb.get(position) == null) {
@@ -969,6 +972,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                     answerList.get(position).setAnswered(true);
                                 } else {
+
+
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                     answerList.get(position).setAnswered(false);
