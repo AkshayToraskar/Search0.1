@@ -16,6 +16,10 @@ public class NestedData {
         this.questionId=questionId;
     }
 
+    public NestedData(long questionId){
+        this.questionId=questionId;
+    }
+
 
     public long getQuestionId() {
         return questionId;

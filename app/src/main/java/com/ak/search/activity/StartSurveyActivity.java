@@ -326,10 +326,13 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
 
-
     public void newLogic(int pos, int size, long surveyId, long questionId) {
 
         int nesPos = pos;
+
+        Survey surveyN = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
+        boolean qFlag = false;
+
         for (MyTreeNode x : root.inOrderView) {
 
             //traverse the tree row wise
@@ -339,35 +342,113 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 Log.d("questionId", "" + questionId + " eleQueId:" + nsd.getQuestionId() + ", Position:" + pos + " elePOs:" + nsd.getPos());
                 Log.d("tree elements", " size:" + nsd.getSize() + ", SurveyId:" + nsd.getSurveyId());
 
+
                 if (nsd.getQuestionId() == questionId) {
                     List<MyTreeNode> lstChildren = x.getChildren();
 
+                    qFlag = true;
 
                     nesPos++;
-                    //remove all child of current node
-                    for (int i = 0; i < lstChildren.size(); i++) {
-                        NestedData ns = (NestedData) lstChildren.get(i).getData();
-                        deleteQuestion(ns.getPos(), ns.getSize()-1);
 
+
+
+                    //remove all child of current node
+
+                    traverse(x);
+
+
+                    for(int i=0; i<questionIdList.size(); i++){
+                        Log.v("asdf"," "+questionIdList.get(i));
                     }
 
+
+                   /* for (int i = 0; i < lstChildren.size(); i++) {
+                        NestedData ns = (NestedData) lstChildren.get(i).getData();
+                        //deleteQuestion(ns.getPos(), ns.getSize()-1);
+                        deleteQue(ns.getQuestionId());
+
+                        if(lstChildren.get(i).getChildren()!=null){
+                            traverse(lstChildren.get(i));
+                        }
+
+                    }*/
+
+                   for(int i=0; i<questionIdList.size(); i++) {
+                       deleteQue(questionIdList.get(i));
+                   }
+
                     x.removeChild(lstChildren);
+
+                    questionIdList.clear();
+
+
+
                     // add new child to current node
                     if (surveyId != 0) {
                         // Survey survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
                         // NestedData nsd1 = new NestedData(nesPos, survey.getQuestions().size(), surveyId, questionId);
                         // x.addChild(nsd1);
-                        addQuestion(nesPos, survey, x);
+                        addQuestion(nesPos, surveyN, x);
                     }
                 }
             }
 
+
             Log.d("tree elements", " size:");
+        }
+
+        if (!qFlag) {
+            nesPos++;
+            addQuestion(nesPos, survey, root);
         }
 
         mAdapter.notifyDataSetChanged();
         Log.v("aa size", "asdf ");
 
+    }
+
+
+    List<Long> questionIdList=new ArrayList<>();
+
+    public void traverse(MyTreeNode child){ // post order traversal
+        List<MyTreeNode> as=child.getChildren();
+        for(MyTreeNode ch : as){
+
+           // for (int i = 0; i < ch.getChildren().size(); i++) {
+                NestedData ns = (NestedData) ch.getData();
+                //deleteQuestion(ns.getPos(), ns.getSize()-1);
+                questionIdList.add(ns.getQuestionId());
+                //deleteQue(ns.getQuestionId());
+          //  }
+            traverse(ch);
+        }
+        //this.printData();
+    }
+
+
+
+
+
+    public void deleteQue(long qId) {
+
+        List<Integer> delData=new ArrayList<>();
+
+        int start=0;
+        for (int i=0; i<answersList.size(); i++) {
+            if(answersList.get(i).getQuestions() !=null) {
+                if (qId == answersList.get(i).getQuestions().getId()) {
+                    //answersList.remove(i);
+                    if (start == 0) {
+                        start = i;
+                    }
+                    delData.add(i);
+                }
+            }
+        }
+
+        for(int i=start; i<(start+delData.size());i++){
+            answersList.remove(i);
+        }
     }
 
 
@@ -392,9 +473,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setByteArrayImage(a);
             answersList.add(pos + i, answ);
 
-           // addNestedData(node, pos + i, survey.getQuestions().get(i).getId(), survey.getId(), survey.getQuestions().size());
+            addNestedData(node, survey.getQuestions().get(i).getId());
 
-            setupNestedData(node,pos,survey.getQuestions().size());
+            // setupNestedData(node,pos,survey.getQuestions().size());
         }
         // mAdapter.notifyDataSetChanged();
     }
@@ -412,11 +493,12 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         List<MyTreeNode> qList = new LinkedList<>();
         //int count = 0;
         //for (Answers ans : answersList) {
-        for (int i = pos; i < pos+size; i++) {
+        for (int i = pos; i < pos + size; i++) {
             Answers ans = answersList.get(i);
             if (ans.getQuestions() != null) {
                 //  if (ans.getQuestions().getOptCondition()) {
-                NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
+                //NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
+                NestedData nestedData=new NestedData(answersList.get(i).getQuestions().getId());
                 MyTreeNode myTreeNode = new MyTreeNode(nestedData);
                 qList.add(myTreeNode);
 
@@ -431,38 +513,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         Log.v("root size", "" + root.getChildren().size());
     }
 
-    public void addNestedData(MyTreeNode node, int pos, long questionId, long surveyId, int size) {
+    public void addNestedData(MyTreeNode node, long questionId) {
 
-
-        //int count = 0;
-        //for (Answers ans : answersList) {
-        //  for(int i=pos; i<size; i++){
-        // Answers ans=answersList.get(i);
-        //      if (ans.getQuestions() != null) {
-        //  if (ans.getQuestions().getOptCondition()) {
-        NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
-        //  MyTreeNode myTreeNode = new MyTreeNode(nestedData);
-        //  qList.add(myTreeNode);
-        //   }
-        //  }
-        // count++;
-        //  }
-        // NestedData nestedData = new NestedData(count, 0, 0);
-
-        //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
-
+        NestedData nestedData = new NestedData(questionId);
+        //NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
         node.addChild(nestedData);
-
         Log.v("root size", "" + root.getChildren().size());
+
     }
-
-
-
-
-
-
-
-
 
 
 }
