@@ -356,12 +356,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                     traverse(x);
 
-
-                    for(int i=0; i<questionIdList.size(); i++){
-                        Log.v("asdf"," "+questionIdList.get(i));
-                    }
-
-
                    /* for (int i = 0; i < lstChildren.size(); i++) {
                         NestedData ns = (NestedData) lstChildren.get(i).getData();
                         //deleteQuestion(ns.getPos(), ns.getSize()-1);
@@ -374,6 +368,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     }*/
 
                    for(int i=0; i<questionIdList.size(); i++) {
+                       Log.v("asdf"," "+questionIdList.get(i));
                        deleteQue(questionIdList.get(i));
                    }
 

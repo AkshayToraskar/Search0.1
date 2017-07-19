@@ -127,7 +127,8 @@
             android:name=".activity.FilePickerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.FilePickerActivityLatest"></activity>
+        <activity android:name=".activity.FilePickerActivityLatest" />
+        <activity android:name=".activity.SettingActivity"></activity>
     </application>
 
 </manifest>

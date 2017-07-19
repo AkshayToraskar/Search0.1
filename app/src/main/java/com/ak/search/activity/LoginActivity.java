@@ -18,6 +18,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.rg_user_type)
     RadioGroup rgUserType;
 
+    public static String LANG;
     ProgressDialog progress;
 
     public static String USERNAME = "username", ISADMIN = "is_admin";
@@ -99,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         validate = new Validate();
         sessionManager = new SessionManager(this);
 
+        LANG = sessionManager.getLanguage();
 
         //permissionCheck();
 
@@ -148,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (rbAdmin.isChecked()) {
 
                     //if (isNetworkAvailable()) {
-                        checkAdminLogin();
+                    checkAdminLogin();
 
                         /*progress = new ProgressDialog(this);
                         progress.setMessage("Please Wait");
@@ -164,13 +168,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 break;
 
-            case R.id.btn_bluetooth:
+         /*   case R.id.btn_bluetooth:
                 startActivity(new Intent(this, BluetoothActivity.class));
                 break;
 
             case R.id.btn_bluetooth_client:
                 startActivity(new Intent(this, BluetoothClientActivity.class));
-                break;
+                break;*/
         }
     }
 
@@ -298,6 +302,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        switch (id) {
+
+
+            case R.id.action_setting:
+                startActivity(new Intent(this, SettingActivity.class));
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     public void checkAdminLogin() {
         /*ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -383,5 +410,18 @@ public class LoginActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!LANG.equals(sessionManager.getLanguage())) {
+            Intent refresh = new Intent(this, LoginActivity.class);
+            refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(refresh);
+        }
+
+
     }
 }

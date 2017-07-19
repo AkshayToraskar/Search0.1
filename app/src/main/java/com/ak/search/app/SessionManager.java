@@ -26,6 +26,8 @@ public class SessionManager {
 
     private static final String SURVEY_ID="SurveyId";
 
+    private static final String LANGUAGE="language";
+
 
 
     public SessionManager(Context context) {
@@ -79,5 +81,14 @@ public class SessionManager {
         return pref.getInt(SURVEY_ID,0);
     }
 
+
+    public void setLanguage(String lang){
+        editor.putString(LANGUAGE,lang);
+        editor.commit();
+    }
+
+    public String getLanguage(){
+        return pref.getString(LANGUAGE,"en");
+    }
 
 }

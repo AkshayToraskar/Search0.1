@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
 
     private Validate validate;
     public static FragmentTransaction transaction;
+    public static String LANG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
         sessionManager = new SessionManager(this);
         validate = new Validate();
 
+        LANG=sessionManager.getLanguage();
+
         if (sessionManager.isLoggedIn()) {
             username = sessionManager.getUsername();
             loginType = sessionManager.getLoginType();
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
             transaction = getSupportFragmentManager().beginTransaction();
 
 
-            getSupportActionBar().setTitle(username+" "+ getResources().getString(R.string.welcome));
+            getSupportActionBar().setTitle( getResources().getString(R.string.welcome) +" "+username);
 
 
             switch (loginType) {
@@ -143,12 +146,12 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
 
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_logout:
+         /*   case R.id.action_logout:
 
                 new AlertDialog.Builder(this)
-                        .setTitle("Logout")
-                        .setMessage("Would you like to logout?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(getString(R.string.logout))
+                        .setMessage(getString(R.string.sure_logout))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 sessionManager.setLogin(false, "", 0,0);
                                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
@@ -156,12 +159,16 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                                 startActivity(i);
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // user doesn't want to logout
                             }
                         })
                         .show();
+                break;*/
+
+            case R.id.action_setting:
+                startActivity(new Intent(this,SettingActivity.class));
                 break;
 
             /*case R.id.action_patient_data:
@@ -194,13 +201,13 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
                 startActivity(new Intent(this, GetSurveyActivity.class));
                 break;
 
-            case R.id.btn_bluetooth:
+           /* case R.id.btn_bluetooth:
                 startActivity(new Intent(this, BluetoothActivity.class));
                 break;
 
             case R.id.btn_bluetooth_client:
                 startActivity(new Intent(this, BluetoothClientActivity.class));
-                break;
+                break;*/
 
 
         }
@@ -238,4 +245,16 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(!LANG.equals(sessionManager.getLanguage())){
+            Intent refresh = new Intent(this, MainActivity.class);
+            refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(refresh);
+        }
+
+
+    }
 }

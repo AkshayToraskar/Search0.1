@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Survey Collection</string>
+
+    <string name="activity_login">लॉग इन</string>
+    <string name="title_activity_user">वापरकर्ता</string>
+    <string name="title_activity_survey">सर्वेक्षण</string>
+    <string name="title_activity_add_user">नवीन वापरकर्ता जोडा</string>
+    <string name="title_activity_add_survey">नवीन सर्वेक्षण जोडा</string>
+    <string name="title_activity_add_question">नवीन प्रश्न जोडा</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_new_survey">नवीन सर्वेक्षण</string>
+
+    <string name="title_activity_send">पाठवा</string>
+    <string name="title_activity_receive">प्राप्त करा</string>
+
+
+    <string name="login">लॉग इन</string>
+    <string name="username">वापरणाऱ्याचे नाव </string>
+    <string name="password">पासवर्ड </string>
+    <string name="admin">प्रमुख </string>
+    <string name="supervisor">सुपरवायझर </string>
+    <string name="user">आरोग्यदूत </string>
+    <string name="import_export">माहिती घेणे/ पाठवणे </string>
+    <string name="send">माहिती पाठवा</string>
+    <string name="receive">माहिती घ्या</string>
+    <string name="users">वापर करणारे</string>
+    <string name="survey">सर्वे फॉर्म्स </string>
+    <string name="patients">रुग्णांची यादी</string>
+    <string name="collectedData">जमा झालेली माहिती</string>
+    <string name="welcome">आपले स्वागत आहे</string>
+    <string name="new_survey">नवीन सर्वे</string>
+    <string name="survey_history">सर्वे माहिती</string>
+    <string name="supervisor_login">सुपरवायझर लॉग इन</string>
+
+    <string name="discard">रद्द करा</string>
+    <string name="sure_cancel">आपली खात्री आहे की आपण भरलेले फॉर्म रद्द करु इच्छिता ?</string>
+
+    <string name="logout">लॉगआउट </string>
+    <string name="sure_logout">आपण लॉगआउट करू इच्छिता?</string>
+
+    <string name="yes">होय</string>
+    <string name="no">नाही</string>
+
+    <string name="save">जतन करा</string>
+
+    <string name="language">भाषा</string>
+    <string name="setting">सेटिंग</string>
+
+
+    <string-array name="lang_list_item_array">
+        <item>मराठी</item>
+        <item>English</item>
+    </string-array>
+
+
+</resources>

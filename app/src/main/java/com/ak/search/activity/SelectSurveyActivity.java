@@ -4,12 +4,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.ak.search.R;
 import com.ak.search.adapter.PatientTabViewpagerAdapter;
@@ -45,6 +48,10 @@ public class SelectSurveyActivity extends AppCompatActivity {
     Realm realm;
     //Dialog dialog;
 
+    // Spinner spnLang;
+
+    public static String LANG;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +64,13 @@ public class SelectSurveyActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
+        LANG = sessionManager.getLanguage();
+
         if (sessionManager.isLoggedIn()) {
             username = sessionManager.getUsername();
             loginType = sessionManager.getLoginType();
 
-            getSupportActionBar().setTitle(username+ " "+getResources().getString(R.string.welcome));
+            getSupportActionBar().setTitle(getResources().getString(R.string.welcome)+" "+username);
         } else {
             startActivity(new Intent(this, LoginActivity.class));
         }
@@ -88,6 +97,14 @@ public class SelectSurveyActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_fieldworker, menu);
 
+/*
+        spnLang= (Spinner) MenuItemCompat.getActionView(menu.getItem(2));
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.lang_list_item_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spnLang.setAdapter(adapter);*/
 
 
         return true;
@@ -99,15 +116,19 @@ public class SelectSurveyActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
 
-            case R.id.action_send:
+           /* case R.id.action_send:
                 startActivity(new Intent(this, BluetoothClientActivity.class));
                 break;
 
             case R.id.action_receive:
                 startActivity(new Intent(this, BluetoothActivity.class));
+                break;*/
+
+            case R.id.action_setting:
+                startActivity(new Intent(this, SettingActivity.class));
                 break;
 
-            case R.id.action_logout:
+           /* case R.id.action_logout:
 
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.logout))
@@ -127,9 +148,14 @@ public class SelectSurveyActivity extends AppCompatActivity {
                         })
                         .show();
                 break;
-
+*/
            /* case R.id.action_patient_data:
                // startActivity(new Intent(this, GetSurveyActivity.class));
+                break;*/
+
+
+           /* case R.id.spinner:
+                changeLanguage();
                 break;*/
 
             case android.R.id.home:
@@ -140,6 +166,8 @@ public class SelectSurveyActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     /*public void onBtnClick(View view) {
@@ -166,9 +194,21 @@ public class SelectSurveyActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!LANG.equals(sessionManager.getLanguage())) {
+            Intent refresh = new Intent(this, SelectSurveyActivity.class);
+            refresh.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(refresh);
+        }
+
     }
 
 }

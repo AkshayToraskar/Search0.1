@@ -1,15 +1,20 @@
 package com.ak.search.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.ak.search.R;
 import com.ak.search.app.SessionManager;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     @BindView(R.id.ivGifImg)
     ImageView ivGifImg;
 
+    Locale myLocale;
     public static int SPLASH_TIME_OUT = 3000;
     private SessionManager sessionManager;
 
@@ -35,6 +41,11 @@ public class SplashActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         sessionManager = new SessionManager(getApplicationContext());
 
+        if(sessionManager.getLanguage().equals("mr")){
+            setLocale("mr");
+        }else if(sessionManager.getLanguage().equals("en")){
+            setLocale("en");
+        }
 
        /* Glide.with(this)
                 .load(R.raw.survey_collection)
@@ -69,5 +80,17 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    public void setLocale(String lang) {
+
+        myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        //Intent refresh = new Intent(this, SplashActivity.class);
+        //startActivity(refresh);
     }
 }

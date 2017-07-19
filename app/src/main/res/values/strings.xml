@@ -15,33 +15,42 @@
     <string name="title_activity_receive">Receive</string>
 
 
-    <string name="login">लॉग इन</string>
-    <string name="username">वापरणाऱ्याचे नाव </string>
-    <string name="password">पासवर्ड </string>
-    <string name="admin">प्रमुख </string>
-    <string name="supervisor">सुपरवायझर </string>
-    <string name="user">आरोग्यदूत </string>
-    <string name="import_export">माहिती घेणे/ पाठवणे </string>
-    <string name="send">माहिती पाठवा</string>
-    <string name="receive">माहिती घ्या</string>
-    <string name="users">वापर करणारे</string>
-    <string name="survey">सर्वे फॉर्म्स </string>
-    <string name="patients">रुग्णांची यादी</string>
-    <string name="collectedData">जमा झालेली माहिती</string>
-    <string name="welcome">आपले स्वागत आहे</string>
-    <string name="new_survey">नवीन सर्वे</string>
-    <string name="survey_history">सर्वे माहिती</string>
-    <string name="supervisor_login">सुपरवायझर लॉग इन</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="admin">Admin</string>
+    <string name="supervisor">Supervisor</string>
+    <string name="user">User</string>
+    <string name="import_export">Import/Export Data</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="users">Users</string>
+    <string name="survey">Surveys</string>
+    <string name="patients">Patients</string>
+    <string name="collectedData">Collected Data</string>
+    <string name="welcome">Welcome</string>
+    <string name="new_survey">New Survey</string>
+    <string name="survey_history">Survey History</string>
+    <string name="supervisor_login">Supervisor Login</string>
 
-    <string name="discard">रद्द करा</string>
-    <string name="sure_cancel">आपली खात्री आहे की आपण भरलेले फॉर्म रद्द करु इच्छिता ?</string>
+    <string name="discard">Discard</string>
+    <string name="sure_cancel">Are you sure you want to cancel the filled form?</string>
 
-    <string name="logout">लॉगआउट </string>
-    <string name="sure_logout">आपण लॉगआउट करू इच्छिता?</string>
+    <string name="logout">Logout</string>
+    <string name="sure_logout">Do you want to logout?</string>
 
-    <string name="yes">होय</string>
-    <string name="no">नाही</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
-    <string name="save">जतन करा</string>
+    <string name="save">Save</string>
+
+    <string name="language">Language</string>
+    <string name="setting">Setting</string>
+
+    <string-array name="lang_list_item_array">
+        <item>Marathi</item>
+        <item>English</item>
+    </string-array>
+
 
 </resources>
