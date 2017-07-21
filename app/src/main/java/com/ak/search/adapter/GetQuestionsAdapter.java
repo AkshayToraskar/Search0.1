@@ -70,8 +70,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     public static HashMap<Integer, Boolean> validateAnswers;
 
 
-    HashMap<Integer, List<RadioButton>> hashAllRb = new HashMap<>();
-    HashMap<Integer, List<RadioButton>> hashAllCondRb = new HashMap<>();
+    //HashMap<Integer, List<RadioButton>> hashAllRb = new HashMap<>();
+    // HashMap<Integer, List<RadioButton>> hashAllCondRb = new HashMap<>();
     Validate validate;
     private RecyclerView mRecyclerView;
     private boolean onBind = false;
@@ -93,14 +93,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         RadioGroup rgOption;
         @BindView(R.id.rg_options_conditional)
         RadioGroup rgOptionConditional;
-        @BindView(R.id.rb_opt1)
+        /*@BindView(R.id.rb_opt1)
         RadioButton rbOpt1;
         @BindView(R.id.rb_opt2)
         RadioButton rbOpt2;
         @BindView(R.id.rb_opt1_conditional)
         RadioButton rbOpt1Conditional;
         @BindView(R.id.rb_opt2_conditional)
-        RadioButton rbOpt2Conditional;
+        RadioButton rbOpt2Conditional;*/
         @BindView(R.id.iv_capture)
         ImageView ivSelImg;
         @BindView(R.id.ll_check)
@@ -125,6 +125,9 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         Button btnSave;
         @BindView(R.id.tv_question_counter)
         TextView tvCounter;
+
+        @BindView(R.id.ivNes)
+        ImageView ivNes;
 
         Handler cstHandler = new Handler();
 
@@ -390,6 +393,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                 holder.llPatient.setVisibility(GONE);
                 holder.tvPatient.setVisibility(GONE);
                 holder.tvCompulsary.setVisibility(GONE);
+                holder.ivNes.setVisibility(GONE);
 
                 if (answerList.get(position).getQuestions() != null) {
 
@@ -451,6 +455,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     //  newWatcher.setActive(true);
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
+                                    holder.etAnswer.setText(" ");
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
@@ -503,6 +508,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     // newWatcher1.setActive(true);
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
+                                    holder.etNumAns.setText(" ");
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
@@ -552,7 +558,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 } else {
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-
+                                    holder.tvDate.setText(" ");
                                     answerList.get(position).setAnswered(false);
                                 }
 
@@ -618,7 +624,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 } else {
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-
+                                    holder.tvTime.setText(" ");
                                     answerList.get(position).setAnswered(false);
                                 }
 
@@ -680,7 +686,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 } else {
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-
+                                    holder.ivSelImg.setImageDrawable(null);
                                     answerList.get(position).setAnswered(false);
                                 }
 
@@ -838,15 +844,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 List<RadioButton> allRb = new ArrayList<>();
                                 holder.rgOption.setVisibility(View.VISIBLE);
-                                //holder.rgOption.removeAllViews();
+                                holder.rgOption.removeAllViews();
 
 
                                 Log.v("TAG", "RB " + questions.getOptions().size());
-                                if (hashAllRb.get(position) == null) {
-                                    for (int i = 0; i < questions.getOptions().size(); i++) {
+                                //if (hashAllRb.get(position) == null) {
+                                for (int i = 0; i < questions.getOptions().size(); i++) {
 
 
-                                        if (i == 0) {
+                                        /*if (i == 0) {
                                             holder.rbOpt1.setText(questions.getOptions().get(0).getOpt());
                                             //  holder.rgOption.addView(holder.rbOpt1);
                                             allRb.add(holder.rbOpt1);
@@ -854,33 +860,35 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             holder.rbOpt2.setText(questions.getOptions().get(1).getOpt());
                                             //  holder.rgOption.addView(holder.rbOpt2);
                                             allRb.add(holder.rbOpt2);
-                                        } else {
-                                            RadioButton rb = new RadioButton(context);
-                                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT);
-                                            params.setMargins(0, 2, 0, 2);
-                                            rb.setLayoutParams(params);
-                                            rb.setText(questions.getOptions().get(i).getOpt());
-                                            rb.setButtonDrawable(R.drawable.radio_button_switch);
-                                            rb.setBackgroundResource(R.drawable.ra_background);
-                                            rb.setTextSize(22);
-                                            holder.rgOption.addView(rb);
+                                        } else {*/
+                                    RadioButton rb = new RadioButton(context);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(0, 2, 0, 2);
+                                    rb.setLayoutParams(params);
+                                    rb.setText(questions.getOptions().get(i).getOpt());
+                                    rb.setButtonDrawable(R.drawable.radio_button_switch);
+                                    rb.setBackgroundResource(R.drawable.ra_background);
+                                    rb.setTextSize(22);
+                                    holder.rgOption.addView(rb);
 
-                                            allRb.add(rb);
-                                        }
-                                    }
-                                    hashAllRb.put(position, allRb);
+                                    allRb.add(rb);
+                                    // }
                                 }
+                                //hashAllRb.put(position, allRb);
+                                // }
 
 
-                                if (answerList.get(position).getSelectedopt() != -1 && hashAllRb.get(position) != null) {
-                                    List<RadioButton> alRb = hashAllRb.get(position);
-                                    alRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+                                if (answerList.get(position).getSelectedopt() != -1 /*&& hashAllRb.get(position) != null*/) {
+                                    // List<RadioButton> alRb = hashAllRb.get(position);
+                                    // alRb.get(answerList.get(position).getSelectedopt()).setChecked(true);
+
+                                    holder.rgOption.check(allRb.get(answerList.get(position).getSelectedopt()).getId());
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                     answerList.get(position).setAnswered(true);
                                 } else {
-
+                                    //holder.rgOption.clearCheck();
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                     answerList.get(position).setAnswered(false);
                                 }
@@ -914,7 +922,17 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
 
                                         //notifyItemChanged(position);
-                                        notifyDataSetChanged();
+                                        //notifyDataSetChanged();
+                                        android.os.Handler mHandler = new Handler();
+                                        //final int finalI = i;
+                                        mHandler.post(new Runnable() {
+                                            public void run() {
+                                                //change adapter contents
+                                                //notifyItemChanged(position);
+                                                //notifyDataSetChanged();
+                                            }
+                                        });
+
                                     }
                                 });
 
@@ -927,15 +945,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 List<RadioButton> allRbCon = new ArrayList<>();
                                 holder.rgOptionConditional.setVisibility(View.VISIBLE);
+                                holder.ivNes.setVisibility(View.VISIBLE);
 
+                                holder.rgOptionConditional.removeAllViews();
 
-
-                                // holder.rgOptionConditional.removeAllViews();
                                 Log.v("TAG", "CONDITIONAL " + questions.getOptionContidion().size());
-                                if (hashAllCondRb.get(position) == null) {
-                                    for (int i = 0; i < questions.getOptionContidion().size(); i++) {
+                                //    if (hashAllCondRb.get(position) == null) {
+                                for (int i = 0; i < questions.getOptionContidion().size(); i++) {
 
-                                        if (i == 0) {
+                                        /*if (i == 0) {
                                             holder.rbOpt1Conditional.setText(questions.getOptionContidion().get(i).getOpt());
                                             //  holder.rgOptionConditional.addView(holder.rbOpt1Conditional);
                                             allRbCon.add(holder.rbOpt1Conditional);
@@ -943,38 +961,39 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             holder.rbOpt2Conditional.setText(questions.getOptionContidion().get(i).getOpt());
                                             //  holder.rgOptionConditional.addView(holder.rbOpt2Conditional);
                                             allRbCon.add(holder.rbOpt2Conditional);
-                                        } else {
+                                        } else {*/
 
-                                            RadioButton rb = new RadioButton(context);
+                                    RadioButton rb = new RadioButton(context);
 
-                                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                                    ViewGroup.LayoutParams.WRAP_CONTENT);
-                                            params.setMargins(0, 2, 0, 2);
-                                            rb.setLayoutParams(params);
-                                            rb.setTextSize(22);
-                                            rb.setText(questions.getOptionContidion().get(i).getOpt());
-                                            rb.setBackgroundResource(R.drawable.ra_background);
-                                            rb.setButtonDrawable(R.drawable.radio_button_switch);
-                                            holder.rgOptionConditional.addView(rb);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(0, 2, 0, 2);
+                                    rb.setLayoutParams(params);
+                                    rb.setTextSize(22);
+                                    rb.setText(questions.getOptionContidion().get(i).getOpt());
+                                    rb.setBackgroundResource(R.drawable.ra_background);
+                                    rb.setButtonDrawable(R.drawable.radio_button_switch);
+                                    holder.rgOptionConditional.addView(rb);
 
-                                            allRbCon.add(rb);
-                                        }
-                                    }
-                                    hashAllCondRb.put(position, allRbCon);
-
+                                    allRbCon.add(rb);
+                                    // }
                                 }
+                                //  hashAllCondRb.put(position, allRbCon);
+
+                                // }
 
 
-                                if (answerList.get(position).getSelectedOptConditional() != -1 && hashAllCondRb.get(position) != null) {
-                                    List<RadioButton> alRb = hashAllCondRb.get(position);
-                                    alRb.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
+                                if (answerList.get(position).getSelectedOptConditional() != -1/* && hashAllCondRb.get(position) != null*/) {
+                                    //List<RadioButton> alRb = hashAllCondRb.get(position);
+                                    //alRb.get(answerList.get(position).getSelectedOptConditional()).setChecked(true);
+
+                                    holder.rgOptionConditional.check(allRbCon.get(answerList.get(position).getSelectedOptConditional()).getId());
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                     answerList.get(position).setAnswered(true);
                                 } else {
 
-
-
+                                    holder.rgOptionConditional.clearCheck();
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                     answerList.get(position).setAnswered(false);
                                 }
@@ -1027,7 +1046,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
                                         //notifyDataSetChanged();
 
-                                        notifyItemChanged(position);
+                                        //  notifyItemChanged(position);
                                     }
                                 });
 
@@ -1064,6 +1083,18 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
         // onBind = false;
     }
+
+    public void removeAt(int position) {
+        answerList.remove(position);
+        notifyItemRemoved(position);
+
+    }
+
+    public void addAt(int position, Answers ans) {
+        answerList.add(position, ans);
+        notifyItemInserted(position);
+    }
+
 
     public void getSelectedChkbox(int position, List<CheckBox> lstCheckbox) {
 

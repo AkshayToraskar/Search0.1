@@ -397,10 +397,67 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             addQuestion(nesPos, survey, root);
         }
 
-        mAdapter.notifyDataSetChanged();
-        Log.v("aa size", "asdf ");
+//       mAdapter.notifyDataSetChanged();
+
+      //  postAndNotifyAdapter(new Handler(),recyclerView,mAdapter);
+
+
+       /* recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });*/
+
+
+
 
     }
+
+
+
+    protected void postAndNotifyAll(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!recyclerView.isComputingLayout()) {
+                    adapter.notifyDataSetChanged();
+                    handler.removeCallbacks(this);
+                } else {
+                    postAndNotifyAll(handler, recyclerView, adapter);
+                }
+            }
+        });
+    }
+
+    protected  void insertItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!recyclerView.isComputingLayout()) {
+                    adapter.notifyItemInserted(pos);
+                    handler.removeCallbacks(this);
+                } else {
+                    insertItem(handler, recyclerView, adapter, pos);
+                }
+            }
+        });
+    }
+
+    protected  void removeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!recyclerView.isComputingLayout()) {
+                    adapter.notifyItemRemoved(pos);
+                    handler.removeCallbacks(this);
+                } else {
+                    removeItem(handler, recyclerView, adapter, pos);
+                }
+            }
+        });
+    }
+
 
 
     List<Long> questionIdList=new ArrayList<>();
@@ -443,11 +500,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
         for(int i=start; i<(start+delData.size());i++){
             answersList.remove(i);
+
+            android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
+            //final int finalI = i;
+            /*mHandler.post(new Runnable() {
+                public void run(){
+                    //change adapter contents
+                    mAdapter.notifyItemRemoved(finalI);
+                }
+            });*/
+            removeItem(mHandler,recyclerView,mAdapter,i);
+
         }
     }
 
 
-    public void addQuestion(int pos, Survey survey, MyTreeNode node) {
+    public void addQuestion(final int pos, Survey survey, MyTreeNode node) {
 
         // Survey survey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
 
@@ -470,9 +538,20 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             addNestedData(node, survey.getQuestions().get(i).getId(), pos+i);
 
+            android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
+            /*final int finalI = i;
+            mHandler.post(new Runnable() {
+                public void run(){
+                    //change adapter contents
+                    mAdapter.notifyItemInserted(pos+ finalI);
+                }
+            });*/
+
+            insertItem(mHandler,recyclerView,mAdapter,pos);
+
             // setupNestedData(node,pos,survey.getQuestions().size());
         }
-        // mAdapter.notifyDataSetChanged();
+       //  mAdapter.notifyDataSetChanged();
     }
 
 
