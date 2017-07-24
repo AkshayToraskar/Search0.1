@@ -174,6 +174,11 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
     }
 
+    @Override
+    public void scrollToError(int pos) {
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

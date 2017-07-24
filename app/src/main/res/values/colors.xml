@@ -23,4 +23,7 @@
     <color name="green">#2c7833</color>
     <color name="dark_green">#1a5120</color>
 
+    <color name="light_red">#c75b5b</color>
+    <color name="dark_red">#ffff0000</color>
+
 </resources>

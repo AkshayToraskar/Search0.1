@@ -299,6 +299,11 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     }
 
     @Override
+    public void scrollToError(int pos) {
+        recyclerView.getLayoutManager().scrollToPosition(pos);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (realm != null) {
@@ -397,6 +402,9 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             addQuestion(nesPos, survey, root);
         }
 
+       // android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
+       // postAndNotifyAll(mHandler,recyclerView,mAdapter);
+
 //       mAdapter.notifyDataSetChanged();
 
       //  postAndNotifyAdapter(new Handler(),recyclerView,mAdapter);
@@ -410,6 +418,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         });*/
 
 
+        android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
+        changeItem(mHandler,recyclerView,mAdapter,pos);
 
 
     }
@@ -457,6 +467,22 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             }
         });
     }
+
+
+    protected  void changeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!recyclerView.isComputingLayout()) {
+                    adapter.notifyItemChanged(pos);
+                    handler.removeCallbacks(this);
+                } else {
+                    removeItem(handler, recyclerView, adapter, pos);
+                }
+            }
+        });
+    }
+
 
 
 
@@ -538,7 +564,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
             addNestedData(node, survey.getQuestions().get(i).getId(), pos+i);
 
-            android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
+
             /*final int finalI = i;
             mHandler.post(new Runnable() {
                 public void run(){
@@ -546,7 +572,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     mAdapter.notifyItemInserted(pos+ finalI);
                 }
             });*/
-
+            android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
             insertItem(mHandler,recyclerView,mAdapter,pos);
 
             // setupNestedData(node,pos,survey.getQuestions().size());

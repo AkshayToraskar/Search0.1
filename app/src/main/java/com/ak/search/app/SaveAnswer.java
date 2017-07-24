@@ -10,4 +10,6 @@ public interface SaveAnswer {
     void onAnswerSave(int index,Answers ans);
     void onAddSurvey(long id, int pos, int parentPos, long questionId);
     void saveCollection();
+
+    void scrollToError(int pos);
 }

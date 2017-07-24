@@ -76,6 +76,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
     private RecyclerView mRecyclerView;
     private boolean onBind = false;
 
+    public static int CH_INDEX, CH_INDEX_C;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_question)
         TextView tvQuestion;
@@ -216,6 +218,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     for (Map.Entry m : validateAnswers.entrySet()) {
                         if ((boolean) m.getValue() == false) {
                             validate = false;
+                            saveAnswer.scrollToError((int)m.getKey());
                         }
                     }
 
@@ -224,6 +227,11 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     } else {
                         showerror = true;
                         notifyDataSetChanged();
+                        //notifyItemRangeChanged(0, answerList.size());
+                        //mRecyclerView.getAdapter().notifyDataSetChanged();
+
+                        //update(answerList);
+
                     }
                 }
             });
@@ -232,6 +240,20 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
             // }
         }
     }
+
+   /* public void update(List<Answers> modelList) {
+
+        List<Answers> aa = new ArrayList<>();
+        aa.addAll(modelList);
+
+        answerList.clear();
+
+
+        for (Answers model : aa) {
+            answerList.add(model);
+        }
+        notifyDataSetChanged();
+    }*/
 
 
     private class CustomWatcher implements TextWatcher {
@@ -409,21 +431,6 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     holder.tvCounter.setText(String.valueOf(position + 1));
 
 
-                    if (questions.getCompulsary() == true) {
-                        holder.tvCompulsary.setVisibility(View.VISIBLE);
-                        if (showerror == true && validateAnswers.get(position) != null) {
-
-                            Boolean result = validateAnswers.get(position);
-                            if (!result) {
-                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
-                            } else {
-                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-                            }
-
-                        }
-                    }
-
-
                     String questionType = questions.getTypeQuestion();
                     String[] quest = questionType.split(",");
                     for (int l = 0; l < quest.length; l++) {
@@ -470,6 +477,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
                                 /*holder.etAnswer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -523,6 +532,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
 
@@ -569,6 +580,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
 
@@ -636,6 +649,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
                                 holder.btnSelectTime.setOnClickListener(new View.OnClickListener() {
@@ -697,6 +712,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
                                 holder.btnSelectImage.setOnClickListener(new View.OnClickListener() {
@@ -745,6 +762,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     } else {
                                         validateAnswers.put(position, false);
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
                                 holder.btnPatientName.setOnClickListener(new View.OnClickListener() {
@@ -800,6 +819,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             validateAnswers.put(position, false);
                                         }
 
+                                    } else {
+                                        validateAnswers.put(position, true);
                                     }
 
 
@@ -844,6 +865,13 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                 List<RadioButton> allRb = new ArrayList<>();
                                 holder.rgOption.setVisibility(View.VISIBLE);
+
+
+                                int radioButtonID = holder.rgOption.getCheckedRadioButtonId();
+                                View radioButton = holder.rgOption.findViewById(radioButtonID);
+                                final int checkedIndex = holder.rgOption.indexOfChild(radioButton);
+                                CH_INDEX = checkedIndex;
+
                                 holder.rgOption.removeAllViews();
 
 
@@ -887,6 +915,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     holder.rgOption.check(allRb.get(answerList.get(position).getSelectedopt()).getId());
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                     answerList.get(position).setAnswered(true);
+
+
                                 } else {
                                     //holder.rgOption.clearCheck();
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
@@ -902,6 +932,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             validateAnswers.put(position, false);
                                         }
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
 
@@ -915,23 +947,31 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 holder.rgOption.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+
                                         int id = holder.rgOption.getCheckedRadioButtonId();
                                         View radioButton = holder.rgOption.findViewById(id);
                                         answerList.get(position).setSelectedopt(holder.rgOption.indexOfChild(radioButton));
                                         saveAnswer.onAnswerSave(position, answerList.get(position));
 
 
-                                        //notifyItemChanged(position);
-                                        //notifyDataSetChanged();
-                                        android.os.Handler mHandler = new Handler();
-                                        //final int finalI = i;
-                                        mHandler.post(new Runnable() {
-                                            public void run() {
-                                                //change adapter contents
-                                                //notifyItemChanged(position);
-                                                //notifyDataSetChanged();
-                                            }
-                                        });
+                                        if (CH_INDEX != answerList.get(position).getSelectedopt()) {
+                                            // holder.rgOption.setOnCheckedChangeListener(null);
+
+
+                                            //notifyItemChanged(position);
+                                            //notifyDataSetChanged();
+                                            android.os.Handler mHandler = new Handler();
+                                            //final int finalI = i;
+                                            mHandler.post(new Runnable() {
+                                                public void run() {
+                                                    //change adapter contents
+                                                    notifyItemChanged(position);
+                                                    //notifyDataSetChanged();
+                                                }
+                                            });
+                                        }
+
 
                                     }
                                 });
@@ -946,6 +986,12 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 List<RadioButton> allRbCon = new ArrayList<>();
                                 holder.rgOptionConditional.setVisibility(View.VISIBLE);
                                 holder.ivNes.setVisibility(View.VISIBLE);
+
+
+                                int radioButtonID1 = holder.rgOptionConditional.getCheckedRadioButtonId();
+                                View radioButton1 = holder.rgOptionConditional.findViewById(radioButtonID1);
+                                int checkedIndexC = holder.rgOptionConditional.indexOfChild(radioButton1);
+                                CH_INDEX_C = checkedIndexC;
 
                                 holder.rgOptionConditional.removeAllViews();
 
@@ -1014,6 +1060,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                             validateAnswers.put(position, false);
                                         }
                                     }
+                                } else {
+                                    validateAnswers.put(position, true);
                                 }
 
                                 /*rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -1035,6 +1083,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 holder.rgOptionConditional.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
                                         int id = holder.rgOptionConditional.getCheckedRadioButtonId();
                                         View radioButton = holder.rgOptionConditional.findViewById(id);
                                         answerList.get(position).setAnswered(true);
@@ -1043,10 +1092,15 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                         answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
                                         surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
                                         //   }
-                                        saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
-                                        //notifyDataSetChanged();
+                                        saveAnswer.onAnswerSave(position, answerList.get(position));
 
-                                        //  notifyItemChanged(position);
+                                        if (CH_INDEX_C != answerList.get(position).getSelectedOptConditional()) {
+
+                                            saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
+                                            //notifyDataSetChanged();
+                                        }
+
+                                        //notifyItemChanged(position);
                                     }
                                 });
 
@@ -1065,6 +1119,22 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     }
                                 });*/
                                 break;
+
+                        }
+                    }
+
+
+                    if (questions.getCompulsary() == true) {
+                        holder.tvCompulsary.setVisibility(View.VISIBLE);
+                        if (showerror == true && validateAnswers.get(position) != null) {
+
+                            Boolean result = validateAnswers.get(position);
+                            if (!result) {
+                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_error_background));
+
+                            }/* else {
+                                holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
+                            }*/
 
                         }
                     }
