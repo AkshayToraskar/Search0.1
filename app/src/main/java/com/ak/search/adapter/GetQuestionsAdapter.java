@@ -218,7 +218,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     for (Map.Entry m : validateAnswers.entrySet()) {
                         if ((boolean) m.getValue() == false) {
                             validate = false;
-                            saveAnswer.scrollToError((int)m.getKey());
+                            saveAnswer.scrollToError((int) m.getKey());
                         }
                     }
 
@@ -1084,20 +1084,25 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     @Override
                                     public void onCheckedChanged(RadioGroup radioGroup, int i) {
 
+
                                         int id = holder.rgOptionConditional.getCheckedRadioButtonId();
                                         View radioButton = holder.rgOptionConditional.findViewById(id);
-                                        answerList.get(position).setAnswered(true);
-                                        long surveyId = 0;
-                                        // if(i==0) {
-                                        answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
-                                        surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
-                                        //   }
-                                        saveAnswer.onAnswerSave(position, answerList.get(position));
+                                        if (radioButton != null) {
+                                            if (radioButton.isPressed()) {
+                                                answerList.get(position).setAnswered(true);
+                                                long surveyId = 0;
+                                                // if(i==0) {
+                                                answerList.get(position).setSelectedOptConditional(holder.rgOptionConditional.indexOfChild(radioButton));
+                                                surveyId = questions.getOptionContidion().get(holder.rgOptionConditional.indexOfChild(radioButton)).getSurveyid();
+                                                //   }
 
-                                        if (CH_INDEX_C != answerList.get(position).getSelectedOptConditional()) {
 
-                                            saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
-                                            //notifyDataSetChanged();
+                                                //if (CH_INDEX_C != answerList.get(position).getSelectedOptConditional()) {
+
+                                                saveAnswer.onAnswerSave(position, answerList.get(position));
+                                                saveAnswer.onAddSurvey(surveyId, position, answerList.get(position).getParentPos(), answerList.get(position).getQuestions().getId());
+                                                //notifyDataSetChanged();
+                                            }
                                         }
 
                                         //notifyItemChanged(position);
