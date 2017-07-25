@@ -44,7 +44,7 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
             tvName = (TextView) view.findViewById(R.id.tvName);
             ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
             tvDateTime = (TextView) view.findViewById(R.id.tvDate);
-tvPatientName=(TextView)view.findViewById(R.id.tvPatientName);
+            tvPatientName = (TextView) view.findViewById(R.id.tvPatientName);
 
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +100,7 @@ tvPatientName=(TextView)view.findViewById(R.id.tvPatientName);
         this.patientsList = patientsList;
         this.context = context;
         realm = Realm.getDefaultInstance();
-        this.superviserLogin=superviserLogin;
+        this.superviserLogin = superviserLogin;
     }
 
     @Override
@@ -115,24 +115,21 @@ tvPatientName=(TextView)view.findViewById(R.id.tvPatientName);
     public void onBindViewHolder(MyViewHolder holder, int position) {
         DataCollection user = patientsList.get(position);
 
-        if(user.getSurveyid()!=0) {
+        if (user.getSurveyid() != 0) {
             Survey survey = realm.where(Survey.class).equalTo("id", user.getSurveyid()).findFirst();
 
             holder.tvName.setText(survey.getName() + " ");
             holder.tvDateTime.setText(user.getTimestamp() + " ");
 
-            if(patientsList.get(position).getPatients()!=null){
+            if (patientsList.get(position).getPatients() != null) {
                 holder.tvPatientName.setText(patientsList.get(position).getPatients().getPatientname());
-            }
-            else{
+            } else {
                 holder.tvPatientName.setVisibility(GONE);
             }
         }
-        if(superviserLogin){
+        if (superviserLogin) {
             holder.ivDelete.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             holder.ivDelete.setVisibility(GONE);
         }
     }

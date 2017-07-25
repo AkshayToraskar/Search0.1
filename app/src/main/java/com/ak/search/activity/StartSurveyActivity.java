@@ -183,7 +183,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 })
                 .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // user doesn't want to logout
+                        // user doesn't want to discard survey
                     }
                 })
                 .show();
@@ -313,7 +313,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
         discardSurvey();
     }
 
