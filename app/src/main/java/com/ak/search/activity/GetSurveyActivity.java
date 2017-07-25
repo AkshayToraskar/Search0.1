@@ -30,6 +30,7 @@ import com.ak.search.R;
 import com.ak.search.adapter.DataCollectionAdapter;
 import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
+import com.ak.search.app.CsvOperation;
 import com.ak.search.model.MSurvey;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
@@ -267,31 +268,41 @@ public class GetSurveyActivity extends AppCompatActivity {
             /*data.add(new String[]{"Id", "SurveyId", "FieldworkerId", "SupervisorId", "Timestamp", "Latitude", "Longitude",
                     "Patient Name", "Sex", "Age", "QuestionId", "selectedOpt", "selectedOptConditional", "getSelectedCheck",
                     "Ans", "NumAns", "Date", "Time", "Image"});*/
-            for (int i = 0; i < surveyHistory.size(); i++) {
+
+
+            CsvOperation csvOperation=new CsvOperation(surveyHistory);
+            List<String> strData=csvOperation.generateString();
+            String str[] = new String[strData.size()];
+            for (int k = 0; k < strData.size(); k++) {
+                str[k] = strData.get(k);
+            }
+            data.add(str);
+
+            /*for (DataCollection dataCollection: surveyHistory) {
 
                 List<String> strData = new ArrayList<>();
 
-                strData.add(String.valueOf(surveyHistory.get(i).getId()));
-                strData.add(String.valueOf(surveyHistory.get(i).getSurveyid()));
-                strData.add(String.valueOf(surveyHistory.get(i).getFieldworkerId()));
-                strData.add(String.valueOf(surveyHistory.get(i).getSuperwiserId()));
-                strData.add(String.valueOf(surveyHistory.get(i).getTimestamp()));
-                strData.add(String.valueOf(surveyHistory.get(i).getLat()));
-                strData.add(String.valueOf(surveyHistory.get(i).getLng()));
+                strData.add(String.valueOf(dataCollection.getId()));
+                strData.add(String.valueOf(dataCollection.getSurveyid()));
+                strData.add(String.valueOf(dataCollection.getFieldworkerId()));
+                strData.add(String.valueOf(dataCollection.getSuperwiserId()));
+                strData.add(String.valueOf(dataCollection.getTimestamp()));
+                strData.add(String.valueOf(dataCollection.getLat()));
+                strData.add(String.valueOf(dataCollection.getLng()));
                 // strData.add(" "+surveyHistory.get(i).getPatients().getPatientname());
                 // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
                 // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
 
-                for (int j = 0; j < surveyHistory.get(i).getAnswerses().size(); j++) {
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getQuestions().getId()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedopt()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedOptConditional()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getSelectedChk()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getAns()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getNumAns()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getDate()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getTime()));
-                    strData.add(String.valueOf(surveyHistory.get(i).getAnswerses().get(j).getByteArrayImage()));
+                for (int j = 0; j < dataCollection.getAnswerses().size(); j++) {
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getQuestions().getId()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedopt()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedOptConditional()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedChk()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getAns()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getNumAns()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getDate()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getTime()));
+                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getByteArrayImage()));
                 }
 
                 String str[] = new String[strData.size()];
@@ -305,7 +316,7 @@ public class GetSurveyActivity extends AppCompatActivity {
                 data.add(str);
 
             }
-
+*/
             //data.add(new String[]{"India", "New Delhi"});
             //data.add(new String[]{"United States", "Washington D.C"});
             //data.add(new String[]{"Germany", "Berlin"});
