@@ -31,6 +31,7 @@ import com.ak.search.adapter.DataCollectionAdapter;
 import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
 import com.ak.search.app.CsvOperation;
+import com.ak.search.app.TraverseNode;
 import com.ak.search.model.MSurvey;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
@@ -90,7 +91,7 @@ public class GetSurveyActivity extends AppCompatActivity {
 
     private int mYear, mMonth, mDay, mHour, mMinute;
 
-    Long patientId=(long)0;
+    Long patientId = (long) 0;
     String selectedDate;
 
     @Override
@@ -220,12 +221,21 @@ public class GetSurveyActivity extends AppCompatActivity {
 
             case R.id.action_export:
 
+
+
+
+                if(spnSurveyName.getSelectedItemPosition()==0)
+                {
+                    Toast.makeText(getApplicationContext(),"please select any one survey from filter to export..!",Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
                 new AlertDialog.Builder(this)
                         .setTitle("Export Data")
                         .setMessage("Would you like to Export data to csv?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                generateCSV();
+                                generateCSV(lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -250,7 +260,7 @@ public class GetSurveyActivity extends AppCompatActivity {
         return true;
     }
 
-    public void generateCSV() {
+    public void generateCSV(Long survId) {
 
         try {
 
@@ -270,13 +280,13 @@ public class GetSurveyActivity extends AppCompatActivity {
                     "Ans", "NumAns", "Date", "Time", "Image"});*/
 
 
-            CsvOperation csvOperation=new CsvOperation(surveyHistory);
-            List<String> strData=csvOperation.generateString();
-            String str[] = new String[strData.size()];
+            CsvOperation csvOperation = new CsvOperation(surveyHistory, survId);
+            List<String[]> strData = csvOperation.generateString();
+            // String str[] = new String[strData.size()];
             for (int k = 0; k < strData.size(); k++) {
-                str[k] = strData.get(k);
+                data.add(strData.get(k));
             }
-            data.add(str);
+
 
             /*for (DataCollection dataCollection: surveyHistory) {
 
@@ -398,37 +408,37 @@ public class GetSurveyActivity extends AppCompatActivity {
     public void applyFilter() {
 
         //surveyHistoryFilter.clear();
-       // boolean filter = false;
+        // boolean filter = false;
 
-        RealmQuery q=realm.where(DataCollection.class);
+        RealmQuery q = realm.where(DataCollection.class);
 
         if (spnSurveyName.getSelectedItemPosition() > 0) {
-            q=q.equalTo("surveyid",lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
+            q = q.equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
             //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId()).findAll());
-           // filter = true;
+            // filter = true;
         }
 
         if (spnFieldWorker.getSelectedItemPosition() > 0) {
-            q=q.equalTo("fieldworkerId", lstUserData.get(spnFieldWorker.getSelectedItemPosition() - 1).getId());
+            q = q.equalTo("fieldworkerId", lstUserData.get(spnFieldWorker.getSelectedItemPosition() - 1).getId());
             //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId()).findAll());
-           // filter = true;
+            // filter = true;
         }
 
-        if(patientId!=0){
-            q=q.equalTo("patients.id", patientId);
-          //  filter=true;
-          //  surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("patients.id", patientId).findAll());
+        if (patientId != 0) {
+            q = q.equalTo("patients.id", patientId);
+            //  filter=true;
+            //  surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("patients.id", patientId).findAll());
         }
 
         if (selectedDate != null) {
-            q=q.beginsWith("timestamp", selectedDate);
+            q = q.beginsWith("timestamp", selectedDate);
             //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("timestamp", selectedDate).findAll());
-           // filter = true;
+            // filter = true;
         }
 
-       // if (filter == false) {
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).findAll());
-       // }
+        // if (filter == false) {
+        //surveyHistoryFilter.addAll(realm.where(DataCollection.class).findAll());
+        // }
 
         surveyHistory.clear();
         surveyHistory.addAll(q.findAll());
