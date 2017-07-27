@@ -2,17 +2,12 @@
     <string name="app_name">Survey Collection</string>
 
     <string name="activity_login">Login</string>
-    <string name="title_activity_user">User</string>
     <string name="title_activity_survey">Surveys</string>
     <string name="title_activity_add_user">Add New User</string>
     <string name="title_activity_add_survey">Add New Survey</string>
     <string name="title_activity_add_question">Add New Question</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_new_survey">NewSurveyActivity</string>
-
-    <string name="title_activity_send">Send</string>
-    <string name="title_activity_receive">Receive</string>
 
 
     <string name="login">Login</string>
@@ -46,11 +41,6 @@
 
     <string name="language">Language</string>
     <string name="setting">Setting</string>
-
-    <string-array name="lang_list_item_array">
-        <item>Marathi</item>
-        <item>English</item>
-    </string-array>
 
 
 </resources>

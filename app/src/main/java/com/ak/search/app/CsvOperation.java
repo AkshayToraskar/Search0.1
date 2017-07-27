@@ -58,32 +58,51 @@ public class CsvOperation {
 
 
         List<String> st = scanHeader();
-        String headerString = "";
-        for (int i = 0; i < st.size(); i++) {
-            headerString = headerString + "," + st.get(i);
-        }
-
-        String[] head = headerString.split(",");
+        String[] head = st.toArray(new String[st.size()]);
 
         strData.add(head);
 
+        //iterate data collection
         for (DataCollection dataColl : dataCollection) {
 
 
-            String dataCollect = "";
-            for (Answers ans : dataColl.getAnswerses()) {
-                String answw = "";
-                List<String> aa = scanQuestion(ans);
-                for (int i = 0; i < aa.size(); i++) {
-                    answw = answw + "," + aa.get(i);
+            List<String> dataCollection = new ArrayList<>();
+            long prevQ=-1;
+            //iterate each questions
+            for(Questions questions: lstQuestions) {
+
+                boolean match = false;
+
+                if(prevQ!=questions.getId()) {
+                    //iterate answers
+                    for (Answers ans : dataColl.getAnswerses()) {
+
+
+
+                        if (questions.getId() == ans.getQuestions().getId()) {
+                            prevQ = questions.getId();
+                            List<String> aa = scanQuestion(ans);
+                            dataCollection.addAll(aa);
+                            match = true;
+                        }
+
+
+                    }
+
+                    if(!match){
+                        dataCollection.add("0");
+                    }
                 }
-
-                dataCollect = dataCollect + answw;
-
             }
-            String arr[] = dataCollect.split(",");
+
+            String arr[] = dataCollection.toArray(new String[dataCollection.size()]); //.split(",");
             strData.add(arr);
         }
+
+
+
+
+
         return strData;
     }
 
@@ -91,7 +110,6 @@ public class CsvOperation {
     public List<String> scanQuestion(Answers answers) {
 
         List<String> strLs = new ArrayList<>();
-
 
         String questionType = answers.getQuestions().getTypeQuestion();
         String[] quest = questionType.split(",");
@@ -101,25 +119,25 @@ public class CsvOperation {
 
                 //Text---------------------------------------
                 case 1:
-                    strLs.add(answers.getAns());
+                    strLs.add(""+answers.getAns());
 
                     break;
 
                 //Number---------------------------------------
                 case 2:
-                    strLs.add(answers.getNumAns());
+                    strLs.add(""+answers.getNumAns());
 
                     break;
 
                 //Date---------------------------------------
                 case 3:
-                    strLs.add(answers.getDate());
+                    strLs.add(""+answers.getDate());
 
                     break;
 
                 //Time---------------------------------------
                 case 4:
-                    strLs.add(answers.getTime());
+                    strLs.add(""+answers.getTime());
 
                     break;
 

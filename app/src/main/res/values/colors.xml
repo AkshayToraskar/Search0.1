@@ -8,22 +8,16 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
 
-    <color name="answered_questions_background">#7dd485</color>
-
     <color name="pink">#558b2f</color>
     <color name="indigo">#467327</color>
 
-    <color name="blue">#2196F3</color>
     <color name="white">#ffffffff</color>
-    <color name="red">#ffff0000</color>
 
     <color name="gray">#706e6e</color>
     <color name="dark_gray">#353434</color>
 
-    <color name="green">#2c7833</color>
     <color name="dark_green">#1a5120</color>
 
     <color name="light_red">#c75b5b</color>
-    <color name="dark_red">#ffff0000</color>
 
 </resources>

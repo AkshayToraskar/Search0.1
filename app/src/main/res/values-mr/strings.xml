@@ -2,17 +2,12 @@
     <string name="app_name">Survey Collection</string>
 
     <string name="activity_login">लॉग इन</string>
-    <string name="title_activity_user">वापरकर्ता</string>
     <string name="title_activity_survey">सर्वेक्षण</string>
     <string name="title_activity_add_user">नवीन वापरकर्ता जोडा</string>
     <string name="title_activity_add_survey">नवीन सर्वेक्षण जोडा</string>
     <string name="title_activity_add_question">नवीन प्रश्न जोडा</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_new_survey">नवीन सर्वेक्षण</string>
-
-    <string name="title_activity_send">पाठवा</string>
-    <string name="title_activity_receive">प्राप्त करा</string>
 
 
     <string name="login">लॉग इन</string>
@@ -46,12 +41,6 @@
 
     <string name="language">भाषा</string>
     <string name="setting">सेटिंग</string>
-
-
-    <string-array name="lang_list_item_array">
-        <item>मराठी</item>
-        <item>English</item>
-    </string-array>
 
 
 </resources>

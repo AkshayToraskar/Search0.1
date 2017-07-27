@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -27,12 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ak.search.R;
-import com.ak.search.adapter.DataCollectionAdapter;
-import com.ak.search.adapter.PatientAdapter;
 import com.ak.search.adapter.SurveyHistoryAdapter;
 import com.ak.search.app.CsvOperation;
-import com.ak.search.app.TraverseNode;
-import com.ak.search.model.MSurvey;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Survey;
@@ -52,7 +47,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmQuery;
-import io.realm.RealmResults;
 
 public class GetSurveyActivity extends AppCompatActivity {
 
@@ -89,6 +83,9 @@ public class GetSurveyActivity extends AppCompatActivity {
     @BindView(R.id.spnFieldworker)
     Spinner spnFieldWorker;
 
+    @BindView(R.id.tv_survey_count)
+    TextView tvSurveyCount;
+
     private int mYear, mMonth, mDay, mHour, mMinute;
 
     Long patientId = (long) 0;
@@ -101,35 +98,16 @@ public class GetSurveyActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         realm = Realm.getDefaultInstance();
 
-        //RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
-        //patientList = new ArrayList<>();
-
-        //patientList.addAll(results);
-
         getSupportActionBar().setTitle(getResources().getString(R.string.collectedData));
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-       /* if (getIntent().getExtras() != null) {
-            surveyId = getIntent().getExtras().getLong("surveyId");
-
-            questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(surveyId));
-
-            List<MOptions> opt = new ArrayList<>();
-            for (int i = 0; i < questionsList.size(); i++) {
-                opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
-            }*/
-
-        //patientList = MPatients.listAll(MPatients.class);
 
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
-                // slideButton.setBackgroundResource(R.drawable.down_arrow_icon);
+
                 slidingDrawer.setBackgroundResource(R.color.cardview_light_background);
-
                 ivArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_down_black_24dp));
-
                 recyclerView.setVisibility(View.GONE);
             }
         });
@@ -139,7 +117,6 @@ public class GetSurveyActivity extends AppCompatActivity {
             public void onDrawerClosed() {
 
                 recyclerView.setVisibility(View.VISIBLE);
-                //  slideButton.setBackgroundResource(R.drawable.upwar_arrow_icon);
                 slidingDrawer.setBackgroundColor(Color.TRANSPARENT);
                 ivArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_keyboard_arrow_up_black_24dp));
             }
@@ -149,6 +126,7 @@ public class GetSurveyActivity extends AppCompatActivity {
         surveyHistoryFilter = new ArrayList<>();
         surveyHistory.addAll(realm.where(DataCollection.class).findAll());
 
+        tvSurveyCount.setText("" + surveyHistory.size());
         mAdapter = new SurveyHistoryAdapter(this, surveyHistory, true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -180,33 +158,11 @@ public class GetSurveyActivity extends AppCompatActivity {
             fieldworkderName[i + 1] = lstUserData.get(i).getName();
         }
 
-
         spnFiledworkerNameAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, fieldworkderName);
         spnFiledworkerNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
         spnFieldWorker.setAdapter(spnFiledworkerNameAdapter);
 
 
-        /*spnSurveyName.setOnItemSelectedListener
-                (new AdapterView.OnItemSelectedListener() {
-                     @Override
-                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                         //String selectedItem = String.valueOf(spnSurveyName.getSelectedItem());
-                         surveyHistory.clear();
-
-                         if (i == 0) {
-                             surveyHistory.addAll(realm.where(DataCollection.class).findAll());
-                         } else {
-                             surveyHistory.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(i-1).getId()).findAll());
-                         }
-
-                         mAdapter.notifyDataSetChanged();
-                     }
-
-                     @Override
-                     public void onNothingSelected(AdapterView<?> adapterView) {
-                     }
-                 }
-                );*/
     }
 
     @Override
@@ -222,11 +178,8 @@ public class GetSurveyActivity extends AppCompatActivity {
             case R.id.action_export:
 
 
-
-
-                if(spnSurveyName.getSelectedItemPosition()==0)
-                {
-                    Toast.makeText(getApplicationContext(),"please select any one survey from filter to export..!",Toast.LENGTH_SHORT).show();
+                if (spnSurveyName.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getApplicationContext(), "please select any one survey from filter to export..!", Toast.LENGTH_LONG).show();
                     break;
                 }
 
@@ -270,76 +223,30 @@ public class GetSurveyActivity extends AppCompatActivity {
             }
             String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "SEARCH" + File.separator + "PatientData " + currentDateTimeString + ".csv";
-            CSVWriter writer = null;
-            writer = new CSVWriter(new FileWriter(csv));
-
             List<String[]> data = new ArrayList<String[]>();
-            /*data.add(new String[]{"Id", "SurveyId", "FieldworkerId", "SupervisorId", "Timestamp", "Latitude", "Longitude",
-                    "Patient Name", "Sex", "Age", "QuestionId", "selectedOpt", "selectedOptConditional", "getSelectedCheck",
-                    "Ans", "NumAns", "Date", "Time", "Image"});*/
-
 
             CsvOperation csvOperation = new CsvOperation(surveyHistory, survId);
             List<String[]> strData = csvOperation.generateString();
-            // String str[] = new String[strData.size()];
+            Survey survey = realm.where(Survey.class).equalTo("id", survId).findFirst();
+
+            String csv = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "SEARCH" + File.separator + survey.getName() + "_" + "Ans_" + currentDateTimeString + ".csv";
+            CSVWriter writer = null;
+            writer = new CSVWriter(new FileWriter(csv));
+
             for (int k = 0; k < strData.size(); k++) {
                 data.add(strData.get(k));
             }
 
 
-            /*for (DataCollection dataCollection: surveyHistory) {
-
-                List<String> strData = new ArrayList<>();
-
-                strData.add(String.valueOf(dataCollection.getId()));
-                strData.add(String.valueOf(dataCollection.getSurveyid()));
-                strData.add(String.valueOf(dataCollection.getFieldworkerId()));
-                strData.add(String.valueOf(dataCollection.getSuperwiserId()));
-                strData.add(String.valueOf(dataCollection.getTimestamp()));
-                strData.add(String.valueOf(dataCollection.getLat()));
-                strData.add(String.valueOf(dataCollection.getLng()));
-                // strData.add(" "+surveyHistory.get(i).getPatients().getPatientname());
-                // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getSex()));
-                // strData.add(String.valueOf(surveyHistory.get(i).getPatients().getAge()));
-
-                for (int j = 0; j < dataCollection.getAnswerses().size(); j++) {
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getQuestions().getId()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedopt()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedOptConditional()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getSelectedChk()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getAns()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getNumAns()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getDate()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getTime()));
-                    strData.add(String.valueOf(dataCollection.getAnswerses().get(j).getByteArrayImage()));
-                }
-
-                String str[] = new String[strData.size()];
-
-                for (int k = 0; k < strData.size(); k++) {
-
-                    str[k] = strData.get(k);
-
-                }
-
-                data.add(str);
-
-            }
-*/
-            //data.add(new String[]{"India", "New Delhi"});
-            //data.add(new String[]{"United States", "Washington D.C"});
-            //data.add(new String[]{"Germany", "Berlin"});
-            //data.add(new String[]{"asdf", "23423s"});
-            //data.add(new String[]{"Germ3423any", "asdf"});
             writer.writeAll(data);
             writer.close();
-            Log.v("asdf", "SUCCESS");
+            Log.v("Export Data", "SUCCESS");
 
-            Toast.makeText(getApplicationContext(), "Data Exported Successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Data Exported Successfully into " + survey.getName() + "_" + "Ans_" + currentDateTimeString + ".csv file", Toast.LENGTH_LONG).show();
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.v("Export Data", "FAIL");
         }
     }
 
@@ -386,6 +293,9 @@ public class GetSurveyActivity extends AppCompatActivity {
 
             case R.id.btnApply:
                 applyFilter();
+
+                slidingDrawer.close();
+
                 break;
         }
     }
@@ -407,42 +317,28 @@ public class GetSurveyActivity extends AppCompatActivity {
 
     public void applyFilter() {
 
-        //surveyHistoryFilter.clear();
-        // boolean filter = false;
-
         RealmQuery q = realm.where(DataCollection.class);
 
         if (spnSurveyName.getSelectedItemPosition() > 0) {
             q = q.equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId()).findAll());
-            // filter = true;
         }
 
         if (spnFieldWorker.getSelectedItemPosition() > 0) {
             q = q.equalTo("fieldworkerId", lstUserData.get(spnFieldWorker.getSelectedItemPosition() - 1).getId());
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId()).findAll());
-            // filter = true;
         }
 
         if (patientId != 0) {
             q = q.equalTo("patients.id", patientId);
-            //  filter=true;
-            //  surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("patients.id", patientId).findAll());
         }
 
         if (selectedDate != null) {
             q = q.beginsWith("timestamp", selectedDate);
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("timestamp", selectedDate).findAll());
-            // filter = true;
         }
-
-        // if (filter == false) {
-        //surveyHistoryFilter.addAll(realm.where(DataCollection.class).findAll());
-        // }
 
         surveyHistory.clear();
         surveyHistory.addAll(q.findAll());
         mAdapter.notifyDataSetChanged();
+        tvSurveyCount.setText("" + surveyHistory.size());
     }
 
 }
