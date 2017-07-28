@@ -99,7 +99,7 @@ public class AddUserActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_user, menu);
-        if (!update) {
+        if (!update || userId==1) {
             menu.getItem(0).setVisible(false);
         }
         return true;

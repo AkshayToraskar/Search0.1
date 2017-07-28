@@ -104,6 +104,30 @@ public class LoginActivity extends AppCompatActivity {
 
         LANG = sessionManager.getLanguage();
 
+
+        User uAd=realm.where(User.class).equalTo("id",1).findFirst();
+        if(uAd==null) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    // Add a admin
+            User user = new User();
+            user.setId(1);
+            user.setName("admin");
+            user.setPassword("admin");
+            user.setType(1);
+            realm.copyToRealmOrUpdate(user);
+            Log.v("TAG","admin added..!");
+
+                }
+            });
+
+        }
+
+
+
+
         //permissionCheck();
 
 /*
@@ -149,21 +173,23 @@ public class LoginActivity extends AppCompatActivity {
                     txt_username.setError(null);
                 }
 
-                if (rbAdmin.isChecked()) {
+                /*if (rbAdmin.isChecked()) {
 
                     //if (isNetworkAvailable()) {
                     checkAdminLogin();
 
-                        /*progress = new ProgressDialog(this);
+                        *//*progress = new ProgressDialog(this);
                         progress.setMessage("Please Wait");
                         progress.show();
                     } else {
                         Toast.makeText(getApplicationContext(), "No Active Internet !", Toast.LENGTH_SHORT).show();
-                    }*/
+                    }*//*
 
                 } else {
                     checkOtherLogin();
-                }
+                }*/
+
+                    checkLogin();
 
 
                 break;
@@ -325,8 +351,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void checkAdminLogin() {
-        /*ApiInterface apiService =
+    /*public void checkAdminLogin() {
+        *//*ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
         Call<Login> call = apiService.getLogin(txt_username.getText().toString(), txt_password.getText().toString());
@@ -354,7 +380,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("asdf", t.toString());
                 Toast.makeText(getApplicationContext(), "Internal server error..!", Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });*//*
 
         if (txt_username.getText().toString().equals("admin") && txt_password.getText().toString().equals("admin")) {
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
@@ -364,13 +390,28 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
-    public void checkOtherLogin() {
+    public void checkLogin() {
 
 
         //if (user.size() > 0) {
         switch (rgUserType.getCheckedRadioButtonId()) {
+
+            case R.id.rb_admin:
+                List<User> admin = realm.where(User.class).equalTo("name", txt_username.getText().toString()).equalTo("password", txt_password.getText().toString()).equalTo("type", 1).findAll();
+
+                if (admin.size() > 0) {
+                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    sessionManager.setLogin(true, admin.get(0).getName(), admin.get(0).getType(), admin.get(0).getId());
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+
             case R.id.rb_user:
                 List<User> user = realm.where(User.class).equalTo("name", txt_username.getText().toString()).equalTo("password", txt_password.getText().toString()).equalTo("type", 3).findAll();
 
