@@ -97,13 +97,9 @@ public class LoginActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         permissionStatus = getSharedPreferences("permissionStatus", MODE_PRIVATE);
-
-
         validate = new Validate();
         sessionManager = new SessionManager(this);
-
         LANG = sessionManager.getLanguage();
-
 
         User uAd=realm.where(User.class).equalTo("id",1).findFirst();
         if(uAd==null) {

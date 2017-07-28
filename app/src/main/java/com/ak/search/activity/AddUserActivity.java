@@ -26,57 +26,39 @@ public class AddUserActivity extends AppCompatActivity {
 
     @BindView(R.id.txt_username)
     EditText txt_username;
-
     @BindView(R.id.txt_password)
     EditText txt_password;
-
     @BindView(R.id.rg_admin)
     RadioButton rb_admin;
-
     @BindView(R.id.rg_superviser)
     RadioButton rb_superviser;
-
     @BindView(R.id.rg_user)
     RadioButton rb_user;
-
     @BindView(R.id.btn_add_user)
     Button btn_login;
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     Validate validate;
-
-
     Realm realm;
-
     long userId;
     User user;
-
     boolean update = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
-
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         realm = Realm.getDefaultInstance();
-
 
         if (getIntent().getExtras() != null) {
 
             getSupportActionBar().setTitle("Update User Info");
-
             userId = getIntent().getExtras().getLong("userId");
-
             user = realm.where(User.class).equalTo("id",userId).findFirst();
-
             txt_username.setText(user.getName());
             txt_password.setText(user.getPassword());
 
@@ -87,12 +69,8 @@ public class AddUserActivity extends AppCompatActivity {
 
             btn_login.setText("Update");
             update = true;
-
         }
-
         validate = new Validate();
-
-
     }
 
 
@@ -105,7 +83,6 @@ public class AddUserActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -115,7 +92,6 @@ public class AddUserActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 break;
-
 
             case R.id.action_delete_user:
                 new AlertDialog.Builder(this)
@@ -206,12 +182,8 @@ public class AddUserActivity extends AppCompatActivity {
                         }
                     });
 
-
-
-
                     finish();
                 } else {
-
 
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -221,11 +193,6 @@ public class AddUserActivity extends AppCompatActivity {
                             user.setType(type);
                         }
                     });
-
-                   /* this.user.setName(txt_username.getText().toString());
-                    this.user.setPassword(txt_password.getText().toString());
-                    this.user.setType(type);*/
-                    //   this.user.save();
 
                     finish();
                 }
