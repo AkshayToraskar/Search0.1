@@ -275,11 +275,8 @@ public class GetSurveyActivity extends AppCompatActivity {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-
                                 selectedDate = dayOfMonth + "." + String.format("%02d", (monthOfYear + 1)) + "." + year;
                                 tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-
-
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -293,7 +290,6 @@ public class GetSurveyActivity extends AppCompatActivity {
 
             case R.id.btnApply:
                 applyFilter();
-
                 slidingDrawer.close();
 
                 break;
