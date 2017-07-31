@@ -20,6 +20,8 @@ public class DataCollection extends RealmObject {
     Patients patients;
     RealmList<Answers> answerses;
 
+    RealmList<TreeString> treeData;
+
     public long getId() {
         return id;
     }
@@ -90,5 +92,13 @@ public class DataCollection extends RealmObject {
 
     public void setSuperwiserId(long superwiserId) {
         this.superwiserId = superwiserId;
+    }
+
+    public RealmList<TreeString> getTreeData() {
+        return treeData;
+    }
+
+    public void setTreeData(RealmList<TreeString> treeData) {
+        this.treeData = treeData;
     }
 }

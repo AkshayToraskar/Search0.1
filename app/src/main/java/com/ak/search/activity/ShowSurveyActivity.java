@@ -25,6 +25,7 @@ import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Patients;
 import com.ak.search.realm_model.Questions;
 import com.ak.search.realm_model.Survey;
+import com.ak.search.realm_model.TreeString;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,6 +70,8 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         addQueHashMap = new HashMap<>();
         sessionManager = new SessionManager(this);
 
+        root = new MyTreeNode<>(null);
+
         if (getIntent().getExtras() != null) {
             superviserLogin = getIntent().getExtras().getBoolean("superviserLogin");
             collectionId = getIntent().getExtras().getLong("collectionid");
@@ -78,8 +81,10 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             answersList.clear();
             //answersList.addAll(dataCollection.getAnswerses());
 
-            survey=realm.where(Survey.class).equalTo("id",dataCollection.getSurveyid()).findFirst();
-            if (survey!=null){
+            generateTreeNode();
+
+            survey = realm.where(Survey.class).equalTo("id", dataCollection.getSurveyid()).findFirst();
+            if (survey != null) {
                 getSupportActionBar().setTitle(survey.getName());
             }
             addQue(dataCollection.getAnswerses());
@@ -96,10 +101,71 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                 getSupportActionBar().setTitle(dataCollection.getPatients().getPatientname() + " ");
             }
 
-            root = new MyTreeNode<>(null);
+
             setupNestedData(root, 0, answersList.size());
         }
 
+    }
+
+
+    public void generateTreeNode() {
+
+        RealmList<TreeString> treeStrings = dataCollection.getTreeData();
+        for (int i = 0; i < treeStrings.size(); i++) {
+
+            String str = treeStrings.get(i).getTreeData();
+            String vvv = str.substring(1, str.length() - 1);
+            String treeVal[] = vvv.split(",");
+            if (treeVal != null) {
+                for (int j = 0; j < treeVal.length; j++) {
+
+                    String trData[] = treeVal[j].split(":");
+                    if (trData.length == 3) {
+                        long parentQId = Long.parseLong(trData[0].trim());
+                        int position = Integer.parseInt(trData[1].trim());
+                        long questionId = Long.parseLong(trData[2].trim());
+
+                        //addNestedData(root, survey.getQuestions().get(i).getId(), pos + i);
+                        boolean present = false;
+
+                        for (MyTreeNode x : root.inOrderView) {
+
+                            if (x.getData() != null && present == false) {
+                                NestedData ns = (NestedData) x.getData();
+
+                                List<MyTreeNode> child = x.getChildren();
+                                boolean flagItem=false;
+
+                                if (child != null || child.size() > 0) {
+                                    for(MyTreeNode nn: child){
+
+                                        NestedData nd=(NestedData)nn.getData();
+
+                                        if(nd.getQuestionId()==questionId && nd.getPos()==position){
+                                            flagItem=true;
+                                            present=true;
+                                        }
+
+                                    }
+                                }
+
+                                if (ns.getQuestionId() == parentQId && !flagItem) {
+                                    addNestedData(x, questionId, position);
+                                    present = true;
+                                }
+
+                            }
+                        }
+
+                        if (!present) {
+                            addNestedData(root, questionId, position);
+                        }
+
+
+                    }
+                }
+            }
+        }
     }
 
 
@@ -132,7 +198,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
     @Override
-    public void onAnswerSave(int index,Answers ans) {
+    public void onAnswerSave(int index, Answers ans) {
         if (patients != null) {
             ans.setPatientid(patients.getId());
         }
@@ -203,13 +269,12 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                 Log.d("tree elements", " size:" + nsd.getSize() + ", SurveyId:" + nsd.getSurveyId());
 
 
-                if (nsd.getQuestionId() == questionId && nsd.getPos()==pos) {
+                if (nsd.getQuestionId() == questionId && nsd.getPos() == pos) {
                     List<MyTreeNode> lstChildren = x.getChildren();
 
                     qFlag = true;
 
                     nesPos++;
-
 
 
                     //remove all child of current node
@@ -227,15 +292,14 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
                     }*/
 
-                    for(int i=0; i<questionIdList.size(); i++) {
-                        Log.v("asdf"," "+questionIdList.get(i));
+                    for (int i = 0; i < questionIdList.size(); i++) {
+                        Log.v("asdf", " " + questionIdList.get(i));
                         deleteQue(questionIdList.get(i));
                     }
 
                     x.removeChild(lstChildren);
 
                     questionIdList.clear();
-
 
 
                     // add new child to current node
@@ -274,12 +338,12 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
 
         android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
-        changeItem(mHandler,recyclerView,mAdapter,pos);
+        changeItem(mHandler, recyclerView, mAdapter, pos);
 
 
     }
 
-    protected  void insertItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+    protected void insertItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -293,7 +357,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         });
     }
 
-    protected  void removeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+    protected void removeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -308,7 +372,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
 
-    protected  void changeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
+    protected void changeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -323,13 +387,11 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
 
+    List<Long> questionIdList = new ArrayList<>();
 
-
-    List<Long> questionIdList=new ArrayList<>();
-
-    public void traverse(MyTreeNode child){ // post order traversal
-        List<MyTreeNode> as=child.getChildren();
-        for(MyTreeNode ch : as){
+    public void traverse(MyTreeNode child) { // post order traversal
+        List<MyTreeNode> as = child.getChildren();
+        for (MyTreeNode ch : as) {
 
             // for (int i = 0; i < ch.getChildren().size(); i++) {
             NestedData ns = (NestedData) ch.getData();
@@ -343,16 +405,13 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
 
-
-
-
     public void deleteQue(long qId) {
 
-        List<Integer> delData=new ArrayList<>();
+        List<Integer> delData = new ArrayList<>();
 
-        int start=0;
-        for (int i=0; i<answersList.size(); i++) {
-            if(answersList.get(i).getQuestions() !=null) {
+        int start = 0;
+        for (int i = 0; i < answersList.size(); i++) {
+            if (answersList.get(i).getQuestions() != null) {
                 if (qId == answersList.get(i).getQuestions().getId()) {
                     //answersList.remove(i);
                     if (start == 0) {
@@ -363,7 +422,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             }
         }
 
-        for(int i=start; i<(start+delData.size());i++){
+        for (int i = start; i < (start + delData.size()); i++) {
             answersList.remove(i);
 
             android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
@@ -374,7 +433,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                     mAdapter.notifyItemRemoved(finalI);
                 }
             });*/
-            removeItem(mHandler,recyclerView,mAdapter,i);
+            removeItem(mHandler, recyclerView, mAdapter, i);
 
         }
     }
@@ -401,7 +460,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             answ.setByteArrayImage(a);
             answersList.add(pos + i, answ);
 
-            addNestedData(node, survey.getQuestions().get(i).getId(), pos+i);
+            addNestedData(node, survey.getQuestions().get(i).getId(), pos + i);
 
 
             /*final int finalI = i;
@@ -412,7 +471,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
                 }
             });*/
             android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
-            insertItem(mHandler,recyclerView,mAdapter,pos);
+            insertItem(mHandler, recyclerView, mAdapter, pos);
 
             // setupNestedData(node,pos,survey.getQuestions().size());
         }
@@ -437,7 +496,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             if (ans.getQuestions() != null) {
                 //  if (ans.getQuestions().getOptCondition()) {
                 //NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
-                NestedData nestedData=new NestedData(answersList.get(i).getQuestions().getId(),i);
+                NestedData nestedData = new NestedData(answersList.get(i).getQuestions().getId(), i);
                 MyTreeNode myTreeNode = new MyTreeNode(nestedData);
                 qList.add(myTreeNode);
 
@@ -452,7 +511,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         Log.v("root size", "" + root.getChildren().size());
     }
 
-    public void addNestedData(MyTreeNode node, long questionId,int pos) {
+    public void addNestedData(MyTreeNode node, long questionId, int pos) {
 
         NestedData nestedData = new NestedData(questionId, pos);
         //NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
