@@ -87,6 +87,7 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
             public void onClick(View view) {
                 //Intent intent = new Intent(context, NewSurveyActivity.class);
                 Intent intent = new Intent(act, StartSurveyActivity.class);
+                intent.putExtra("update",false);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("survey", Parcels.wrap(Survey.class,survey));
                 //bundle.putParcelable("patient", Parcels.wrap(Patients.class, SelectSurveyActivity.patients));

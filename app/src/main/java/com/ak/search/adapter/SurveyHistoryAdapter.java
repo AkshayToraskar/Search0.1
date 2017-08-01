@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ak.search.R;
 import com.ak.search.activity.ShowSurveyActivity;
+import com.ak.search.activity.StartSurveyActivity;
 import com.ak.search.realm_model.DataCollection;
 import com.ak.search.realm_model.Survey;
 
@@ -53,7 +54,9 @@ public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdap
 
                     // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
-                    Intent i = new Intent(context, ShowSurveyActivity.class);
+                   // Intent i = new Intent(context, ShowSurveyActivity.class);
+                    Intent i = new Intent(context, StartSurveyActivity.class);
+                    i.putExtra("update",true);
                     i.putExtra("superviserLogin", superviserLogin);
                     i.putExtra("collectionid", patientsList.get(getPosition()).getId());
                     context.startActivity(i);

@@ -87,7 +87,28 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
             if (survey != null) {
                 getSupportActionBar().setTitle(survey.getName());
             }
+
+
+
+
             addQue(dataCollection.getAnswerses());
+            /*if(superviserLogin){
+                Answers answ = new Answers();
+                answ.setPatientid(0);
+                answ.setQuestions(null);
+                answ.setParentPos(0);
+                answ.setSelectedopt(-1);
+                answ.setSelectedOptConditional(-1);
+                answ.setSelectedChk("");
+                answ.setAns("");
+                answ.setNumAns("");
+                answ.setDate("");
+                answ.setTime("");
+                byte[] a = {};
+                answ.setByteArrayImage(a);
+                answersList.add(answ);
+            }*/
+
 
             mAdapter = new GetQuestionsAdapter(this, answersList, saveAnswer, realm, superviserLogin);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
