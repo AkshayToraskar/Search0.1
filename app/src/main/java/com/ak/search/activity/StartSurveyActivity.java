@@ -282,8 +282,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
                     RealmList<Answers> answerses = new RealmList<>();
-                    for (int i = 0; i < answersList.size(); i++) {
-                        Answers a = answersList.get(i);
+                    for (Answers a: answersList) {
+                        //Answers a = answersList.get(i);
                         Answers ans = realm.createObject(Answers.class);
                         if (a.getQuestions() != null) {
                             Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
@@ -292,12 +292,15 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                             ans.setPatientid(a.getPatientid());
                             ans.setAns(a.getAns());
                             ans.setSelectedopt(a.getSelectedopt());
+                            ans.setSelectedOptConditional(a.getSelectedOptConditional());
                             ans.setNumAns(a.getNumAns());
                             ans.setByteArrayImage(a.getByteArrayImage());
                             ans.setDate(a.getDate());
                             ans.setTime(a.getTime());
                             ans.setSelectedChk(a.getSelectedChk());
                             answerses.add(ans);
+
+
                         }
                     }
 
@@ -516,7 +519,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 Log.d("tree elements", " size:" + nsd.getSize() + ", SurveyId:" + nsd.getSurveyId());
 
 
-                if (nsd.getQuestionId() == questionId && nsd.getPos() == pos) {
+                if (nsd.getQuestionId() == questionId) {
                     List<MyTreeNode> lstChildren = x.getChildren();
 
                     qFlag = true;
@@ -698,10 +701,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");
-            answ.setAns("");
-            answ.setNumAns("");
-            answ.setDate("");
-            answ.setTime("");
+            answ.setAns(null);
+            answ.setNumAns(null);
+            answ.setDate(null);
+            answ.setTime(null);
             byte[] a = {-1};
             answ.setByteArrayImage(a);
             answersList.add(pos + i, answ);
