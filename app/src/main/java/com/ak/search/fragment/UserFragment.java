@@ -59,11 +59,26 @@ public class UserFragment extends Fragment {
         }*/
         //  surveysList = MSurvey.listAll(MSurvey.class);
 
+
+        boolean isPhone = getActivity().getResources().getBoolean(R.bool.is_phone);
+
         mAdapter = new GetSurveyAdapter(getContext(), surveysList, getActivity());
-        GridLayoutManager mLayoutManager = new GridLayoutManager(getContext(), 3);
+        GridLayoutManager mLayoutManager;
+        if (isPhone) {
+           mLayoutManager = new GridLayoutManager(getContext(), 2);
+
+        } else {
+          mLayoutManager = new GridLayoutManager(getContext(), 3);
+
+        }
+
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+
+
+
+
 
         return view;
     }

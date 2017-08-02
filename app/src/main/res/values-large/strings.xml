@@ -1,0 +1,4 @@
+<resources>
+    <bool name="is_phone">false</bool>
+
+</resources>

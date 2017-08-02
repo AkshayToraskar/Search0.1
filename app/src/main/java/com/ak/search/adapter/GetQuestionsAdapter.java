@@ -109,6 +109,14 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
         LinearLayout llChck;
         @BindView(R.id.ll_patient_name)
         LinearLayout llPatient;
+        @BindView(R.id.ll_time)
+        LinearLayout llTime;
+        @BindView(R.id.ll_date)
+        LinearLayout llDate;
+        @BindView(R.id.ll_image)
+        LinearLayout llImage;
+
+
         @BindView(R.id.btn_date)
         Button btnSelectDate;
         @BindView(R.id.btn_time)
@@ -462,7 +470,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     //  newWatcher.setActive(true);
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
-                                    holder.etAnswer.setText(" ");
+                                    holder.etAnswer.setText("");
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
@@ -517,7 +525,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     // newWatcher1.setActive(true);
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                 } else {
-                                    holder.etNumAns.setText(" ");
+                                    holder.etNumAns.setText("");
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
                                 }
 
@@ -569,7 +577,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 } else {
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-                                    holder.tvDate.setText(" ");
+                                    holder.tvDate.setText("");
                                     answerList.get(position).setAnswered(false);
                                 }
 
@@ -585,7 +593,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 }
 
 
-                                holder.btnSelectDate.setOnClickListener(new View.OnClickListener() {
+                                holder.llDate.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         final Calendar c = Calendar.getInstance();
@@ -637,7 +645,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                 } else {
 
                                     holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background));
-                                    holder.tvTime.setText(" ");
+                                    holder.tvTime.setText("");
                                     answerList.get(position).setAnswered(false);
                                 }
 
@@ -653,7 +661,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     validateAnswers.put(position, true);
                                 }
 
-                                holder.btnSelectTime.setOnClickListener(new View.OnClickListener() {
+                                holder.llTime.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         final Calendar c = Calendar.getInstance();
@@ -716,7 +724,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     validateAnswers.put(position, true);
                                 }
 
-                                holder.btnSelectImage.setOnClickListener(new View.OnClickListener() {
+                                holder.llImage.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         StartSurveyActivity.positionImg = position;
@@ -766,7 +774,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                     validateAnswers.put(position, true);
                                 }
 
-                                holder.btnPatientName.setOnClickListener(new View.OnClickListener() {
+                                holder.llPatient.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         Intent i = new Intent(context, SelectPatientsActivity.class);

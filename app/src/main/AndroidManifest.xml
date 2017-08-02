@@ -114,7 +114,8 @@
             android:name=".bluetooth.BluetoothClientActivity"
             android:label="@string/send"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.StartSurveyActivity" />
+        <activity android:name=".activity.StartSurveyActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.SelectPatientsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

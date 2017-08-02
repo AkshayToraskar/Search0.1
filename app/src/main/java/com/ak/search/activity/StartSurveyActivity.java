@@ -175,10 +175,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                 answ.setSelectedopt(-1);
                 answ.setSelectedOptConditional(-1);
                 answ.setSelectedChk("");
-                answ.setAns("");
-                answ.setNumAns("");
-                answ.setDate("");
-                answ.setTime("");
+                answ.setAns(null);
+                answ.setNumAns(null);
+                answ.setDate(null);
+                answ.setTime(null);
                 byte[] a = {};
                 answ.setByteArrayImage(a);
                 answersList.add(answ);
@@ -200,13 +200,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             recyclerView.setAdapter(mAdapter);
 
 
+
         }
     }
 
 
     public void discardSurvey() {
 
-        if (!update && superviserLogin == true) {
+        if (!update || superviserLogin) {
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.discard))
                     .setMessage(getString(R.string.sure_cancel))
@@ -797,10 +798,10 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");
-            answ.setAns("");
-            answ.setNumAns("");
-            answ.setDate("");
-            answ.setTime("");
+            answ.setAns(null);
+            answ.setNumAns(null);
+            answ.setDate(null);
+            answ.setTime(null);
             byte[] a = {};
             answ.setByteArrayImage(a);
             answersList.add(answ);

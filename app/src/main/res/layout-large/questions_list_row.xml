@@ -97,7 +97,7 @@
                 android:id="@+id/view_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/cardview_dark_background" />
+                android:background="@color/dark_background" />
 
 
             <LinearLayout
@@ -116,16 +116,16 @@
                     android:layout_weight="3"
                     android:padding="10dp"
                     android:textSize="22sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/btn_date"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="20dp"
-                    android:background="@drawable/ic_date_range_blue"
+                    android:background="@drawable/ic_date_range"
                     android:padding="10dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -141,20 +141,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:layout_weight="2"
+                    android:layout_weight="2.8"
                     android:padding="10dp"
                     android:textSize="22sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/btn_patientname"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_margin="20dp"
-                    android:layout_weight="1"
-                    android:padding="10dp"
-                    android:text="Select Patient"
-                    android:visibility="gone" />
+                    android:background="@drawable/ic_local_hotel"
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -173,16 +171,16 @@
                     android:layout_weight="3"
                     android:padding="10dp"
                     android:textSize="22sp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/btn_time"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="20dp"
-                    android:background="@drawable/ic_time_blue"
+                    android:background="@drawable/ic_access_time"
                     android:padding="10dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -203,16 +201,16 @@
                     android:layout_margin="20dp"
                     android:padding="10dp"
 
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <Button
                     android:id="@+id/btn_capture_image"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_margin="20dp"
-                    android:background="@drawable/ic_capture_picture_black"
+                    android:background="@drawable/ic_image"
                     android:padding="10dp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -293,6 +291,8 @@
                 android:drawablePadding="10dp"
                 android:drawableRight="@drawable/text1"
                 android:padding="10dp"
+                android:windowSoftInputMode="stateHidden"
+
                 android:textSize="22sp"
                 android:visibility="gone" />
 
@@ -304,6 +304,7 @@
                 android:drawablePadding="10dp"
                 android:drawableRight="@drawable/num"
                 android:inputType="number"
+                android:windowSoftInputMode="stateHidden"
                 android:padding="10dp"
                 android:textSize="22sp"
                 android:visibility="gone" />
