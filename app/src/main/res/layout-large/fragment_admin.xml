@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.ak.search.fragment.AdminFragment">
 
     <LinearLayout
@@ -33,19 +33,18 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/imageView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/user"
-                        android:id="@+id/imageView2" />
+                        android:src="@drawable/user" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:paddingTop="15dp"
-                        android:orientation="horizontal">
-
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
 
                         <RelativeLayout
@@ -56,17 +55,17 @@
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/circle_shape"/>
+                                android:src="@drawable/counter_survey_background" />
 
                             <TextView
                                 android:id="@+id/tv_user_count"
-                                android:layout_centerInParent="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="0"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
                                 android:textSize="25sp"
-                                android:text="0"/>
+                                android:textStyle="bold" />
 
                         </RelativeLayout>
 
@@ -75,12 +74,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="@string/users"
                             android:gravity="center"
+                            android:text="@string/users"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
-
 
 
                 </LinearLayout>
@@ -102,18 +100,19 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical">
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/survey"/>
+                        android:src="@drawable/survey" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:paddingTop="15dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
 
                         <RelativeLayout
@@ -124,17 +123,17 @@
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/circle_shape"/>
+                                android:src="@drawable/counter_survey_background" />
 
                             <TextView
                                 android:id="@+id/tv_survey_count"
-                                android:layout_centerInParent="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:layout_centerInParent="true"
+                                android:text="0"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:text="0"/>
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
 
                         </RelativeLayout>
 
@@ -147,7 +146,6 @@
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
-
 
 
                 </LinearLayout>
@@ -181,14 +179,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/search"/>
+                        android:src="@drawable/search" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:paddingTop="15dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
 
                         <RelativeLayout
@@ -199,17 +197,17 @@
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/circle_shape"/>
+                                android:src="@drawable/counter_survey_background" />
 
                             <TextView
                                 android:id="@+id/tv_patient_count"
-                                android:layout_centerInParent="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
+                                android:layout_centerInParent="true"
+                                android:text="0"
                                 android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:text="0"/>
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
 
                         </RelativeLayout>
 
@@ -217,12 +215,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:text="@string/patients"
                             android:gravity="center"
+                            android:text="@string/patients"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
-
 
 
                 </LinearLayout>
@@ -250,15 +247,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/doc"/>
+                        android:src="@drawable/doc" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:paddingTop="15dp"
-                        android:orientation="horizontal">
-
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
 
                         <RelativeLayout
@@ -266,27 +262,25 @@
                             android:layout_height="wrap_content">
 
 
-
                             <ImageView
+                                android:id="@+id/imageView"
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
-                                android:src="@drawable/circle_shape"
-                                android:layout_alignParentTop="true"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
-                                android:id="@+id/imageView"
-                                />
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/counter_survey_background" />
 
                             <TextView
                                 android:id="@+id/tv_collected_data_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="25sp"
-                                android:textColor="@android:color/white"
-                                android:textStyle="bold"
-                                android:text="0"
+                                android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
-                                android:layout_centerHorizontal="true" />
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
 
                         </RelativeLayout>
 
@@ -301,7 +295,6 @@
                     </LinearLayout>
 
 
-
                 </LinearLayout>
 
 
@@ -311,60 +304,6 @@
         </LinearLayout>
 
 
-        <!--<android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:elevation="10dp"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/import_export" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <Button
-                        android:id="@+id/btn_bluetooth_client"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimary"
-                        android:textColor="@color/colorText"
-                        android:onClick="onBtnClick"
-                        android:text="@string/send" />
-
-                    <Button
-                        android:id="@+id/btn_bluetooth"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimary"
-                        android:textColor="@color/colorText"
-                        android:onClick="onBtnClick"
-                        android:text="@string/receive" />
-
-
-
-                </LinearLayout>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>-->
     </LinearLayout>
 
 </FrameLayout>

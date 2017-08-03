@@ -32,20 +32,7 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
     private SessionManager sessionManager;
 
     public static ManageFragment manageFragment;
-    /*@BindView(R.id.ll_admin)
-    LinearLayout llAdmin;
 
-    @BindView(R.id.ll_user)
-    LinearLayout llUser;
-
-    @BindView(R.id.txt_patient_name)
-    EditText txt_patient_name;
-
-    private List<MSurvey> surveysList;
-    @BindView(R.id.rv_survey)
-    RecyclerView recyclerView;
-    public GetSurveyAdapter mAdapter;
-*/
 
     public static long surveyId = -1;
 

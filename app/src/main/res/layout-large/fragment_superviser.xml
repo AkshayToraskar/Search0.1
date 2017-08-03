@@ -7,11 +7,11 @@
 
 
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:orientation="vertical">
-
 
 
         <LinearLayout
@@ -23,40 +23,66 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_patients"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/search" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
-                        <ImageView
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/search"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="70dp"
+                                android:layout_height="50dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/counter_survey_background" />
+
+                            <TextView
+                                android:id="@+id/tv_patient_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
+
+                        </RelativeLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:gravity="center"
                             android:text="@string/patients"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
 
 
-
-                </RelativeLayout>
+                </LinearLayout>
 
 
             </android.support.v7.widget.CardView>
@@ -64,40 +90,72 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/btn_data"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:onClick="onBtnClick"
                 app:cardCornerRadius="2dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/doc" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:orientation="horizontal"
+                        android:paddingTop="15dp">
 
-                        <ImageView
+
+                        <RelativeLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/doc"/>
+                            android:layout_height="wrap_content">
+
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="70dp"
+                                android:layout_height="50dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/counter_survey_background" />
+
+                            <TextView
+                                android:id="@+id/tv_collected_data_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                android:text="0"
+                                android:textColor="@android:color/white"
+                                android:textSize="25sp"
+                                android:textStyle="bold" />
+
+                        </RelativeLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
+                            android:gravity="center"
                             android:text="@string/collectedData"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp" />
                     </LinearLayout>
 
 
-
-                </RelativeLayout>
+                </LinearLayout>
 
 
             </android.support.v7.widget.CardView>
@@ -106,60 +164,6 @@
         </LinearLayout>
 
 
-        <!--<android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:elevation="10dp"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="2dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/import_export" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <Button
-                        android:id="@+id/btn_bluetooth_client"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimary"
-                        android:textColor="@color/colorText"
-                        android:onClick="onBtnClick"
-                        android:text="@string/send" />
-
-                    <Button
-                        android:id="@+id/btn_bluetooth"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_margin="5dp"
-                        android:background="@color/colorPrimary"
-                        android:textColor="@color/colorText"
-                        android:onClick="onBtnClick"
-                        android:text="@string/receive" />
-
-
-
-                </LinearLayout>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>-->
     </LinearLayout>
 
 </FrameLayout>
