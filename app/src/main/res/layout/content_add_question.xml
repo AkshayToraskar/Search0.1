@@ -257,12 +257,16 @@
                                 android:id="@+id/txt_opt1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
                                 android:hint="option 1" />
 
                             <EditText
                                 android:id="@+id/txt_opt2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
                                 android:hint="option 2" />
 
                         </LinearLayout>
@@ -309,12 +313,17 @@
                                 android:id="@+id/txt_chk1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
                                 android:hint="option 1" />
 
                             <EditText
                                 android:id="@+id/txt_chk2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
+
                                 android:hint="option 2" />
 
                         </LinearLayout>
@@ -354,7 +363,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -367,6 +376,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
+                                    android:drawablePadding="5dp"
+                                    android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
                                     android:hint="option 1" />
 
                                 <Spinner
@@ -374,6 +385,12 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"></Spinner>
+
+                                <Button
+                                    android:id="@+id/btn_cond1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="add"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -387,6 +404,8 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="4"
+                                    android:drawablePadding="5dp"
+                                    android:drawableRight="@drawable/ic_remove_circle_outline_black_24dp"
                                     android:hint="option 2" />
 
                                 <Spinner
@@ -394,6 +413,12 @@
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="3"></Spinner>
+
+                                <Button
+                                    android:id="@+id/btn_cond2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="add"/>
                             </LinearLayout>
                         </LinearLayout>
 

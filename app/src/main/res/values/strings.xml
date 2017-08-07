@@ -47,4 +47,9 @@
     <string name="setting">Setting</string>
 
 
+    <array name="search_patient">
+        <item>Name</item>
+        <item>Id</item>
+    </array>
+
 </resources>

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.ak.search.R;
 import com.ak.search.adapter.SearchPatientAdapter;
@@ -33,6 +34,8 @@ public class SelectPatientsActivity extends AppCompatActivity {
     EditText etPatientName;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.spn_type)
+    Spinner spnType;
     Realm realm;
     SearchPatientAdapter searchPatientAdapter;
 
@@ -52,7 +55,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
 
         //loadData();
 
-        patientsList=new RealmList<>();
+        patientsList = new RealmList<>();
 
         RealmResults<Patients> results
                 = realm.where(Patients.class).findAll();
@@ -80,23 +83,29 @@ public class SelectPatientsActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 patientsList.clear();
-                if(editable==null)
-                {
+                if (editable == null) {
                     RealmResults<Patients> results = realm.where(Patients.class).findAll();
                     patientsList.addAll(results);
                     searchPatientAdapter.notifyDataSetChanged();
-                }
-                else{
-                    RealmResults<Patients> results = realm.where(Patients.class).beginsWith("patientname",String.valueOf(editable)).findAll();
-                    patientsList.addAll(results);
-                    searchPatientAdapter.notifyDataSetChanged();
+                } else {
+                    RealmResults<Patients> results;
+                    if (spnType.getSelectedItemPosition() == 0) {
+
+                        results = realm.where(Patients.class).beginsWith("patientname", String.valueOf(editable)).findAll();
+
+                    } else {
+                        results = realm.where(Patients.class).beginsWith("id", String.valueOf(editable)).findAll();
+                    }
+                    if (results != null) {
+                        patientsList.addAll(results);
+                        searchPatientAdapter.notifyDataSetChanged();
+                    }
                 }
 
 
             }
         });
     }
-
 
 
     @Override
@@ -142,7 +151,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }

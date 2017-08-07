@@ -30,6 +30,7 @@
             android:text="include in nested Survey?"/>
 
         <View
+            android:id="@+id/view_divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@color/colorPrimary" />

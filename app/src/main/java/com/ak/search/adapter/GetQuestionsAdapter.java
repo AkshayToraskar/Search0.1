@@ -676,8 +676,22 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                                     public void onTimeSet(TimePicker view, int hourOfDay,
                                                                           int minute) {
 
-                                                        holder.tvTime.setText(hourOfDay + ":" + minute);
-                                                        answerList.get(position).setTime(hourOfDay + ":" + minute);
+
+                                                        String AM_PM = " AM";
+                                                        if (hourOfDay >= 12) {
+                                                            AM_PM = " PM";
+                                                            if (hourOfDay >=13 && hourOfDay < 24) {
+                                                                hourOfDay -= 12;
+                                                            }
+                                                            else {
+                                                                hourOfDay = 12;
+                                                            }
+                                                        } else if (hourOfDay == 0) {
+                                                            hourOfDay = 12;
+                                                        }
+
+                                                        holder.tvTime.setText(hourOfDay + ":" + minute+" "+AM_PM);
+                                                        answerList.get(position).setTime(hourOfDay + ":" + minute+" "+AM_PM);
                                                         answerList.get(position).setAnswered(true);
                                                         //getSelectedChkbox();
                                                         saveAnswer.onAnswerSave(position, answerList.get(position));
@@ -685,6 +699,8 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                                                     }
                                                 }, mHour, mMinute, false);
                                         timePickerDialog.show();
+
+
                                     }
                                 });
 

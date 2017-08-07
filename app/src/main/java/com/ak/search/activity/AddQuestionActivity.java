@@ -1,6 +1,7 @@
 package com.ak.search.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -94,11 +96,18 @@ public class AddQuestionActivity extends AppCompatActivity {
     @BindView(R.id.spn_op2)
     Spinner spnOp2;
 
+    @BindView(R.id.btn_cond1)
+    Button btnCond1;
+    @BindView(R.id.btn_cond2)
+    Button btnCond2;
+
+
     String typeQuestion;
 
 
     List<EditText> allEds, allEdsChk, allEdsOptConditional;
     List<Spinner> allSpnCondition;
+    List<Button> allBtnCondition;
     public Questions questions;
     public List<Options> option, checkboxOpt;
     public List<ConditionalOptions> conditionalOptions;
@@ -128,6 +137,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         allEdsChk = new ArrayList<>();
         allEdsOptConditional = new ArrayList<>();
         allSpnCondition = new ArrayList<>();
+        allBtnCondition = new ArrayList<>();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -135,6 +145,12 @@ public class AddQuestionActivity extends AppCompatActivity {
         allEds.add(et_opt1);
         allEds.add(et_opt2);
 
+        removeTextFieldListener(et_opt1);
+        removeTextFieldListener(et_opt2);
+        removeTextFieldListener(et_chk1);
+        removeTextFieldListener(et_chk2);
+        removeTextFieldListener(et_opt1_conditional);
+        removeTextFieldListener(et_opt2_conditional);
 
         allEdsChk.add(et_chk1);
         allEdsChk.add(et_chk2);
@@ -143,6 +159,12 @@ public class AddQuestionActivity extends AppCompatActivity {
         allEdsOptConditional.add(et_opt2_conditional);
         allSpnCondition.add(spnOp1);
         allSpnCondition.add(spnOp2);
+        allBtnCondition.add(btnCond1);
+        allBtnCondition.add(btnCond2);
+
+        addNesteadSurvey(btnCond1);
+        addNesteadSurvey(btnCond2);
+
 
         lstQuestion = new RealmList<Questions>();
 
@@ -153,7 +175,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         sur[0] = "-";
 
         for (int i = 0; i < surveys.size(); i++) {
-            sur[i+1] = surveys.get(i).getName();
+            sur[i + 1] = surveys.get(i).getName();
         }
 
 
@@ -208,8 +230,14 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
                         text.setText(option.get(i).getOpt());
+
+                        text.setCompoundDrawablePadding(5);
+                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
                         ll_option.addView(text);
                         allEds.add(text);
+
+                        removeTextFieldListener(text);
                     }
 
                 }
@@ -231,8 +259,15 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 ViewGroup.LayoutParams.MATCH_PARENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
                         text.setText(checkboxOpt.get(i).getOpt());
+
+                        text.setCompoundDrawablePadding(5);
+                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
                         ll_check.addView(text);
                         allEdsChk.add(text);
+
+                        removeTextFieldListener(text);
+
                     }
 
                 }
@@ -243,9 +278,23 @@ public class AddQuestionActivity extends AppCompatActivity {
                     if (i == 0) {
                         et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
                         spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+
+                        if (conditionalOptions.get(i).getSurveyid() > 0) {
+                            btnCond1.setText("Update");
+                        } else {
+                            btnCond1.setText("Add");
+                        }
+
                     } else if (i == 1) {
                         et_opt2_conditional.setText(conditionalOptions.get(i).getOpt());
                         spnOp2.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+
+                        if (conditionalOptions.get(i).getSurveyid() > 0) {
+                            btnCond2.setText("Update");
+                        } else {
+                            btnCond2.setText("Add");
+                        }
+
                     } else {
                         LinearLayout ll = new LinearLayout(this);
                         ll.setWeightSum(7);
@@ -263,11 +312,36 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 R.layout.simple_spinner_dropdown_item, sur);
                         spn.setAdapter(adapter1);
                         spn.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+
+
+                        text2.setCompoundDrawablePadding(5);
+                        text2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
+
+                        Button btn = new Button(this);
+                        btn.setLayoutParams(new LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+
+
+                        if (conditionalOptions.get(i).getSurveyid() > 0) {
+                            btn.setText("Update");
+                        } else {
+                            btn.setText("Add");
+                        }
+
                         ll.addView(text2);
                         ll.addView(spn);
+                        ll.addView(btn);
+
+
                         ll_option_conditional.addView(ll);
                         allEdsOptConditional.add(text2);
                         allSpnCondition.add(spn);
+                        allBtnCondition.add(btn);
+
+                        removeTextFieldListener(text2);
+                        addNesteadSurvey(btn);
                     }
                 }
 
@@ -342,7 +416,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         if (surveyId != 0) {
             for (int i = 0; i < surveys.size(); i++) {
                 if (surveys.get(i).getId() == surveyId) {
-                    pos = i+1;
+                    pos = i + 1;
                     break;
                 }
             }
@@ -536,8 +610,12 @@ public class AddQuestionActivity extends AppCompatActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 text.setHint("option");
+                text.setCompoundDrawablePadding(5);
+                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
                 ll_option.addView(text);
                 allEds.add(text);
+
+                removeTextFieldListener(text);
                 break;
 
             case R.id.btn_add_more_checkbox:
@@ -545,9 +623,13 @@ public class AddQuestionActivity extends AppCompatActivity {
                 text1.setLayoutParams(new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
+                text1.setCompoundDrawablePadding(5);
+                text1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
                 text1.setHint("option");
                 ll_check.addView(text1);
                 allEdsChk.add(text1);
+
+                removeTextFieldListener(text1);
                 break;
 
             case R.id.btn_add_more_option_conditional:
@@ -558,6 +640,8 @@ public class AddQuestionActivity extends AppCompatActivity {
                 text2.setLayoutParams(new LinearLayout.LayoutParams(
                         0,
                         ViewGroup.LayoutParams.WRAP_CONTENT, 4));
+                text2.setCompoundDrawablePadding(5);
+                text2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
                 text2.setHint("option");
                 Spinner spn = new Spinner(this);
                 spn.setLayoutParams(new LinearLayout.LayoutParams(
@@ -568,15 +652,98 @@ public class AddQuestionActivity extends AppCompatActivity {
                         R.layout.simple_spinner_dropdown_item, sur);
                 spn.setAdapter(adapter);
 
+                Button btn = new Button(this);
+                btn.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+                btn.setText("Add");
+
                 ll.addView(text2);
                 ll.addView(spn);
+                ll.addView(btn);
+
                 ll_option_conditional.addView(ll);
                 allEdsOptConditional.add(text2);
                 allSpnCondition.add(spn);
 
+                removeTextFieldListener(text2);
+addNesteadSurvey(btn);
+
                 break;
         }
     }
+
+
+    public void removeTextFieldListener(final EditText et) {
+        et.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (et.getRight() - et.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+
+                        if (cb_option.isChecked()) {
+                            for (int i = 0; i < allEds.size(); i++) {
+                                EditText et1 = allEds.get(i);
+                                if (et.getId() == et1.getId()) {
+                                    ll_option.removeView(et1);
+                                    allEds.remove(et1);
+                                }
+                            }
+                        }
+                        if (cb_checkbox.isChecked()) {
+                            for (int i = 0; i < allEdsChk.size(); i++) {
+                                EditText et1 = allEdsChk.get(i);
+                                if (et.getId() == et1.getId()) {
+                                    ll_check.removeView(et1);
+                                    allEdsChk.remove(et1);
+                                }
+                            }
+                        }
+                        if (cb_options_condition.isChecked()) {
+                            for (int i = 0; i < allEdsOptConditional.size(); i++) {
+
+                                EditText et1 = allEdsOptConditional.get(i);
+                                if (et.getId() == et1.getId()) {
+                                    Spinner spn = allSpnCondition.get(i);
+                                    ll_option_conditional.removeViewAt(i);
+                                    //ll_option_conditional.removeView(spn);
+
+                                    allEdsOptConditional.remove(et1);
+                                    allSpnCondition.remove(spn);
+                                }
+                            }
+                        }
+
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+
+    public void addNesteadSurvey(final Button btn) {
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < allBtnCondition.size(); i++) {
+                    if (btn.getId() == allBtnCondition.get(i).getId()) {
+                        Intent intent = new Intent(AddQuestionActivity.this, AddSurveyActivity.class);
+                        intent.putExtra("isNestead", true);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+    }
+
 
     public void showOption(boolean val) {
         if (val) {
@@ -739,9 +906,9 @@ public class AddQuestionActivity extends AppCompatActivity {
                             }
 
                             long surveyId;
-                            Log.v("TAG","Selected Position===="+allSpnCondition.get(i).getSelectedItemPosition());
+                            Log.v("TAG", "Selected Position====" + allSpnCondition.get(i).getSelectedItemPosition());
                             if (allSpnCondition.get(i).getSelectedItemPosition() != 0) {
-                                surveyId = surveys.get((allSpnCondition.get(i).getSelectedItemPosition())-1).getId();
+                                surveyId = surveys.get((allSpnCondition.get(i).getSelectedItemPosition()) - 1).getId();
                             } else {
                                 surveyId = 0;
                             }

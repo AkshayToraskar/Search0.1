@@ -54,6 +54,9 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
     @BindView(R.id.btn_add_question)
     FloatingActionButton fabAddQuestion;
 
+    @BindView(R.id.view_divider)
+    View view;
+
     Validate validate;
 
     public static String SURVEYID = "surveyid";
@@ -73,6 +76,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
     Menu menus = null;
 
+    public boolean isNestead = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,48 +93,53 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
         questionsList = new RealmList<>();
 
         if (getIntent().getExtras() != null) {
+
             this.surveyId = getIntent().getExtras().getLong("surveyId");
             this.surveyName = getIntent().getExtras().getString("surveyName");
+            this.isNestead = getIntent().getExtras().getBoolean("isNestead");
+
+
             txt_survey_name.setText(surveyName + " ");
 
+
             survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
+            if (survey != null) {
+                Log.v("SURVEY NAME", "dasf " + survey.getName() + "=====" + survey.getQuestions().size());
 
-            Log.v("SURVEY NAME", "dasf " + survey.getName() + "=====" + survey.getQuestions().size());
+                cbNestedSurvey.setChecked(survey.getNested());
+                questionsList.clear();
+                questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
 
-            cbNestedSurvey.setChecked(survey.getNested());
-            questionsList.clear();
-            questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
+                update = true;
+            } else {
 
-            update = true;
-        } else {
+                txt_survey_name.setText("Survey " + String.valueOf(sessionManager.getSurveyId()));
 
-            txt_survey_name.setText("Survey " + String.valueOf(sessionManager.getSurveyId()));
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
 
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-
-                    //long id = realm.where(MUser.class).max("id").longValue() + 1;
+                        //long id = realm.where(MUser.class).max("id").longValue() + 1;
 
 
-                    try {
-                        surveyId = realm.where(Survey.class).max("id").intValue() + 1;
-                    } catch (Exception ex) {
-                        Log.v("exception", ex.toString());
-                        surveyId = 1;
+                        try {
+                            surveyId = realm.where(Survey.class).max("id").intValue() + 1;
+                        } catch (Exception ex) {
+                            Log.v("exception", ex.toString());
+                            surveyId = 1;
+                        }
+
+                        // Add a survey
+                        survey = realm.createObject(Survey.class, surveyId);
+                        //survey.setId(surveyId);
+                        survey.setNested(cbNestedSurvey.isChecked());
+                        survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
+                        realm.copyToRealmOrUpdate(survey);
+                        //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
+
                     }
-
-                    // Add a survey
-                    survey = realm.createObject(Survey.class, surveyId);
-                    //survey.setId(surveyId);
-                    survey.setNested(cbNestedSurvey.isChecked());
-                    survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
-                    realm.copyToRealmOrUpdate(survey);
-                    //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-
+                });
+            }
 
             // long surveyid = survey.save();
 
@@ -137,6 +147,12 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
             // this.surveyId = String.valueOf(surveyid);
             update = false;
+        }
+
+        if (isNestead) {
+            txt_survey_name.setVisibility(View.GONE);
+            cbNestedSurvey.setVisibility(View.GONE);
+            view.setVisibility(View.GONE);
         }
         // questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", surveyId);
 
