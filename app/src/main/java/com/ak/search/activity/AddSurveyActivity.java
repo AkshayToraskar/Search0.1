@@ -59,14 +59,14 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
     Validate validate;
 
-    public static String SURVEYID = "surveyid";
+    public  String SURVEYID = "surveyid";
     long surveyId;
     String surveyName;
     public boolean update;
     SessionManager sessionManager;
     Realm realm;
 
-    public static Survey survey;
+    public Survey survey;
     public RealmList<Questions> questionsList;
 
     ItemTouchHelper touchHelper;
@@ -108,8 +108,9 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
                 cbNestedSurvey.setChecked(survey.getNested());
                 questionsList.clear();
-                questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
-
+                if (survey.getQuestions() != null) {
+                    questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
+                }
                 update = true;
             } else {
 
@@ -132,21 +133,23 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                         // Add a survey
                         survey = realm.createObject(Survey.class, surveyId);
                         //survey.setId(surveyId);
-                        survey.setNested(cbNestedSurvey.isChecked());
+                        survey.setNested(isNestead);
                         survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
                         realm.copyToRealmOrUpdate(survey);
                         //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
                     }
                 });
+
+
+                // long surveyid = survey.save();
+
+
+
+                // this.surveyId = String.valueOf(surveyid);
+                update = false;
             }
-
-            // long surveyid = survey.save();
-
             sessionManager.setSurveyId(sessionManager.getSurveyId() + 1);
-
-            // this.surveyId = String.valueOf(surveyid);
-            update = false;
         }
 
         if (isNestead) {

@@ -91,10 +91,10 @@ public class AddQuestionActivity extends AppCompatActivity {
     LinearLayout ll_option_conditional;
     @BindView(R.id.btn_add_more_option_conditional)
     Button btn_add_more_option_conditional;
-    @BindView(R.id.spn_op1)
+    /*@BindView(R.id.spn_op1)
     Spinner spnOp1;
     @BindView(R.id.spn_op2)
-    Spinner spnOp2;
+    Spinner spnOp2;*/
 
     @BindView(R.id.btn_cond1)
     Button btnCond1;
@@ -106,18 +106,21 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
     List<EditText> allEds, allEdsChk, allEdsOptConditional;
-    List<Spinner> allSpnCondition;
+    // List<Spinner> allSpnCondition;
     List<Button> allBtnCondition;
+    List<Long> nesSurveyId;
     public Questions questions;
     public List<Options> option, checkboxOpt;
     public List<ConditionalOptions> conditionalOptions;
 
     public boolean update;
 
-    String[] sur;
-    List<Survey> surveys;
+    // String[] sur;
+    //List<Survey> surveysList;
 
+    Survey survey;
     long questionsId;
+    long surveyId;
     Realm realm;
     RealmList<Questions> lstQuestion;
 
@@ -136,8 +139,9 @@ public class AddQuestionActivity extends AppCompatActivity {
         allEds = new ArrayList<EditText>();
         allEdsChk = new ArrayList<>();
         allEdsOptConditional = new ArrayList<>();
-        allSpnCondition = new ArrayList<>();
+        //  allSpnCondition = new ArrayList<>();
         allBtnCondition = new ArrayList<>();
+        nesSurveyId = new ArrayList<>();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -157,10 +161,13 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         allEdsOptConditional.add(et_opt1_conditional);
         allEdsOptConditional.add(et_opt2_conditional);
-        allSpnCondition.add(spnOp1);
-        allSpnCondition.add(spnOp2);
+        // allSpnCondition.add(spnOp1);
+        // allSpnCondition.add(spnOp2);
         allBtnCondition.add(btnCond1);
         allBtnCondition.add(btnCond2);
+
+        nesSurveyId.add((long) 0);
+        nesSurveyId.add((long) 0);
 
         addNesteadSurvey(btnCond1);
         addNesteadSurvey(btnCond2);
@@ -169,25 +176,27 @@ public class AddQuestionActivity extends AppCompatActivity {
         lstQuestion = new RealmList<Questions>();
 
 
-        surveys = realm.where(Survey.class).notEqualTo("id", AddSurveyActivity.survey.getId()).equalTo("nested", true).findAll();
-        sur = new String[surveys.size() + 1];
+        //surveysList = realm.where(Survey.class).notEqualTo("id", survey.getId()).equalTo("nested", true).findAll();
+        // sur = new String[surveysList.size() + 1];
 
-        sur[0] = "-";
+        // sur[0] = "-";
 
-        for (int i = 0; i < surveys.size(); i++) {
-            sur[i + 1] = surveys.get(i).getName();
-        }
+        //  for (int i = 0; i < surveysList.size(); i++) {
+        //     sur[i + 1] = surveysList.get(i).getName();
+        // }
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
-                R.layout.simple_spinner_dropdown_item, sur);
-        spnOp1.setAdapter(adapter);
-        spnOp2.setAdapter(adapter);
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+        //          R.layout.simple_spinner_dropdown_item, sur);
+        // spnOp1.setAdapter(adapter);
+        // spnOp2.setAdapter(adapter);
 
 
         if (getIntent().getExtras() != null) {
-            //surveyid = getIntent().getExtras().getLong(AddSurveyActivity.SURVEYID);
+            surveyId = getIntent().getExtras().getLong("surveyid");
             questionsId = getIntent().getExtras().getLong("questionId", 0);
+
+            survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
 
             Log.v("Question Id", "" + questionsId);
 
@@ -277,22 +286,26 @@ public class AddQuestionActivity extends AppCompatActivity {
                 for (int i = 0; i < conditionalOptions.size(); i++) {
                     if (i == 0) {
                         et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
-                        spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                        //      spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
 
                         if (conditionalOptions.get(i).getSurveyid() > 0) {
                             btnCond1.setText("Update");
+                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
                         } else {
                             btnCond1.setText("Add");
+                            nesSurveyId.add(i, (long) 0);
                         }
 
                     } else if (i == 1) {
                         et_opt2_conditional.setText(conditionalOptions.get(i).getOpt());
-                        spnOp2.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                        //     spnOp2.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
 
                         if (conditionalOptions.get(i).getSurveyid() > 0) {
                             btnCond2.setText("Update");
+                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
                         } else {
                             btnCond2.setText("Add");
+                            nesSurveyId.add(i, (long) 0);
                         }
 
                     } else {
@@ -303,15 +316,15 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 0,
                                 ViewGroup.LayoutParams.WRAP_CONTENT, 4));
                         text2.setText(conditionalOptions.get(i).getOpt());
-                        Spinner spn = new Spinner(this);
-                        spn.setLayoutParams(new LinearLayout.LayoutParams(
-                                0,
-                                ViewGroup.LayoutParams.WRAP_CONTENT, 3));
+                        //   Spinner spn = new Spinner(this);
+                        //   spn.setLayoutParams(new LinearLayout.LayoutParams(
+                        //           0,
+                        //          ViewGroup.LayoutParams.WRAP_CONTENT, 3));
 
-                        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.
-                                R.layout.simple_spinner_dropdown_item, sur);
-                        spn.setAdapter(adapter1);
-                        spn.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
+                        //  ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.
+                        //           R.layout.simple_spinner_dropdown_item, sur);
+                        //  spn.setAdapter(adapter1);
+                        //  spn.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
 
 
                         text2.setCompoundDrawablePadding(5);
@@ -326,20 +339,22 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                         if (conditionalOptions.get(i).getSurveyid() > 0) {
                             btn.setText("Update");
+                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
                         } else {
                             btn.setText("Add");
+                            nesSurveyId.add(i, (long) 0);
                         }
 
                         ll.addView(text2);
-                        ll.addView(spn);
+                        //  ll.addView(spn);
                         ll.addView(btn);
 
 
                         ll_option_conditional.addView(ll);
                         allEdsOptConditional.add(text2);
-                        allSpnCondition.add(spn);
+                        //   allSpnCondition.add(spn);
                         allBtnCondition.add(btn);
-
+                        //nesSurveyId.add((long)0);
                         removeTextFieldListener(text2);
                         addNesteadSurvey(btn);
                     }
@@ -356,7 +371,9 @@ public class AddQuestionActivity extends AppCompatActivity {
                     @Override
                     public void execute(Realm realm) {
 
-                        lstQuestion.addAll(AddSurveyActivity.survey.getQuestions());
+                        /*if (survey != null) {
+                            lstQuestion.addAll(survey.getQuestions());
+                        }*/
                         int questionid;
                         try {
                             questionid = realm.where(Questions.class).max("id").intValue() + 1;
@@ -365,7 +382,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                             questionid = 1;
                         }
                         questions = realm.createObject(Questions.class, questionid);
-
+                        saveUpdateQuestions();
                         update = false;
 
                     }
@@ -410,12 +427,12 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     }
 
-    public int getSurveyPosition(long surveyId) {
+    /*public int getSurveyPosition(long surveyId) {
         int pos = 0;
 
         if (surveyId != 0) {
-            for (int i = 0; i < surveys.size(); i++) {
-                if (surveys.get(i).getId() == surveyId) {
+            for (int i = 0; i < surveysList.size(); i++) {
+                if (surveysList.get(i).getId() == surveyId) {
                     pos = i + 1;
                     break;
                 }
@@ -423,7 +440,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         }
 
         return pos;
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -489,13 +506,13 @@ public class AddQuestionActivity extends AppCompatActivity {
                 }
 
 
-                if (update) {
+                //  if (update) {
 
 
-                    saveUpdateQuestions();
-                    finish();
+                saveUpdateQuestions();
+                finish();
 
-                    // questions.setSurveyid(surveyid);
+                // questions.setSurveyid(surveyid);
                     /*questions.setQuestion(txt_question.getText().toString());
                     questions.setText(cb_text.isChecked());
                     questions.setOpt(cb_option.isChecked());
@@ -526,34 +543,34 @@ public class AddQuestionActivity extends AppCompatActivity {
                         }
                         // }
                     }*/
-                    //   MOptions.updateInTx(option);
+                //   MOptions.updateInTx(option);
 
-                    //questions.setOptions(options);
-
-
-                    //questions.save();
-                    //AddSurveyActivity.mAdapter.notifyDataSetChanged();
-                    // finish();
-
-                } else {
+                //questions.setOptions(options);
 
 
-                    //  final MQuestions questions = new MQuestions();
+                //questions.save();
+                //AddSurveyActivity.mAdapter.notifyDataSetChanged();
+                // finish();
+
+                //  } else {
 
 
-                    saveUpdateQuestions();
-                    finish();
-
-                    //   MOptions.saveInTx(options);
-
-                    //questions.setOptions(options);
+                //  final MQuestions questions = new MQuestions();
 
 
-                    //questions.save();
-                    //AddSurveyActivity.mAdapter.notifyDataSetChanged();
-                    //finish();
+                //      saveUpdateQuestions();
+                //     finish();
 
-                }
+                //   MOptions.saveInTx(options);
+
+                //questions.setOptions(options);
+
+
+                //questions.save();
+                //AddSurveyActivity.mAdapter.notifyDataSetChanged();
+                //finish();
+
+                //  }
 
 
                 break;
@@ -643,14 +660,14 @@ public class AddQuestionActivity extends AppCompatActivity {
                 text2.setCompoundDrawablePadding(5);
                 text2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
                 text2.setHint("option");
-                Spinner spn = new Spinner(this);
-                spn.setLayoutParams(new LinearLayout.LayoutParams(
-                        0,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, 3));
+                //  Spinner spn = new Spinner(this);
+                /// spn.setLayoutParams(new LinearLayout.LayoutParams(
+                //           0,
+                //         ViewGroup.LayoutParams.WRAP_CONTENT, 3));
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
-                        R.layout.simple_spinner_dropdown_item, sur);
-                spn.setAdapter(adapter);
+                // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
+                //           R.layout.simple_spinner_dropdown_item, sur);
+                //   spn.setAdapter(adapter);
 
                 Button btn = new Button(this);
                 btn.setLayoutParams(new LinearLayout.LayoutParams(
@@ -659,15 +676,16 @@ public class AddQuestionActivity extends AppCompatActivity {
                 btn.setText("Add");
 
                 ll.addView(text2);
-                ll.addView(spn);
+                //     ll.addView(spn);
                 ll.addView(btn);
 
                 ll_option_conditional.addView(ll);
                 allEdsOptConditional.add(text2);
-                allSpnCondition.add(spn);
+                nesSurveyId.add((long) 0);
+                //    allSpnCondition.add(spn);
 
                 removeTextFieldListener(text2);
-addNesteadSurvey(btn);
+                addNesteadSurvey(btn);
 
                 break;
         }
@@ -709,12 +727,16 @@ addNesteadSurvey(btn);
 
                                 EditText et1 = allEdsOptConditional.get(i);
                                 if (et.getId() == et1.getId()) {
-                                    Spinner spn = allSpnCondition.get(i);
+                                    //  Spinner spn = allSpnCondition.get(i);
+                                    Button btn = allBtnCondition.get(i);
                                     ll_option_conditional.removeViewAt(i);
+                                    ll_option_conditional.removeView(btn);
                                     //ll_option_conditional.removeView(spn);
 
                                     allEdsOptConditional.remove(et1);
-                                    allSpnCondition.remove(spn);
+                                    allBtnCondition.remove(btn);
+                                    nesSurveyId.remove(i);
+                                    // allSpnCondition.remove(spn);
                                 }
                             }
                         }
@@ -728,6 +750,7 @@ addNesteadSurvey(btn);
         });
     }
 
+    long survId = 1;
 
     public void addNesteadSurvey(final Button btn) {
         btn.setOnClickListener(new View.OnClickListener() {
@@ -735,8 +758,38 @@ addNesteadSurvey(btn);
             public void onClick(View v) {
                 for (int i = 0; i < allBtnCondition.size(); i++) {
                     if (btn.getId() == allBtnCondition.get(i).getId()) {
+
+
+                        if (conditionalOptions.get(i).getSurveyid() != 0) {
+                            nesSurveyId.set(i, conditionalOptions.get(i).getSurveyid());
+                            survId = conditionalOptions.get(i).getSurveyid();
+                        } else {
+                            realm.executeTransaction(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+
+                                    try {
+                                        survId = realm.where(Survey.class).max("id").intValue() + 1;
+                                    } catch (Exception ex) {
+                                        Log.v("exception", ex.toString());
+                                        survId = 1;
+                                    }
+
+                                    // Add a survey
+                                    Survey survey = realm.createObject(Survey.class, surveyId);
+                                    survey.setNested(true);
+                                    survey.setName("Survey " + surveyId);
+                                    realm.copyToRealmOrUpdate(survey);
+                                }
+                            });
+
+                            nesSurveyId.set(i, surveyId);
+
+                        }
+
                         Intent intent = new Intent(AddQuestionActivity.this, AddSurveyActivity.class);
                         intent.putExtra("isNestead", true);
+                        intent.putExtra("surveyId", survId);
                         startActivity(intent);
                     }
                 }
@@ -906,12 +959,12 @@ addNesteadSurvey(btn);
                             }
 
                             long surveyId;
-                            Log.v("TAG", "Selected Position====" + allSpnCondition.get(i).getSelectedItemPosition());
-                            if (allSpnCondition.get(i).getSelectedItemPosition() != 0) {
-                                surveyId = surveys.get((allSpnCondition.get(i).getSelectedItemPosition()) - 1).getId();
-                            } else {
-                                surveyId = 0;
-                            }
+                            Log.v("TAG", "Selected Position====" + nesSurveyId.get(i));
+                            // if (nesSurveyId.get(i) != 0) {
+                            surveyId = nesSurveyId.get(i);//surveys.get((allSpnCondition.get(i).getSelectedItemPosition()) - 1).getId();
+                            //} else {
+                            //    surveyId = 0;
+                            // }
 
                             ConditionalOptions opt1 = realm.createObject(ConditionalOptions.class, optionsId);
                             //opt1.setId(j);
@@ -927,9 +980,14 @@ addNesteadSurvey(btn);
                 if (update) {
                     realm.copyToRealmOrUpdate(questions);
                 } else {
+
+
+                    if (survey != null) {
+                        lstQuestion.addAll(survey.getQuestions());
+                    }
                     lstQuestion.add(questions);
-                    AddSurveyActivity.survey.setQuestions(lstQuestion);
-                    realm.copyToRealmOrUpdate(AddSurveyActivity.survey);
+                    survey.setQuestions(lstQuestion);
+                    realm.copyToRealmOrUpdate(survey);
                 }
                 //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
