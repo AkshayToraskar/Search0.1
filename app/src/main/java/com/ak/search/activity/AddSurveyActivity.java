@@ -44,8 +44,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
     @BindView(R.id.txt_survey_name)
     EditText txt_survey_name;
-    @BindView(R.id.cb_nested_survey)
-    CheckBox cbNestedSurvey;
+    /*@BindView(R.id.cb_nested_survey)
+    CheckBox cbNestedSurvey;*/
 
     @BindView(R.id.rv_questions)
     RecyclerView recyclerView;
@@ -54,8 +54,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
     @BindView(R.id.btn_add_question)
     FloatingActionButton fabAddQuestion;
 
-    @BindView(R.id.view_divider)
-    View view;
+    /*@BindView(R.id.view_divider)
+    View view;*/
 
     Validate validate;
 
@@ -106,7 +106,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
             if (survey != null) {
                 Log.v("SURVEY NAME", "dasf " + survey.getName() + "=====" + survey.getQuestions().size());
 
-                cbNestedSurvey.setChecked(survey.getNested());
+                //cbNestedSurvey.setChecked(survey.getNested());
                 questionsList.clear();
                 if (survey.getQuestions() != null) {
                     questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
@@ -138,6 +138,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                         realm.copyToRealmOrUpdate(survey);
                         //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
 
+                        sessionManager.setSurveyId(sessionManager.getSurveyId() + 1);
                     }
                 });
 
@@ -149,13 +150,13 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                 // this.surveyId = String.valueOf(surveyid);
                 update = false;
             }
-            sessionManager.setSurveyId(sessionManager.getSurveyId() + 1);
+
         }
 
         if (isNestead) {
             txt_survey_name.setVisibility(View.GONE);
-            cbNestedSurvey.setVisibility(View.GONE);
-            view.setVisibility(View.GONE);
+            //cbNestedSurvey.setVisibility(View.GONE);
+            //view.setVisibility(View.GONE);
         }
         // questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", surveyId);
 
@@ -165,7 +166,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
             //     opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
         }
 
-        mAdapter = new QuestionsAdapter(this, questionsList, onStartDragListener);
+        mAdapter = new QuestionsAdapter(this, questionsList, onStartDragListener, surveyId);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         RecyclerView.ItemDecoration itemDecoration = new
@@ -232,7 +233,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                         //survey = realm.where(MSurvey.class).equalTo("id", surveyId).findFirst();
                         survey.setName(txt_survey_name.getText().toString());
 
-                        survey.setNested(cbNestedSurvey.isChecked());
+                        survey.setNested(isNestead);
                         /*RealmList que = new RealmList();
                         for (int i = 0; i < 3; i++) {
 
@@ -326,7 +327,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                 break;
 
             case android.R.id.home:
-                SurveyActivity.mAdapter.notifyDataSetChanged();
+                //SurveyActivity.mAdapter.notifyDataSetChanged();
                 finish();
                 break;
 

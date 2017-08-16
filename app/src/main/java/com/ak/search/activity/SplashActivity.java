@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
     ImageView ivGifImg;
 
     Locale myLocale;
-    public static int SPLASH_TIME_OUT = 3000;
+    public static int SPLASH_TIME_OUT = 1000;
     private SessionManager sessionManager;
 
     @Override

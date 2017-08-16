@@ -59,6 +59,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.MyViewHold
                     Intent i = new Intent(context, AddSurveyActivity.class);
                     i.putExtra("surveyId", surveysList.get(getPosition()).getId());
                     i.putExtra("surveyName", surveysList.get(getPosition()).getName());
+                    i.putExtra("isNestead",surveysList.get(getPosition()).getNested());
                     context.startActivity(i);
                 }
             });

@@ -33,7 +33,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
     public static RealmList<Questions> questionsList;
     private Context context;
     private final OnStartDragListener mDragStartListener;
-
+    long surveyId;
     Realm realm;
 
     @Override
@@ -84,6 +84,7 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
 
                     Intent i = new Intent(context, AddQuestionActivity.class);
                     i.putExtra("questionId", questionsList.get(getPosition()).getId());
+                    i.putExtra("surveyid", surveyId);
                     context.startActivity(i);
                 }
             });
@@ -93,11 +94,11 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
     }
 
 
-    public QuestionsAdapter(Context context, RealmList<Questions> questionsList, OnStartDragListener dragStartListener) {
+    public QuestionsAdapter(Context context, RealmList<Questions> questionsList, OnStartDragListener dragStartListener, long surveyId) {
         this.questionsList = questionsList;
         this.context = context;
         mDragStartListener = dragStartListener;
-
+        this.surveyId = surveyId;
         realm = Realm.getDefaultInstance();
     }
 

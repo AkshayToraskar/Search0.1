@@ -91,10 +91,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     LinearLayout ll_option_conditional;
     @BindView(R.id.btn_add_more_option_conditional)
     Button btn_add_more_option_conditional;
-    /*@BindView(R.id.spn_op1)
-    Spinner spnOp1;
-    @BindView(R.id.spn_op2)
-    Spinner spnOp2;*/
+
 
     @BindView(R.id.btn_cond1)
     Button btnCond1;
@@ -106,7 +103,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
     List<EditText> allEds, allEdsChk, allEdsOptConditional;
-    // List<Spinner> allSpnCondition;
+
     List<Button> allBtnCondition;
     List<Long> nesSurveyId;
     public Questions questions;
@@ -115,8 +112,6 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     public boolean update;
 
-    // String[] sur;
-    //List<Survey> surveysList;
 
     Survey survey;
     long questionsId;
@@ -136,10 +131,11 @@ public class AddQuestionActivity extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
         validate = new Validate();
 
+
         allEds = new ArrayList<EditText>();
         allEdsChk = new ArrayList<>();
         allEdsOptConditional = new ArrayList<>();
-        //  allSpnCondition = new ArrayList<>();
+
         allBtnCondition = new ArrayList<>();
         nesSurveyId = new ArrayList<>();
 
@@ -161,8 +157,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         allEdsOptConditional.add(et_opt1_conditional);
         allEdsOptConditional.add(et_opt2_conditional);
-        // allSpnCondition.add(spnOp1);
-        // allSpnCondition.add(spnOp2);
+
         allBtnCondition.add(btnCond1);
         allBtnCondition.add(btnCond2);
 
@@ -175,21 +170,9 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         lstQuestion = new RealmList<Questions>();
 
-
-        //surveysList = realm.where(Survey.class).notEqualTo("id", survey.getId()).equalTo("nested", true).findAll();
-        // sur = new String[surveysList.size() + 1];
-
-        // sur[0] = "-";
-
-        //  for (int i = 0; i < surveysList.size(); i++) {
-        //     sur[i + 1] = surveysList.get(i).getName();
-        // }
-
-
-        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.
-        //          R.layout.simple_spinner_dropdown_item, sur);
-        // spnOp1.setAdapter(adapter);
-        // spnOp2.setAdapter(adapter);
+        option = new ArrayList<>();
+        checkboxOpt = new ArrayList<>();
+        conditionalOptions = new ArrayList<>();
 
 
         if (getIntent().getExtras() != null) {
@@ -200,207 +183,10 @@ public class AddQuestionActivity extends AppCompatActivity {
 
             Log.v("Question Id", "" + questionsId);
 
-
-            if (questionsId != 0) {
-                // questions = MQuestions.findById(MQuestions.class, Long.parseLong(questionsId));
-
-                questions = realm.where(Questions.class).equalTo("id", questionsId).findFirst();
-
-
-                cb_option.setChecked(questions.getOpt());
-                cb_text.setChecked(questions.getText());
-                cb_number.setChecked(questions.getNumber());
-                cb_date.setChecked(questions.getDate());
-                cb_time.setChecked(questions.getTime());
-                cb_picture.setChecked(questions.getImage());
-                cb_compulsary.setChecked(questions.getCompulsary());
-                cb_checkbox.setChecked(questions.getCheckbox());
-                cb_options_condition.setChecked(questions.getOptCondition());
-                cb_patient_name.setChecked(questions.getPatientName());
-                showOption(questions.getOpt());
-                showCheckbox(questions.getCheckbox());
-                showOptionConditional(questions.getOptCondition());
-                txt_question.setText(questions.getQuestion());
-
-                option = questions.getOptions();
-                /*if (option.size() > 0)
-                    et_opt1.setText(option.get(0).getOpt());
-                if (option.size() > 1)
-                    et_opt2.setText(option.get(1).getOpt());
-                if (option.size() > 2) {*/
-                for (int i = 0; i < option.size(); i++) {
-                    if (i == 0) {
-                        et_opt1.setText(option.get(i).getOpt());
-                    } else if (i == 1) {
-                        et_opt2.setText(option.get(i).getOpt());
-                    } else {
-                        EditText text = new EditText(this);
-                        text.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        text.setText(option.get(i).getOpt());
-
-                        text.setCompoundDrawablePadding(5);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
-
-                        ll_option.addView(text);
-                        allEds.add(text);
-
-                        removeTextFieldListener(text);
-                    }
-
-                }
-
-                checkboxOpt = questions.getChkb();
-                /*if (option.size() > 0)
-                    et_opt1.setText(option.get(0).getOpt());
-                if (option.size() > 1)
-                    et_opt2.setText(option.get(1).getOpt());
-                if (option.size() > 2) {*/
-                for (int i = 0; i < checkboxOpt.size(); i++) {
-                    if (i == 0) {
-                        et_chk1.setText(checkboxOpt.get(i).getOpt());
-                    } else if (i == 1) {
-                        et_chk2.setText(checkboxOpt.get(i).getOpt());
-                    } else {
-                        EditText text = new EditText(this);
-                        text.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        text.setText(checkboxOpt.get(i).getOpt());
-
-                        text.setCompoundDrawablePadding(5);
-                        text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
-
-                        ll_check.addView(text);
-                        allEdsChk.add(text);
-
-                        removeTextFieldListener(text);
-
-                    }
-
-                }
-
-
-                conditionalOptions = questions.getOptionContidion();
-                for (int i = 0; i < conditionalOptions.size(); i++) {
-                    if (i == 0) {
-                        et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
-                        //      spnOp1.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
-
-                        if (conditionalOptions.get(i).getSurveyid() > 0) {
-                            btnCond1.setText("Update");
-                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
-                        } else {
-                            btnCond1.setText("Add");
-                            nesSurveyId.add(i, (long) 0);
-                        }
-
-                    } else if (i == 1) {
-                        et_opt2_conditional.setText(conditionalOptions.get(i).getOpt());
-                        //     spnOp2.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
-
-                        if (conditionalOptions.get(i).getSurveyid() > 0) {
-                            btnCond2.setText("Update");
-                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
-                        } else {
-                            btnCond2.setText("Add");
-                            nesSurveyId.add(i, (long) 0);
-                        }
-
-                    } else {
-                        LinearLayout ll = new LinearLayout(this);
-                        ll.setWeightSum(7);
-                        EditText text2 = new EditText(this);
-                        text2.setLayoutParams(new LinearLayout.LayoutParams(
-                                0,
-                                ViewGroup.LayoutParams.WRAP_CONTENT, 4));
-                        text2.setText(conditionalOptions.get(i).getOpt());
-                        //   Spinner spn = new Spinner(this);
-                        //   spn.setLayoutParams(new LinearLayout.LayoutParams(
-                        //           0,
-                        //          ViewGroup.LayoutParams.WRAP_CONTENT, 3));
-
-                        //  ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.
-                        //           R.layout.simple_spinner_dropdown_item, sur);
-                        //  spn.setAdapter(adapter1);
-                        //  spn.setSelection(getSurveyPosition(conditionalOptions.get(i).getSurveyid()));
-
-
-                        text2.setCompoundDrawablePadding(5);
-                        text2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
-
-
-                        Button btn = new Button(this);
-                        btn.setLayoutParams(new LinearLayout.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT, 0));
-
-
-                        if (conditionalOptions.get(i).getSurveyid() > 0) {
-                            btn.setText("Update");
-                            nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
-                        } else {
-                            btn.setText("Add");
-                            nesSurveyId.add(i, (long) 0);
-                        }
-
-                        ll.addView(text2);
-                        //  ll.addView(spn);
-                        ll.addView(btn);
-
-
-                        ll_option_conditional.addView(ll);
-                        allEdsOptConditional.add(text2);
-                        //   allSpnCondition.add(spn);
-                        allBtnCondition.add(btn);
-                        //nesSurveyId.add((long)0);
-                        removeTextFieldListener(text2);
-                        addNesteadSurvey(btn);
-                    }
-                }
-
-
-                //}
-
-                update = true;
-
-
-            } else {
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-
-                        /*if (survey != null) {
-                            lstQuestion.addAll(survey.getQuestions());
-                        }*/
-                        int questionid;
-                        try {
-                            questionid = realm.where(Questions.class).max("id").intValue() + 1;
-                        } catch (Exception ex) {
-                            Log.v("exception", ex.toString());
-                            questionid = 1;
-                        }
-                        questions = realm.createObject(Questions.class, questionid);
-                        saveUpdateQuestions();
-                        update = false;
-
-                    }
-                });
-
-            }
+            setupData();
 
         }
 
-
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         cb_option.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -427,20 +213,6 @@ public class AddQuestionActivity extends AppCompatActivity {
 
     }
 
-    /*public int getSurveyPosition(long surveyId) {
-        int pos = 0;
-
-        if (surveyId != 0) {
-            for (int i = 0; i < surveysList.size(); i++) {
-                if (surveysList.get(i).getId() == surveyId) {
-                    pos = i + 1;
-                    break;
-                }
-            }
-        }
-
-        return pos;
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -470,108 +242,8 @@ public class AddQuestionActivity extends AppCompatActivity {
                     txt_question.setError(null);
                 }
 
-                typeQuestion = "";
-
-                if (cb_text.isChecked()) {
-                    typeQuestion = typeQuestion + "1,";
-                }
-                if (cb_number.isChecked()) {
-                    typeQuestion = typeQuestion + "2,";
-                }
-                if (cb_date.isChecked()) {
-                    typeQuestion = typeQuestion + "3,";
-                }
-                if (cb_time.isChecked()) {
-                    typeQuestion = typeQuestion + "4,";
-                }
-                if (cb_picture.isChecked()) {
-                    typeQuestion = typeQuestion + "5,";
-                }
-                if (cb_patient_name.isChecked()) {
-                    typeQuestion = typeQuestion + "6,";
-                }
-                if (cb_checkbox.isChecked()) {
-                    typeQuestion = typeQuestion + "7,";
-                }
-                if (cb_option.isChecked()) {
-                    typeQuestion = typeQuestion + "8,";
-                }
-                if (cb_options_condition.isChecked()) {
-                    typeQuestion = typeQuestion + "9,";
-                }
-
-                if (typeQuestion.equals("")) {
-                    Toast.makeText(getApplicationContext(), "Select QuestionType", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-
-
-                //  if (update) {
-
-
-                saveUpdateQuestions();
+                validateAndSave();
                 finish();
-
-                // questions.setSurveyid(surveyid);
-                    /*questions.setQuestion(txt_question.getText().toString());
-                    questions.setText(cb_text.isChecked());
-                    questions.setOpt(cb_option.isChecked());
-
-
-                    for (int i = 0; i < option.size(); i++) {
-
-
-                        // option.get(i).setQuestionid(String.valueOf(questions.getId()));
-
-
-                        *//*if (i == 0) {
-                            option.get(i).setOpt(et_opt1.getText().toString());
-                        } else if (i == 1) {
-                            option.get(i).setOpt(et_opt2.getText().toString());
-                        } else if (allEds.size() > i) {
-
-                            for (int j = 0; j < allEds.size(); j++) {
-                                option.get(i).setOpt(allEds.get(j).getText().toString());
-                            }
-                        } else {*//*
-                        for (int j = option.size(); j < allEds.size(); j++) {
-                            MOptions op = new MOptions();
-                            //    op.setQuestionid(String.valueOf(questions.getId()));
-                            op.setOpt(allEds.get(j).getText().toString());
-
-                            option.add(op);
-                        }
-                        // }
-                    }*/
-                //   MOptions.updateInTx(option);
-
-                //questions.setOptions(options);
-
-
-                //questions.save();
-                //AddSurveyActivity.mAdapter.notifyDataSetChanged();
-                // finish();
-
-                //  } else {
-
-
-                //  final MQuestions questions = new MQuestions();
-
-
-                //      saveUpdateQuestions();
-                //     finish();
-
-                //   MOptions.saveInTx(options);
-
-                //questions.setOptions(options);
-
-
-                //questions.save();
-                //AddSurveyActivity.mAdapter.notifyDataSetChanged();
-                //finish();
-
-                //  }
-
 
                 break;
 
@@ -609,7 +281,7 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
             case android.R.id.home:
-                AddSurveyActivity.mAdapter.notifyDataSetChanged();
+                validateAndSave();
                 finish();
                 break;
         }
@@ -692,6 +364,54 @@ public class AddQuestionActivity extends AppCompatActivity {
     }
 
 
+    public void validateAndSave() {
+        if (validate.validateString(txt_question.getText().toString())) {
+            txt_question.setError("Enter Question");
+            return;
+        } else {
+            txt_question.setError(null);
+        }
+
+        typeQuestion = "";
+
+        if (cb_text.isChecked()) {
+            typeQuestion = typeQuestion + "1,";
+        }
+        if (cb_number.isChecked()) {
+            typeQuestion = typeQuestion + "2,";
+        }
+        if (cb_date.isChecked()) {
+            typeQuestion = typeQuestion + "3,";
+        }
+        if (cb_time.isChecked()) {
+            typeQuestion = typeQuestion + "4,";
+        }
+        if (cb_picture.isChecked()) {
+            typeQuestion = typeQuestion + "5,";
+        }
+        if (cb_patient_name.isChecked()) {
+            typeQuestion = typeQuestion + "6,";
+        }
+        if (cb_checkbox.isChecked()) {
+            typeQuestion = typeQuestion + "7,";
+        }
+        if (cb_option.isChecked()) {
+            typeQuestion = typeQuestion + "8,";
+        }
+        if (cb_options_condition.isChecked()) {
+            typeQuestion = typeQuestion + "9,";
+        }
+
+        if (typeQuestion.equals("")) {
+            Toast.makeText(getApplicationContext(), "Select QuestionType", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        saveUpdateQuestions();
+
+    }
+
     public void removeTextFieldListener(final EditText et) {
         et.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -759,6 +479,11 @@ public class AddQuestionActivity extends AppCompatActivity {
                 for (int i = 0; i < allBtnCondition.size(); i++) {
                     if (btn.getId() == allBtnCondition.get(i).getId()) {
 
+                       validateAndSave();
+
+                        questions = realm.where(Questions.class).equalTo("id", questionsId).findFirst();
+                        //conditionalOptions.clear();
+                        conditionalOptions = questions.getOptionContidion();
 
                         if (conditionalOptions.get(i).getSurveyid() != 0) {
                             nesSurveyId.set(i, conditionalOptions.get(i).getSurveyid());
@@ -776,14 +501,14 @@ public class AddQuestionActivity extends AppCompatActivity {
                                     }
 
                                     // Add a survey
-                                    Survey survey = realm.createObject(Survey.class, surveyId);
+                                    Survey survey = realm.createObject(Survey.class, survId);
                                     survey.setNested(true);
-                                    survey.setName("Survey " + surveyId);
+                                    survey.setName("Survey " + survId);
                                     realm.copyToRealmOrUpdate(survey);
                                 }
                             });
 
-                            nesSurveyId.set(i, surveyId);
+                            nesSurveyId.set(i, survId);
 
                         }
 
@@ -832,7 +557,8 @@ public class AddQuestionActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        AddSurveyActivity.mAdapter.notifyDataSetChanged();
+
+        validateAndSave();
         finish();
     }
 
@@ -881,17 +607,7 @@ public class AddQuestionActivity extends AppCompatActivity {
                     questions.getOptionContidion().clear();
                 }
 
-                //MOptions opt1 = new MOptions();
-                // opt2 = new MOptions();
 
-                //      long questionid = questions.save();
-                //   opt1.setQuestionid(String.valueOf(questionid));
-                ///    opt1.setOpt(et_opt1.getText().toString());
-                //    opt2.setQuestionid(String.valueOf(questionid));
-                //    opt2.setOpt(et_opt2.getText().toString());
-
-                //options.add(opt1);
-                //options.add(opt2);
                 if (cb_option.isChecked()) {
                     if (allEds.size() >= 0) {
                         for (int i = 0; i < allEds.size(); i++) {
@@ -905,15 +621,11 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
                             Options opt1 = realm.createObject(Options.class, optionsId);
-                            //opt1.setId(j);
+
                             opt1.setOpt(allEds.get(i).getText().toString());
                             options.add(opt1);
 
 
-                            //MOptions op = new MOptions();
-                            //           op.setQuestionid(String.valueOf(questionid));
-                            //            op.setOpt(allEds.get(i).getText().toString());
-                            //options.add(op);
                         }
                     }
                 }
@@ -933,15 +645,11 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
                             Options opt1 = realm.createObject(Options.class, optionsId);
-                            //opt1.setId(j);
+
                             opt1.setOpt(allEdsChk.get(i).getText().toString());
                             chk.add(opt1);
 
 
-                            //MOptions op = new MOptions();
-                            //           op.setQuestionid(String.valueOf(questionid));
-                            //            op.setOpt(allEds.get(i).getText().toString());
-                            //options.add(op);
                         }
                     }
                 }
@@ -958,18 +666,14 @@ public class AddQuestionActivity extends AppCompatActivity {
                                 optionsId = 1;
                             }
 
-                            long surveyId;
+                            //long surveyId;
                             Log.v("TAG", "Selected Position====" + nesSurveyId.get(i));
-                            // if (nesSurveyId.get(i) != 0) {
-                            surveyId = nesSurveyId.get(i);//surveys.get((allSpnCondition.get(i).getSelectedItemPosition()) - 1).getId();
-                            //} else {
-                            //    surveyId = 0;
-                            // }
+
 
                             ConditionalOptions opt1 = realm.createObject(ConditionalOptions.class, optionsId);
-                            //opt1.setId(j);
+
                             opt1.setOpt(allEdsOptConditional.get(i).getText().toString());
-                            opt1.setSurveyid(surveyId);
+                            opt1.setSurveyid(nesSurveyId.get(i));
                             conditionalOptionses.add(opt1);
                         }
                     }
@@ -979,17 +683,16 @@ public class AddQuestionActivity extends AppCompatActivity {
 
                 if (update) {
                     realm.copyToRealmOrUpdate(questions);
-                } else {
 
 
-                    if (survey != null) {
-                        lstQuestion.addAll(survey.getQuestions());
-                    }
+                }
+                /*if (survey != null) {
+                    lstQuestion.clear();
+                    lstQuestion.addAll(survey.getQuestions());
                     lstQuestion.add(questions);
                     survey.setQuestions(lstQuestion);
                     realm.copyToRealmOrUpdate(survey);
-                }
-                //Toast.makeText(getApplicationContext(), "MUser Added Successfully !", Toast.LENGTH_SHORT).show();
+                }*/
 
             }
         });
@@ -1003,4 +706,207 @@ public class AddQuestionActivity extends AppCompatActivity {
             realm.close();
         }
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setupData();
+
+    }
+
+    public void setupData() {
+
+        if (questionsId != 0) {
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    option.clear();
+                    checkboxOpt.clear();
+                    conditionalOptions.clear();
+                }
+            });
+
+
+            questions = realm.where(Questions.class).equalTo("id", questionsId).findFirst();
+            // saveUpdateQuestions();
+
+            cb_option.setChecked(questions.getOpt());
+            cb_text.setChecked(questions.getText());
+            cb_number.setChecked(questions.getNumber());
+            cb_date.setChecked(questions.getDate());
+            cb_time.setChecked(questions.getTime());
+            cb_picture.setChecked(questions.getImage());
+            cb_compulsary.setChecked(questions.getCompulsary());
+            cb_checkbox.setChecked(questions.getCheckbox());
+            cb_options_condition.setChecked(questions.getOptCondition());
+            cb_patient_name.setChecked(questions.getPatientName());
+            showOption(questions.getOpt());
+            showCheckbox(questions.getCheckbox());
+            showOptionConditional(questions.getOptCondition());
+            txt_question.setText(questions.getQuestion());
+
+            option = questions.getOptions();
+
+            for (int i = 0; i < option.size(); i++) {
+                if (i == 0) {
+                    et_opt1.setText(option.get(i).getOpt());
+                } else if (i == 1) {
+                    et_opt2.setText(option.get(i).getOpt());
+                } else {
+                    EditText text = new EditText(this);
+                    text.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    text.setText(option.get(i).getOpt());
+
+                    text.setCompoundDrawablePadding(5);
+                    text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
+                    ll_option.addView(text);
+                    allEds.add(text);
+
+                    removeTextFieldListener(text);
+                }
+
+            }
+
+            checkboxOpt = questions.getChkb();
+
+            for (int i = 0; i < checkboxOpt.size(); i++) {
+                if (i == 0) {
+                    et_chk1.setText(checkboxOpt.get(i).getOpt());
+                } else if (i == 1) {
+                    et_chk2.setText(checkboxOpt.get(i).getOpt());
+                } else {
+                    EditText text = new EditText(this);
+                    text.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    text.setText(checkboxOpt.get(i).getOpt());
+
+                    text.setCompoundDrawablePadding(5);
+                    text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
+                    ll_check.addView(text);
+                    allEdsChk.add(text);
+
+                    removeTextFieldListener(text);
+
+                }
+
+            }
+
+
+            conditionalOptions = questions.getOptionContidion();
+            for (int i = 0; i < conditionalOptions.size(); i++) {
+                if (i == 0) {
+                    et_opt1_conditional.setText(conditionalOptions.get(i).getOpt());
+
+                    if (conditionalOptions.get(i).getSurveyid() > 0) {
+                        btnCond1.setText("Update");
+                        nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
+                    } else {
+                        btnCond1.setText("Add");
+                        nesSurveyId.add(i, (long) 0);
+                    }
+
+                } else if (i == 1) {
+                    et_opt2_conditional.setText(conditionalOptions.get(i).getOpt());
+
+                    if (conditionalOptions.get(i).getSurveyid() > 0) {
+                        btnCond2.setText("Update");
+                        nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
+                    } else {
+                        btnCond2.setText("Add");
+                        nesSurveyId.add(i, (long) 0);
+                    }
+
+                } else {
+                    LinearLayout ll = new LinearLayout(this);
+                    ll.setWeightSum(7);
+                    EditText text2 = new EditText(this);
+                    text2.setLayoutParams(new LinearLayout.LayoutParams(
+                            0,
+                            ViewGroup.LayoutParams.WRAP_CONTENT, 4));
+                    text2.setText(conditionalOptions.get(i).getOpt());
+
+
+                    text2.setCompoundDrawablePadding(5);
+                    text2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+
+
+                    Button btn = new Button(this);
+                    btn.setLayoutParams(new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT, 0));
+
+
+                    if (conditionalOptions.get(i).getSurveyid() > 0) {
+                        btn.setText("Update");
+                        nesSurveyId.add(i, conditionalOptions.get(i).getSurveyid());
+                    } else {
+                        btn.setText("Add");
+                        nesSurveyId.add(i, (long) 0);
+                    }
+
+                    ll.addView(text2);
+                    ll.addView(btn);
+
+
+                    ll_option_conditional.addView(ll);
+                    allEdsOptConditional.add(text2);
+
+                    allBtnCondition.add(btn);
+
+                    removeTextFieldListener(text2);
+                    addNesteadSurvey(btn);
+                }
+            }
+            update = true;
+
+
+        } else {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+
+                    try {
+                        questionsId = realm.where(Questions.class).max("id").intValue() + 1;
+                    } catch (Exception ex) {
+                        Log.v("exception", ex.toString());
+                        questionsId = 1;
+                    }
+                    questions = realm.createObject(Questions.class, questionsId);
+                    questions.setQuestion(txt_question.getText().toString());
+
+                    questions.setCompulsary(false);
+                    questions.setText(false);//1
+                    questions.setNumber(false);//2
+                    questions.setDate(false);//3
+                    questions.setTime(false);//4
+                    questions.setImage(false);//5
+                    questions.setPatientName(false);
+                    questions.setCheckbox(false);//7
+                    questions.setOpt(false);//8
+                    questions.setOptCondition(false);//9
+                    update = false;
+
+                    if (survey != null) {
+                        lstQuestion.clear();
+                        lstQuestion.addAll(survey.getQuestions());
+                        lstQuestion.add(questions);
+                        survey.setQuestions(lstQuestion);
+                        realm.copyToRealmOrUpdate(survey);
+                    }
+
+                }
+            });
+
+        }
+    }
+
 }
