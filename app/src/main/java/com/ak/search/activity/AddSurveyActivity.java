@@ -373,13 +373,13 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
         //questionsList.clear();
         questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
 
-        for (int i = 0; i < survey.getQuestions().size(); i++) {
+        /*for (int i = 0; i < survey.getQuestions().size(); i++) {
             Log.v("asfd", "???????" + survey.getQuestions().get(i).getQuestion() + " size" + survey.getQuestions().get(i).getOptions().size());
             for (int j = 0; j < survey.getQuestions().get(i).getOptions().size(); j++) {
                 Log.v("asfd", "//" + survey.getQuestions().get(i).getOptions().get(j).getOpt());
             }
 
-        }
+        }*/
 
         //  questionsList.addAll(MQuestions.find(MQuestions.class, "surveyid = ?", surveyId));
         mAdapter.notifyDataSetChanged();

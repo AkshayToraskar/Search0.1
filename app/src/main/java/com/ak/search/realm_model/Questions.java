@@ -6,7 +6,7 @@ import com.ak.search.app.RealmListParcelConverter;
 import org.parceler.Parcel;
 import org.parceler.ParcelPropertyConverter;
 
-import io.realm.QuestionsRealmProxy;
+/*import io.realm.QuestionsRealmProxy;*/
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -15,9 +15,9 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-@Parcel(implementations = { QuestionsRealmProxy.class },
+/*@Parcel(implementations = { QuestionsRealmProxy.class },
         value = Parcel.Serialization.FIELD,
-        analyze = { Questions.class })
+        analyze = { Questions.class })*/
 public class Questions extends RealmObject{
 
     @PrimaryKey
