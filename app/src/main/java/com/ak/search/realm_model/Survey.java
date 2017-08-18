@@ -9,16 +9,16 @@ import org.parceler.ParcelPropertyConverter;
 import io.realm.RealmList;
 import io.realm.RealmObject;
 
-/*import io.realm.SurveyRealmProxy;*/
+import io.realm.SurveyRealmProxy;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by dg hdghfd on 01-12-2016.
  */
 
-/*@Parcel(implementations = { SurveyRealmProxy.class },
+@Parcel(implementations = { SurveyRealmProxy.class },
         value = Parcel.Serialization.FIELD,
-        analyze = { Survey.class })*/
+        analyze = { Survey.class })
 public class Survey extends RealmObject {
 
     @PrimaryKey

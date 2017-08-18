@@ -3,8 +3,8 @@ package com.ak.search.realm_model;
 
 import org.parceler.Parcel;
 
-/*import io.realm.ConditionalOptionsRealmProxy;
-import io.realm.OptionsRealmProxy;*/
+import io.realm.ConditionalOptionsRealmProxy;
+import io.realm.OptionsRealmProxy;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -12,9 +12,9 @@ import io.realm.annotations.PrimaryKey;
  * Created by dg hdghfd on 01-12-2016.
  */
 
-/*@Parcel(implementations = {ConditionalOptionsRealmProxy.class },
+@Parcel(implementations = {ConditionalOptionsRealmProxy.class },
         value = Parcel.Serialization.FIELD,
-        analyze = { ConditionalOptions.class })*/
+        analyze = { ConditionalOptions.class })
 public class ConditionalOptions extends RealmObject {
 
     @PrimaryKey
