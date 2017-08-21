@@ -154,10 +154,10 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyVi
                         questionType = questionType + "Patient Name ";
                         break;
                     case 7:
-                        questionType = questionType + "Checkbox ";
+                        questionType = questionType + "Multichoice ";
                         break;
                     case 8:
-                        questionType = questionType + "Option ";
+                        questionType = questionType + "Single Choice ";
                         break;
                     case 9:
                         questionType = questionType + "Conditional ";

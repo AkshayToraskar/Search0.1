@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.ak.search.R;
 import com.ak.search.adapter.OptionsAdapter;
+import com.ak.search.app.AddNestedInfo;
 import com.ak.search.app.Validate;
 import com.ak.search.realm_model.ConditionalOptions;
 import com.ak.search.realm_model.Options;
@@ -46,7 +47,7 @@ import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmList;
 
-public class AddQuestionActivity extends AppCompatActivity {
+public class AddQuestionActivity extends AppCompatActivity implements AddNestedInfo {
     Validate validate;
     @BindView(R.id.txt_question)
     EditText txt_question;
@@ -95,6 +96,8 @@ public class AddQuestionActivity extends AppCompatActivity {
     RadioButton rb_multichoice;
     @BindView(R.id.rb_conditional)
     RadioButton rb_conditional;
+
+    AddNestedInfo addNestedInfo;
 
     /*@BindView(R.id.txt_opt1_conditional)
     EditText et_opt1_conditional;
@@ -157,6 +160,7 @@ public class AddQuestionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         realm = Realm.getDefaultInstance();
         validate = new Validate();
+        addNestedInfo = this;
 
 
        /* allEds = new ArrayList<EditText>();
@@ -208,6 +212,13 @@ public class AddQuestionActivity extends AppCompatActivity {
         }
 
 
+        mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false, addNestedInfo);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        rvOptions.setLayoutManager(mLayoutManager);
+        rvOptions.setItemAnimator(new DefaultItemAnimator());
+        rvOptions.setAdapter(mAdapter);
+
+
         if (getIntent().getExtras() != null) {
             surveyId = getIntent().getExtras().getLong("surveyid");
             questionsId = getIntent().getExtras().getLong("questionId", 0);
@@ -234,25 +245,30 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
                         if (!b1) {
-                            //rb_single_choice.setChecked(false);
-                            //rb_multichoice.setChecked(false);
-                            //rb_conditional.setChecked(false);
-                            questions.setOpt(false);
-                            questions.setOptCondition(false);
-                            questions.setCheckbox(false);
+                            //  rb_single_choice.setChecked(false);
+                            //  rb_multichoice.setChecked(false);
+                            //  rb_conditional.setChecked(false);
+                            //   questions.setOpt(false);
+                            //   questions.setOptCondition(false);
+                            //   questions.setCheckbox(false);
 
                         } else {
 
 
-                            //  rb_single_choice.setChecked(true);
-                            questions.setOpt(true);
+                            //    rb_single_choice.setChecked(true);
+                            // questions.setOpt(true);
+                            // questions.setOptCondition(false);
+                            // questions.setCheckbox(false);
                         }
 
-                        showOption(b1);
 
+                        //  realm.copyToRealmOrUpdate(questions);
+                        showOption(b1);
+                        // setupData();
 
                     }
                 });
+
 
             }
         });
@@ -271,24 +287,24 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         switch (rgOptions.getCheckedRadioButtonId()) {
             case R.id.rb_single_choice:
-                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false);
+                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false, addNestedInfo);
                 break;
 
             case R.id.rb_multi_choice:
-                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false);
+                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false, addNestedInfo);
                 break;
 
             case R.id.rb_conditional:
-                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, true);
+                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, true, addNestedInfo);
                 break;
 
             default:
-                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false);
+                mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false, addNestedInfo);
                 break;
         }
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        rvOptions.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        rvOptions.setLayoutManager(mLayoutManager1);
         rvOptions.setItemAnimator(new DefaultItemAnimator());
         rvOptions.setAdapter(mAdapter);
 
@@ -297,9 +313,9 @@ public class AddQuestionActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 if (R.id.rb_conditional == rgOptions.getCheckedRadioButtonId()) {
-                    mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, true);
+                    mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, true, addNestedInfo);
                 } else {
-                    mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false);
+                    mAdapter = new OptionsAdapter(AddQuestionActivity.this, conditionalOptions, false, addNestedInfo);
                 }
 
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -332,7 +348,7 @@ public class AddQuestionActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_question, menu);
         if (update) {
-            menu.getItem(1).setTitle("update");
+            menu.getItem(1).setTitle("Done");
         } else {
             menu.getItem(0).setVisible(false);
         }
@@ -349,7 +365,11 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_save_question:
-
+                if (!rb_option.isChecked()) {
+                    rb_single_choice.setChecked(false);
+                    rb_multichoice.setChecked(false);
+                    rb_conditional.setChecked(false);
+                }
                 if (isValidate()) {
                     saveUpdateQuestions();
                     finish();
@@ -391,6 +411,12 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
             case android.R.id.home:
+
+                if (!rb_option.isChecked()) {
+                    rb_single_choice.setChecked(false);
+                    rb_multichoice.setChecked(false);
+                    rb_conditional.setChecked(false);
+                }
                 if (isValidate()) {
                     saveUpdateQuestions();
                     finish();
@@ -408,19 +434,19 @@ public class AddQuestionActivity extends AppCompatActivity {
 
         switch (id) {
 
-            case R.id.btn_add_more_option:
-                EditText text = new EditText(this);
-                text.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                text.setHint("option");
-                text.setCompoundDrawablePadding(5);
-                text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
-                // ll_option.addView(text);
-                // allEds.add(text);
+            //  case R.id.btn_add_more_option:
+            // EditText text = new EditText(this);
+            // text.setLayoutParams(new ViewGroup.LayoutParams(
+            //          ViewGroup.LayoutParams.MATCH_PARENT,
+            //         ViewGroup.LayoutParams.WRAP_CONTENT));
+            // text.setHint("option");
+            // text.setCompoundDrawablePadding(5);
+            //  text.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_circle_outline_black_24dp, 0);
+            // ll_option.addView(text);
+            // allEds.add(text);
 
-                //  removeTextFieldListener(text);
-                break;
+            //  removeTextFieldListener(text);
+            //      break;
 
            /* case R.id.btn_add_more_checkbox:
                 EditText text1 = new EditText(this);
@@ -704,6 +730,12 @@ public class AddQuestionActivity extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
 
+        if (!rb_option.isChecked()) {
+            rb_single_choice.setChecked(false);
+            rb_multichoice.setChecked(false);
+            rb_conditional.setChecked(false);
+        }
+
         if (isValidate()) {
             saveUpdateQuestions();
             finish();
@@ -725,13 +757,6 @@ public class AddQuestionActivity extends AppCompatActivity {
 
 
                 // questions.setSurveyid(surveyid);
-
-
-                if (!rb_option.isChecked()) {
-                    rb_single_choice.setChecked(false);
-                    rb_multichoice.setChecked(false);
-                    rb_conditional.setChecked(false);
-                }
 
 
                 questions.setQuestion(txt_question.getText().toString());
@@ -770,6 +795,55 @@ public class AddQuestionActivity extends AppCompatActivity {
                     questions.getOptionContidion().clear();
                 }
 
+                if (rb_conditional.isChecked()) {
+
+                    for (int i = 0; i < conditionalOptions.size(); i++) {
+                        int optionsId;
+                        try {
+                            optionsId = realm.where(ConditionalOptions.class).max("id").intValue() + 1;
+                        } catch (Exception ex) {
+                            Log.v("exception", ex.toString());
+                            optionsId = 1;
+                        }
+                        ConditionalOptions opt1 = realm.createObject(ConditionalOptions.class, optionsId);
+                        opt1.setOpt(conditionalOptions.get(i).getOpt());
+                        opt1.setSurveyid(conditionalOptions.get(i).getSurveyid());
+                        conditionalOptionses.add(opt1);
+                    }
+
+                } else if (rb_single_choice.isChecked()) {
+                    for (int i = 0; i < conditionalOptions.size(); i++) {
+                        int optionsId;
+                        try {
+                            optionsId = realm.where(Options.class).max("id").intValue() + 1;
+                        } catch (Exception ex) {
+                            Log.v("exception", ex.toString());
+                            optionsId = 1;
+                        }
+
+                        Options opt1 = realm.createObject(Options.class, optionsId);
+                        opt1.setOpt(conditionalOptions.get(i).getOpt());
+                        options.add(opt1);
+                    }
+                } else if (rb_multichoice.isChecked()) {
+                    for (int i = 0; i < conditionalOptions.size(); i++) {
+                        int optionsId;
+                        try {
+                            optionsId = realm.where(Options.class).max("id").intValue() + 1;
+                        } catch (Exception ex) {
+                            Log.v("exception", ex.toString());
+                            optionsId = 1;
+                        }
+
+                        Options opt1 = realm.createObject(Options.class, optionsId);
+                        opt1.setOpt(conditionalOptions.get(i).getOpt());
+                        chk.add(opt1);
+                    }
+                }
+
+                questions.setOptionContidion(conditionalOptionses);
+                questions.setChkb(chk);
+                questions.setOptions(options);
 
                 /*if (rb_single_choice.isChecked()) {
                     if (allEds.size() >= 0) {
@@ -913,6 +987,40 @@ public class AddQuestionActivity extends AppCompatActivity {
             if (rb_single_choice.isChecked() || rb_multichoice.isChecked() || rb_conditional.isChecked()) {
                 rb_option.setChecked(true);
                 showOption(true);
+
+                conditionalOptions.clear();
+
+                if (rb_single_choice.isChecked()) {
+
+                    List<ConditionalOptions> opt = new ArrayList<>();
+                    for (int i = 0; i < questions.getOptions().size(); i++) {
+                        ConditionalOptions op = new ConditionalOptions();
+                        op.setId(questions.getOptions().get(i).getId());
+                        op.setOpt(questions.getOptions().get(i).getOpt());
+                        opt.add(op);
+                    }
+
+                    conditionalOptions.addAll(opt);
+                } else if (rb_multichoice.isChecked()) {
+                    List<ConditionalOptions> opt = new ArrayList<>();
+                    for (int i = 0; i < questions.getChkb().size(); i++) {
+                        ConditionalOptions op = new ConditionalOptions();
+                        op.setId(questions.getChkb().get(i).getId());
+                        op.setOpt(questions.getChkb().get(i).getOpt());
+                        opt.add(op);
+                    }
+
+                    conditionalOptions.addAll(opt);
+                } else if (rb_conditional.isChecked()) {
+                    conditionalOptions.addAll(questions.getOptionContidion());
+                } else {
+                    for (int i = 0; i < 2; i++) {
+                        ConditionalOptions conditionalOpt = new ConditionalOptions();
+                        conditionalOptions.add(conditionalOpt);
+                    }
+                }
+                mAdapter.notifyDataSetChanged();
+
             } else {
                 rb_option.setChecked(false);
                 showOption(false);
@@ -1093,4 +1201,55 @@ public class AddQuestionActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void addNestedData(long surveyId) {
+        //for (int i = 0; i < allBtnCondition.size(); i++) {
+        //   if (btn.getId() == allBtnCondition.get(i).getId()) {
+
+        //  if (isValidate()) {
+        saveUpdateQuestions();
+        // finish();
+        // } else {
+        //     discardQuestion();
+        // }
+
+        // questions = realm.where(Questions.class).equalTo("id", questionsId).findFirst();
+        //conditionalOptions.clear();
+        // conditionalOptions = questions.getOptionContidion();
+
+                /*if (conditionalOptions.get(pos).getSurveyid() != 0) {
+                  //  nesSurveyId.set(pos, conditionalOptions.get(pos).getSurveyid());
+                    survId = conditionalOptions.get(pos).getSurveyid();
+                } else {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+                            try {
+                                survId = realm.where(Survey.class).max("id").intValue() + 1;
+                            } catch (Exception ex) {
+                                Log.v("exception", ex.toString());
+                                survId = 1;
+                            }
+
+                            // Add a survey
+                            Survey survey = realm.createObject(Survey.class, survId);
+                            survey.setNested(true);
+                            survey.setName("Survey " + survId);
+                            realm.copyToRealmOrUpdate(survey);
+                        }
+                    });
+
+                 //   nesSurveyId.set(pos, survId);
+
+                }*/
+
+
+        Intent intent = new Intent(AddQuestionActivity.this, AddSurveyActivity.class);
+        intent.putExtra("isNestead", true);
+        intent.putExtra("surveyId", surveyId);
+        startActivity(intent);
+    }
+    // }
+    //}
 }

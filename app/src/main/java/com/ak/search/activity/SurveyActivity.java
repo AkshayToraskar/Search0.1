@@ -43,7 +43,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         //  usersList = MUser.listAll(MUser.class);
 
-        RealmResults<Survey> results = realm.where(Survey.class).findAll();
+        RealmResults<Survey> results = realm.where(Survey.class).equalTo("nested",false).findAll();
         //surveysList = MSurvey.listAll(MSurvey.class);
         surveysList=new ArrayList<>();
         surveysList.addAll(results);
@@ -73,7 +73,7 @@ public class SurveyActivity extends AppCompatActivity {
         super.onResume();
         surveysList.clear();
         //surveysList.addAll(MSurvey.listAll(MSurvey.class));
-        surveysList.addAll(realm.where(Survey.class).findAll());
+        surveysList.addAll(realm.where(Survey.class).equalTo("nested",false).findAll());
         mAdapter.notifyDataSetChanged();
     }
 
