@@ -13,6 +13,8 @@
 
     <color name="white">#ffffffff</color>
 
+    <color name="background_edittext">#30cccccc</color>
+
     <color name="gray">#706e6e</color>
     <color name="dark_gray">#353434</color>
 
