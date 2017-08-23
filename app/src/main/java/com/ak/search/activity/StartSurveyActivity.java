@@ -112,10 +112,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
         if (getIntent().getExtras() != null) {
 
-            // patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
-            //RealmList<Questions> questionsList=  survey.getQuestions().sort("question_pos", Sort.ASCENDING);
-            // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
-
             update = getIntent().getExtras().getBoolean("update");
             root = new MyTreeNode<>(null);
 
@@ -126,7 +122,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                 dataCollection = realm.where(DataCollection.class).equalTo("id", collectionId).findFirst();
                 answersList.clear();
-                //answersList.addAll(dataCollection.getAnswerses());
 
                 generateTreeNode();
 
@@ -194,11 +189,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-           /* RecyclerView.ItemDecoration itemDecoration = new
-                    DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-            recyclerView.addItemDecoration(itemDecoration);*/
             recyclerView.setAdapter(mAdapter);
-
 
 
         }
@@ -267,7 +258,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         } else {
             newLogic(pos, 0, 0, questionId);
         }
-        //oldLogic(pos,id,treePos);
+
     }
 
 
@@ -283,8 +274,8 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
 
                     RealmList<Answers> answerses = new RealmList<>();
-                    for (Answers a: answersList) {
-                        //Answers a = answersList.get(i);
+                    for (Answers a : answersList) {
+
                         Answers ans = realm.createObject(Answers.class);
                         if (a.getQuestions() != null) {
                             Questions questions = realm.where(Questions.class).equalTo("id", a.getQuestions().getId()).findFirst();
@@ -310,18 +301,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     if (dataCollection.getPatients() != null) {
                         patients1 = dataCollection.getPatients();
                     }
-                    //if (patients != null) {
-                    //    patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
-                    //}
 
-
-                    /*int collectionId;
-                    try {
-                        collectionId = realm.where(DataCollection.class).max("id").intValue() + 1;
-                    } catch (Exception ex) {
-                        Log.v("exception", ex.toString());
-                        collectionId = 1;
-                    }*/
                     RealmList<TreeString> treeStrings = new RealmList<TreeString>();
                     for (String str : aa) {
                         TreeString trData = realm.createObject(TreeString.class);
@@ -330,8 +310,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                     }
 
 
-                    //dataCollection = realm.where(DataCollection.class).equalTo("id", dataCollection.getId()).findFirst();
-                    //dataCollection.setSurveyid(dataCollection.getSurveyid());
                     dataCollection.setPatients(patients1);
                     dataCollection.setAnswerses(answerses);
                     dataCollection.setTreeData(treeStrings);
@@ -532,16 +510,6 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                     traverse(x);
 
-                   /* for (int i = 0; i < lstChildren.size(); i++) {
-                        NestedData ns = (NestedData) lstChildren.get(i).getData();
-                        //deleteQuestion(ns.getPos(), ns.getSize()-1);
-                        deleteQue(ns.getQuestionId());
-
-                        if(lstChildren.get(i).getChildren()!=null){
-                            traverse(lstChildren.get(i));
-                        }
-
-                    }*/
 
                     for (int i = 0; i < questionIdList.size(); i++) {
                         Log.v("asdf", " " + questionIdList.get(i));
@@ -555,9 +523,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
                     // add new child to current node
                     if (surveyId != 0) {
-                        // Survey survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
-                        // NestedData nsd1 = new NestedData(nesPos, survey.getQuestions().size(), surveyId, questionId);
-                        // x.addChild(nsd1);
+
                         addQuestion(nesPos, surveyN, x);
                     }
                 }
@@ -643,15 +609,14 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         List<MyTreeNode> as = child.getChildren();
         for (MyTreeNode ch : as) {
 
-            // for (int i = 0; i < ch.getChildren().size(); i++) {
+
             NestedData ns = (NestedData) ch.getData();
-            //deleteQuestion(ns.getPos(), ns.getSize()-1);
+
             questionIdList.add(ns.getQuestionId());
-            //deleteQue(ns.getQuestionId());
-            //  }
+
             traverse(ch);
         }
-        //this.printData();
+
     }
 
 
@@ -663,7 +628,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
         for (int i = 0; i < answersList.size(); i++) {
             if (answersList.get(i).getQuestions() != null) {
                 if (qId == answersList.get(i).getQuestions().getId()) {
-                    //answersList.remove(i);
+
                     if (start == 0) {
                         start = i;
                     }
@@ -676,13 +641,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             answersList.remove(i);
 
             android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
-            //final int finalI = i;
-            /*mHandler.post(new Runnable() {
-                public void run(){
-                    //change adapter contents
-                    mAdapter.notifyItemRemoved(finalI);
-                }
-            });*/
+
             removeItem(mHandler, recyclerView, mAdapter, i);
 
         }
@@ -691,14 +650,13 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
 
     public void addQuestion(final int pos, Survey survey, MyTreeNode node) {
 
-        // Survey survey = realm.where(Survey.class).equalTo("id",surveyId).findFirst();
 
         for (int i = 0; i < survey.getQuestions().size(); i++) {
 
             Answers answ = new Answers();
             answ.setPatientid(0);
             answ.setQuestions(survey.getQuestions().get(i));
-            //  answ.setParentPos(pos);
+
             answ.setSelectedopt(-1);
             answ.setSelectedOptConditional(-1);
             answ.setSelectedChk("");
@@ -713,49 +671,31 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
             addNestedData(node, survey.getQuestions().get(i).getId(), pos + i);
 
 
-            /*final int finalI = i;
-            mHandler.post(new Runnable() {
-                public void run(){
-                    //change adapter contents
-                    mAdapter.notifyItemInserted(pos+ finalI);
-                }
-            });*/
             android.os.Handler mHandler = this.getWindow().getDecorView().getHandler();
             insertItem(mHandler, recyclerView, mAdapter, pos);
 
-            // setupNestedData(node,pos,survey.getQuestions().size());
-        }
-        //  mAdapter.notifyDataSetChanged();
-    }
 
-
-    public void deleteQuestion(int pos, int size) {
-        for (int i = pos; i < (pos + size); i++) {
-            answersList.remove(pos);
         }
+
     }
 
 
     public void setupNestedData(MyTreeNode myTree, int pos, int size) {
 
         List<MyTreeNode> qList = new LinkedList<>();
-        //int count = 0;
-        //for (Answers ans : answersList) {
+
         for (int i = pos; i < pos + size; i++) {
             Answers ans = answersList.get(i);
             if (ans.getQuestions() != null) {
-                //  if (ans.getQuestions().getOptCondition()) {
-                //NestedData nestedData = new NestedData(i, answersList.size(), survey.getId(), answersList.get(i).getQuestions().getId());
+
                 NestedData nestedData = new NestedData(answersList.get(i).getQuestions().getId(), i);
                 MyTreeNode myTreeNode = new MyTreeNode(nestedData);
                 qList.add(myTreeNode);
 
-                //   }
+
             }
-            // count++;
+
         }
-        // NestedData nestedData = new NestedData(count, 0, 0);
-        //NestedQuest[] quests = qList.toArray(new NestedQuest[qList.size()]);
 
         myTree.addChildren(qList);
         Log.v("root size", "" + root.getChildren().size());
@@ -764,7 +704,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
     public void addNestedData(MyTreeNode node, long questionId, int pos) {
 
         NestedData nestedData = new NestedData(questionId, pos);
-        //NestedData nestedData = new NestedData(pos, size, surveyId, questionId);
+
         node.addChild(nestedData);
         Log.v("root size", "" + root.getChildren().size());
 
@@ -826,7 +766,7 @@ public class StartSurveyActivity extends AppCompatActivity implements SaveAnswer
                         int position = Integer.parseInt(trData[1].trim());
                         long questionId = Long.parseLong(trData[2].trim());
 
-                        //addNestedData(root, survey.getQuestions().get(i).getId(), pos + i);
+
                         boolean present = false;
 
                         for (MyTreeNode x : root.inOrderView) {

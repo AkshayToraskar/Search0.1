@@ -58,7 +58,7 @@ public class PatientsActivity extends AppCompatActivity {
 
 
         RealmResults<Patients> results = realm.where(Patients.class).findAll();
-        //surveysList = MSurvey.listAll(MSurvey.class);
+
         patientList = new ArrayList<>();
         patientList.addAll(results);
 
@@ -76,7 +76,7 @@ public class PatientsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         patientList.clear();
-        //surveysList.addAll(MSurvey.listAll(MSurvey.class));
+
         patientList.addAll(realm.where(Patients.class).findAll());
         mAdapter.notifyDataSetChanged();
     }
@@ -114,39 +114,20 @@ public class PatientsActivity extends AppCompatActivity {
         }
     }
 
-    /*public void onBtnClick(View view) {
-        int id = view.getId();
 
-        switch (id) {
-            case R.id.btn_import_csv:
-
-               *//* Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("text*//**//*");
-                startActivityForResult(intent, REQUEST_CODE);*//*
-
-                Intent intent = new Intent(this, FilePickerActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
-
-                break;
-        }
-
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            // String filePath = null;
-            /*String str = data.getData().getPath();
-            Log.v("asdf","URI = "+ str);*/
+
 
             if (data.hasExtra(FilePickerActivity.EXTRA_FILE_PATH)) {
 
                 selectedFile = new File
                         (data.getStringExtra(FilePickerActivity.EXTRA_FILE_PATH));
-                // filePath.setText(selectedFile.getPath());
+
 
                 Log.v("file path", " " + selectedFile.getPath());
                 parseCSVData();
@@ -163,7 +144,6 @@ public class PatientsActivity extends AppCompatActivity {
 
         CSVReader reader;
         try {
-            // File myFile = new File(string);
 
             if (getFileExt(selectedFile.getName()).equals("csv")) {
 
@@ -239,7 +219,7 @@ public class PatientsActivity extends AppCompatActivity {
     }
 
     public static String getFileExt(String fileName) {
-        //Log.v("filename",fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()));
+
         return fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).trim();
     }
 

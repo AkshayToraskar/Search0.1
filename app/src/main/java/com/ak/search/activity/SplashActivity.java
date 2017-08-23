@@ -47,19 +47,14 @@ public class SplashActivity extends AppCompatActivity {
             setLocale("en");
         }
 
-       /* Glide.with(this)
-                .load(R.raw.survey_collection)
-                .asGif()
-               // .placeholder(R.drawable.loading2)
-             //   .crossFade()
-                .into(ivGifImg);*/
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                //permissionCheck();
+
 
 
                 if (sessionManager.isLoggedIn()) {
@@ -90,7 +85,6 @@ public class SplashActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = myLocale;
         res.updateConfiguration(conf, dm);
-        //Intent refresh = new Intent(this, SplashActivity.class);
-        //startActivity(refresh);
+
     }
 }

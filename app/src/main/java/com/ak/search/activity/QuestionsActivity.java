@@ -70,7 +70,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
     int currentPage;
     DataCollection dataCollection;
 
-    //public ArrayList<MAnswers> ans;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +87,8 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             patients = Parcels.unwrap(getIntent().getExtras().getParcelable("patient"));
 
 
-            // survey = MSurvey.findById(MSurvey.class, (int) surveyId);
             getSupportActionBar().setTitle(survey.getName() + " ");
 
-
-            // ans=new ArrayList<>();
 
             for (int i = 0; i < survey.getQuestions().size(); i++) {
 
@@ -105,41 +102,12 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
 
 
-            /*realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
 
-
-                    int patientId;
-                    try {
-                        patientId = realm.where(MPatients.class).max("id").intValue() + 1;
-                    } catch (Exception ex) {
-                        Log.v("exception", ex.toString());
-                        patientId = 1;
-                    }
-
-
-                    //MPatients patients = realm.createObject(MPatients.class, patientId);
-                    patients.setPatientname(patients.getPatientname());
-                    //patients.setSurveyid(surveyId);
-
-                    realm.copyToRealmOrUpdate(patients);
-
-                }
-            });*/
-            //     patientId = patients.save();
 
             questionsList = new ArrayList<>();
 
             questionsList.addAll(survey.getQuestions());
 
-            //     questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(surveyId));
-
-
-            /*for (int i = 0; i < questionsList.size(); i++) {
-                List<MOptions> opt = MOptions.find(MOptions.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
-                questionsList.get(i).setOptions(opt);
-            }*/
         }
 
 
@@ -165,33 +133,13 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                         // move to next screen
                         pager.setCurrentItem(current);
                     } else {
-                        // launchHomeScreen();
 
-                        /*for (Map.Entry m : answers.entrySet()) {
-                            MAnswers an = (MAnswers) m.getValue();
-                            // an.save();
-
-                            Log.v("ans ", " " + m.getKey() + "," + an.getPatientid() + "," + an.getPatientid() + "," + an.getAns());
-
-                        }*/
 
 
                     }
                 } else {
 
-                   /* for(int i=0; i<fragments.size();i++){
-                        Log.v("ans ",answers.get(i).getQuestionId()+", ");
-                    }*/
 
-                    //Log.v("ans "," "+answers.get(0).getQuestionId());
-
-
-                    /*for (Map.Entry m : answers.entrySet()) {
-                        MAnswers an = (MAnswers) m.getValue();
-                       // an.save();
-                        Log.v("ans ", " " + m.getKey() + "," + "," + an.getPatientid() + "--------" + an.getSelectedopt() + "," + an.getAns());
-
-                    }*/
 
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -200,13 +148,7 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                             //MAnswers
                             RealmList<Answers> answerses = new RealmList<Answers>();
                             for (Map.Entry m : answers.entrySet()) {
-                                /*int answerId;
-                                try {
-                                    answerId = realm.where(MAnswers.class).max("id").intValue() + 1;
-                                } catch (Exception ex) {
-                                    Log.v("exception", ex.toString());
-                                    answerId = 1;
-                                }*/
+
                                 Answers a = (Answers) m.getValue();
                                 Answers ans = realm.createObject(Answers.class);
 
@@ -225,20 +167,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
                             }
 
-
-                            //MPatients
-                            /*if (!patients.isManaged()) { // if the 'list' is managed, all items in it is also managed
-                                //RealmList<Image> managedImageList = new RealmList<>();
-                               // for (Image item : list) {
-                                    if (patients.isManaged()) {
-                                        //managedImageList.add(item);
-                                    } else {
-                                        realm.copyToRealm(patients);
-                                        //managedImageList.add(realm.copyToRealm(item));
-                                    }
-                                }
-                                //list = managedImageList;
-                            }*/
 
                             Patients patients1 = realm.where(Patients.class).equalTo("id", patients.getId()).findFirst();
 
@@ -302,10 +230,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             Log.v("aa", "page Selected " + position);
 
 
-            //QuestionFragment qf=new QuestionFragment();
-            //answers.put(position,qf.getAns());
-
-
             currentPage = pager.getCurrentItem();
 
             txt_page_count.setText(currentPage + 1 + "/" + (fragments.size() - 1));
@@ -317,47 +241,34 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
                 btn_next.setText("DONE");
 
                 txt_page_count.setVisibility(View.INVISIBLE);
-                //btn_next.setVisibility(View.VISIBLE);
                 btn_previous.setVisibility(View.VISIBLE);
 
 
                 ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
                         .hideSoftInputFromWindow(pager.getWindowToken(), 0);
 
-                //  getSupportActionBar().setTitle("Review " + NewSurveyActivity.selectedSurvey.getName());
-
             } else if (position == 0) {
-                // still pages are left
-                // btn_next.setText(getString(R.string.next));
 
                 btn_next.setText("NEXT");
 
                 txt_page_count.setVisibility(View.VISIBLE);
-                //btn_next.setVisibility(View.VISIBLE);
                 btn_previous.setVisibility(View.INVISIBLE);
 
-//                getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
             } else {
 
                 btn_next.setText("NEXT");
                 txt_page_count.setVisibility(View.VISIBLE);
-                //btn_next.setVisibility(View.VISIBLE);
                 btn_previous.setVisibility(View.VISIBLE);
-
-
-                // getSupportActionBar().setTitle(NewSurveyActivity.selectedSurvey.getName() + " ");
 
             }
         }
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
-            //Log.v("aa", "page Scrolled");
         }
 
         @Override
         public void onPageScrollStateChanged(int arg0) {
-            //  Log.v("aa", "page Scroll state changed "+arg0);
         }
     };
 
@@ -394,7 +305,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
             questionReviewFragment.updateReviewAnswer.onReviewUpdate(answers);
         }
 
-        //Log.v("asdf",""+ans.getAns());
     }
 
     @Override
@@ -407,7 +317,6 @@ public class QuestionsActivity extends AppCompatActivity implements SaveAnswer {
 
 
         for (int i = 0; i < survey.getQuestions().size(); i++) {
-            //fragments.add(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
             adapterViewPager.addFragment(1,QuestionFragment.newInstance(survey.getQuestions().get(i)));
         }
 

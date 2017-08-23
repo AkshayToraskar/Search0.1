@@ -62,8 +62,7 @@ public class UserActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               /* Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
+
                 startActivity(new Intent(UserActivity.this, AddUserActivity.class));
 
             }
@@ -75,9 +74,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         usersList.clear();
-
-       // List<MUser> results = ;
-
         usersList.addAll(realm.where(User.class).findAll());
         mAdapter.notifyDataSetChanged();
     }

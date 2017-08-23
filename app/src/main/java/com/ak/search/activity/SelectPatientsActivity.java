@@ -122,32 +122,6 @@ public class SelectPatientsActivity extends AppCompatActivity {
     }
 
 
-
-
-    /*public void loadData() {
-
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                for (int i = 0; i < 20; i++) {
-                    int patientId;
-                    try {
-                        patientId = realm.where(Patients.class).max("id").intValue() + 1;
-                    } catch (Exception ex) {
-                        Log.v("exception", ex.toString());
-                        patientId = 1;
-                    }
-
-                    Patients patient = realm.createObject(Patients.class, patientId);
-                    patient.setPatientname("patient name " + patientId);
-                    patient.setAddress("address122 asfasfd asdf" + i);
-                    realm.copyToRealmOrUpdate(patient);
-                }
-            }
-        });
-    }*/
-
     @Override
     public void onDestroy() {
         super.onDestroy();

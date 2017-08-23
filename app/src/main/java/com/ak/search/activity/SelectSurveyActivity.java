@@ -34,11 +34,7 @@ public class SelectSurveyActivity extends AppCompatActivity {
     TabLayout tabLayout;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
-    /*@BindView(R.id.tv_patient_name)
-    TextView tvPatientName;
-    @BindView(R.id.tv_patient_address)
-    TextView tvPatientAddress;*/
-    //public static Patients patients;
+
     private int loginType;
     public static SessionManager sessionManager;
 
@@ -46,9 +42,7 @@ public class SelectSurveyActivity extends AppCompatActivity {
 
     private String username;
     Realm realm;
-    //Dialog dialog;
 
-    // Spinner spnLang;
 
     public static String LANG;
 
@@ -75,16 +69,7 @@ public class SelectSurveyActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        /*if (getIntent().getExtras() != null) {
-            patients = Parcels.unwrap(getIntent().getExtras().getParcelable("PatientData"));
-
-            tvPatientName.setText(patients.getPatientname());
-            tvPatientAddress.setText(patients.getAddress());
-
-        }*/
 
         PatientTabViewpagerAdapter adapter = new PatientTabViewpagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new UserFragment(), getResources().getString(R.string.new_survey));
@@ -96,17 +81,6 @@ public class SelectSurveyActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main_fieldworker, menu);
-
-/*
-        spnLang= (Spinner) MenuItemCompat.getActionView(menu.getItem(2));
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.lang_list_item_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spnLang.setAdapter(adapter);*/
-
-
         return true;
     }
 
@@ -116,47 +90,12 @@ public class SelectSurveyActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
 
-           /* case R.id.action_send:
-                startActivity(new Intent(this, BluetoothClientActivity.class));
-                break;
 
-            case R.id.action_receive:
-                startActivity(new Intent(this, BluetoothActivity.class));
-                break;*/
 
             case R.id.action_setting:
                 startActivity(new Intent(this, SettingActivity.class));
                 break;
 
-           /* case R.id.action_logout:
-
-                new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.logout))
-                        .setMessage(getString(R.string.sure_logout))
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                sessionManager.setLogin(false, "", 0, 0);
-                                Intent i = new Intent(SelectSurveyActivity.this, LoginActivity.class);
-                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(i);
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // user doesn't want to logout
-                            }
-                        })
-                        .show();
-                break;
-*/
-           /* case R.id.action_patient_data:
-               // startActivity(new Intent(this, GetSurveyActivity.class));
-                break;*/
-
-
-           /* case R.id.spinner:
-                changeLanguage();
-                break;*/
 
             case android.R.id.home:
                 finish();
@@ -168,28 +107,6 @@ public class SelectSurveyActivity extends AppCompatActivity {
     }
 
 
-
-
-    /*public void onBtnClick(View view) {
-        int id = view.getId();
-
-        switch (id) {
-
-            case R.id.btn_send:
-
-                break;
-
-            case R.id.btn_login_logout:
-                if (SuperviserLogin == 0) {
-                    callLoginDialog();
-
-                } else {
-                    callLogoutDialog();
-                }
-                break;
-
-        }
-    }*/
 
     @Override
     public void onDestroy() {

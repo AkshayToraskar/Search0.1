@@ -121,24 +121,6 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-
-
-
-        //permissionCheck();
-
-/*
-        if (sessionManager.isLoggedIn()) {
-            if (sessionManager.getLoginType() == 3) {
-                Intent i = new Intent(this, SelectSurveyActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-            } else {
-                Intent i = new Intent(this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(i);
-            }
-        }*/
-
     }
 
 
@@ -169,34 +151,11 @@ public class LoginActivity extends AppCompatActivity {
                     txt_username.setError(null);
                 }
 
-                /*if (rbAdmin.isChecked()) {
-
-                    //if (isNetworkAvailable()) {
-                    checkAdminLogin();
-
-                        *//*progress = new ProgressDialog(this);
-                        progress.setMessage("Please Wait");
-                        progress.show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "No Active Internet !", Toast.LENGTH_SHORT).show();
-                    }*//*
-
-                } else {
-                    checkOtherLogin();
-                }*/
 
                     checkLogin();
-
-
                 break;
 
-         /*   case R.id.btn_bluetooth:
-                startActivity(new Intent(this, BluetoothActivity.class));
-                break;
 
-            case R.id.btn_bluetooth_client:
-                startActivity(new Intent(this, BluetoothClientActivity.class));
-                break;*/
         }
     }
 
@@ -259,7 +218,6 @@ public class LoginActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(LoginActivity.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
             }
 
-            // txtPermissions.setText("Permissions Required");
 
             SharedPreferences.Editor editor = permissionStatus.edit();
             editor.putBoolean(permissionsRequired[0], true);
@@ -347,46 +305,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    /*public void checkAdminLogin() {
-        *//*ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-
-        Call<Login> call = apiService.getLogin(txt_username.getText().toString(), txt_password.getText().toString());
-        call.enqueue(new Callback<Login>() {
-            @Override
-            public void onResponse(Call<Login> call, Response<Login> response) {
-                Login login = response.body();
-                Log.d("asdf", "Name of user: " + login.getError_message());
-                progress.dismiss();
-
-                if (!login.isError()) {
-                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    sessionManager.setLogin(true, login.getUser().getName(), login.getUser().getType(), login.getUser().getId());
-                    startActivity(i);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Login> call, Throwable t) {
-                // Log error here since request failed
-                progress.dismiss();
-                Log.e("asdf", t.toString());
-                Toast.makeText(getApplicationContext(), "Internal server error..!", Toast.LENGTH_SHORT).show();
-            }
-        });*//*
-
-        if (txt_username.getText().toString().equals("admin") && txt_password.getText().toString().equals("admin")) {
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            sessionManager.setLogin(true, "admin", 1, 1);
-            startActivity(i);
-        } else {
-            Toast.makeText(getApplicationContext(), "Wrong credential", Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
     public void checkLogin() {
 

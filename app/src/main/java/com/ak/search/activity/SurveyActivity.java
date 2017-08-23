@@ -72,7 +72,6 @@ public class SurveyActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         surveysList.clear();
-        //surveysList.addAll(MSurvey.listAll(MSurvey.class));
         surveysList.addAll(realm.where(Survey.class).equalTo("nested",false).findAll());
         mAdapter.notifyDataSetChanged();
     }

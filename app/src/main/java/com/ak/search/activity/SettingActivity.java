@@ -63,32 +63,7 @@ public class SettingActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(getString(R.string.setting));
 
-       /* spnChangeLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int pos, long id) {
-
-                if (pos == 0) {
-
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Marathi", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("mr");
-                } else if (pos == 1) {
-
-                    Toast.makeText(parent.getContext(),
-                            "You have selected English", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("en");
-                }
-
-            }
-
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-
-        });*/
 
 
         if (sessionManager.isLoggedIn()) {
@@ -138,8 +113,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
-        //setLocale("en");
 
 
     }
