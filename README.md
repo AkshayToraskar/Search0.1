@@ -5,11 +5,11 @@ This is an Android application where user can create and collect the survey.
 
 # Feature
 
-- add three type of user (Admin, Supervisor, Fieldworker).
+- add three type of user (`Admin`, `Supervisor`, `Fieldworker`).
 - Offline data collection
-- support Several type of questions (Text, Integer, Date, Time, image, patient data, single choice, multichoice, conditional).
-- Sharing of data (via bluetooth).
-- Multilanguage Support (Marathi, English).
+- support Several type of questions (`Text`, `Integer`, `Date`, `Time`, `image`, `patient data`, `single choice`, `multichoice`, `conditional`).
+- Sharing of data (`via bluetooth`).
+- Multilanguage Support (`Marathi`, `English`).
 - Export collected data into csv file.
 
 
