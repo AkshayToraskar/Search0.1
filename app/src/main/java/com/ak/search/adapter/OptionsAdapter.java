@@ -93,7 +93,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.MyViewHo
 
                     survId = 0;
                     if (optionList.get(getPosition()).getSurveyid() != 0) {
-                        //  nesSurveyId.set(pos, conditionalOptions.get(pos).getSurveyid());
+
                         survId = optionList.get(getPosition()).getSurveyid();
                     } else {
                         realm.executeTransaction(new Realm.Transaction() {
@@ -117,7 +117,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.MyViewHo
                             }
                         });
 
-                        //   nesSurveyId.set(pos, survId);
+
 
                     }
 

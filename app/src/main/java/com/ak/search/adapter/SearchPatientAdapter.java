@@ -36,18 +36,7 @@ public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdap
                 @Override
                 public void onClick(View view) {
 
-                    //Intent i = new Intent(context, AddQuestionActivity.class);
-                    //i.putExtra("questionId", questionsList.get(getPosition()).getId());
-                    //context.startActivity(i);
-                    //MainActivity.transaction.replace(R.id.main_frame, new UserFragment());
-                    //MainActivity.transaction.commit();
 
-                    //MainActivity.manageFragment.changeFragment(questionsList.get(getPosition()));
-
-                                        /*FragmentTransaction fragmentTransaction = getA.beginTransaction();
-                    fragmentTransaction.replace(mContainerId, fragment, tag);
-                    fragmentTransaction.addToBackStack(tag);
-                    fragmentTransaction.commitAllowingStateLoss();*/
 
 
                     Intent returnIntent = new Intent();

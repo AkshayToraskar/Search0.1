@@ -44,16 +44,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHo
             tvSex = (TextView) view.findViewById(R.id.tvSex);
             tvAge = (TextView) view.findViewById(R.id.tvAge);
             tvMMUId = (TextView) view.findViewById(R.id.tv_mmu);
-           /* view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
-                    //Intent i = new Intent(context, ShowSurveyActivity.class);
-                  //  i.putExtra("surveyId", patientsList.get(getPosition()).getSurveyid());
-                  //  i.putExtra("patientId", patientsList.get(getPosition()).getId());
-                  //  context.startActivity(i);
-                }
-            });*/
+
 
             ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override

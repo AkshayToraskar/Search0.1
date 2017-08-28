@@ -31,31 +31,15 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
     private Context context;
 
     private Activity act;
-    // private TextView lastCheckedRB = null;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView tvSurveyName, tvSurveyQuestions;
-        public ImageView ivProfile;
 
         public MyViewHolder(final View view) {
             super(view);
             tvSurveyName = (TextView) view.findViewById(R.id.tv_survey_name);
             tvSurveyQuestions = (TextView) view.findViewById(R.id.tv_survey_questions);
-
-           /* rbSurveyName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (lastCheckedRB != null) {
-                        lastCheckedRB.setChecked(false);
-                    }
-                    lastCheckedRB = rbSurveyName;
-                    MainActivity.surveyId=surveysList.get(getPosition()).getId();
-                }
-            });*/
-
-
-
-
         }
     }
 
@@ -79,18 +63,17 @@ public class GetSurveyAdapter extends RecyclerView.Adapter<GetSurveyAdapter.MyVi
         final Survey survey = surveysList.get(position);
         holder.tvSurveyName.setText(survey.getName());
 
-      //  final List<MQuestions> questionsList = MQuestions.find(MQuestions.class, "surveyid = ?", String.valueOf(survey.getId()));
-        holder.tvSurveyQuestions.setText( survey.getQuestions().size()+" Questions");
+
+        holder.tvSurveyQuestions.setText(survey.getQuestions().size() + " Questions");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent intent = new Intent(context, NewSurveyActivity.class);
+
                 Intent intent = new Intent(act, StartSurveyActivity.class);
-                intent.putExtra("update",false);
+                intent.putExtra("update", false);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("survey", Parcels.wrap(Survey.class,survey));
-                //bundle.putParcelable("patient", Parcels.wrap(Patients.class, SelectSurveyActivity.patients));
+                bundle.putParcelable("survey", Parcels.wrap(Survey.class, survey));
                 intent.putExtras(bundle);
                 act.startActivity(intent);
             }

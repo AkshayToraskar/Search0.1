@@ -58,7 +58,6 @@ public class BtLoginFragment extends Fragment {
 
         realm = Realm.getDefaultInstance();
         transferModel = new TransferModel();
-        //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<User> results = realm.where(User.class).findAll();
 
@@ -80,11 +79,11 @@ public class BtLoginFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    mAdapter.selectAll(b);
+                mAdapter.selectAll(b);
 
-                    transferModel.setUserList(usersList);
-                    transferModel.setName(String.valueOf(b));
-                    collectDataInfo.collectData(transferModel);
+                transferModel.setUserList(usersList);
+                transferModel.setName(String.valueOf(b));
+                collectDataInfo.collectData(transferModel);
 
 
             }

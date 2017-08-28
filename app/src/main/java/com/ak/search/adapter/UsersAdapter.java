@@ -35,7 +35,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder
                 @Override
                 public void onClick(View view) {
 
-                    // Log.v("SurveyID","asf"+surveysList.get(getPosition()).getId());
 
                     Intent i = new Intent(context, AddUserActivity.class);
                     i.putExtra("userId", userList.get(getPosition()).getId());

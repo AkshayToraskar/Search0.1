@@ -37,7 +37,7 @@ public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHo
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
-tvInfo=(TextView)view.findViewById(R.id.tvInfo);
+            tvInfo = (TextView) view.findViewById(R.id.tvInfo);
 
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -75,7 +75,7 @@ tvInfo=(TextView)view.findViewById(R.id.tvInfo);
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = userList.get(position);
         holder.cbName.setText(user.getName());
-        switch (user.getType()){
+        switch (user.getType()) {
             case 1:
                 holder.tvInfo.setText("Admin");
                 break;
@@ -89,8 +89,7 @@ tvInfo=(TextView)view.findViewById(R.id.tvInfo);
 
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
-        }
-        else{
+        } else {
             holder.cbName.setChecked(true);
         }
     }

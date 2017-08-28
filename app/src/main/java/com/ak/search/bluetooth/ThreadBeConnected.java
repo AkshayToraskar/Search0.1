@@ -105,7 +105,7 @@ public class ThreadBeConnected extends Thread {
                     @Override
                     public void run() {
                         Log.v(TAG, eMessage);
-                        //   textStatus.setText("something wrong: \n" + eMessage);
+
                         changeUIFromThread.changeStatus("something wrong: \n" + eMessage);
                     }
                 });
@@ -117,7 +117,7 @@ public class ThreadBeConnected extends Thread {
                 @Override
                 public void run() {
                     Log.v(TAG, "bluetoothServerSocket == null");
-                    //   textStatus.setText("bluetoothServerSocket == null");
+
                     changeUIFromThread.changeStatus("bluetoothServerSocket == null");
                     changeUIFromThread.disconnectThread();
                 }

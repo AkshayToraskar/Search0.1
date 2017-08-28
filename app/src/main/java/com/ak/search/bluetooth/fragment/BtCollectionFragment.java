@@ -62,7 +62,6 @@ public class BtCollectionFragment extends Fragment{
 
         realm = Realm.getDefaultInstance();
 
-        //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<DataCollection> results = realm.where(DataCollection.class).findAll();
 

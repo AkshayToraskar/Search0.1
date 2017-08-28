@@ -95,7 +95,7 @@ public class ThreadConnected extends Thread {
                     act.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                          //  textStatus.setText(msgReceived);
+
                             changeUIFromThread.changeStatus(msgReceived1);
                             changeUIFromThread.dataReceived(data);
                         }
@@ -113,9 +113,9 @@ public class ThreadConnected extends Thread {
 
                     @Override
                     public void run() {
-                        //textStatus.setText(msgConnectionLost);
+
                         changeUIFromThread.changeStatus(msgConnectionLost);
-                      //  changeUIFromThread.disconnectThread();
+
                     }
                 });
             } catch (ClassNotFoundException e) {
@@ -124,7 +124,7 @@ public class ThreadConnected extends Thread {
 
                     @Override
                     public void run() {
-                       // changeUIFromThread.disconnectThread();
+
                     }
                 });
             }
@@ -154,15 +154,7 @@ public class ThreadConnected extends Thread {
     }
 
     public void cancel() {
-        /*if (connectedInputStream != null) {
-            try {connectedInputStream.close();} catch (Exception e) {}
-            connectedInputStream = null;
-        }
 
-        if (connectedOutputStream != null) {
-            try {connectedOutputStream.close();} catch (Exception e) {}
-            connectedOutputStream = null;
-        }*/
 
         if (connectedBluetoothSocket != null) {
             try {connectedBluetoothSocket.close();} catch (Exception e) {}

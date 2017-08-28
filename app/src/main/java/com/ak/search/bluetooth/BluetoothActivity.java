@@ -137,9 +137,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
             myThreadBeConnected.cancel();
         }
 
-      /*  if (myThreadConnected != null) {
-            myThreadConnected.cancel();
-        }*/
+
 
     }
 
@@ -186,7 +184,7 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
 
     @Override
     public void changeUi() {
-        // tabs.setVisibility(View.VISIBLE);
+
         inputPane.setVisibility(View.VISIBLE);
         pulsator.setVisibility(View.GONE);
     }
@@ -232,16 +230,6 @@ public class BluetoothActivity extends AppCompatActivity implements ChangeUIFrom
                 });
 
         snackbar.show();
-
-
-      /*  if (myThreadBeConnected != null) {
-            myThreadBeConnected.cancel();
-        }*/
-
-      /*  if (myThreadConnected != null) {
-            myThreadConnected.cancel();
-        }*/
-
 
     }
 

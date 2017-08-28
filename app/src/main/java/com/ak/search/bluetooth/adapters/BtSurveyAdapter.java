@@ -37,13 +37,13 @@ public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyView
         public MyViewHolder(View view) {
             super(view);
             cbName = (CheckBox) view.findViewById(R.id.cbName);
-tvInfo=(TextView)view.findViewById(R.id.tvInfo);
+            tvInfo = (TextView) view.findViewById(R.id.tvInfo);
 
             cbName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                    List<Survey> surveys=new ArrayList<Survey>();
+                    List<Survey> surveys = new ArrayList<Survey>();
                     surveys.add(surveysList.get(getPosition()));
                     transferModel.setName(String.valueOf(b));
                     transferModel.setSurveyList(surveys);
@@ -61,7 +61,7 @@ tvInfo=(TextView)view.findViewById(R.id.tvInfo);
         this.surveysList = surveysList;
         this.context = context;
         this.collectDataInfo = collectDataInfo;
-        transferModel=new TransferModel();
+        transferModel = new TransferModel();
     }
 
     @Override
@@ -76,12 +76,11 @@ tvInfo=(TextView)view.findViewById(R.id.tvInfo);
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Survey survey = surveysList.get(position);
         holder.cbName.setText(survey.getName());
-holder.tvInfo.setText("No of Questions: "+survey.getQuestions().size());
+        holder.tvInfo.setText("No of Questions: " + survey.getQuestions().size());
 
         if (!isSelectedAll) {
             holder.cbName.setChecked(false);
-        }
-        else{
+        } else {
             holder.cbName.setChecked(true);
         }
     }

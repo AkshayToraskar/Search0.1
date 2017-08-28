@@ -49,9 +49,7 @@ public class SessionManager {
         return  pref.getString(KEY_USERNAME,"");
     }
 
-    /*public boolean isAdmin(){
-        return  pref.getBoolean(KEY_TYPE,false);
-    }*/
+
 
     public long getUserId(){
         return pref.getLong(KEY_USERID,0);

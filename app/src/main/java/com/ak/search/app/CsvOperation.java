@@ -277,12 +277,8 @@ public class CsvOperation {
                         for (int i = 0; i < questionData.getChkb().size(); i++) {
 
 
-                            // String a = answers.getSelectedChk();
-                            // if (a != null) {
-                            //     String val = String.valueOf(a.charAt(i));
 
                             strH.add(qId + "_op" + i);
-                            // }
 
 
                         }

@@ -59,7 +59,6 @@ public class BtPatientFragment extends Fragment{
 
         realm = Realm.getDefaultInstance();
         transferModel = new TransferModel();
-        //  usersList = MUser.listAll(MUser.class);
 
         RealmResults<Patients> results = realm.where(Patients.class).findAll();
 

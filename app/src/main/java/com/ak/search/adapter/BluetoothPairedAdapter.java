@@ -26,7 +26,7 @@ import java.util.List;
 public class BluetoothPairedAdapter extends RecyclerView.Adapter<BluetoothPairedAdapter.MyViewHolder> {
 
 private List<BluetoothDevice> bluetoothDevicesList;
-//private Activity context;
+
     ChangeUIFromThread changeUIFromThread;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -44,17 +44,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
 
                BluetoothDevice device =
                         (BluetoothDevice) bluetoothDevicesList.get(getPosition());
-                 /*Toast.makeText(context,
-                        "Name: " + device.getName() + "\n"
-                                + "Address: " + device.getAddress() + "\n"
-                                + "BondState: " + device.getBondState() + "\n"
-                                + "BluetoothClass: " + device.getBluetoothClass() + "\n"
-                                + "Class: " + device.getClass(),
-                        Toast.LENGTH_LONG).show();
 
-                //textStatus.setText("start ThreadConnectBTdevice");
-                BluetoothClientActivity.myThreadConnectBTdevice = new ThreadConnectBTdevice(BluetoothClientActivity.changeUIFromThread,device);
-                BluetoothClientActivity.myThreadConnectBTdevice.start();*/
                 changeUIFromThread.connectToThread(device);
 
             }

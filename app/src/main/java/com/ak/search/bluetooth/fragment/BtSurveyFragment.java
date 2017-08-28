@@ -60,7 +60,7 @@ public class BtSurveyFragment extends Fragment{
 
         realm = Realm.getDefaultInstance();
         transferModel = new TransferModel();
-        //  usersList = MUser.listAll(MUser.class);
+
         RealmResults<Survey> results = realm.where(Survey.class).findAll();
 
         surveyList = new ArrayList<>();

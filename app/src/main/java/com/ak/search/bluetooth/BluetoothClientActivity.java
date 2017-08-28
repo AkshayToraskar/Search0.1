@@ -218,9 +218,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             myThreadConnectBTdevice.cancel();
         }
 
-     /*   if( myThreadConnected!=null){
-            myThreadConnected.cancel();
-        }*/
+
 
     }
 
@@ -278,17 +276,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
                 }
                 break;
 
-            /*case R.id.btn_send_survey:
-                if (myThreadConnected != null) {
-                    try {
-                        DataUtils dataUtils = new DataUtils();
-                        byte[] bytesToSend = ParcebleUtil.serialize(dataUtils.sendSurveyData(realm));
-                        myThreadConnected.write(bytesToSend);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;*/
+
 
         }
     }
@@ -339,9 +327,7 @@ public class BluetoothClientActivity extends AppCompatActivity implements Change
             myThreadConnectBTdevice.cancel();
         }
 
-       /* if( myThreadConnected!=null){
-            myThreadConnected.cancel();
-        }*/
+
 
     }
 
