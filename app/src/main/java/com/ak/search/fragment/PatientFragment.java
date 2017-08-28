@@ -102,7 +102,7 @@ public class PatientFragment extends Fragment {
 
 
 
-      //  realmSearchView.setAdapter(searchPatientAdapter);
+
 
         return view;
     }

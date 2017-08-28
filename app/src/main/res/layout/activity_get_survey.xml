@@ -16,11 +16,7 @@
         android:weightSum="1">
 
 
-        <!--<View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="15dp"
-            android:background="@color/colorPrimary" />-->
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_questions"

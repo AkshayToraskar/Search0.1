@@ -70,11 +70,7 @@
 
 
 
-                        <!--<LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="2">-->
+
 
                         <RadioButton
                             android:id="@+id/rb_text"
@@ -105,13 +101,7 @@
                             android:textAllCaps="true"
                             android:textSize="16dp"
                             android:textStyle="bold" />
-                        <!--</LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="2">-->
 
 
                         <RadioButton
@@ -141,13 +131,7 @@
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
-                        <!-- </LinearLayout>
 
-                         <LinearLayout
-                             android:layout_width="match_parent"
-                             android:layout_height="wrap_content"
-                             android:orientation="horizontal"
-                             android:weightSum="2">-->
 
                         <RadioButton
                             android:id="@+id/rb_picture"
@@ -175,12 +159,7 @@
                             android:textAllCaps="true"
                             android:textSize="16dp"
                             android:textStyle="bold" />
-                        <!--</LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">-->
 
 
                         <RadioButton
@@ -261,9 +240,7 @@
                         </LinearLayout>
 
 
-                        <!--   </LinearLayout>
 
-                       </LinearLayout>-->
                     </RadioGroup>
                 </LinearLayout>
 

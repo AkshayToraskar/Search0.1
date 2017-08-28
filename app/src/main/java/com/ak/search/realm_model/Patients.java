@@ -22,15 +22,7 @@ public class Patients extends RealmObject {
     String houseId;
 
 
-    //RealmList<MAnswers> answers;
 
-   /* public RealmList<MAnswers> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(RealmList<MAnswers> answers) {
-        this.answers = answers;
-    }*/
 
     public String getHouseId() {
         return houseId;

@@ -56,14 +56,11 @@ public class SurveyHistoryFragment extends Fragment {
 
     @BindView(R.id.btn_login_logout)
     Button btnLoginLogout;
-    /*@BindView(R.id.btn_send)
-    Button btnSend;*/
+
     Dialog dialog;
-   /* @BindView(R.id.spnSurveyName)
-    Spinner spnSurveyName;*/
 
 
-    //ArrayAdapter<String> spnSurveyNameAdapter;
+
 
     View view;
 
@@ -132,9 +129,7 @@ public class SurveyHistoryFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         ButterKnife.bind(this, view);
 
-        /*spnSurveyNameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, surveyName);
-        spnSurveyNameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // The drop down view
-        spnSurveyName.setAdapter(spnSurveyNameAdapter);*/
+
 
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
@@ -266,11 +261,7 @@ public class SurveyHistoryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-       // surveyHistory.clear();
-        // List<MUser> results = ;
 
-       // surveyHistory.addAll(realm.where(DataCollection.class).equalTo("fieldworkerId", SelectSurveyActivity.sessionManager.getUserId()).findAll());
-       // mAdapter.notifyDataSetChanged();
 
         applyFilter();
 
@@ -360,38 +351,31 @@ public class SurveyHistoryFragment extends Fragment {
 
     public void applyFilter() {
 
-        //surveyHistoryFilter.clear();
-        // boolean filter = false;
+
 
         RealmQuery q = realm.where(DataCollection.class);
 
         if (spnSurveyName.getSelectedItemPosition() > 0) {
             q = q.equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId());
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("surveyid", lstSurveyData.get(spnSurveyName.getSelectedItemPosition() - 1).getId()).findAll());
-            // filter = true;
+
         }
 
         if (spnFieldWorker.getSelectedItemPosition() > 0) {
             q = q.equalTo("fieldworkerId", lstUserData.get(spnFieldWorker.getSelectedItemPosition() - 1).getId());
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("superwiserId", lstUserData.get(spnSupervisor.getSelectedItemPosition() - 1).getId()).findAll());
-            // filter = true;
+
         }
 
         if (patientId != 0) {
             q = q.equalTo("patients.id", patientId);
-            //  filter=true;
-            //  surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("patients.id", patientId).findAll());
+
         }
 
         if (selectedDate != null) {
             q = q.beginsWith("timestamp", selectedDate);
-            //surveyHistoryFilter.addAll(realm.where(DataCollection.class).equalTo("timestamp", selectedDate).findAll());
-            // filter = true;
+
         }
 
-        // if (filter == false) {
-        //surveyHistoryFilter.addAll(realm.where(DataCollection.class).findAll());
-        // }
+
 
         surveyHistory.clear();
         surveyHistory.addAll(q.findAll());

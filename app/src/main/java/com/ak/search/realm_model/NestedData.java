@@ -16,8 +16,6 @@ public class NestedData extends RealmObject {
     long  questionId;
 
 
-
-
     public long getQuestionId() {
         return questionId;
     }

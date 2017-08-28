@@ -123,7 +123,6 @@
 
 
                             <ImageView
-                                android:id="@+id/imageView"
                                 android:layout_width="70dp"
                                 android:layout_height="50dp"
                                 android:layout_alignParentLeft="true"

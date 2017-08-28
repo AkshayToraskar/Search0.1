@@ -23,15 +23,7 @@ public class MPatients implements Serializable {
     String Address;
     int sex, age;
 
-    //RealmList<MAnswers> answers;
 
-   /* public RealmList<MAnswers> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(RealmList<MAnswers> answers) {
-        this.answers = answers;
-    }*/
 
     public String getAddress() {
         return Address;

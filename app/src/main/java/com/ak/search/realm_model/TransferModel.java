@@ -14,7 +14,7 @@ import java.util.List;
 public class TransferModel implements Serializable {
 
     String name;
-    //  List<Test1> test1List;
+
 
     List<User> userList;
     List<Patients> patientsList;
@@ -29,14 +29,6 @@ public class TransferModel implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
-   /* public List<Test1> getTest1List() {
-        return test1List;
-    }
-
-    public void setTest1List(List<Test1> test1List) {
-        this.test1List = test1List;
-    }*/
 
 
     public List<User> getUserList() {

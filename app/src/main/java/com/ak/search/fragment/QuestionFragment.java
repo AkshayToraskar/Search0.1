@@ -128,18 +128,10 @@ public class QuestionFragment extends Fragment {
 
         final Questions questions = Parcels.unwrap(getArguments().getParcelable(EXTRA_MESSAGE));
 
-        //MSurvey survey=MSurvey.findById(MSurvey.class,Integer.parseInt(message.getSurveyid()));
-        //((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(survey.getName()+"");
 
         tv_question.setText(questions.getQuestion());
 
-        /*int answerId;
-        try {
-            answerId = realm.where(MUser.class).max("id").intValue() + 1;
-        } catch(Exception ex) {
-            Log.v("exception",ex.toString());
-            answerId = 1;
-        }*/
+
 
         ans = new Answers();
 
@@ -150,22 +142,7 @@ public class QuestionFragment extends Fragment {
             rg_option.setVisibility(GONE);
             ans.setSelectedopt(-1);
         } else {
-            /*if (questions.getOptions().size() > 1) {
-                rb_opt1.setText(questions.getOptions().get(0).getOpt());
-                rb_opt2.setText(questions.getOptions().get(1).getOpt());
-            }
-            *//*if (opt.size() > 2) {
-                for (int i = 2; i < opt.size(); i++) {
 
-                }
-            }*//*
-
-            if (questions.getOptions().size() > 0) {
-                rb_opt1.setText(questions.getOptions().get(0).getOpt());
-            } else if (questions.getOptions().size() > 1) {
-                rb_opt1.setText(questions.getOptions().get(0).getOpt());
-                rb_opt2.setText(questions.getOptions().get(1).getOpt());
-            }*/
             if (questions.getOptions().size() > 0) {
                 for (int i = 0; i < questions.getOptions().size(); i++) {
                     if (i < 2) {
@@ -180,7 +157,7 @@ public class QuestionFragment extends Fragment {
                         rb.setText(questions.getOptions().get(i).getOpt());
                         rg_option.addView(rb);
                     }
-                    //allEds.add(text);
+
                 }
             }
 
@@ -216,7 +193,7 @@ public class QuestionFragment extends Fragment {
                     llCheck.addView(cb);
                     lstChkbox.add(cb);
                 }
-                //allEds.add(text);
+
             }
 
         }
@@ -241,7 +218,7 @@ public class QuestionFragment extends Fragment {
                         rb.setText(questions.getOptionContidion().get(i).getOpt());
                         rg_option_conditional.addView(rb);
                     }
-                    //allEds.add(text);
+
                 }
             }
 
@@ -269,7 +246,7 @@ public class QuestionFragment extends Fragment {
             ans.setByteArrayImage(aa);
         }
 
-        //  ans.setQuestionid(String.valueOf(message.getId()));
+
 
         et_answer.addTextChangedListener(new TextWatcher() {
             @Override
@@ -285,7 +262,7 @@ public class QuestionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 ans.setAns(String.valueOf(editable));
-                //getSelectedChkbox();
+
                 answer.onAnswerSave(0,ans);
             }
         });
@@ -304,7 +281,7 @@ public class QuestionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 ans.setNumAns(String.valueOf(editable));
-                //getSelectedChkbox();
+
                 answer.onAnswerSave(0,ans);
             }
         });
@@ -328,9 +305,9 @@ public class QuestionFragment extends Fragment {
 
                 int id = rg_option_conditional.getCheckedRadioButtonId();
                 View radioButton = rg_option_conditional.findViewById(id);
-                //ans.setSelectedopt(rg_option.indexOfChild(radioButton));
+
                 long surveyId = questions.getOptionContidion().get(rg_option_conditional.indexOfChild(radioButton)).getSurveyid();
-                //answer.onAddSurvey(surveyId);
+
             }
         });
 
@@ -384,7 +361,7 @@ public class QuestionFragment extends Fragment {
             byte[] byteArray = stream.toByteArray();
 
             ans.setByteArrayImage(byteArray);
-            //getSelectedChkbox();
+
             answer.onAnswerSave(0,ans);
         }
     }
@@ -408,7 +385,7 @@ public class QuestionFragment extends Fragment {
                         tvDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
 
                         ans.setDate(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                        //getSelectedChkbox();
+
                         answer.onAnswerSave(0,ans);
                     }
                 }, mYear, mMonth, mDay);
@@ -441,14 +418,12 @@ public class QuestionFragment extends Fragment {
 
     public void getSelectedChkbox() {
         if (!lstChkbox.isEmpty()) {
-            // List<Integer> lstChecked = new ArrayList<>();
-            //int i=lstChkbox.size();
 
             String checkedData = "";
 
             for (int i = 0; i < lstChkbox.size(); i++) {
                 if (lstChkbox.get(i).isChecked()) {
-                    //lstChecked.add(i);
+
                     checkedData = checkedData + "1";
                 } else {
                     checkedData = checkedData + "0";
@@ -456,18 +431,12 @@ public class QuestionFragment extends Fragment {
             }
 
 
-            /*for (int i = 0; i < lstChecked.size(); i++) {
-                checkedData = checkedData+","+i;
-            }*/
+
 
             ans.setSelectedChk(checkedData);
             answer.onAnswerSave(0,ans);
         }
     }
 
-     /*public static MAnswers getAns()
-    {
 
-        return ans;
-    }*/
 }

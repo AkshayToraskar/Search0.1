@@ -29,15 +29,12 @@ public class UserFragment extends Fragment {
     private List<Survey> surveysList;
     @BindView(R.id.rv_survey)
     RecyclerView recyclerView;
-    /*@BindView(R.id.tv_patient_name)
-    TextView tvPatientName;
-    @BindView(R.id.tv_patient_address)
-    TextView tvPatientAddress;*/
+
 
 
     public GetSurveyAdapter mAdapter;
     Realm realm;
-    //public static MPatients patients;
+
 
     public UserFragment() {
     }
@@ -52,12 +49,7 @@ public class UserFragment extends Fragment {
 
         surveysList = realm.where(Survey.class).equalTo("nested",false).findAll();
 
-        /*if (getArguments() != null) {
-            patients = Parcels.unwrap(getArguments().getParcelable("PatientData"));
-            tvPatientName.setText(patients.getPatientname());
-            tvPatientAddress.setText(patients.getAddress());
-        }*/
-        //  surveysList = MSurvey.listAll(MSurvey.class);
+
 
 
         boolean isPhone = getActivity().getResources().getBoolean(R.bool.is_phone);

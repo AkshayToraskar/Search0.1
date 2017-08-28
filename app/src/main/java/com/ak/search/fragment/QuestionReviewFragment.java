@@ -36,7 +36,7 @@ import io.realm.Realm;
  */
 public class QuestionReviewFragment extends Fragment implements UpdateReviewAnswer {
 
-    //long surveyId;
+
     private List<Questions> questionsList;
 
     private List<Answers> answersList;
@@ -61,7 +61,7 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
         View view = inflater.inflate(R.layout.fragment_question_review, container, false);
         realm = Realm.getDefaultInstance();
         ButterKnife.bind(this, view);
-        //questionsList = new ArrayList<>();
+
         answersList = new ArrayList<>();
         updateReviewAnswer = this;
 
@@ -69,9 +69,6 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
         if (getArguments() != null) {
 
             questionsList = Parcels.unwrap(getArguments().getParcelable("questionList"));
-           /* surveyId = getArguments().getLong("surveyId");
-            survey=realm.where(MSurvey.class).equalTo("id",surveyId).findFirst();
-            questionsList=survey.getMQuestions();*/
 
 
             for (Map.Entry m : QuestionsActivity.answers.entrySet()) {
@@ -81,18 +78,7 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
 
 
 
-               /* for (Map.Entry m : QuestionsActivity.answers.entrySet()) {
 
-
-                    for (int i = 0; i < answersList.size(); i++) {
-                        if (Long.parseLong(String.valueOf(m.getKey())) == answersList.get(i).getMQuestions().getId()) {
-                            MAnswers an = (MAnswers) m.getValue();
-                            answersList.set(i,an);
-                        }
-                    }
-
-
-                }*/
 
             SaveAnswer saveAnswer = null;
 
@@ -101,8 +87,6 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             recyclerView.setAdapter(mAdapter);
-
-            // Log.v("GET SURVEY", "" + surveyId);
 
         }
 
@@ -124,9 +108,6 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
     @Override
     public void onReviewUpdate(HashMap<Long, Answers> answers) {
 
-        //getQuestionList();
-        //answersList.clear();
-        //questionsList.addAll(getQuestionList());
 
 
         for (Map.Entry m : answers.entrySet()) {
@@ -136,39 +117,17 @@ public class QuestionReviewFragment extends Fragment implements UpdateReviewAnsw
                     answersList.set(i,an);
                 }
             }
-            //MAnswers ans=(MAnswers)m.getValue();
 
-            //answersList.add(ans);
 
         }
 
 
 
-        //recyclerView.invalidate();
-        //Log.v("ans "," "+questionsList.get(0).getId());
 
         mAdapter.notifyDataSetChanged();
-        //mAdapter.update(answersList);
 
-
-        //Log.v("","");
     }
 
 
-    /*public List<MQuestions> getQuestionList() {
 
-
-        //surveyId = getArguments().getLong("surveyId");
-        //survey=realm.where(MSurvey.class).equalTo("id",surveyId).findFirst();
-        //questionsList=survey.getMQuestions();
-
-        ///List<MOptions> opt = new ArrayList<>();
-       *//* for (int i = 0; i < questionsList.size(); i++) {
-            //opt = questionsList.get(i).getOptions(String.valueOf(questionsList.get(i).getId()));
-            //List<MOptions> opt = MOptions.find(MOptions.class, "questionid = ?", String.valueOf(questionsList.get(i).getId()));
-            //questionsList.get(i).setOptions(opt);
-
-        }*//*
-        return questionsList;
-    }*/
 }

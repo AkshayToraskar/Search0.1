@@ -3,32 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ak.search.activity.MainActivity">
 
-    <!--<item
-        android:id="@+id/action_send"
-        android:title="@string/send"
-        app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_receive"
-        android:title="@string/receive"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/spinner"
-        android:title="Language"
-        app:actionViewClass="android.widget.Spinner"
-        android:background="#ff00"
-        app:showAsAction="always" />-->
 
     <item android:id="@+id/action_setting"
         android:title="Setting"
         app:showAsAction="always"
         android:icon="@drawable/ic_settings_black_24dp"/>
 
-   <!-- <item
-        android:id="@+id/action_logout"
-        android:icon="@drawable/ic_power_settings_new_black_24dp"
-        android:title="Logout"
-        app:showAsAction="always" />-->
 
 </menu>

@@ -12,7 +12,6 @@ import java.util.List;
 public class MTransferModel implements Serializable{
 
     String name;
-  //  List<Test1> test1List;
 
     List<MUser> userList;
     List<MPatients> patientsList;
@@ -29,13 +28,7 @@ public class MTransferModel implements Serializable{
         this.name = name;
     }
 
-   /* public List<Test1> getTest1List() {
-        return test1List;
-    }
 
-    public void setTest1List(List<Test1> test1List) {
-        this.test1List = test1List;
-    }*/
 
 
     public List<MUser> getUserList() {
