@@ -15,10 +15,10 @@ This is an Android application where user can create and collect the survey.
 
 # ScreenShot
 
-<img src="./Screenshot_2017-03-09-14-49-43.jpg" width="50%" height="50%">
-<img src="./Screenshot_2017-03-09-14-51-52.jpg" width="50%" height="50%">
-<img src="./Screenshot_2017-03-09-14-52-43.jpg" width="50%" height="50%">
-<img src="./Screenshot_2017-03-09-14-51-56.jpg" width="50%" height="50%">
+<img src="./Screenshot/Screenshot_2017-03-09-14-49-43.jpg" width="50%" height="50%">
+<img src="./Screenshot/Screenshot_2017-03-09-14-51-52.jpg" width="50%" height="50%">
+<img src="./Screenshot/Screenshot_2017-03-09-14-52-43.jpg" width="50%" height="50%">
+<img src="./Screenshot/Screenshot_2017-03-09-14-52-29.jpg" width="50%" height="50%">
 
 # App Demo Video
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/PV1YA3uthQ0/0.jpg)](http://www.youtube.com/watch?v=PV1YA3uthQ0)
