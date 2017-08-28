@@ -15,8 +15,10 @@ This is an Android application where user can create and collect the survey.
 
 # ScreenShot
 
-<img src="./screenshot/Screenshot_01.gif" width="30%" height="30%">
-<img src="./screenshot/Screenshot_2015-07-19-11-23-22.png" width="30%" height="30%">
+<img src="./Screenshot_2017-03-09-14-49-43.jpg" width="30%" height="30%">
+<img src="./Screenshot_2017-03-09-14-51-52.jpg" width="30%" height="30%">
+<img src="./Screenshot_2017-03-09-14-52-43.jpg" width="30%" height="30%">
+<img src="./Screenshot_2017-03-09-14-51-56.jpg" width="30%" height="30%">
 
 
 
