@@ -36,7 +36,7 @@ This is an Android application where user can create and collect the survey.
 # Contributors
 
 - [Akshay Toraskar](https://github.com/AkshayToraskar)
-
+- [Sindhu Hari](https://github.com/sindhuee)
 
 # Contact Me
 
