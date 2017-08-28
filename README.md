@@ -25,7 +25,7 @@ This is an Android application where user can create and collect the survey.
 [![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/PV1YA3uthQ0/0.jpg)](http://www.youtube.com/watch?v=PV1YA3uthQ0)
 
 
-# Thanks
+# Library
 
 - [Realm](https://github.com/realm/realm-java)
 - [butterknife](https://github.com/JakeWharton/butterknife)
