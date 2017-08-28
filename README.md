@@ -1,8 +1,7 @@
-# Search0.1
+# Survey Collection
 
 This is an Android application where user can create and collect the survey.
 
-Survey Collection
 
 # Feature
 
