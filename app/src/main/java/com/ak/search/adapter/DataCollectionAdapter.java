@@ -1,5 +1,11 @@
 package com.ak.search.adapter;
 
+
+/**
+ *  show all collected data
+ * */
+
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;

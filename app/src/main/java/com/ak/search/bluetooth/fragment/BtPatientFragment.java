@@ -30,6 +30,9 @@ import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * fragment to diplay patient data
+ *
  */
 public class BtPatientFragment extends Fragment{
 

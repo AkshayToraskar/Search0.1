@@ -20,6 +20,9 @@ import java.util.List;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * display all users
+ *
  */
 
 public class BtUsersAdapter extends RecyclerView.Adapter<BtUsersAdapter.MyViewHolder> {

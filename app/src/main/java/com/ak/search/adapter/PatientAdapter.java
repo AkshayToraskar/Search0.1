@@ -21,6 +21,9 @@ import io.realm.Realm;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * list of patients shown
+ *
  */
 
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.MyViewHolder> {

@@ -1,5 +1,14 @@
 package com.ak.search.activity;
 
+/**
+ * Add new user or update user, define its role;
+ * <p>
+ * user type
+ * 1 admin
+ * 2 supervisor
+ * 3 fieldworker
+ */
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -58,7 +67,7 @@ public class AddUserActivity extends AppCompatActivity {
 
             getSupportActionBar().setTitle("Update User Info");
             userId = getIntent().getExtras().getLong("userId");
-            user = realm.where(User.class).equalTo("id",userId).findFirst();
+            user = realm.where(User.class).equalTo("id", userId).findFirst();
             txt_username.setText(user.getName());
             txt_password.setText(user.getPassword());
 
@@ -77,7 +86,7 @@ public class AddUserActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_user, menu);
-        if (!update || userId==1) {
+        if (!update || userId == 1) {
             menu.getItem(0).setVisible(false);
         }
         return true;
@@ -159,13 +168,12 @@ public class AddUserActivity extends AppCompatActivity {
                         @Override
                         public void execute(Realm realm) {
 
-                            //long id = realm.where(MUser.class).max("id").longValue() + 1;
 
                             int key;
                             try {
                                 key = realm.where(User.class).max("id").intValue() + 1;
-                            } catch(Exception ex) {
-                                Log.v("exception",ex.toString());
+                            } catch (Exception ex) {
+                                Log.v("exception", ex.toString());
                                 key = 1;
                             }
 
@@ -204,7 +212,7 @@ public class AddUserActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(realm != null) {
+        if (realm != null) {
             realm.close();
         }
     }

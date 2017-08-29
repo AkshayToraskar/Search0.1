@@ -1,5 +1,10 @@
 package com.ak.search.activity;
 
+/**
+ * add new survey
+ */
+
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -280,6 +285,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
         mAdapter.notifyDataSetChanged();
     }
 
+
+    // generate duplicated surveys
     public void createDublicateSurvey() {
 
         realm.executeTransaction(new Realm.Transaction() {

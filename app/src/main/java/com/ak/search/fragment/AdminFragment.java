@@ -22,6 +22,9 @@ import io.realm.Realm;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * represent admin data
+ *
  */
 public class AdminFragment extends Fragment {
 

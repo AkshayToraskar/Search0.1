@@ -10,6 +10,9 @@ import retrofit2.http.Query;
 
 /**
  * Created by dg hdghfd on 22-03-2017.
+ *
+ * login of user from server side
+ *
  */
 
 public interface ApiInterface {

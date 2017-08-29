@@ -16,6 +16,9 @@ import java.util.List;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * list of users shown
+ *
  */
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.MyViewHolder> {

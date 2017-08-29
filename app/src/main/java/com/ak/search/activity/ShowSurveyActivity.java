@@ -1,4 +1,7 @@
 package com.ak.search.activity;
+/**
+ * See and update collected surveys
+ * */
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -112,6 +115,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
     }
 
 
+    //if surveys have nestead questions generate tree node for questions
     public void generateTreeNode() {
 
         RealmList<TreeString> treeStrings = dataCollection.getTreeData();
@@ -235,6 +239,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         mAdapter.onActivityResult(requestCode, resultCode, data, positionImg);
     }
 
+    //add new nested question in survey
     public void addQue(List<Answers> ans) {
         for (int i = 0; i < ans.size(); i++) {
             Answers answ = new Answers();
@@ -254,7 +259,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         }
     }
 
-
+    // update nested question
     public void newLogic(int pos, int size, long surveyId, long questionId) {
 
         int nesPos = pos;
@@ -311,6 +316,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
     }
 
+    //insert new item in nested survey
     protected void insertItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
         handler.post(new Runnable() {
             @Override
@@ -325,6 +331,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         });
     }
 
+    //remove item from survey
     protected void removeItem(final Handler handler, final RecyclerView recyclerView, final RecyclerView.Adapter adapter, final int pos) {
         handler.post(new Runnable() {
             @Override
@@ -356,7 +363,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
 
 
     List<Long> questionIdList = new ArrayList<>();
-
+    // traverse the tree
     public void traverse(MyTreeNode child) { // post order traversal
         List<MyTreeNode> as = child.getChildren();
         for (MyTreeNode ch : as) {
@@ -367,7 +374,7 @@ public class ShowSurveyActivity extends AppCompatActivity implements SaveAnswer 
         }
     }
 
-
+    //remove questions from tree and survey
     public void deleteQue(long qId) {
 
         List<Integer> delData = new ArrayList<>();

@@ -5,6 +5,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by dg hdghfd on 22-03-2017.
+ *
+ * do login from server
+ *
  */
 
 public class ApiClient {

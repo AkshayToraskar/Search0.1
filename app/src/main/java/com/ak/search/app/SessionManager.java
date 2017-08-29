@@ -6,6 +6,9 @@ import android.util.Log;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * all the app shared preferenced data will be stored here
+ *
  */
 
 public class SessionManager {

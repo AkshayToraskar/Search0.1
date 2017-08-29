@@ -50,6 +50,9 @@ import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * show supervisor history panel
+ *
  */
 public class SurveyHistoryFragment extends Fragment {
 

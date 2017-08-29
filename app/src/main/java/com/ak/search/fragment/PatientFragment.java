@@ -26,6 +26,7 @@ import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
+ * show patient data
  */
 public class PatientFragment extends Fragment {
 

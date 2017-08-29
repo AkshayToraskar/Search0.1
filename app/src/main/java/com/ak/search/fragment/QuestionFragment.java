@@ -45,6 +45,7 @@ import static android.view.View.GONE;
 
 /**
  * Created by dg hdghfd on 08-12-2016.
+ * show the questions to be display
  */
 
 public class QuestionFragment extends Fragment {

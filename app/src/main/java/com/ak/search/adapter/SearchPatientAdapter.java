@@ -17,6 +17,9 @@ import io.realm.RealmList;
 
 /**
  * Created by dg hdghfd on 03-01-2017.
+ *
+ * show patient list
+ *
  */
 
 public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdapter.MyViewHolder> {

@@ -6,6 +6,9 @@ import io.realm.Realm;
 
 /**
  * Created by dg hdghfd on 28-12-2016.
+ *
+ * initialised the realm database
+ *
  */
 
 public class MyApplication extends Application {

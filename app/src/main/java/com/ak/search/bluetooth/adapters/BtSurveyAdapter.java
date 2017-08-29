@@ -20,6 +20,9 @@ import java.util.List;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * display survey data
+ *
  */
 
 public class BtSurveyAdapter extends RecyclerView.Adapter<BtSurveyAdapter.MyViewHolder> {

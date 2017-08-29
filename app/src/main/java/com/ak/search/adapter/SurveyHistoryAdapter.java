@@ -27,6 +27,9 @@ import static android.view.View.GONE;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * display list of collected survey history
+ *
  */
 
 public class SurveyHistoryAdapter extends RecyclerView.Adapter<SurveyHistoryAdapter.MyViewHolder> {

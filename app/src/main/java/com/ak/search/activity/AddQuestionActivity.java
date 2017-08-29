@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * Add new Questions in the survey
+ */
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -293,6 +297,7 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
     }
 
 
+    //validate entered data
     public boolean isValidate() {
         if (validate.validateString(txt_question.getText().toString())) {
             txt_question.setError("Enter Question");
@@ -341,6 +346,7 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
     }
 
 
+    //discard insarted question data
     public void discardQuestion() {
 
         Snackbar snackbar = Snackbar
@@ -392,6 +398,7 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
     }
 
 
+    //save new question into given question id.
     public void saveUpdateQuestions() {
 
 
@@ -502,6 +509,7 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
 
     }
 
+    //load questions based on question id
     public void setupData() {
 
         if (questionsId != 0) {
@@ -605,6 +613,8 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
         }
     }
 
+
+    //add nested question data
     @Override
     public void addNestedData(long surveyId) {
 

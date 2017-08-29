@@ -1,5 +1,8 @@
 package com.ak.search.adapter;
 
+/**
+ * display all paired blutooth device
+ * */
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;

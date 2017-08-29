@@ -33,6 +33,9 @@ import java.util.List;
 
 /**
  * Created by dg hdghfd on 25-07-2017.
+ *
+ * scan the survey and import and export the data into csv format
+ *
  */
 
 public class CsvOperation {

@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * show patient data and import the patient information from csv
+ * */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -139,6 +143,7 @@ public class PatientsActivity extends AppCompatActivity {
     }
 
 
+    //import patient data
     private void parseCSVData() {
 
 

@@ -27,6 +27,9 @@ import io.realm.RealmList;
 
 /**
  * Created by dg hdghfd on 12-01-2017.
+ *
+ * convert realm data into normal object
+ *
  */
 
 public class DataUtils {

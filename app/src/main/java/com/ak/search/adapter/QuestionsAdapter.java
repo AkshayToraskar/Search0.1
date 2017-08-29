@@ -26,6 +26,9 @@ import io.realm.RealmList;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * show questions list
+ *
  */
 
 public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.MyViewHolder> implements ItemTouchHelperAdapter {

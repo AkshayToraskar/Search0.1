@@ -1,5 +1,7 @@
 package com.ak.search.activity;
-
+/**
+ * panel to be shown after login
+ * */
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
         validate = new Validate();
         LANG = sessionManager.getLanguage();
 
+
+        //check user login
         if (sessionManager.isLoggedIn()) {
             username = sessionManager.getUsername();
             loginType = sessionManager.getLoginType();
@@ -57,12 +61,12 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
             getSupportActionBar().setTitle(getResources().getString(R.string.welcome) + " " + username);
 
             switch (loginType) {
-                case 1:
+                case 1: //show admin fragment
                     transaction.add(R.id.main_frame, new AdminFragment());
                     transaction.commit();
                     break;
 
-                case 2:
+                case 2: //show supervisor fragment
                     transaction.add(R.id.main_frame, new SupervisorFragment());
                     transaction.commit();
                     break;

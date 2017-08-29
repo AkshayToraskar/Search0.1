@@ -1,5 +1,9 @@
 package com.ak.search.adapter;
 
+/**
+ * show list of surveys
+ * */
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

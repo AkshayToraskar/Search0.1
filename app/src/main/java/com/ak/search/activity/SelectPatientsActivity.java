@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * Search and select patient while collecting the survey.
+ * */
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;

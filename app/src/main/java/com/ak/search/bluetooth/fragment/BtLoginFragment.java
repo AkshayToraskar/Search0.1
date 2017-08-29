@@ -30,6 +30,9 @@ import io.realm.RealmResults;
 
 /**
  * A simple {@link Fragment} subclass.
+ *
+ * fragment to display users data
+ *
  */
 public class BtLoginFragment extends Fragment {
 

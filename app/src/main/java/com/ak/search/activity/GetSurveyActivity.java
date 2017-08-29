@@ -1,5 +1,12 @@
 package com.ak.search.activity;
 
+/**
+ * see the collected surveys
+ *
+ * sort the data which is collected
+ *
+ */
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -213,6 +220,8 @@ public class GetSurveyActivity extends AppCompatActivity {
         return true;
     }
 
+
+    //export the data into csv file
     public void generateCSV(Long survId) {
 
         try {
@@ -311,6 +320,7 @@ public class GetSurveyActivity extends AppCompatActivity {
         }
     }
 
+    //apply the filter and display the data
     public void applyFilter() {
 
         RealmQuery q = realm.where(DataCollection.class);

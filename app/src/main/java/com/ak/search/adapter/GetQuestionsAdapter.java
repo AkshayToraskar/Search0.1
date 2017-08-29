@@ -54,6 +54,9 @@ import static android.view.View.GONE;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * collcting the survey
+ *
  */
 
 public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapter.MyViewHolder> {

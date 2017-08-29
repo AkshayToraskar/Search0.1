@@ -32,6 +32,9 @@ import static android.view.View.GONE;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * list of surveys will be shown
+ *
  */
 
 public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.MyViewHolder> {
@@ -110,6 +113,7 @@ public class SurveyAdapter extends RecyclerView.Adapter<SurveyAdapter.MyViewHold
     }
 
 
+    //export survey data into csv file
     public void generateCSV(Long survId) {
 
         try {

@@ -1,5 +1,13 @@
 package com.ak.search.activity;
 
+/**
+ * change setting of app
+ * - change the language
+ * - logout user
+ * - send and receive the data
+ * - see user profile
+ * */
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -132,7 +140,7 @@ public class SettingActivity extends AppCompatActivity {
                 //setLocale("mr");
                 break;
 
-            case R.id.btn_logout:
+            case R.id.btn_logout: //logout the user
                 new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.logout))
                         .setMessage(getString(R.string.sure_logout))
@@ -154,6 +162,8 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+
+    //change the language
     public void setLocale(String lang) {
 
         myLocale = new Locale(lang);

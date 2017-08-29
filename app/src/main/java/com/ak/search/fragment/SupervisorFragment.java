@@ -11,6 +11,8 @@ import com.ak.search.R;
 
 /**
  * A simple {@link Fragment} subclass.
+ * show supervisor panel
+ *
  */
 public class SupervisorFragment extends Fragment {
 

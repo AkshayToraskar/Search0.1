@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * Login for user
+ */
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -101,20 +105,20 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         LANG = sessionManager.getLanguage();
 
-        User uAd=realm.where(User.class).equalTo("id",1).findFirst();
-        if(uAd==null) {
+        User uAd = realm.where(User.class).equalTo("id", 1).findFirst();
+        if (uAd == null) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
 
                     // Add a admin
-            User user = new User();
-            user.setId(1);
-            user.setName("admin");
-            user.setPassword("admin");
-            user.setType(1);
-            realm.copyToRealmOrUpdate(user);
-            Log.v("TAG","admin added..!");
+                    User user = new User();
+                    user.setId(1);
+                    user.setName("admin");
+                    user.setPassword("admin");
+                    user.setType(1);
+                    realm.copyToRealmOrUpdate(user);
+                    Log.v("TAG", "admin added..!");
 
                 }
             });
@@ -137,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view1.getWindowToken(), 0);
                 }
 
-
+                //validate data
                 if (validate.validateString(txt_username.getText().toString())) {
                     txt_username.setError("Enter Username");
                     return;
@@ -152,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
 
-                    checkLogin();
+                checkLogin();
                 break;
 
 
@@ -306,6 +310,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    // check is login credential is valid or not
     public void checkLogin() {
 
 

@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * Start collcting new survey
+ * */
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;

@@ -1,5 +1,9 @@
 package com.ak.search.activity;
 
+/**
+ * splash activity which check local language and login status and proceed further depending on that
+ * */
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;

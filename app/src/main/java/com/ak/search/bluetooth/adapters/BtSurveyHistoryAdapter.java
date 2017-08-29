@@ -23,6 +23,8 @@ import io.realm.Realm;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
+ *
+ * display collected data
  */
 
 public class BtSurveyHistoryAdapter extends RecyclerView.Adapter<BtSurveyHistoryAdapter.MyViewHolder> {
