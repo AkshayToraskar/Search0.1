@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
+    android:padding="5dp"
     android:orientation="vertical">
 
 
@@ -11,12 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_patient_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end" />
+        android:ellipsize="end"
+        android:textSize="20sp" />
 
 </LinearLayout>

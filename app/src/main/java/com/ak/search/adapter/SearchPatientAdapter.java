@@ -71,7 +71,7 @@ public class SearchPatientAdapter extends RecyclerView.Adapter<SearchPatientAdap
     public void onBindViewHolder(SearchPatientAdapter.MyViewHolder holder, int position) {
         Patients patients = patientList.get(position);
         holder.tvName.setText(patients.getPatientname());
-        holder.tvAddress.setText(patients.getAddress());
+        holder.tvAddress.setText("MMUID: "+patients.getId());
     }
 
     @Override

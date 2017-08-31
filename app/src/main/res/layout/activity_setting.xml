@@ -139,7 +139,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/language"
-                        android:textSize="20sp" />
+                         />
 
                     <RadioGroup
                         android:id="@+id/rg_lang"

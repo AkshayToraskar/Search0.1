@@ -54,9 +54,8 @@ import static android.view.View.GONE;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
- *
+ * <p>
  * collcting the survey
- *
  */
 
 public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapter.MyViewHolder> {
@@ -183,6 +182,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
                     answerList.get(getPosition()).setSelectedChk("");
                     answerList.get(getPosition()).setSelectedopt(-1);
                     answerList.get(getPosition()).setSelectedOptConditional(-1);
+                    answerList.get(getPosition()).setPatientid(0);
 
 
                     String type[] = answerList.get(getPosition()).getQuestions().getTypeQuestion().split("");
@@ -661,7 +661,7 @@ public class GetQuestionsAdapter extends RecyclerView.Adapter<GetQuestionsAdapte
 
                                         Patients p = realm.where(Patients.class).equalTo("id", answerList.get(position).getPatientid()).findFirst();
                                         if (p != null) {
-                                            holder.tvPatient.setText(p.getPatientname());
+                                            holder.tvPatient.setText(p.getPatientname() + " ( MMUID: " + p.getId()+" )");
                                         }
                                         holder.tvCounter.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.counter_background_answered));
                                         holder.ivRedo.setVisibility(View.VISIBLE);

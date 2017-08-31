@@ -2,21 +2,24 @@ package com.ak.search.activity;
 
 /**
  * Search and select patient while collecting the survey.
- * */
+ */
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -70,7 +73,28 @@ public class SelectPatientsActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         rvPatientList.setLayoutManager(mLayoutManager);
         rvPatientList.setItemAnimator(new DefaultItemAnimator());
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        rvPatientList.addItemDecoration(itemDecoration);
         rvPatientList.setAdapter(searchPatientAdapter);
+
+
+        spnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    etPatientName.setInputType(InputType.TYPE_CLASS_TEXT);
+                } else if (position == 1) {
+                    etPatientName.setInputType(InputType.TYPE_CLASS_NUMBER);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         etPatientName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -87,18 +111,22 @@ public class SelectPatientsActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
                 patientsList.clear();
-                if (editable == null) {
+                if (editable == null || String.valueOf(editable).equals("")) {
                     RealmResults<Patients> results = realm.where(Patients.class).findAll();
                     patientsList.addAll(results);
                     searchPatientAdapter.notifyDataSetChanged();
                 } else {
-                    RealmResults<Patients> results;
+                    RealmList<Patients> results = new RealmList<Patients>();
                     if (spnType.getSelectedItemPosition() == 0) {
-
-                        results = realm.where(Patients.class).beginsWith("patientname", String.valueOf(editable)).findAll();
+                        RealmResults realmResult = realm.where(Patients.class).beginsWith("patientname", String.valueOf(editable)).findAll();
+                        results.addAll(realmResult.subList(0, realmResult.size()));
 
                     } else {
-                        results = realm.where(Patients.class).beginsWith("id", String.valueOf(editable)).findAll();
+
+                        Patients patients = realm.where(Patients.class).equalTo("id", Long.parseLong(editable.toString())).findFirst();
+                        if (patients != null) {
+                            results.add(patients);
+                        }
                     }
                     if (results != null) {
                         patientsList.addAll(results);
