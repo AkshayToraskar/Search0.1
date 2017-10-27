@@ -27,8 +27,10 @@
     <string name="survey">Surveys</string>
     <string name="patients">Patients</string>
     <string name="collectedData">Collected Data</string>
+
     <string name="welcome">Welcome</string>
     <string name="new_survey">New Survey</string>
+    <string name="filedworker_status">Fieldworker Status</string>
     <string name="survey_history">Survey History</string>
     <string name="supervisor_login">Supervisor Login</string>
 

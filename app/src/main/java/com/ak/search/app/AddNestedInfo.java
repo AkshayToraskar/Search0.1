@@ -6,4 +6,5 @@ package com.ak.search.app;
 
 public interface AddNestedInfo {
     public void addNestedData(long survId);
+    public void linkNestedData(int pos);
 }

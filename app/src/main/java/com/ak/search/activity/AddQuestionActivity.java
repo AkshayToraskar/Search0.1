@@ -103,6 +103,9 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
     RealmList<Questions> lstQuestion;
     OptionsAdapter mAdapter;
 
+    public static int NESTEDSURVEY = 10;
+    public static int nesPos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -613,6 +616,28 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == NESTEDSURVEY) {
+
+            final long survID = data.getLongExtra("SURVEYID", 0);
+
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+
+                    Log.v("updated survey id", " " + survID);
+
+                    conditionalOptions.get(nesPos).setSurveyid(survID);
+                }
+            });
+
+
+        }
+
+    }
 
     //add nested question data
     @Override
@@ -623,6 +648,14 @@ public class AddQuestionActivity extends AppCompatActivity implements AddNestedI
         intent.putExtra("isNestead", true);
         intent.putExtra("surveyId", surveyId);
         startActivity(intent);
+    }
+
+    @Override
+    public void linkNestedData(int pos) {
+        this.nesPos = pos;
+        Intent i = new Intent(this, LinkNestedActivity.class);
+        i.putExtra("surveyId",conditionalOptions.get(pos).getSurveyid());
+        startActivityForResult(i, NESTEDSURVEY);
     }
 
 }

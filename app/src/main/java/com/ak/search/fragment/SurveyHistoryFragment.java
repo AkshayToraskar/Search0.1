@@ -50,9 +50,8 @@ import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
- *
+ * <p>
  * show supervisor history panel
- *
  */
 public class SurveyHistoryFragment extends Fragment {
 
@@ -61,8 +60,6 @@ public class SurveyHistoryFragment extends Fragment {
     Button btnLoginLogout;
 
     Dialog dialog;
-
-
 
 
     View view;
@@ -133,7 +130,6 @@ public class SurveyHistoryFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
-
         slidingDrawer.setOnDrawerOpenListener(new SlidingDrawer.OnDrawerOpenListener() {
             @Override
             public void onDrawerOpened() {
@@ -161,9 +157,9 @@ public class SurveyHistoryFragment extends Fragment {
         surveyHistoryFilter = new ArrayList<>();
         surveyHistory.addAll(realm.where(DataCollection.class).findAll());
 
-        tvSurveyCount.setText(""+surveyHistory.size());
+        tvSurveyCount.setText("" + surveyHistory.size());
 
-        mAdapter = new SurveyHistoryAdapter(getActivity(), surveyHistory, false);
+        mAdapter = new SurveyHistoryAdapter(getActivity(), surveyHistory, true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -265,7 +261,6 @@ public class SurveyHistoryFragment extends Fragment {
         super.onResume();
 
 
-
         applyFilter();
 
     }
@@ -355,7 +350,6 @@ public class SurveyHistoryFragment extends Fragment {
     public void applyFilter() {
 
 
-
         RealmQuery q = realm.where(DataCollection.class);
 
         if (spnSurveyName.getSelectedItemPosition() > 0) {
@@ -379,11 +373,10 @@ public class SurveyHistoryFragment extends Fragment {
         }
 
 
-
         surveyHistory.clear();
         surveyHistory.addAll(q.findAll());
         mAdapter.notifyDataSetChanged();
 
-        tvSurveyCount.setText(""+surveyHistory.size());
+        tvSurveyCount.setText("" + surveyHistory.size());
     }
 }

@@ -94,7 +94,7 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.MyViewHo
                 @Override
                 public void onClick(View v) {
 
-                    survId = 0;
+                    /*survId = 0;
                     if (optionList.get(getPosition()).getSurveyid() != 0) {
 
                         survId = optionList.get(getPosition()).getSurveyid();
@@ -127,7 +127,9 @@ public class OptionsAdapter extends RecyclerView.Adapter<OptionsAdapter.MyViewHo
 
                     nestedInfo.addNestedData(survId);
 
-                    notifyItemChanged(getPosition());
+                    notifyItemChanged(getPosition());*/
+
+                    nestedInfo.linkNestedData(getPosition());
 
                 }
             });

@@ -114,7 +114,8 @@
             android:name=".bluetooth.BluetoothClientActivity"
             android:label="@string/send"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.StartSurveyActivity"
+        <activity
+            android:name=".activity.StartSurveyActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activity.SelectPatientsActivity"
@@ -129,7 +130,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.FilePickerActivityLatest" />
-        <activity android:name=".activity.SettingActivity"></activity>
+        <activity android:name=".activity.SettingActivity" />
+        <activity android:name=".activity.LinkNestedActivity" />
+        <activity android:name=".activity.CollectSurveyActivity" />
+        <activity android:name=".activity.FieldworkerStatusActivity"></activity>
     </application>
 
 </manifest>

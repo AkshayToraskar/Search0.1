@@ -53,7 +53,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
     RecyclerView recyclerView;
     @BindView(R.id.btn_add_question)
     FloatingActionButton fabAddQuestion;
-
+    @BindView(R.id.cb_nested_survey)
+    CheckBox cbNestedSurvey;
 
     Validate validate;
     public static QuestionsAdapter mAdapter;
@@ -96,7 +97,7 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
             survey = realm.where(Survey.class).equalTo("id", surveyId).findFirst();
             if (survey != null) {
                 Log.v("SURVEY NAME", "dasf " + survey.getName() + "=====" + survey.getQuestions().size());
-
+                cbNestedSurvey.setChecked(survey.getNested());
                 questionsList.clear();
                 if (survey.getQuestions() != null) {
                     questionsList.addAll(survey.getQuestions().sort("question_pos", Sort.ASCENDING));
@@ -119,7 +120,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
                         // Add a survey
                         survey = realm.createObject(Survey.class, surveyId);
-                        survey.setNested(isNestead);
+                        //survey.setNested(isNestead);
+                        survey.setNested(cbNestedSurvey.isChecked());
                         survey.setName("Survey " + String.valueOf(sessionManager.getSurveyId()));
                         realm.copyToRealmOrUpdate(survey);
                         sessionManager.setSurveyId(sessionManager.getSurveyId() + 1);
@@ -130,10 +132,10 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
 
         }
 
-        if (isNestead) {
-            txt_survey_name.setVisibility(View.GONE);
-
-        }
+        //if (isNestead) {
+            //txt_survey_name.setVisibility(View.GONE);
+            //cbNestedSurvey.setVisibility(View.GONE);
+       // }
 
 
         List<Options> opt = new ArrayList<>();
@@ -202,7 +204,8 @@ public class AddSurveyActivity extends AppCompatActivity implements OnStartDragL
                     @Override
                     public void execute(Realm realm) {
                         survey.setName(txt_survey_name.getText().toString());
-                        survey.setNested(isNestead);
+                        //survey.setNested(isNestead);
+                        survey.setNested(cbNestedSurvey.isChecked());
                         realm.copyToRealmOrUpdate(survey);
                     }
                 });

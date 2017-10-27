@@ -1,8 +1,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.ak.search.fragment.SupervisorFragment">
 
     <ScrollView
@@ -15,8 +15,7 @@
             android:layout_height="match_parent"
             android:layout_margin="2dp"
             android:orientation="vertical"
-            android:weightSum="2">
-
+            android:weightSum="4">
 
 
             <android.support.v7.widget.CardView
@@ -51,9 +50,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
                             android:layout_margin="2dp"
                             android:text="@string/patients"
-                            android:layout_centerInParent="true"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -125,11 +124,11 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
                             android:layout_margin="2dp"
                             android:text="@string/collectedData"
                             android:textColor="@color/colorSecondaryText"
                             android:textSize="20sp"
-                            android:layout_centerInParent="true"
                             android:textStyle="bold" />
 
                         <RelativeLayout
@@ -169,7 +168,103 @@
 
             </android.support.v7.widget.CardView>
 
+            <android.support.v7.widget.CardView
+                android:id="@+id/btn_collect_survey_data"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:onClick="onBtnClick"
+                app:cardCornerRadius="2dp">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/survey" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="2dp"
+                            android:text="@string/new_survey"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/btn_fieldworker_status"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:onClick="onBtnClick"
+                app:cardCornerRadius="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/team" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="left"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_margin="2dp"
+                            android:text="@string/filedworker_status"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
 

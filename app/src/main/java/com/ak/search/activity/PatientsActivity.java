@@ -2,7 +2,7 @@ package com.ak.search.activity;
 
 /**
  * show patient data and import the patient information from csv
- * */
+ */
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +28,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -119,7 +122,6 @@ public class PatientsActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -188,6 +190,12 @@ public class PatientsActivity extends AppCompatActivity {
                                     patients.setPatientname(finalRow[7]);
                                     patients.setAge(Integer.parseInt(finalRow[8]));
                                     patients.setSex(Integer.parseInt(finalRow[9]));
+
+                                    /*DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                                    Date date = new Date();
+                                    dateFormat.format(date);
+                                    patients.setSaveDate(date);*/
+
                                     realm.copyToRealmOrUpdate(patients);
                                 }
                             });

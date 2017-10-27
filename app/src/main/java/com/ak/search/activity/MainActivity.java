@@ -1,7 +1,7 @@
 package com.ak.search.activity;
 /**
  * panel to be shown after login
- * */
+ */
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -121,6 +121,16 @@ public class MainActivity extends AppCompatActivity implements ManageFragment {
             case R.id.btn_data:
                 startActivity(new Intent(this, GetSurveyActivity.class));
                 break;
+
+            case R.id.btn_collect_survey_data:
+                startActivity(new Intent(this, CollectSurveyActivity.class));
+                break;
+
+
+            case R.id.btn_fieldworker_status:
+                startActivity(new Intent(this,FieldworkerStatusActivity.class));
+                break;
+
         }
 
     }
