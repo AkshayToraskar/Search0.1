@@ -48,6 +48,9 @@
     <string name="language">Language</string>
     <string name="setting">Setting</string>
 
+    <string name="delete_old_data">Delete old records</string>
+    <string name="after_days">Days</string>
+
 
     <array name="search_patient">
         <item>Name</item>

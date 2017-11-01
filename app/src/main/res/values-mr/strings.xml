@@ -44,5 +44,8 @@
     <string name="language">भाषा</string>
     <string name="setting">सेटिंग</string>
 
+    <string name="delete_old_data">जुन्या रेकॉर्ड हटवायचे</string>
+    <string name="after_days">दिवसांनंतर</string>
+
 
 </resources>

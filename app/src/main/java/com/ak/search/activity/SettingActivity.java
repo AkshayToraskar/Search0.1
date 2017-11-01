@@ -6,7 +6,7 @@ package com.ak.search.activity;
  * - logout user
  * - send and receive the data
  * - see user profile
- * */
+ */
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,11 +17,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -56,8 +60,22 @@ public class SettingActivity extends AppCompatActivity {
     @BindView(R.id.cv_profile)
     CardView cvProfile;
 
+    @BindView(R.id.ll_delete_old_records)
+    LinearLayout llDeleteOldRecords;
+    @BindView(R.id.ll_indays)
+    LinearLayout llIndays;
+    @BindView(R.id.rb_yes)
+    RadioButton rbYes;
+    @BindView(R.id.rb_no)
+    RadioButton rbNo;
+    @BindView(R.id.rg_delete_old_data)
+    RadioGroup rgDeleteOldData;
+    @BindView(R.id.et_indays)
+    EditText etInDays;
+
     Locale myLocale;
     SessionManager sessionManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +90,6 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.setting));
 
 
-
-
         if (sessionManager.isLoggedIn()) {
             tvUsername.setText(sessionManager.getUsername());
 
@@ -81,12 +97,15 @@ public class SettingActivity extends AppCompatActivity {
             switch (sessionManager.getLoginType()) {
                 case 1:
                     usertype = "Admin";
+                    llDeleteOldRecords.setVisibility(View.VISIBLE);
                     break;
                 case 2:
                     usertype = "Supervisor";
+                    llDeleteOldRecords.setVisibility(View.GONE);
                     break;
                 case 3:
                     usertype = "worker";
+                    llDeleteOldRecords.setVisibility(View.GONE);
                     break;
             }
 
@@ -103,6 +122,15 @@ public class SettingActivity extends AppCompatActivity {
             rbEnglish.setChecked(true);
         }
 
+        if (sessionManager.isDeleteOldData()) {
+            rbYes.setChecked(true);
+            llIndays.setVisibility(View.VISIBLE);
+        } else {
+            rbNo.setChecked(true);
+            llIndays.setVisibility(View.GONE);
+        }
+
+        etInDays.setText(String.valueOf(sessionManager.getInDays()));
 
         rgLang.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -121,6 +149,44 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        rgDeleteOldData.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_yes:
+                        sessionManager.setDeleteOldData(true);
+                        llIndays.setVisibility(View.VISIBLE);
+                        break;
+
+                    case R.id.rb_no:
+                        sessionManager.setDeleteOldData(false);
+                        llIndays.setVisibility(View.GONE);
+                        break;
+                }
+            }
+        });
+
+        etInDays.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (!s.toString().equals("")) {
+                    sessionManager.setInDays(Integer.parseInt(s.toString()));
+                } else {
+                    sessionManager.setInDays(30);
+                }
+            }
+        });
 
 
     }

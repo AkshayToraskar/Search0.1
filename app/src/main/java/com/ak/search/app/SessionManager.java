@@ -6,9 +6,8 @@ import android.util.Log;
 
 /**
  * Created by dg hdghfd on 29-11-2016.
- *
+ * <p>
  * all the app shared preferenced data will be stored here
- *
  */
 
 public class SessionManager {
@@ -26,11 +25,10 @@ public class SessionManager {
     private static final String KEY_USERID = "UserId";
     private static final String KEY_USERNAME = "Username";
     private static final String KEY_TYPE = "Type";
-
-    private static final String SURVEY_ID="SurveyId";
-
-    private static final String LANGUAGE="language";
-
+    private static final String DELETE_OLD_DATA = "DeleteOldData";
+    private static final String IN_DAYS = "InDays";
+    private static final String SURVEY_ID = "SurveyId";
+    private static final String LANGUAGE = "language";
 
 
     public SessionManager(Context context) {
@@ -39,57 +37,74 @@ public class SessionManager {
         editor = pref.edit();
     }
 
-    public void setLogin(boolean isLoggedIn,String Username, int Type, long id) {
+    public void setLogin(boolean isLoggedIn, String Username, int Type, long id) {
         editor.putBoolean(KEY_IS_LOGGEDIN, isLoggedIn);
-        editor.putString(KEY_USERNAME,Username);
-        editor.putInt(KEY_TYPE,Type);
-        editor.putLong(KEY_USERID,id);
+        editor.putString(KEY_USERNAME, Username);
+        editor.putInt(KEY_TYPE, Type);
+        editor.putLong(KEY_USERID, id);
         editor.commit();
         Log.d(TAG, "MUser login session modified!");
     }
 
-    public String getUsername(){
-        return  pref.getString(KEY_USERNAME,"");
+    public String getUsername() {
+        return pref.getString(KEY_USERNAME, "");
     }
 
 
-
-    public long getUserId(){
-        return pref.getLong(KEY_USERID,0);
+    public long getUserId() {
+        return pref.getLong(KEY_USERID, 0);
     }
 
-    public int getLoginType()
-    {
-        return pref.getInt(KEY_TYPE,0);
+    public int getLoginType() {
+        return pref.getInt(KEY_TYPE, 0);
     }
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
 
-    public void setUserId(long id){
-        editor.putLong(KEY_USERID,id);
+    public void setUserId(long id) {
+        editor.putLong(KEY_USERID, id);
         editor.commit();
     }
 
 
-    public void setSurveyId(int id)
-    {   editor.putInt(SURVEY_ID,id);
+    public void setSurveyId(int id) {
+        editor.putInt(SURVEY_ID, id);
         editor.commit();
     }
 
-    public int getSurveyId(){
-        return pref.getInt(SURVEY_ID,0);
+    public int getSurveyId() {
+        return pref.getInt(SURVEY_ID, 0);
     }
 
 
-    public void setLanguage(String lang){
-        editor.putString(LANGUAGE,lang);
+    public void setLanguage(String lang) {
+        editor.putString(LANGUAGE, lang);
         editor.commit();
     }
 
-    public String getLanguage(){
-        return pref.getString(LANGUAGE,"en");
+    public String getLanguage() {
+        return pref.getString(LANGUAGE, "en");
+    }
+
+
+    public void setDeleteOldData(boolean isDelete) {
+        editor.putBoolean(DELETE_OLD_DATA, isDelete);
+        editor.commit();
+    }
+
+    public boolean isDeleteOldData() {
+        return pref.getBoolean(DELETE_OLD_DATA, false);
+    }
+
+    public void setInDays(int days) {
+        editor.putInt(IN_DAYS, days);
+        editor.commit();
+    }
+
+    public int getInDays() {
+        return pref.getInt(IN_DAYS, 30);
     }
 
 }

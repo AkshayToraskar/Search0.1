@@ -31,11 +31,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.realm.Realm;
+
 /**
  * Created by dg hdghfd on 25-07-2017.
- *
+ * <p>
  * scan the survey and import and export the data into csv format
- *
  */
 
 public class CsvOperation {
@@ -46,14 +47,14 @@ public class CsvOperation {
     List<String> strAns = new ArrayList<>();
 
     List<String[]> strData = new ArrayList<>();
-
+    Realm realm;
 
     //for generating ans
     public CsvOperation(List<DataCollection> dataCollection, long surveyId) {
         this.dataCollection = dataCollection;
-
         TraverseNode trv = new TraverseNode(surveyId);
         lstQuestions = trv.setupAllNodes();
+        realm = Realm.getDefaultInstance();
     }
 
 
@@ -62,11 +63,11 @@ public class CsvOperation {
 
         TraverseNode trv = new TraverseNode(surveyId);
         lstQuestions = trv.setupAllNodes();
+        realm = Realm.getDefaultInstance();
     }
 
 
     //for surveyQuestion
-
 
 
     //for answers
@@ -83,13 +84,22 @@ public class CsvOperation {
 
 
             List<String> dataCollection = new ArrayList<>();
+
+            dataCollection.add(dataColl.getTimestamp());
+
+            Patients pat = dataColl.getPatients();
+            dataCollection.add((pat == null) ? "-" : pat.getPatientname());
+
             long prevQ = -1;
             //iterate each questions
             for (Questions questions : lstQuestions) {
 
                 boolean match = false;
 
+
                 if (prevQ != questions.getId()) {
+
+
                     //iterate answers
                     for (Answers ans : dataColl.getAnswerses()) {
 
@@ -122,6 +132,9 @@ public class CsvOperation {
 
         List<String> strLs = new ArrayList<>();
 
+        Patients pat = realm.where(Patients.class).equalTo("id", answers.getPatientid()).findFirst();
+
+
         String questionType = answers.getQuestions().getTypeQuestion();
         String[] quest = questionType.split(",");
         for (int l = 0; l < quest.length; l++) {
@@ -131,94 +144,75 @@ public class CsvOperation {
                 //Text---------------------------------------
                 case 1:
                     strLs.add("" + answers.getAns());
-
                     break;
 
                 //Number---------------------------------------
                 case 2:
                     strLs.add("" + answers.getNumAns());
-
                     break;
 
                 //Date---------------------------------------
                 case 3:
                     strLs.add("" + answers.getDate());
-
                     break;
 
                 //Time---------------------------------------
                 case 4:
                     strLs.add("" + answers.getTime());
-
                     break;
 
                 //Image---------------------------------------
                 case 5:
                     strLs.add("Image");
-
                     break;
 
                 //patient name---------------------------------------
                 case 6:
-                    strLs.add("Patient Name");
-
+                    strLs.add((pat == null) ? "-" : String.valueOf(pat.getId()));
                     break;
 
                 //Checkbox---------------------------------------
                 case 7:
-
                     for (int i = 0; i < answers.getQuestions().getChkb().size(); i++) {
-
-
                         String a = answers.getSelectedChk();
                         if (a != null) {
                             String val = String.valueOf(a.charAt(i));
-
                             if (val.equals("1")) {
                                 strLs.add("1");
                             } else {
                                 strLs.add("0");
                             }
                         }
-
-
                     }
-
                     break;
 
                 //Options-----------------------------------------
                 case 8:
-
-
                     Log.v("TAG", "RB " + answers.getQuestions().getOptions().size());
-                    for (int i = 0; i < answers.getQuestions().getOptions().size(); i++) {
+                    /*for (int i = 0; i < answers.getQuestions().getOptions().size(); i++) {
 
                         if (answers.getSelectedopt() == i) {
                             strLs.add("1");
                         } else {
                             strLs.add("0");
                         }
-                    }
-
-
+                    }*/
+                    strLs.add(String.valueOf(answers.getSelectedopt()));
                     break;
-
 
                 //Conditional---------------------------------------
                 case 9:
-
                     Log.v("TAG", "CONDITIONAL " + answers.getQuestions().getOptionContidion().size());
-                    for (int i = 0; i < answers.getQuestions().getOptionContidion().size(); i++) {
+                    /*for (int i = 0; i < answers.getQuestions().getOptionContidion().size(); i++) {
 
                         if (answers.getSelectedOptConditional() == i) {
                             strLs.add("1");
                         } else {
                             strLs.add("0");
                         }
-                    }
-
+                    }*/
+                    strLs.add(String.valueOf(answers.getSelectedOptConditional()));
                     break;
-
             }
         }
 
@@ -229,6 +223,10 @@ public class CsvOperation {
     public List<String> scanHeader() {
 
         List<String> strH = new ArrayList<>();
+
+        strH.add("Date");
+        strH.add("Patient Name");
+
         for (Questions questionData : lstQuestions) {
             String qId = String.valueOf(questionData.getId());
 
@@ -270,7 +268,7 @@ public class CsvOperation {
 
                     //patient name---------------------------------------
                     case 6:
-                        strH.add(qId + "_Patient Name");
+                        strH.add(qId + "_Patient Id");
 
                         break;
 
@@ -278,7 +276,6 @@ public class CsvOperation {
                     case 7:
 
                         for (int i = 0; i < questionData.getChkb().size(); i++) {
-
 
 
                             strH.add(qId + "_op" + i);
@@ -293,10 +290,11 @@ public class CsvOperation {
 
 
                         Log.v("TAG", "RB " + questionData.getOptions().size());
-                        for (int i = 0; i < questionData.getOptions().size(); i++) {
+                        /*for (int i = 0; i < questionData.getOptions().size(); i++) {
 
                             strH.add(qId + "_op" + i);
-                        }
+                        }*/
+                        strH.add(qId + "_op");
 
 
                         break;
@@ -306,10 +304,11 @@ public class CsvOperation {
                     case 9:
 
                         Log.v("TAG", "CONDITIONAL " + questionData.getOptionContidion().size());
-                        for (int i = 0; i < questionData.getOptionContidion().size(); i++) {
+                        /*for (int i = 0; i < questionData.getOptionContidion().size(); i++) {
 
                             strH.add(qId + "_op" + i);
-                        }
+                        }*/
+                        strH.add(qId + "_op");
 
                         break;
 
