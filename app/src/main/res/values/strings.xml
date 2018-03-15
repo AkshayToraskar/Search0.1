@@ -53,8 +53,8 @@
 
 
     <array name="search_patient">
-        <item>Name</item>
         <item>Id</item>
+        <item>Name</item>
     </array>
 
 </resources>

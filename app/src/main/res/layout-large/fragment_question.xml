@@ -48,7 +48,7 @@
                     android:id="@+id/txt_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="number"
+                    android:hint="numberDecimal|numberSigned"
                     android:inputType="number" />
 
                 <LinearLayout

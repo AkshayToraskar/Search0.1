@@ -274,7 +274,7 @@
                 android:layout_margin="20dp"
                 android:drawablePadding="10dp"
                 android:drawableRight="@drawable/num"
-                android:inputType="number"
+                android:inputType="numberDecimal|numberSigned"
                 android:padding="10dp"
                 android:textSize="22sp"
                 android:visibility="gone"

@@ -82,9 +82,9 @@ public class SelectPatientsActivity extends AppCompatActivity {
         spnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+                if (position == 1) {
                     etPatientName.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else if (position == 1) {
+                } else if (position == 0) {
                     etPatientName.setInputType(InputType.TYPE_CLASS_NUMBER);
                 }
             }
@@ -117,13 +117,13 @@ public class SelectPatientsActivity extends AppCompatActivity {
                     searchPatientAdapter.notifyDataSetChanged();
                 } else {
                     RealmList<Patients> results = new RealmList<Patients>();
-                    if (spnType.getSelectedItemPosition() == 0) {
+                    if (spnType.getSelectedItemPosition() == 1) {
                         RealmResults realmResult = realm.where(Patients.class).beginsWith("patientname", String.valueOf(editable)).findAll();
                         results.addAll(realmResult.subList(0, realmResult.size()));
 
                     } else {
 
-                        Patients patients = realm.where(Patients.class).equalTo("id", Long.parseLong(editable.toString())).findFirst();
+                        Patients patients = realm.where(Patients.class).beginsWith("id", String.valueOf(Long.parseLong(editable.toString()))).findFirst();
                         if (patients != null) {
                             results.add(patients);
                         }

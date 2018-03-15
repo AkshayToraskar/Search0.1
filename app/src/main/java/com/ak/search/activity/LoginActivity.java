@@ -82,11 +82,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final int PERMISSION_CALLBACK_CONSTANT = 100;
     private static final int REQUEST_PERMISSION_SETTING = 101;
-    String[] permissionsRequired = new String[]{Manifest.permission.CAMERA,
-            Manifest.permission.BLUETOOTH,
+    String[] permissionsRequired = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+            /*Manifest.permission.BLUETOOTH,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.INTERNET,
-            Manifest.permission.ACCESS_NETWORK_STATE};
+            Manifest.permission.ACCESS_NETWORK_STATE*/};
 
     private SharedPreferences permissionStatus;
     private boolean sentToSettings = false;
@@ -104,6 +104,8 @@ public class LoginActivity extends AppCompatActivity {
         validate = new Validate();
         sessionManager = new SessionManager(this);
         LANG = sessionManager.getLanguage();
+
+        permissionCheck();
 
         User uAd = realm.where(User.class).equalTo("id", 1).findFirst();
         if (uAd == null) {
@@ -164,64 +166,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void permissionCheck() {
-        if (ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[1]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[2]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[3]) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[4]) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[0])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[1])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[2])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[3])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[4])) {
+        if (ActivityCompat.checkSelfPermission(LoginActivity.this, permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[0])) {
                 //Show Information about why you need the permission
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setTitle("Need Multiple Permissions");
-                builder.setMessage("This app needs Camera and Location permissions.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        ActivityCompat.requestPermissions(LoginActivity.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
+                ActivityCompat.requestPermissions(LoginActivity.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
+
             } else if (permissionStatus.getBoolean(permissionsRequired[0], false)) {
                 //Previously Permission Request was cancelled with 'Dont Ask Again',
-                // Redirect to Settings after showing Information about why you need the permission
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setTitle("Need Multiple Permissions");
-                builder.setMessage("This app needs Camera and Location permissions.");
-                builder.setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
                         sentToSettings = true;
                         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                         Uri uri = Uri.fromParts("package", getPackageName(), null);
                         intent.setData(uri);
                         startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
-                        Toast.makeText(getBaseContext(), "Go to Permissions to Grant  Camera and Location", Toast.LENGTH_LONG).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
+                        Toast.makeText(getBaseContext(), "Go to Permissions to Grant storage permission", Toast.LENGTH_LONG).show();
             } else {
                 //just request the permission
                 ActivityCompat.requestPermissions(LoginActivity.this, permissionsRequired, PERMISSION_CALLBACK_CONSTANT);
             }
-
 
             SharedPreferences.Editor editor = permissionStatus.edit();
             editor.putBoolean(permissionsRequired[0], true);
@@ -249,12 +210,8 @@ public class LoginActivity extends AppCompatActivity {
 
             if (allgranted) {
                 proceedAfterPermission();
-            } else if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[0])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[1])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[2])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[3])
-                    || ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[4])) {
-                //  txtPermissions.setText("Permissions Required");
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permissionsRequired[0])) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 builder.setTitle("Need Multiple Permissions");
                 builder.setMessage("This app needs Camera and Location permissions.");
@@ -362,7 +319,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void proceedAfterPermission() {
         // txtPermissions.setText("We've got all permissions");
-        Toast.makeText(getBaseContext(), "We got All Permissions", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getBaseContext(), "We got All Permissions", Toast.LENGTH_LONG).show();
     }
 
     private boolean isNetworkAvailable() {
