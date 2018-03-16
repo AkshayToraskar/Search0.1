@@ -122,8 +122,7 @@ public class SelectPatientsActivity extends AppCompatActivity {
                         results.addAll(realmResult.subList(0, realmResult.size()));
 
                     } else {
-
-                        Patients patients = realm.where(Patients.class).beginsWith("id", String.valueOf(Long.parseLong(editable.toString()))).findFirst();
+                        Patients patients = realm.where(Patients.class).equalTo("id", Long.parseLong(editable.toString())).findFirst();
                         if (patients != null) {
                             results.add(patients);
                         }
